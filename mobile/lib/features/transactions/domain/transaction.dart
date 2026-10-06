@@ -40,18 +40,19 @@ abstract class TransactionRecord with _$TransactionRecord {
     @Default(false) bool hasReceipt,
     @Default(false) bool recurring,
     @Default(false) bool excludedFromBudget,
+    @Default([]) List<String> tags,
   }) = _TransactionRecord;
   factory TransactionRecord.fromJson(Map<String, dynamic> json) =>
       _$TransactionRecordFromJson(json);
   int get displayAmount => kind == TransactionKind.expense ? -amount : amount;
-  int get expenseImpact =>
-      status == TransactionStatus.pending || excludedFromBudget
+  int get expenseImpact => status == TransactionStatus.pending
       ? 0
       : switch (kind) {
           TransactionKind.expense => amount,
           TransactionKind.refund => -amount,
           TransactionKind.income || TransactionKind.transfer => 0,
         };
+  int get budgetImpact => excludedFromBudget ? 0 : expenseImpact;
   int get cashFlowImpact =>
       status == TransactionStatus.pending || kind == TransactionKind.transfer
       ? 0

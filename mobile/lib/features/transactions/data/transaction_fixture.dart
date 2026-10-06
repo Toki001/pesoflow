@@ -14,6 +14,7 @@ List<TransactionRecord> transactionFixture() => [
     source: TransactionSource.walletSync,
     note: 'Lunch combo with spicy chickenjoy and peach mango pie',
     hasReceipt: true,
+    tags: const ['Lunch', 'Team', 'OfficeDay'],
   ),
   TransactionRecord(
     id: 'grab',

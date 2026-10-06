@@ -136,7 +136,12 @@ feed. Dashboard imports the shared model. Search/filtering never changes the
 month snapshot. Internal transfers and pending amounts are excluded from cash
 flow; refunds reduce expense impact. No backend endpoints were added.
 
-The next approved screens are Transaction Detail and Add Expense, followed by
+Transaction Detail uses root task routes, preserving feed/Home navigation state.
+Annotations live in the session ledger; monthly fixture totals use deltas against
+the baseline records to avoid double counting. Budget exclusion does not remove
+real spending from cash flow.
+
+The next approved screen is Add Expense, followed by
 Budgets and Analytics. Extend the session ledger first; persistence comes later.
 
 ## Foundation verification

@@ -50,6 +50,18 @@ abstract final class AppTheme {
           ),
         ),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: c.surface,
+          foregroundColor: c.secondaryInk,
+          side: BorderSide(color: c.border),
+          minimumSize: const Size(48, 48),
+          textStyle: AppTypography.labelMedium,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,

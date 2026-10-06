@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/dashboard/presentation/home_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
+import '../features/transactions/presentation/transaction_detail_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -18,6 +19,11 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
     GoRoute(path: '/', redirect: (_, _) => '/home'),
+    GoRoute(
+      path: '/transactions/:id',
+      builder: (_, state) =>
+          TransactionDetailScreen(id: state.pathParameters['id']!),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, shell) => AppShell(shell: shell),
       branches: [

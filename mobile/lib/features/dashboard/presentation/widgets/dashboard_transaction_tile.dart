@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../core/formatting/date_formatter.dart';
@@ -40,18 +41,24 @@ class DashboardTransactionTile extends StatelessWidget {
       ),
       _ => (Icons.receipt_long_outlined, c.secondaryInk, c.mutedSurface),
     };
-    return TransactionTile(
-      merchant: transaction.merchant,
-      subtitle:
-          '${transaction.metadata} · ${DateFormatter.transaction(transaction.occurredAt, asOf)}',
-      amount: transaction.displayAmount,
-      transfer: transaction.kind == TransactionKind.transfer,
-      incoming:
-          transaction.kind == TransactionKind.income ||
-          transaction.kind == TransactionKind.refund,
-      icon: icon,
-      iconColor: color,
-      iconBackground: soft,
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: () => context.push('/transactions/${transaction.id}'),
+        child: TransactionTile(
+          merchant: transaction.merchant,
+          subtitle:
+              '${transaction.metadata} · ${DateFormatter.transaction(transaction.occurredAt, asOf)}',
+          amount: transaction.displayAmount,
+          transfer: transaction.kind == TransactionKind.transfer,
+          incoming:
+              transaction.kind == TransactionKind.income ||
+              transaction.kind == TransactionKind.refund,
+          icon: icon,
+          iconColor: color,
+          iconBackground: soft,
+        ),
+      ),
     );
   }
 }

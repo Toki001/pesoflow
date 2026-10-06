@@ -8,6 +8,7 @@ class CategoryIcon extends StatelessWidget {
     required this.foreground,
     required this.background,
     this.size = 40,
+    this.iconSize,
     this.round = true,
     super.key,
   });
@@ -15,6 +16,7 @@ class CategoryIcon extends StatelessWidget {
   final Color foreground;
   final Color background;
   final double size;
+  final double? iconSize;
   final bool round;
   @override
   Widget build(BuildContext context) => Container(
@@ -26,6 +28,10 @@ class CategoryIcon extends StatelessWidget {
         round ? AppRadius.pill : AppRadius.control,
       ),
     ),
-    child: Icon(icon, size: size == 40 ? 20 : 18, color: foreground),
+    child: Icon(
+      icon,
+      size: iconSize ?? (size == 40 ? 20 : 18),
+      color: foreground,
+    ),
   );
 }

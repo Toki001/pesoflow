@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Home and Transactions are implemented. Other destinations explicitly identify themselves
+- Home, Transactions and Transaction Detail are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -111,3 +111,17 @@ Starbucks is excluded from posted cash flow. Transactions sort by timestamp,
 so SM Supermarket precedes Salary on October 20. Native icons, ellipsis and font
 rasterization differ from the web export. Full-page light/dark goldens at
 420 × 1300, phone interactions and 200% text at 320px are tested.
+
+## Transaction Detail implementation
+
+Detail opens as a task screen without bottom navigation. The Jollibee fixture
+reproduces the hero, provenance, Food budget meter, receipt line items, sharing
+preview, tags and actions. Notes/category/tags/exclusion update the session
+ledger; synced financial fields remain read-only. Unknown IDs have a missing
+record state. Exclusion changes budget impact only, not spending/cash flow.
+
+The receipt photo is represented by a native receipt icon because no licensed
+image is bundled. OCR/security copy explicitly identifies fixture/demo data.
+Sharing is an equal-split preview, not recorded debt or a payment. Reports and
+receipt export explain their unavailable state. Detail goldens cover both
+themes at 390 × 1447; 320px with 200% text remains scrollable.

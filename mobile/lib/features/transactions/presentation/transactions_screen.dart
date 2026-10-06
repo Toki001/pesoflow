@@ -9,6 +9,7 @@ import '../../../core/widgets/finance_card.dart';
 import '../application/transactions_provider.dart';
 import '../data/transaction_fixture.dart';
 import '../domain/transaction.dart';
+import '../domain/month_snapshot.dart';
 import '../domain/transaction_query.dart';
 import 'transaction_list_row.dart';
 
@@ -158,29 +159,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                   data: (records) {
                     final filtered = filterTransactions(records, query);
                     final groups = groupTransactions(filtered);
-                    // The approved month snapshot includes records beyond this recent feed.
-                    final isFixtureMonth =
-                        query.year == 2024 && query.month == 10;
-                    final spent = isFixtureMonth
-                        ? 1680000
-                        : records
-                              .where(
-                                (t) =>
-                                    t.occurredAt.year == query.year &&
-                                    t.occurredAt.month == query.month,
-                              )
-                              .fold(0, (sum, t) => sum + t.expenseImpact);
-                    final income = isFixtureMonth
-                        ? 4500000
-                        : records
-                              .where(
-                                (t) =>
-                                    t.occurredAt.year == query.year &&
-                                    t.occurredAt.month == query.month &&
-                                    t.kind == TransactionKind.income &&
-                                    t.status == TransactionStatus.posted,
-                              )
-                              .fold(0, (sum, t) => sum + t.amount);
+                    final snapshot = MonthSnapshot.fromLedger(
+                      records,
+                      query.year,
+                      query.month,
+                      baseline: transactionFixture(),
+                    );
+                    final spent = snapshot.spent;
+                    final income = snapshot.income;
                     return ListView(
                       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                       children: [

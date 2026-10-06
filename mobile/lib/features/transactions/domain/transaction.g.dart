@@ -26,6 +26,9 @@ _TransactionRecord _$TransactionRecordFromJson(Map<String, dynamic> json) =>
       hasReceipt: json['hasReceipt'] as bool? ?? false,
       recurring: json['recurring'] as bool? ?? false,
       excludedFromBudget: json['excludedFromBudget'] as bool? ?? false,
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$TransactionRecordToJson(_TransactionRecord instance) =>
@@ -44,6 +47,7 @@ Map<String, dynamic> _$TransactionRecordToJson(_TransactionRecord instance) =>
       'hasReceipt': instance.hasReceipt,
       'recurring': instance.recurring,
       'excludedFromBudget': instance.excludedFromBudget,
+      'tags': instance.tags,
     };
 
 const _$TransactionKindEnumMap = {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
@@ -87,64 +88,70 @@ class TransactionListRow extends StatelessWidget {
             : c.ink,
       ),
     );
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final large =
-              MediaQuery.textScalerOf(context).scale(14) > 19 ||
-              constraints.maxWidth < 300;
-          final details = Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: () => context.push('/transactions/${t.id}'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final large =
+                  MediaQuery.textScalerOf(context).scale(14) > 19 ||
+                  constraints.maxWidth < 300;
+              final details = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      t.merchant,
-                      maxLines: large ? null : 1,
-                      overflow: large ? null : TextOverflow.ellipsis,
-                      style: AppTypography.merchant,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          t.merchant,
+                          maxLines: large ? null : 1,
+                          overflow: large ? null : TextOverflow.ellipsis,
+                          style: AppTypography.merchant,
+                        ),
+                      ),
+                      if (badge.isNotEmpty) ...[
+                        const SizedBox(width: 6),
+                        StatusBadge(
+                          badge,
+                          foreground: badgeColor,
+                          background: badgeBackground,
+                          pill: false,
+                        ),
+                      ],
+                      if (t.recurring) ...[
+                        const SizedBox(width: 6),
+                        Icon(Icons.sync, size: 14, color: c.mutedInk),
+                      ],
+                    ],
                   ),
-                  if (badge.isNotEmpty) ...[
-                    const SizedBox(width: 6),
-                    StatusBadge(
-                      badge,
-                      foreground: badgeColor,
-                      background: badgeBackground,
-                      pill: false,
-                    ),
-                  ],
-                  if (t.recurring) ...[
-                    const SizedBox(width: 6),
-                    Icon(Icons.sync, size: 14, color: c.mutedInk),
-                  ],
+                  const SizedBox(height: 3),
+                  Text(
+                    '${t.metadata} · ${DateFormat('h:mm a').format(t.occurredAt)}',
+                    maxLines: large ? null : 1,
+                    overflow: large ? null : TextOverflow.ellipsis,
+                    style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+                  ),
+                  if (large) ...[const SizedBox(height: 8), money],
                 ],
-              ),
-              const SizedBox(height: 3),
-              Text(
-                '${t.metadata} · ${DateFormat('h:mm a').format(t.occurredAt)}',
-                maxLines: large ? null : 1,
-                overflow: large ? null : TextOverflow.ellipsis,
-                style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-              ),
-              if (large) ...[const SizedBox(height: 8), money],
-            ],
-          );
-          return Row(
-            children: [
-              CategoryIcon(
-                icon,
-                foreground: foreground,
-                background: background,
-              ),
-              const SizedBox(width: 12),
-              Expanded(child: details),
-              if (!large) ...[const SizedBox(width: 12), money],
-            ],
-          );
-        },
+              );
+              return Row(
+                children: [
+                  CategoryIcon(
+                    icon,
+                    foreground: foreground,
+                    background: background,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(child: details),
+                  if (!large) ...[const SizedBox(width: 12), money],
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
