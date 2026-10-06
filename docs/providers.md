@@ -8,3 +8,17 @@ requests. `Demo · Active` qualifies the reference's simulated sync status.
 Stitch connection-screen claims are design reference copy, not verified API
 availability or compliance claims. Future adapters require legitimate provider
 documentation and authorization; they must remain isolated from domain logic.
+
+Connected Accounts now exposes a native demo list at `/accounts`. Four masked
+profiles reproduce the approved design; BPI has a sample expired state. Active
+sample balances sum to ₱34,500. No amount is fetched from a financial provider.
+`DemoAccountsRepository` loads local fixtures and performs a no-network check.
+Sync All retains balances/as-of times, and errors retain the cached list.
+
+Settings, confirmed removal and restoring an existing sample are session-only.
+Real linking/reconnection is explicitly unavailable; the catalog requires no
+credentials and does not imply provider authorization. UnionBank/RCBC names in
+the design's institution panel are illustrative, not verified integrations.
+Trust copy does not claim encryption, certification, Open Finance authorization,
+regulatory compliance or automated provider support. No bank/wallet website is
+scraped, and no remote connection is created or revoked.

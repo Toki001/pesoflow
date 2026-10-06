@@ -53,3 +53,13 @@ has a null value. The September comparison aggregate, October category trend
 badges, narrative and trajectory are separate illustrative reference inputs;
 there is no reconciled prior-period category history. See architecture.md for
 coverage and forecast limitations. No backend data model/API changed.
+
+`DemoAccount` stores a sample ID/institution/name, masked identifier, bank/wallet
+kind, integer-centavo reported balance, balance-as-of timestamp and active/expired
+sample status. No raw identifiers, credentials, tokens or granted permissions are
+modeled. `AccountsOverview` validates unique IDs, exposes immutable profiles,
+separates available/last-known totals and represents local refresh progress/errors.
+`DemoAccountsRepository` loads/checks only fixtures. These session values have no
+serialization/backend contract. Demo list changes do not mutate the ledger,
+Home snapshot, budgets or manual payment sources; no reported balance is derived
+from a manual transaction. Expired BPI remains excluded from available totals.

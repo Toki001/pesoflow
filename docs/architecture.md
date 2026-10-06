@@ -3,7 +3,7 @@
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
-GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets/Analytics, a session-only
+GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets/Analytics/Accounts, a session-only
 demo ledger, and minimal NestJS `/v1/health` endpoint.
 No HTML rendering, WebViews, provider calls, authentication, database, queues,
 OCR, notifications, persistence, or money movement are implemented.
@@ -32,7 +32,7 @@ Real event timestamps will require UTC storage and explicit timezone conversion.
 
 GoRouter's indexed stateful shell preserves tab state and Home scroll. Home,
 Transactions, Analytics and Budgets are implemented shell destinations.
-Add opens `/add` above the shell, and row taps open
+Add opens `/add` above the shell, Home's balance card opens `/accounts`, and row taps open
 `/transactions/:id`; both suppress bottom navigation as approved in Stitch. Close
 pops to the originating screen, or goes to Transactions when directly linked.
 `/` redirects to Home. OS universal/app-link associations are not configured.
@@ -193,8 +193,8 @@ updates, compact/large/landscape layouts and 200% text with safe insets/keyboard
 Formatting, analysis, Android debug and iOS simulator debug builds pass. Backend
 format/lint/build and its existing health HTTP test pass.
 
-The next approved screen is Connected Accounts. Use truthful fixture connection
-states and preserve the approved trust layout; integrations remain deferred.
+The next approved screen is Subscriptions. Use deterministic recurring-expense
+fixtures and the existing demo ledger; integrations remain deferred.
 
 Transactions/Add milestone verification (historical): 43 Flutter tests passed,
 including nine light/dark/phone
@@ -277,3 +277,48 @@ shared target edits, period/toggle/navigation, loading/empty/retry, compact/larg
 landscape, 200% text, safe insets and accessible chart details. Existing goldens
 remain unchanged. Formatting, analysis, Android debug/iOS simulator builds and
 backend format/lint/build/health tests pass.
+
+## Connected Accounts phase
+
+`features/accounts` separates immutable session models and a repository contract,
+deterministic sample profiles, Riverpod AsyncNotifier state, native cards/hero/
+trust components and account dialogs. These transient fixtures need no JSON or
+persistence contract. The repository is explicitly demo-only; its local refresh
+method never calls providers, replaces balances or advances their timestamps.
+No packages, backend functionality, credential fields or provider adapters were added.
+
+`/accounts` is a task route above the shell, opened by Home's balance card.
+Back pops to the originating tab with its scroll preserved; direct links fall
+back to Home. The shared TaskScreen accepts optional back icon/tooltip/fallback
+settings while existing defaults and goldens remain unchanged. Bottom navigation
+is suppressed, matching Stitch; the connect CTA remains docked above safe insets.
+
+Available balance sums integer centavos for active sample profiles (₱34,500).
+BPI's expired ₱12,200 is last-known and excluded. The export's ₱34,300 aggregate
+is inconsistent with its three active amounts, so the displayed total is corrected
+rather than hiding the ₱200 discrepancy. Home's separate ₱30,650 reference
+snapshot and manual payment-source fixtures remain independent. Removing a demo
+profile does not remove transactions or change budgets/payment sources.
+
+Disconnect requires confirmation. The catalog adds only known sample profiles,
+with duplicate prevention; restoring BPI retains its stale status. Reconnect
+explains the unavailable real integration and offers confirmed demo removal,
+without accepting credentials or pretending to restore authorization. Settings
+show only masked identifiers, dated balances and the demo permission boundary.
+State remains session-only and survives route navigation.
+
+Loading uses skeleton cards. Refresh disables repeated checks, retains visible
+balances during failures, hides exception payloads and permits retry. If a profile
+is removed while a local check is pending, completion keeps the latest list and
+does not resurrect it. Empty lists offer sample restoration. Repository errors
+provide an explicit safe retry. All security/provider copy is qualified: no
+256-bit encryption, ISO/NPC certification, Open Finance authorization, guaranteed
+provider availability or time-saving claims are asserted.
+
+Validation: 110 Flutter tests, including 15 golden comparisons, pass. New tests
+cover exact totals/stale exclusion, immutable lists, duplicate prevention,
+removal/restoration, concurrent refresh and cached-error recovery, masked settings,
+loading/empty/retry, navigation/back, compact/large/landscape, 200% text and safe
+insets. Accounts light/dark captures are visually reviewed at 390 × 1632; older
+screen goldens remain unchanged. Formatting/analysis, Android debug/iOS simulator
+builds and backend format/lint/build/health tests pass.

@@ -14,3 +14,12 @@ No certification or regulatory compliance is claimed.
 Environment files, native signing keys, build output and test artifacts are
 ignored. Commit lockfiles and review dependency changes. CI runs npm audit;
 the resolved backend tree had zero findings at foundation verification.
+
+Connected Accounts keeps masked sample identifiers only. Its catalog and
+reauthentication explanation have no credential inputs, provider permissions,
+external redirects, network calls or secret storage. Removing a demo profile
+requires confirmation and leaves transaction history intact; it is not a remote
+consent revocation. Live connection consent/revocation and secure adapter work
+remain deferred. Local refresh errors use generic UI copy and do not log payloads
+or mark unchanged/stale balances as freshly synced. Unverified Stitch security,
+certification and provider-support claims are replaced by accurate demo wording.

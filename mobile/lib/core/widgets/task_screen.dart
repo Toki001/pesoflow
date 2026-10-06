@@ -12,6 +12,9 @@ class TaskScreen extends StatelessWidget {
     this.actions = const [],
     this.centerTitle = false,
     this.footer,
+    this.backIcon = Icons.close,
+    this.backTooltip = 'Close',
+    this.fallbackRoute = '/transactions',
     super.key,
   });
   final String title;
@@ -19,6 +22,9 @@ class TaskScreen extends StatelessWidget {
   final Widget child;
   final List<Widget> actions;
   final Widget? footer;
+  final IconData backIcon;
+  final String backTooltip;
+  final String fallbackRoute;
   @override
   Widget build(BuildContext context) => ColoredBox(
     color: context.colors.canvas,
@@ -39,15 +45,15 @@ class TaskScreen extends StatelessWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        tooltip: 'Close',
+                        tooltip: backTooltip,
                         onPressed: () {
                           if (context.canPop()) {
                             context.pop();
                           } else {
-                            context.go('/transactions');
+                            context.go(fallbackRoute);
                           }
                         },
-                        icon: const Icon(Icons.close),
+                        icon: Icon(backIcon),
                       ),
                       Expanded(
                         child: Text(

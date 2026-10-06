@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Home, Transactions, Transaction Detail, Add Expense, Budgets and Analytics are implemented. Other destinations explicitly identify themselves
+- Home, Transactions, Transaction Detail, Add Expense, Budgets, Analytics and Connected Accounts are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -214,3 +214,41 @@ and native Inter rendering differ from the export. Chart dates map to actual
 calendar positions (the export's Oct 24 marker is at x=240/350 and does not align
 with its evenly spaced calendar labels). Tappable chart values supplement the
 accessible textual summary. No reference assets or earlier screen goldens changed.
+
+## Connected Accounts implementation
+
+Native widgets preserve the Back/Link header, reassurance banner, balance hero,
+linked-source count, GCash/BDO/Maya/BPI card order, masked identifiers, right-aligned
+balances, sync/action footers, amber stale-BPI state, provider/trust card, purple
+insight and docked connect CTA. Layout uses 16px outer margins, 14px reassurance,
+18px hero/trust and 16px source-card radii, existing Inter/semantic tokens and
+generic wallet/bank icons. No provider logos or remote assets were introduced.
+
+Balances: GCash ₱4,250, BDO ₱28,400, Maya ₱1,850, BPI last-known ₱12,200.
+The three active balances sum to **₱34,500**, correcting the export's ₱34,300
+hero. Stale BPI is excluded from available balance and never promoted by a demo
+refresh. The institution count includes its listed profile. Home retains its
+independent reference balance; no transactions are deleted by demo removal.
+
+Reference claims about 256-bit encryption, authorized Open Finance access,
+ISO/NPC compliance, direct provider support, “18 more” providers and 42 minutes
+saved are unverified. Their visual containers remain, with accurate demo copy:
+sample profiles, no credentials, no financial connections and no fund access.
+Each source shows a demo sync/active qualification; the hero displays the fixed
+October 24, 2024 snapshot instead of a misleading “Just now”.
+
+Home's balance card opens `/accounts`; Back returns to its tab/scroll, or Home
+for a direct link. Settings show masked provenance/date and unavailable live
+features. Sync All performs a local check, retains timestamps, shows safe errors
+and supports retry. Disconnect confirms session-only removal; Link/Connect opens
+an explicitly demo-only catalog that restores a missing sample after confirmation.
+All existing profiles are marked Listed. Reconnect explains that real authorization
+is unavailable and retains the stale balance. No credential entry exists.
+
+Human screenshot comparison retained the approved hierarchy and corrected large
+text action overflow and a clipped bottom insight. Light/dark goldens use
+390 × 1632 to show the full screen with 48px touch targets; the reference is
+390 × 1527. Remaining differences are taller accessible controls/source footers,
+wrapped demo-qualified badges, native font/icon rendering, truthful trust copy
+and the corrected total. Compact/200% text stacks balances; safe areas and the
+connect CTA stay usable. The shared task header defaults preserve older screens.

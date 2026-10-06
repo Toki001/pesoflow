@@ -158,7 +158,15 @@ class HomeContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.md),
-        BalanceHero(data: data),
+        Semantics(
+          key: const ValueKey('open-accounts'),
+          button: true,
+          label: 'View connected accounts',
+          child: InkWell(
+            onTap: () => context.push('/accounts'),
+            child: BalanceHero(data: data),
+          ),
+        ),
         const SizedBox(height: AppSpacing.md),
         FlowSummary(data: data),
         const SizedBox(height: AppSpacing.md),

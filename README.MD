@@ -41,10 +41,12 @@ Engineering and implementation instructions are defined in:
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,
-Add Expense, Budgets and Analytics screens. Manual expenses, income and transfers update
+Add Expense, Budgets, Analytics and Connected Accounts screens. Manual expenses, income and transfers update
 a session-only demo ledger. Budget creation, editing, filters and reallocation
 work with that ledger. Analytics supports date/period selection, category
-percentages, chart details and session spending updates. `backend/` contains only a NestJS health endpoint.
+percentages, chart details and session spending updates. Connected Accounts offers
+masked sample profiles, local refresh checks, and confirmed session removal/restoration;
+open it from Home's balance card. `backend/` contains only a NestJS health endpoint.
 There are no real bank/e-wallet integrations.
 
 Run mobile: `cd mobile && flutter pub get && flutter run`.

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/dashboard/presentation/home_screen.dart';
 import '../features/budgets/presentation/budgets_screen.dart';
 import '../features/analytics/presentation/analytics_screen.dart';
+import '../features/accounts/presentation/accounts_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
@@ -23,6 +24,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
   routes: [
     GoRoute(path: '/', redirect: (_, _) => '/home'),
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
+    GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(
       path: '/transactions/:id',
       builder: (_, state) =>
