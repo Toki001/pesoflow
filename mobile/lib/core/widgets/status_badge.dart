@@ -9,6 +9,7 @@ class StatusBadge extends StatelessWidget {
     required this.foreground,
     required this.background,
     this.icon,
+    this.iconSize = 14,
     this.pill = true,
     super.key,
   });
@@ -16,6 +17,7 @@ class StatusBadge extends StatelessWidget {
   final Color foreground;
   final Color background;
   final IconData? icon;
+  final double iconSize;
   final bool pill;
   @override
   Widget build(BuildContext context) => Container(
@@ -30,7 +32,7 @@ class StatusBadge extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
-          Icon(icon, size: 14, color: foreground),
+          Icon(icon, size: iconSize, color: foreground),
           const SizedBox(width: 4),
         ],
         Flexible(

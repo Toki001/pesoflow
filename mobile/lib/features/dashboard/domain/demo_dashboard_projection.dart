@@ -33,6 +33,14 @@ Dashboard projectDemoLedger(
     savings: savings,
     savingsRate: '${rate < 0 ? '-' : ''}${rate.abs() ~/ 10}.${rate.abs() % 10}',
     transactionCount: base.transactionCount + ledger.length - baseline.length,
+    budgetSpent:
+        (base.budgetSpent ?? base.outflow) +
+        ledger
+            .where(currentMonth)
+            .fold<int>(0, (sum, t) => sum + t.budgetImpact) -
+        baseline
+            .where(currentMonth)
+            .fold<int>(0, (sum, t) => sum + t.budgetImpact),
     budgets: [
       for (final budget in base.budgets)
         budget.copyWith(

@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Home, Transactions, Transaction Detail and Add Expense are implemented. Other destinations explicitly identify themselves
+- Home, Transactions, Transaction Detail, Add Expense and Budgets are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -141,3 +141,34 @@ light/dark full-page goldens use 390 × 1600. At 390px the form is taller than
 the scaled Stitch screenshot because quick actions, selectors and links use
 48px touch targets. Native glyphs and input typography differ slightly. The
 keyboard, errors and 200% text flow naturally without hiding the docked action.
+
+## Budgets implementation
+
+`/budgets` now implements the approved brand/context header, monthly hero, spent
+and remaining panels, 8px meters, safe daily pace, month-end estimate, supportive
+reallocation card and all six category allowances. Snapshot: monthly ₱25,000;
+spent ₱16,800; remaining ₱8,200; 67% used; 7 days left; safe daily allowance
+₱1,171.42; estimated month-end ₱22,400. Category limits: Food ₱8,000, Shopping
+₱5,000, Transport ₱2,500, Bills ₱2,500, Subscriptions ₱1,600, Entertainment
+₱2,000. Bills and Subscriptions retain settled/fixed states rather than becoming
+variable-spending warnings solely from utilization.
+
+Month selection, All/At Risk/On Track, sorting, New and category/monthly limit
+editing are functional. Reallocation requires an explicit Apply, moves ₱500 of
+allowance from Entertainment to Food, and preserves the monthly limit and
+spending. Dismissal is scoped to the period. There is no payment or money move.
+New/edited allowances affect Add Expense and Detail. Explicit limit edits also
+update Home, including restoring an edited limit to its original Stitch value.
+The initial Home Transport ₱3,500 and 8-day display remain approved snapshot
+variants; Budgets has ₱2,500 and 7 days (excluding the current day).
+
+Native light/dark full-page goldens use 390 × 1932, proportional to the supplied
+323 × 1600 export. Hero/insight radius is 16px (`rounded-2xl` in this export);
+category cards remain 12px. Measured category rhythm uses 10px header-to-value,
+6px value-to-meter and 4px footer spacing. The month header's whole left area is
+the accessible period-selection target. Native 48px action/filter targets make
+those controls taller than Stitch. Long category descriptions ellipsize on
+normal phones and wrap with large text; native glyphs/font rasterization differ.
+Provider/reset claims in the source footer are replaced by honest session-demo
+copy. Loading skeletons, retry, empty periods/filters, 320/390/430px, landscape,
+safe insets and 200% text with a keyboard are covered by tests.

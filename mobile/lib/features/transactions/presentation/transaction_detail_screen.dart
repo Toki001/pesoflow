@@ -11,7 +11,7 @@ import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../../../core/widgets/task_screen.dart';
 import '../application/transactions_provider.dart';
-import '../data/transaction_fixture.dart';
+import '../../budgets/application/budgets_provider.dart';
 import '../domain/transaction.dart';
 
 class TransactionDetailScreen extends ConsumerWidget {
@@ -125,19 +125,19 @@ class TransactionDetailScreen extends ConsumerWidget {
         t.source == TransactionSource.bankSync ||
         t.source == TransactionSource.walletSync;
     final jollibee = id == 'jollibee';
-    final foodSpent =
-        690000 +
-        ledger
-            .where(
-              (t) =>
-                  t.category == TransactionCategory.food &&
-                  t.occurredAt.year == 2024 &&
-                  t.occurredAt.month == 10,
-            )
-            .fold<int>(0, (sum, t) => sum + t.budgetImpact) -
-        transactionFixture()
-            .where((t) => t.category == TransactionCategory.food)
-            .fold<int>(0, (sum, t) => sum + t.budgetImpact);
+    ref.watch(demoBudgetPlansProvider);
+    final plan = ref
+        .read(demoBudgetPlansProvider.notifier)
+        .viewFor(t.occurredAt.year, t.occurredAt.month);
+    final allowances = plan.allowances.where((a) => a.category == t.category);
+    final allowance = allowances.isEmpty ? null : allowances.first;
+    final categorySpent = allowance?.spent ?? 0;
+    final categoryLimit = allowance?.limit ?? 1;
+    final budgetColor = categorySpent >= categoryLimit
+        ? c.danger
+        : categorySpent * 100 >= categoryLimit * 80
+        ? c.warning
+        : c.primary;
     Widget heading(String text) => Text(
       text.toUpperCase(),
       style: AppTypography.labelMedium.copyWith(
@@ -332,9 +332,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (t.category == TransactionCategory.food &&
-                    t.occurredAt.year == 2024 &&
-                    t.occurredAt.month == 10)
+                if (allowance != null)
                   FinanceCard(
                     color: c.canvas,
                     padding: const EdgeInsets.all(12),
@@ -349,16 +347,16 @@ class TransactionDetailScreen extends ConsumerWidget {
                             Text(
                               t.excludedFromBudget
                                   ? 'Excluded'
-                                  : '${(foodSpent * 100 ~/ 800000)}% Used',
+                                  : '${(categorySpent * 100 ~/ categoryLimit)}% Used',
                               style: small.copyWith(color: c.warning),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         BudgetProgressBar(
-                          value: foodSpent / 800000,
-                          color: c.warning,
-                          label: 'Food & Dining budget',
+                          value: categorySpent / categoryLimit,
+                          color: budgetColor,
+                          label: '${categoryLabel(t.category)} budget',
                           height: 8,
                         ),
                         const SizedBox(height: 8),
@@ -367,11 +365,11 @@ class TransactionDetailScreen extends ConsumerWidget {
                           spacing: 8,
                           children: [
                             Text(
-                              '${MoneyFormatter.php(foodSpent, decimals: false)} / ₱8,000 limit',
+                              '${MoneyFormatter.php(categorySpent, decimals: false)} / ${MoneyFormatter.php(categoryLimit, decimals: false)} limit',
                               style: small,
                             ),
                             Text(
-                              '${MoneyFormatter.php(800000 - foodSpent, decimals: false)} remaining',
+                              '${MoneyFormatter.php(categoryLimit - categorySpent, decimals: false)} remaining',
                               style: small,
                             ),
                           ],

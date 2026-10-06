@@ -19,6 +19,7 @@ _Dashboard _$DashboardFromJson(Map<String, dynamic> json) => _Dashboard(
   transactionCount: (json['transactionCount'] as num).toInt(),
   accountCount: (json['accountCount'] as num).toInt(),
   budgetLimit: (json['budgetLimit'] as num).toInt(),
+  budgetSpent: (json['budgetSpent'] as num?)?.toInt(),
   daysLeft: (json['daysLeft'] as num).toInt(),
   projectedExtraSavings: (json['projectedExtraSavings'] as num).toInt(),
   budgets: (json['budgets'] as List<dynamic>)
@@ -46,6 +47,7 @@ Map<String, dynamic> _$DashboardToJson(_Dashboard instance) =>
       'transactionCount': instance.transactionCount,
       'accountCount': instance.accountCount,
       'budgetLimit': instance.budgetLimit,
+      'budgetSpent': instance.budgetSpent,
       'daysLeft': instance.daysLeft,
       'projectedExtraSavings': instance.projectedExtraSavings,
       'budgets': instance.budgets,

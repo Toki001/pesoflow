@@ -3,7 +3,7 @@
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
-GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense, a session-only
+GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets, a session-only
 demo ledger, and minimal NestJS `/v1/health` endpoint.
 No HTML rendering, WebViews, provider calls, authentication, database, queues,
 OCR, notifications, persistence, or money movement are implemented.
@@ -31,8 +31,8 @@ Philippine wall-time fixture values, initialized with `en_PH` date symbols.
 Real event timestamps will require UTC storage and explicit timezone conversion.
 
 GoRouter's indexed stateful shell preserves tab state and Home scroll. Home,
-Transactions, Analytics and Budgets are shell destinations; Analytics/Budgets
-remain explicit placeholders. Add opens `/add` above the shell, and row taps open
+Transactions, Analytics and Budgets are shell destinations; Analytics remains
+an explicit placeholder. Add opens `/add` above the shell, and row taps open
 `/transactions/:id`; both suppress bottom navigation as approved in Stitch. Close
 pops to the originating screen, or goes to Transactions when directly linked.
 `/` redirects to Home. OS universal/app-link associations are not configured.
@@ -157,10 +157,47 @@ a manual record does not invent a provider balance update. Session data is lost
 on restart; no storage or provider sync was added. Receipt camera/upload/OCR,
 export and issue reporting are explicitly unavailable; split sharing is a preview.
 
-The next approved screen is Budgets, followed by Analytics. Use the session ledger
-for state while preserving documented cross-screen fixture differences.
+## Budgets phase
 
-Continuation verification: 43 Flutter tests pass, including nine light/dark/phone
+`features/budgets` contains immutable Freezed plans/allowances, Stitch fixtures,
+ledger projections, Riverpod session plans/period selection, and decomposed
+screen/hero/reallocation/category/form presentation. No endpoints, persistence
+or dependencies were added. The shared card supports the approved 16px budget
+hero radius; bottom sheets use the existing 24px sheet token.
+
+Spending is `budgetImpact`, separate from cash flow. Budget exclusion, refunds,
+transfers, pending state and recategorization apply as deltas against the full
+fixture snapshot. New category allowances include known historical records.
+The monthly limit independently covers category allocations; invalid totals
+are rejected. Reallocation validates live remaining allowance and updates both
+limits atomically without changing spending, account balances or monthly limits.
+
+Session plans record explicitly edited categories so Home's initial approved
+Transport variant stays intact until edited. Restoring a limit still counts as
+an explicit edit. Home exposes `budgetSpent` separately from `outflow`; exclusion
+therefore affects budget utilization without hiding real spending. Add Expense
+and Detail use the current period's shared allowances.
+
+Days use calendar arithmetic with zero-day safeguards. Safe pace floors integer
+centavos so the proposed daily amount never overshoots the remaining budget.
+Month-end and Food overage forecasts preserve the approved fixture's remaining
+estimate and apply spending deltas; they are illustrative estimates, not a
+production forecasting engine. Other months start without budgets or fabricated
+forecasts and support session budget creation.
+
+Budgets validation: 66 Flutter tests, including 11 golden comparisons, pass.
+Existing Home/Transactions/Detail/Add goldens are unchanged. New tests cover
+financial projection, explicit limit edits, atomic reallocation, validation,
+filters/sort, month/new-budget flows, loading/retry, empty states, cross-screen
+updates, compact/large/landscape layouts and 200% text with safe insets/keyboard.
+Formatting, analysis, Android debug and iOS simulator debug builds pass. Backend
+format/lint/build and its existing health HTTP test pass.
+
+The next approved screen is Analytics. Reuse the session ledger and preserve
+its documented reference snapshot differences; integrations remain deferred.
+
+Transactions/Add milestone verification (historical): 43 Flutter tests passed,
+including nine light/dark/phone
 goldens, financial projections, queries, annotation edits, navigation and manual
 entry flows, keyboard/safe insets and validation of offscreen fields. Formatting
 and analysis pass. Android debug and iOS simulator debug builds pass. Backend

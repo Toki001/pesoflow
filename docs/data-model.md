@@ -24,3 +24,16 @@ history is preserved. `ManualTransactionDraft` validates integer-centavo amounts
 The Riverpod ledger is immutable and session-only, rejects duplicate IDs and
 generates monotonically increasing demo IDs. Local editing is not provider sync
 or persistent storage. Financial fields on synced fixtures remain read-only.
+
+`BudgetPlan` and `BudgetAllowance` now model period, monthly/category limits,
+qualifying spend, fixed/settled status, projected additional spend and explicit
+session category edits. `projectBudgetLedger` applies immutable baseline deltas;
+allowance editing never persists projected spending again. Creation includes
+known spend for newly tracked categories. Filters use risk status rather than
+label colors, and settled/fixed allowances become exceeded when fully used.
+
+`Dashboard.budgetSpent` is distinct from cash outflow. Account transfers and
+pending records have zero budget impact; refunds offset spend; user exclusions
+change budgets while retaining expense/cash-flow semantics. Limits are shared
+across budget, entry, detail and Home views once explicitly edited. Initial
+Stitch cross-screen variants remain until then. No backend schema/API contract changed.

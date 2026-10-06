@@ -142,7 +142,7 @@ void main() {
     expect(find.text('Add Expense'), findsOneWidget);
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
-    for (final tab in ['Analytics', 'Budgets']) {
+    for (final tab in ['Analytics']) {
       await tester.tap(find.byKey(ValueKey('nav-$tab')));
       await tester.pumpAndSettle();
       expect(find.text('Back to Home'), findsOneWidget);

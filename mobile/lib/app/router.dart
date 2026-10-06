@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/dashboard/presentation/home_screen.dart';
+import '../features/budgets/presentation/budgets_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
@@ -45,6 +46,8 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
                 path: path,
                 builder: (_, _) => path == '/transactions'
                     ? const TransactionsScreen()
+                    : path == '/budgets'
+                    ? const BudgetsScreen()
                     : FoundationDestination(title: label),
               ),
             ],

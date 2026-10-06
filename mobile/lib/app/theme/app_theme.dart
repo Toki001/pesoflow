@@ -38,6 +38,14 @@ abstract final class AppTheme {
         labelMedium: AppTypography.labelMedium,
         labelSmall: AppTypography.labelSmall,
       ).apply(bodyColor: c.ink, displayColor: c.ink),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: c.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppRadius.hero),
+          ),
+        ),
+      ),
       dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
       iconTheme: IconThemeData(color: c.secondaryInk, size: 20),
       textButtonTheme: TextButtonThemeData(

@@ -7,4 +7,6 @@ abstract final class AppRadius {
   static const pill = 999.0;
   // Home's screenshot and HTML override use 12px, see docs/ui-reference.md.
   static const homeCard = 12.0;
+  // Budgets hero/insight export uses rounded-2xl (16px).
+  static const budgetHero = 16.0;
 }

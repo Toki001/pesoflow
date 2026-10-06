@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Dashboard {
 
- String get name; DateTime get asOf; int get balance; int get monthChange; String get monthChangePercent; int get inflow; int get outflow; int get savings; String get savingsRate; int get transactionCount; int get accountCount; int get budgetLimit; int get daysLeft; int get projectedExtraSavings; List<BudgetSnapshot> get budgets; List<TransactionRecord> get transactions; List<UpcomingBill> get bills;
+ String get name; DateTime get asOf; int get balance; int get monthChange; String get monthChangePercent; int get inflow; int get outflow; int get savings; String get savingsRate; int get transactionCount; int get accountCount; int get budgetLimit; int? get budgetSpent; int get daysLeft; int get projectedExtraSavings; List<BudgetSnapshot> get budgets; List<TransactionRecord> get transactions; List<UpcomingBill> get bills;
 /// Create a copy of Dashboard
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,20 +30,20 @@ $DashboardCopyWith<Dashboard> get copyWith => _$DashboardCopyWithImpl<Dashboard>
 @override
 bool operator ==(Object other) {
   final _this = this as Dashboard;
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Dashboard&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.asOf, _this.asOf) || other.asOf == _this.asOf)&&(identical(other.balance, _this.balance) || other.balance == _this.balance)&&(identical(other.monthChange, _this.monthChange) || other.monthChange == _this.monthChange)&&(identical(other.monthChangePercent, _this.monthChangePercent) || other.monthChangePercent == _this.monthChangePercent)&&(identical(other.inflow, _this.inflow) || other.inflow == _this.inflow)&&(identical(other.outflow, _this.outflow) || other.outflow == _this.outflow)&&(identical(other.savings, _this.savings) || other.savings == _this.savings)&&(identical(other.savingsRate, _this.savingsRate) || other.savingsRate == _this.savingsRate)&&(identical(other.transactionCount, _this.transactionCount) || other.transactionCount == _this.transactionCount)&&(identical(other.accountCount, _this.accountCount) || other.accountCount == _this.accountCount)&&(identical(other.budgetLimit, _this.budgetLimit) || other.budgetLimit == _this.budgetLimit)&&(identical(other.daysLeft, _this.daysLeft) || other.daysLeft == _this.daysLeft)&&(identical(other.projectedExtraSavings, _this.projectedExtraSavings) || other.projectedExtraSavings == _this.projectedExtraSavings)&&const DeepCollectionEquality().equals(other.budgets, _this.budgets)&&const DeepCollectionEquality().equals(other.transactions, _this.transactions)&&const DeepCollectionEquality().equals(other.bills, _this.bills));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Dashboard&&(identical(other.name, _this.name) || other.name == _this.name)&&(identical(other.asOf, _this.asOf) || other.asOf == _this.asOf)&&(identical(other.balance, _this.balance) || other.balance == _this.balance)&&(identical(other.monthChange, _this.monthChange) || other.monthChange == _this.monthChange)&&(identical(other.monthChangePercent, _this.monthChangePercent) || other.monthChangePercent == _this.monthChangePercent)&&(identical(other.inflow, _this.inflow) || other.inflow == _this.inflow)&&(identical(other.outflow, _this.outflow) || other.outflow == _this.outflow)&&(identical(other.savings, _this.savings) || other.savings == _this.savings)&&(identical(other.savingsRate, _this.savingsRate) || other.savingsRate == _this.savingsRate)&&(identical(other.transactionCount, _this.transactionCount) || other.transactionCount == _this.transactionCount)&&(identical(other.accountCount, _this.accountCount) || other.accountCount == _this.accountCount)&&(identical(other.budgetLimit, _this.budgetLimit) || other.budgetLimit == _this.budgetLimit)&&(identical(other.budgetSpent, _this.budgetSpent) || other.budgetSpent == _this.budgetSpent)&&(identical(other.daysLeft, _this.daysLeft) || other.daysLeft == _this.daysLeft)&&(identical(other.projectedExtraSavings, _this.projectedExtraSavings) || other.projectedExtraSavings == _this.projectedExtraSavings)&&const DeepCollectionEquality().equals(other.budgets, _this.budgets)&&const DeepCollectionEquality().equals(other.transactions, _this.transactions)&&const DeepCollectionEquality().equals(other.bills, _this.bills));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
   final _this = this as Dashboard;
-  return Object.hash(runtimeType,_this.name,_this.asOf,_this.balance,_this.monthChange,_this.monthChangePercent,_this.inflow,_this.outflow,_this.savings,_this.savingsRate,_this.transactionCount,_this.accountCount,_this.budgetLimit,_this.daysLeft,_this.projectedExtraSavings,const DeepCollectionEquality().hash(_this.budgets),const DeepCollectionEquality().hash(_this.transactions),const DeepCollectionEquality().hash(_this.bills));
+  return Object.hash(runtimeType,_this.name,_this.asOf,_this.balance,_this.monthChange,_this.monthChangePercent,_this.inflow,_this.outflow,_this.savings,_this.savingsRate,_this.transactionCount,_this.accountCount,_this.budgetLimit,_this.budgetSpent,_this.daysLeft,_this.projectedExtraSavings,const DeepCollectionEquality().hash(_this.budgets),const DeepCollectionEquality().hash(_this.transactions),const DeepCollectionEquality().hash(_this.bills));
 }
 
 @override
 String toString() {
   final _this = this as Dashboard;
-  return 'Dashboard(name: ${_this.name}, asOf: ${_this.asOf}, balance: ${_this.balance}, monthChange: ${_this.monthChange}, monthChangePercent: ${_this.monthChangePercent}, inflow: ${_this.inflow}, outflow: ${_this.outflow}, savings: ${_this.savings}, savingsRate: ${_this.savingsRate}, transactionCount: ${_this.transactionCount}, accountCount: ${_this.accountCount}, budgetLimit: ${_this.budgetLimit}, daysLeft: ${_this.daysLeft}, projectedExtraSavings: ${_this.projectedExtraSavings}, budgets: ${_this.budgets}, transactions: ${_this.transactions}, bills: ${_this.bills})';
+  return 'Dashboard(name: ${_this.name}, asOf: ${_this.asOf}, balance: ${_this.balance}, monthChange: ${_this.monthChange}, monthChangePercent: ${_this.monthChangePercent}, inflow: ${_this.inflow}, outflow: ${_this.outflow}, savings: ${_this.savings}, savingsRate: ${_this.savingsRate}, transactionCount: ${_this.transactionCount}, accountCount: ${_this.accountCount}, budgetLimit: ${_this.budgetLimit}, budgetSpent: ${_this.budgetSpent}, daysLeft: ${_this.daysLeft}, projectedExtraSavings: ${_this.projectedExtraSavings}, budgets: ${_this.budgets}, transactions: ${_this.transactions}, bills: ${_this.bills})';
 }
 
 
@@ -54,7 +54,7 @@ abstract mixin class $DashboardCopyWith<$Res>  {
   factory $DashboardCopyWith(Dashboard value, $Res Function(Dashboard) _then) = _$DashboardCopyWithImpl;
 @useResult
 $Res call({
- String name, DateTime asOf, int balance, int monthChange, String monthChangePercent, int inflow, int outflow, int savings, String savingsRate, int transactionCount, int accountCount, int budgetLimit, int daysLeft, int projectedExtraSavings, List<BudgetSnapshot> budgets, List<TransactionRecord> transactions, List<UpcomingBill> bills
+ String name, DateTime asOf, int balance, int monthChange, String monthChangePercent, int inflow, int outflow, int savings, String savingsRate, int transactionCount, int accountCount, int budgetLimit, int? budgetSpent, int daysLeft, int projectedExtraSavings, List<BudgetSnapshot> budgets, List<TransactionRecord> transactions, List<UpcomingBill> bills
 });
 
 
@@ -71,7 +71,7 @@ class _$DashboardCopyWithImpl<$Res>
 
 /// Create a copy of Dashboard
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? asOf = null,Object? balance = null,Object? monthChange = null,Object? monthChangePercent = null,Object? inflow = null,Object? outflow = null,Object? savings = null,Object? savingsRate = null,Object? transactionCount = null,Object? accountCount = null,Object? budgetLimit = null,Object? daysLeft = null,Object? projectedExtraSavings = null,Object? budgets = null,Object? transactions = null,Object? bills = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? name = null,Object? asOf = null,Object? balance = null,Object? monthChange = null,Object? monthChangePercent = null,Object? inflow = null,Object? outflow = null,Object? savings = null,Object? savingsRate = null,Object? transactionCount = null,Object? accountCount = null,Object? budgetLimit = null,Object? budgetSpent = freezed,Object? daysLeft = null,Object? projectedExtraSavings = null,Object? budgets = null,Object? transactions = null,Object? bills = null,}) {
   return _then(Dashboard(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,asOf: null == asOf ? _self.asOf : asOf // ignore: cast_nullable_to_non_nullable
@@ -85,7 +85,8 @@ as int,savingsRate: null == savingsRate ? _self.savingsRate : savingsRate // ign
 as String,transactionCount: null == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
 as int,accountCount: null == accountCount ? _self.accountCount : accountCount // ignore: cast_nullable_to_non_nullable
 as int,budgetLimit: null == budgetLimit ? _self.budgetLimit : budgetLimit // ignore: cast_nullable_to_non_nullable
-as int,daysLeft: null == daysLeft ? _self.daysLeft : daysLeft // ignore: cast_nullable_to_non_nullable
+as int,budgetSpent: freezed == budgetSpent ? _self.budgetSpent : budgetSpent // ignore: cast_nullable_to_non_nullable
+as int?,daysLeft: null == daysLeft ? _self.daysLeft : daysLeft // ignore: cast_nullable_to_non_nullable
 as int,projectedExtraSavings: null == projectedExtraSavings ? _self.projectedExtraSavings : projectedExtraSavings // ignore: cast_nullable_to_non_nullable
 as int,budgets: null == budgets ? _self.budgets : budgets // ignore: cast_nullable_to_non_nullable
 as List<BudgetSnapshot>,transactions: null == transactions ? _self.transactions : transactions // ignore: cast_nullable_to_non_nullable
@@ -175,10 +176,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int? budgetSpent,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Dashboard() when $default != null:
-return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
+return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.budgetSpent,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
   return orElse();
 
 }
@@ -196,10 +197,10 @@ return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.mont
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int? budgetSpent,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)  $default,) {final _that = this;
 switch (_that) {
 case _Dashboard():
-return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
+return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.budgetSpent,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -216,10 +217,10 @@ return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.mont
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  DateTime asOf,  int balance,  int monthChange,  String monthChangePercent,  int inflow,  int outflow,  int savings,  String savingsRate,  int transactionCount,  int accountCount,  int budgetLimit,  int? budgetSpent,  int daysLeft,  int projectedExtraSavings,  List<BudgetSnapshot> budgets,  List<TransactionRecord> transactions,  List<UpcomingBill> bills)?  $default,) {final _that = this;
 switch (_that) {
 case _Dashboard() when $default != null:
-return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
+return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.monthChangePercent,_that.inflow,_that.outflow,_that.savings,_that.savingsRate,_that.transactionCount,_that.accountCount,_that.budgetLimit,_that.budgetSpent,_that.daysLeft,_that.projectedExtraSavings,_that.budgets,_that.transactions,_that.bills);case _:
   return null;
 
 }
@@ -231,7 +232,7 @@ return $default(_that.name,_that.asOf,_that.balance,_that.monthChange,_that.mont
 @JsonSerializable()
 
 class _Dashboard implements Dashboard {
-  const _Dashboard({required this.name, required this.asOf, required this.balance, required this.monthChange, required this.monthChangePercent, required this.inflow, required this.outflow, required this.savings, required this.savingsRate, required this.transactionCount, required this.accountCount, required this.budgetLimit, required this.daysLeft, required this.projectedExtraSavings, required  List<BudgetSnapshot> budgets, required  List<TransactionRecord> transactions, required  List<UpcomingBill> bills}): _budgets = budgets,_transactions = transactions,_bills = bills;
+  const _Dashboard({required this.name, required this.asOf, required this.balance, required this.monthChange, required this.monthChangePercent, required this.inflow, required this.outflow, required this.savings, required this.savingsRate, required this.transactionCount, required this.accountCount, required this.budgetLimit, this.budgetSpent, required this.daysLeft, required this.projectedExtraSavings, required  List<BudgetSnapshot> budgets, required  List<TransactionRecord> transactions, required  List<UpcomingBill> bills}): _budgets = budgets,_transactions = transactions,_bills = bills;
   factory _Dashboard.fromJson(Map<String, dynamic> json) => _$DashboardFromJson(json);
 
 @override final  String name;
@@ -246,6 +247,7 @@ class _Dashboard implements Dashboard {
 @override final  int transactionCount;
 @override final  int accountCount;
 @override final  int budgetLimit;
+@override final  int? budgetSpent;
 @override final  int daysLeft;
 @override final  int projectedExtraSavings;
  final  List<BudgetSnapshot> _budgets;
@@ -283,18 +285,18 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Dashboard&&(identical(other.name, name) || other.name == name)&&(identical(other.asOf, asOf) || other.asOf == asOf)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.monthChange, monthChange) || other.monthChange == monthChange)&&(identical(other.monthChangePercent, monthChangePercent) || other.monthChangePercent == monthChangePercent)&&(identical(other.inflow, inflow) || other.inflow == inflow)&&(identical(other.outflow, outflow) || other.outflow == outflow)&&(identical(other.savings, savings) || other.savings == savings)&&(identical(other.savingsRate, savingsRate) || other.savingsRate == savingsRate)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.accountCount, accountCount) || other.accountCount == accountCount)&&(identical(other.budgetLimit, budgetLimit) || other.budgetLimit == budgetLimit)&&(identical(other.daysLeft, daysLeft) || other.daysLeft == daysLeft)&&(identical(other.projectedExtraSavings, projectedExtraSavings) || other.projectedExtraSavings == projectedExtraSavings)&&const DeepCollectionEquality().equals(other.budgets, _budgets)&&const DeepCollectionEquality().equals(other.transactions, _transactions)&&const DeepCollectionEquality().equals(other.bills, _bills));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is _Dashboard&&(identical(other.name, name) || other.name == name)&&(identical(other.asOf, asOf) || other.asOf == asOf)&&(identical(other.balance, balance) || other.balance == balance)&&(identical(other.monthChange, monthChange) || other.monthChange == monthChange)&&(identical(other.monthChangePercent, monthChangePercent) || other.monthChangePercent == monthChangePercent)&&(identical(other.inflow, inflow) || other.inflow == inflow)&&(identical(other.outflow, outflow) || other.outflow == outflow)&&(identical(other.savings, savings) || other.savings == savings)&&(identical(other.savingsRate, savingsRate) || other.savingsRate == savingsRate)&&(identical(other.transactionCount, transactionCount) || other.transactionCount == transactionCount)&&(identical(other.accountCount, accountCount) || other.accountCount == accountCount)&&(identical(other.budgetLimit, budgetLimit) || other.budgetLimit == budgetLimit)&&(identical(other.budgetSpent, budgetSpent) || other.budgetSpent == budgetSpent)&&(identical(other.daysLeft, daysLeft) || other.daysLeft == daysLeft)&&(identical(other.projectedExtraSavings, projectedExtraSavings) || other.projectedExtraSavings == projectedExtraSavings)&&const DeepCollectionEquality().equals(other.budgets, _budgets)&&const DeepCollectionEquality().equals(other.transactions, _transactions)&&const DeepCollectionEquality().equals(other.bills, _bills));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
 int get hashCode {
-    return Object.hash(runtimeType,name,asOf,balance,monthChange,monthChangePercent,inflow,outflow,savings,savingsRate,transactionCount,accountCount,budgetLimit,daysLeft,projectedExtraSavings,const DeepCollectionEquality().hash(_budgets),const DeepCollectionEquality().hash(_transactions),const DeepCollectionEquality().hash(_bills));
+    return Object.hash(runtimeType,name,asOf,balance,monthChange,monthChangePercent,inflow,outflow,savings,savingsRate,transactionCount,accountCount,budgetLimit,budgetSpent,daysLeft,projectedExtraSavings,const DeepCollectionEquality().hash(_budgets),const DeepCollectionEquality().hash(_transactions),const DeepCollectionEquality().hash(_bills));
 }
 
 @override
 String toString() {
-    return 'Dashboard(name: $name, asOf: $asOf, balance: $balance, monthChange: $monthChange, monthChangePercent: $monthChangePercent, inflow: $inflow, outflow: $outflow, savings: $savings, savingsRate: $savingsRate, transactionCount: $transactionCount, accountCount: $accountCount, budgetLimit: $budgetLimit, daysLeft: $daysLeft, projectedExtraSavings: $projectedExtraSavings, budgets: $budgets, transactions: $transactions, bills: $bills)';
+    return 'Dashboard(name: $name, asOf: $asOf, balance: $balance, monthChange: $monthChange, monthChangePercent: $monthChangePercent, inflow: $inflow, outflow: $outflow, savings: $savings, savingsRate: $savingsRate, transactionCount: $transactionCount, accountCount: $accountCount, budgetLimit: $budgetLimit, budgetSpent: $budgetSpent, daysLeft: $daysLeft, projectedExtraSavings: $projectedExtraSavings, budgets: $budgets, transactions: $transactions, bills: $bills)';
 }
 
 
@@ -305,7 +307,7 @@ abstract mixin class _$DashboardCopyWith<$Res> implements $DashboardCopyWith<$Re
   factory _$DashboardCopyWith(_Dashboard value, $Res Function(_Dashboard) _then) = __$DashboardCopyWithImpl;
 @override @useResult
 $Res call({
- String name, DateTime asOf, int balance, int monthChange, String monthChangePercent, int inflow, int outflow, int savings, String savingsRate, int transactionCount, int accountCount, int budgetLimit, int daysLeft, int projectedExtraSavings, List<BudgetSnapshot> budgets, List<TransactionRecord> transactions, List<UpcomingBill> bills
+ String name, DateTime asOf, int balance, int monthChange, String monthChangePercent, int inflow, int outflow, int savings, String savingsRate, int transactionCount, int accountCount, int budgetLimit, int? budgetSpent, int daysLeft, int projectedExtraSavings, List<BudgetSnapshot> budgets, List<TransactionRecord> transactions, List<UpcomingBill> bills
 });
 
 
@@ -322,7 +324,7 @@ class __$DashboardCopyWithImpl<$Res>
 
 /// Create a copy of Dashboard
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? asOf = null,Object? balance = null,Object? monthChange = null,Object? monthChangePercent = null,Object? inflow = null,Object? outflow = null,Object? savings = null,Object? savingsRate = null,Object? transactionCount = null,Object? accountCount = null,Object? budgetLimit = null,Object? daysLeft = null,Object? projectedExtraSavings = null,Object? budgets = null,Object? transactions = null,Object? bills = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? name = null,Object? asOf = null,Object? balance = null,Object? monthChange = null,Object? monthChangePercent = null,Object? inflow = null,Object? outflow = null,Object? savings = null,Object? savingsRate = null,Object? transactionCount = null,Object? accountCount = null,Object? budgetLimit = null,Object? budgetSpent = freezed,Object? daysLeft = null,Object? projectedExtraSavings = null,Object? budgets = null,Object? transactions = null,Object? bills = null,}) {
   return _then(_Dashboard(
 name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,asOf: null == asOf ? _self.asOf : asOf // ignore: cast_nullable_to_non_nullable
@@ -336,7 +338,8 @@ as int,savingsRate: null == savingsRate ? _self.savingsRate : savingsRate // ign
 as String,transactionCount: null == transactionCount ? _self.transactionCount : transactionCount // ignore: cast_nullable_to_non_nullable
 as int,accountCount: null == accountCount ? _self.accountCount : accountCount // ignore: cast_nullable_to_non_nullable
 as int,budgetLimit: null == budgetLimit ? _self.budgetLimit : budgetLimit // ignore: cast_nullable_to_non_nullable
-as int,daysLeft: null == daysLeft ? _self.daysLeft : daysLeft // ignore: cast_nullable_to_non_nullable
+as int,budgetSpent: freezed == budgetSpent ? _self.budgetSpent : budgetSpent // ignore: cast_nullable_to_non_nullable
+as int?,daysLeft: null == daysLeft ? _self.daysLeft : daysLeft // ignore: cast_nullable_to_non_nullable
 as int,projectedExtraSavings: null == projectedExtraSavings ? _self.projectedExtraSavings : projectedExtraSavings // ignore: cast_nullable_to_non_nullable
 as int,budgets: null == budgets ? _self._budgets : budgets // ignore: cast_nullable_to_non_nullable
 as List<BudgetSnapshot>,transactions: null == transactions ? _self._transactions : transactions // ignore: cast_nullable_to_non_nullable

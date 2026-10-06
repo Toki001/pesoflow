@@ -21,6 +21,7 @@ abstract class Dashboard with _$Dashboard {
     required int transactionCount,
     required int accountCount,
     required int budgetLimit,
+    int? budgetSpent,
     required int daysLeft,
     required int projectedExtraSavings,
     required List<BudgetSnapshot> budgets,

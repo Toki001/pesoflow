@@ -16,7 +16,7 @@ class BudgetSummary extends StatelessWidget {
     final c = context.colors;
     final overall = BudgetSnapshot(
       name: 'Overall Limit (${data.daysLeft} days left)',
-      spent: data.outflow,
+      spent: data.budgetSpent ?? data.outflow,
       limit: data.budgetLimit,
       status: 'utilized',
     );
@@ -28,7 +28,7 @@ class BudgetSummary extends StatelessWidget {
           const SizedBox(height: 6),
           BudgetProgressBar(
             value: overall.used,
-            color: AppColors.primary,
+            color: overall.exceeded ? c.danger : AppColors.primary,
             label: 'Overall budget',
             height: 8,
           ),
@@ -40,7 +40,9 @@ class BudgetSummary extends StatelessWidget {
             ),
             right: Text(
               '${MoneyFormatter.php(overall.remaining, decimals: false)} remaining',
-              style: AppTypography.labelSmall.copyWith(color: c.positive),
+              style: AppTypography.labelSmall.copyWith(
+                color: overall.exceeded ? c.danger : c.positive,
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.sm),

@@ -10,6 +10,7 @@ class FinanceCard extends StatelessWidget {
     required this.child,
     this.padding = const EdgeInsets.all(AppSpacing.sm),
     this.hero = false,
+    this.radius = AppRadius.homeCard,
     this.color,
     this.borderColor,
     super.key,
@@ -17,6 +18,7 @@ class FinanceCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry padding;
   final bool hero;
+  final double radius;
   final Color? color;
   final Color? borderColor;
   @override
@@ -24,7 +26,7 @@ class FinanceCard extends StatelessWidget {
     padding: padding,
     decoration: BoxDecoration(
       color: color ?? context.colors.surface,
-      borderRadius: BorderRadius.circular(AppRadius.homeCard),
+      borderRadius: BorderRadius.circular(radius),
       border: Border.all(
         color:
             borderColor ??

@@ -11,6 +11,7 @@ import '../../../core/widgets/category_icon.dart';
 import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/task_screen.dart';
 import '../../transactions/application/transactions_provider.dart';
+import '../../budgets/application/budgets_provider.dart';
 import '../../transactions/data/transaction_fixture.dart';
 import '../../transactions/domain/transaction.dart';
 import '../../transactions/domain/transaction_query.dart';
@@ -238,25 +239,16 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     final large = MediaQuery.textScalerOf(context).scale(14) > 19;
     final label = AppTypography.labelMedium;
     final small = AppTypography.bodySmall;
-    final budget = switch (category) {
-      TransactionCategory.food => (690000, 800000),
-      TransactionCategory.shopping => (340000, 500000),
-      TransactionCategory.transport => (215000, 350000),
-      _ => (0, 0),
-    };
-    final ledger = ref.watch(demoLedgerProvider);
-    int budgetContribution(List<TransactionRecord> records) => records
-        .where(
-          (t) =>
-              t.category == category &&
-              t.occurredAt.year == 2024 &&
-              t.occurredAt.month == 10,
-        )
-        .fold(0, (sum, t) => sum + t.budgetImpact);
-    final spent =
-        budget.$1 +
-        budgetContribution(ledger) -
-        budgetContribution(transactionFixture());
+    ref.watch(demoLedgerProvider);
+    ref.watch(demoBudgetPlansProvider);
+    final plan = ref
+        .read(demoBudgetPlansProvider.notifier)
+        .viewFor(date.year, date.month);
+    final matches = plan.allowances.where((a) => a.category == category);
+    final budget = matches.isEmpty
+        ? (0, 0)
+        : (matches.first.spent, matches.first.limit);
+    final spent = budget.$1;
     Widget title(String text) => Text(text, style: label);
     Widget quickButton(
       String text,
@@ -563,7 +555,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                       },
                     ),
                     const SizedBox(height: 12),
-                    if (budget.$2 > 0 && date.year == 2024 && date.month == 10)
+                    if (budget.$2 > 0)
                       FinanceCard(
                         color: c.canvas,
                         padding: const EdgeInsets.all(12),
