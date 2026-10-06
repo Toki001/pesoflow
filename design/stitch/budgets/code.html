@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>PesoFlow - Budgets</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;750&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#dbe1ff",
+            "warning-soft": "#FEF3C7",
+            "warning": "#D97706",
+            "surface": "#FFFFFF",
+            "positive": "#16A34A",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-primary-container": "#eeefff",
+            "ink-secondary": "#475569",
+            "border-strong": "#CBD5E1",
+            "on-tertiary-container": "#f7edff",
+            "surface-container": "#eaedff",
+            "on-primary": "#ffffff",
+            "outline": "#737686",
+            "dark-ink-secondary": "#CBD5E1",
+            "tertiary-container": "#8343f4",
+            "background": "#faf8ff",
+            "danger-soft": "#FEE2E2",
+            "positive-soft": "#DCFCE7",
+            "dark-ink-muted": "#94A3B8",
+            "on-error": "#ffffff",
+            "inverse-primary": "#b4c5ff",
+            "surface-tint": "#0053db",
+            "on-secondary-container": "#006f67",
+            "on-background": "#131b2e",
+            "dark-surface-subtle": "#111827",
+            "tertiary-fixed": "#eaddff",
+            "tertiary": "#6a1edb",
+            "ink-muted": "#64748B",
+            "on-primary-fixed": "#00174b",
+            "secondary": "#006a63",
+            "error-container": "#ffdad6",
+            "dark-ink": "#F8FAFC",
+            "inverse-surface": "#283044",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#eef0ff",
+            "tertiary-fixed-dim": "#d2bbff",
+            "secondary-soft": "#CCFBF1",
+            "on-secondary": "#ffffff",
+            "primary-strong": "#1D4ED8",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "dark-border": "#334155",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "on-secondary-fixed": "#00201d",
+            "primary-container": "#2563eb",
+            "on-surface-variant": "#434655",
+            "surface-container-high": "#e2e7ff",
+            "secondary-container": "#99efe5",
+            "secondary-fixed-dim": "#80d5cb",
+            "accent-soft": "#EDE9FE",
+            "surface-variant": "#dae2fd",
+            "on-secondary-fixed-variant": "#00504a",
+            "surface-dim": "#d2d9f4",
+            "dark-surface-muted": "#1E293B",
+            "surface-muted": "#F1F5F9",
+            "border": "#E2E8F0",
+            "on-tertiary-fixed": "#25005a",
+            "primary": "#004ac6",
+            "on-primary-fixed-variant": "#003ea8",
+            "surface-container-low": "#f2f3ff",
+            "surface-bright": "#faf8ff",
+            "surface-container-highest": "#dae2fd",
+            "primary-soft": "#DBEAFE",
+            "secondary-fixed": "#9cf2e8",
+            "danger": "#DC2626",
+            "on-surface": "#131b2e",
+            "dark-surface": "#0B1220",
+            "surface-subtle": "#F8FAFC"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "gutter-sm": "0.75rem",
+            "margin-lg": "1.25rem",
+            "space-md": "0.75rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-xl": "1.5rem",
+            "space-lg": "1rem",
+            "space-xs": "0.25rem",
+            "space-3xl": "2.5rem",
+            "space-4xl": "3rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "body-sm": ["Inter"],
+            "label-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "numeric-xl": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "numeric-lg": ["Inter"],
+            "numeric-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "display": ["Inter"],
+            "headline-lg": ["Inter"]
+          },
+          "fontSize": {
+            "body-sm": ["12px", { "lineHeight": "17px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "label-sm": ["11px", { "lineHeight": "13px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "numeric-xl": ["32px", { "lineHeight": "32px", "letterSpacing": "-0.035em", "fontWeight": "750" }],
+            "headline-md": ["22px", { "lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "numeric-lg": ["24px", { "lineHeight": "24px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "numeric-md": ["18px", { "lineHeight": "18px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "650" }],
+            "display": ["34px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.025em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-subtle text-on-surface antialiased font-body-md text-body-md min-h-screen flex flex-col items-center">
+<!-- Main Mobile Canvas Container -->
+<div class="w-full max-w-lg min-h-screen flex flex-col bg-surface-subtle pb-28 relative">
+<!-- Top Navigation Header (from Shared Component JSON and Design System) -->
+<header class="sticky top-0 z-40 bg-surface shadow-sm">
+<div class="flex justify-between items-center w-full px-margin h-14 max-w-lg mx-auto">
+<div class="flex items-center gap-space-sm">
+<div aria-label="User Profile Avatar" class="w-8 h-8 rounded-full bg-primary-soft text-primary flex items-center justify-center font-bold text-label-md">
+            PF
+          </div>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">PesoFlow</span>
+</div>
+<button aria-label="Notifications" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-subtle active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[22px]">notifications</span>
+</button>
+</div>
+<!-- Contextual Sub-header / Period Selector & Actions -->
+<div class="px-margin pb-space-md pt-space-xs flex items-center justify-between">
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Budgets</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-soft text-primary">
+              Active
+            </span>
+</div>
+<!-- Subtle Month Selector & Remaining Days -->
+<div class="flex items-center gap-2 mt-0.5">
+<button class="inline-flex items-center gap-1 text-ink-muted hover:text-on-surface font-label-md text-label-md transition-colors">
+<span>October 2024</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+<span class="text-ink-muted text-body-sm">•</span>
+<span class="text-ink-muted text-body-sm flex items-center gap-1 font-body-sm">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+              7 days left
+            </span>
+</div>
+</div>
+<!-- Add Category / Create Budget Button -->
+<button class="flex items-center gap-1 bg-primary text-on-primary px-3 py-2 rounded-xl text-label-md font-label-md shadow-sm hover:bg-primary-strong active:scale-95 transition-all duration-150">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>New</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<main class="flex-1 px-margin pt-space-md space-y-space-lg">
+<!-- Overall Monthly Budget Hero Card (Level 2 Elevation) -->
+<section class="bg-surface rounded-2xl p-space-lg border border-border-strong shadow-[0_4px_16px_0_rgba(15,23,42,0.06)] relative overflow-hidden">
+<!-- Ambient top subtle indicator -->
+<div class="flex items-start justify-between">
+<div>
+<span class="text-ink-muted text-label-md font-label-md tracking-wider uppercase">Monthly Budget</span>
+<div class="flex items-baseline gap-1.5 mt-0.5">
+<span class="text-headline-md font-headline-md text-on-surface">₱25,000.00</span>
+<span class="text-ink-muted text-body-sm font-body-sm">limit</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+<span class="w-1.5 h-1.5 rounded-full bg-positive"></span>
+            Within limit
+          </span>
+</div>
+<!-- Metric Partition: Spent vs Remaining -->
+<div class="grid grid-cols-2 gap-space-md my-4 pt-1">
+<div class="bg-surface-subtle p-3 rounded-xl border border-border">
+<span class="text-ink-muted text-label-sm font-label-sm">Spent so far</span>
+<div class="text-numeric-md font-numeric-md text-on-surface mt-0.5">
+              ₱16,800.00
+            </div>
+<span class="text-body-sm font-body-sm text-ink-muted">67% utilized</span>
+</div>
+<div class="bg-surface-subtle p-3 rounded-xl border border-border">
+<span class="text-ink-muted text-label-sm font-label-sm">Remaining</span>
+<div class="text-numeric-md font-numeric-md text-primary mt-0.5">
+              ₱8,200.00
+            </div>
+<span class="text-body-sm font-body-sm text-positive font-semibold">33% left</span>
+</div>
+</div>
+<!-- Horizontal Progress Track (67% utilized) -->
+<div class="space-y-1.5">
+<div class="w-full h-2.5 bg-surface-muted rounded-full overflow-hidden p-0.5">
+<div class="h-full bg-primary-container rounded-full transition-all duration-500 ease-out" style="width: 67%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-ink-muted">
+<span>0%</span>
+<span>67% spent</span>
+<span>100%</span>
+</div>
+</div>
+<!-- Daily Safe-to-Spend Allowance & Projected Metrics Banner -->
+<div class="mt-4 pt-3 border-t border-border flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-[18px] text-primary">savings</span>
+<p class="text-body-sm font-body-sm">
+<span class="font-semibold text-on-surface">₱1,171.42 / day</span> safe pace for next 7 days
+            </p>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm bg-surface-subtle px-3 py-2 rounded-lg">
+<span class="text-ink-muted">Estimated Month-End:</span>
+<span class="font-semibold text-on-surface">₱22,400.00 <span class="text-positive font-normal">(₱2,600 buffer)</span></span>
+</div>
+</div>
+</section>
+<!-- Supportive Calm Insight / Smart Recommendation Card (Level 1 Elevation) -->
+<section class="bg-accent-soft/40 border border-purple-200/70 rounded-2xl p-space-lg relative overflow-hidden">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-xl bg-accent-soft text-tertiary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Smart Reallocation Suggestion</h3>
+<span class="text-label-sm font-label-sm px-2 py-0.5 rounded-full bg-white text-tertiary border border-purple-100">
+                Supportive
+              </span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-secondary mt-1.5 leading-relaxed">
+              You have <span class="font-semibold text-on-surface">₱1,200 surplus</span> in Entertainment. Reallocating <span class="font-semibold text-on-surface">₱500</span> to Food &amp; Dining will keep all categories comfortably balanced this month.
+            </p>
+<div class="mt-3 flex items-center gap-2">
+<button class="bg-surface border border-purple-200 text-tertiary px-3.5 py-1.5 rounded-xl text-label-md font-label-md shadow-sm hover:bg-white active:scale-95 transition-all">
+                Adjust Budgets
+              </button>
+<button class="text-ink-muted hover:text-on-surface text-label-md font-label-md px-2 py-1.5 transition-colors">
+                Dismiss
+              </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Budgets Section Header & Filters -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between pt-1">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface">Category Budgets</h2>
+<p class="text-ink-muted text-body-sm font-body-sm">6 categorized allowances tracked</p>
+</div>
+<span class="text-label-md font-label-md text-primary flex items-center gap-0.5 cursor-pointer">
+            Sort <span class="material-symbols-outlined text-[16px]">swap_vert</span>
+</span>
+</div>
+<!-- Filter Chips (Touch Friendly) -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-label-md bg-on-surface text-white shadow-sm flex items-center gap-1">
+<span>All</span>
+<span class="text-label-sm bg-white/20 px-1.5 py-0.2 rounded-full">6</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-label-md bg-surface border border-border text-ink-secondary hover:bg-surface-subtle flex items-center gap-1 transition-colors">
+<span>At Risk</span>
+<span class="text-label-sm bg-warning-soft text-warning px-1.5 py-0.2 rounded-full">2</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-full text-label-md font-label-md bg-surface border border-border text-ink-secondary hover:bg-surface-subtle flex items-center gap-1 transition-colors">
+<span>On Track</span>
+<span class="text-label-sm bg-positive-soft text-positive px-1.5 py-0.2 rounded-full">4</span>
+</button>
+</div>
+<!-- Category Budget Cards List -->
+<div class="space-y-3">
+<!-- 1. Food & Dining (Amber / 86% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-warning-soft text-warning flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">restaurant</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Food &amp; Dining</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Groceries, delivery, cafes</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-warning-soft text-warning">
+                Slow down slightly
+              </span>
+</div>
+<!-- Spend vs Limit -->
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱6,900.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱8,000.00</span>
+</div>
+<span class="text-label-md font-label-md text-warning font-semibold">86% used</span>
+</div>
+<!-- Progress Bar (Amber at 86%) -->
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-warning rounded-full" style="width: 86%;"></div>
+</div>
+<!-- Supportive Guidance Note -->
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>Avg ₱287/day. At this rate, will exceed by ₱350.</span>
+<span class="font-semibold text-on-surface">₱1,100 left</span>
+</div>
+</div>
+<!-- 2. Shopping (Blue/Green Healthy / 68% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-soft text-primary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Shopping</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Personal, gadgets &amp; clothing</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+                Healthy
+              </span>
+</div>
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱3,400.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱5,000.00</span>
+</div>
+<span class="text-label-md font-label-md text-ink-muted">68% used</span>
+</div>
+<!-- Progress Bar (Calm Primary Blue at 68%) -->
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-primary-container rounded-full" style="width: 68%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>Paced steadily for 7 days remaining.</span>
+<span class="font-semibold text-positive">₱1,600 left</span>
+</div>
+</div>
+<!-- 3. Transport (Amber / Approaching limit / 86% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-warning-soft text-warning flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">directions_car</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Transport</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Ride hailing, fuel, tolls</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-warning-soft text-warning">
+                Approaching limit
+              </span>
+</div>
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱2,150.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱2,500.00</span>
+</div>
+<span class="text-label-md font-label-md text-warning font-semibold">86% used</span>
+</div>
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-warning rounded-full" style="width: 86%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>Approx ₱50/day safe allowance left.</span>
+<span class="font-semibold text-on-surface">₱350 left</span>
+</div>
+</div>
+<!-- 4. Bills & Utilities (On Track / Fixed Recurring / 80% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-soft text-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Bills &amp; Utilities</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Electricity, water, fiber internet</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+                On track
+              </span>
+</div>
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱2,000.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱2,500.00</span>
+</div>
+<span class="text-label-md font-label-md text-ink-muted">80% used</span>
+</div>
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-primary-container rounded-full" style="width: 80%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>Fixed monthly expenses settled.</span>
+<span class="font-semibold text-on-surface">₱500 left</span>
+</div>
+</div>
+<!-- 5. Subscriptions (Fixed • 4 services / 97% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-muted text-ink-secondary flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">subscriptions</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Subscriptions</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Netflix, Spotify, Cloud storage</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-muted text-ink-secondary">
+                Fixed • 4 services
+              </span>
+</div>
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱1,550.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱1,600.00</span>
+</div>
+<span class="text-label-md font-label-md text-ink-muted">97% used</span>
+</div>
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-outline rounded-full" style="width: 97%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>All 4 recurring bills charged.</span>
+<span class="font-semibold text-on-surface">₱50 left</span>
+</div>
+</div>
+<!-- 6. Entertainment & Leisure (Green / 40% used) -->
+<div class="bg-surface rounded-xl p-space-lg border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-2.5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-positive-soft text-positive flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">sports_esports</span>
+</div>
+<div>
+<h4 class="text-body-md font-semibold text-on-surface">Entertainment &amp; Leisure</h4>
+<p class="text-body-sm font-body-sm text-ink-muted">Movies, outings &amp; games</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+                Well on track
+              </span>
+</div>
+<div class="flex justify-between items-baseline mb-1.5">
+<div class="flex items-baseline gap-1">
+<span class="text-numeric-md font-numeric-md text-on-surface">₱800.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ ₱2,000.00</span>
+</div>
+<span class="text-label-md font-label-md text-positive font-semibold">40% used</span>
+</div>
+<div class="w-full h-2 bg-surface-muted rounded-full overflow-hidden mb-2">
+<div class="h-full bg-positive rounded-full" style="width: 40%;"></div>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-1 border-t border-border/60 text-ink-muted">
+<span>₱1,200 available cushion for month-end.</span>
+<span class="font-semibold text-positive">₱1,200 left</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Monthly Health Footnote / Calm FinTech Disclosure -->
+<section class="py-space-md text-center">
+<p class="text-body-sm font-body-sm text-ink-muted">
+          PesoFlow tracks actual bank transactions in read-only mode.<br/>
+          Budgets reset automatically on <span class="font-semibold text-on-surface">November 1, 2024</span>.
+        </p>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Shared Component JSON Source of Truth) -->
+<!-- Destination count: 5. Active item: "Budgets" (Matched strictly to page content) -->
+<nav aria-label="Bottom Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-gutter max-w-lg mx-auto bg-surface shadow-[0_-4px_16px_0_rgba(15,23,42,0.06)]">
+<!-- 1. Home -->
+<a aria-label="Home" class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" href="#home">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</a>
+<!-- 2. Transactions -->
+<a aria-label="Transactions" class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" href="#transactions">
+<span class="material-symbols-outlined text-[24px]">receipt_long</span>
+<span class="text-label-sm font-label-sm mt-0.5">Transactions</span>
+</a>
+<!-- 3. Add (Center prominent button with style_universal_hover) -->
+<a aria-label="Add Transaction" class="flex flex-col items-center justify-center -mt-5 active:scale-95 transition-transform duration-150 ease-out group" href="#add">
+<div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg shadow-primary/30 group-hover:bg-primary-strong transition-colors">
+<span class="material-symbols-outlined text-[26px]">add</span>
+</div>
+<span class="text-label-sm font-label-sm text-ink-muted group-hover:text-primary mt-1">Add</span>
+</a>
+<!-- 4. Analytics -->
+<a aria-label="Analytics" class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" href="#analytics">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+<span class="text-label-sm font-label-sm mt-0.5">Analytics</span>
+</a>
+<!-- 5. Budgets (ACTIVE DESTINATION: style_active_navigation applied) -->
+<a aria-current="page" aria-label="Budgets" class="flex flex-col items-center justify-center text-primary font-semibold active:scale-95 transition-transform duration-150 ease-out" href="#budgets">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="text-label-sm font-label-sm mt-0.5">Budgets</span>
+</a>
+</nav>
+</div>
+</body></html>

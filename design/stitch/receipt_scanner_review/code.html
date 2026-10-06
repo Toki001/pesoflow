@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PesoFlow — Receipt Scanner &amp; OCR Review</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;750;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-soft": "#DBEAFE",
+            "secondary-soft": "#CCFBF1",
+            "error": "#ba1a1a",
+            "surface-bright": "#faf8ff",
+            "primary": "#004ac6",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#eeefff",
+            "on-tertiary-fixed": "#25005a",
+            "surface": "#FFFFFF",
+            "on-surface": "#131b2e",
+            "surface-variant": "#dae2fd",
+            "primary-fixed-dim": "#b4c5ff",
+            "ink-muted": "#64748B",
+            "surface-container-high": "#e2e7ff",
+            "inverse-surface": "#283044",
+            "error-container": "#ffdad6",
+            "on-background": "#131b2e",
+            "inverse-primary": "#b4c5ff",
+            "positive": "#16A34A",
+            "surface-muted": "#F1F5F9",
+            "tertiary-container": "#8343f4",
+            "surface-container-highest": "#dae2fd",
+            "dark-border": "#334155",
+            "tertiary-fixed": "#eaddff",
+            "outline-variant": "#c3c6d7",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "on-surface-variant": "#434655",
+            "accent-soft": "#EDE9FE",
+            "on-primary": "#ffffff",
+            "dark-surface-muted": "#1E293B",
+            "ink-secondary": "#475569",
+            "secondary-fixed": "#9cf2e8",
+            "surface-subtle": "#F8FAFC",
+            "surface-container": "#eaedff",
+            "tertiary-fixed-dim": "#d2bbff",
+            "dark-ink-secondary": "#CBD5E1",
+            "on-secondary-fixed": "#00201d",
+            "inverse-on-surface": "#eef0ff",
+            "on-error": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed-variant": "#003ea8",
+            "tertiary": "#6a1edb",
+            "dark-ink": "#F8FAFC",
+            "on-tertiary": "#ffffff",
+            "primary-strong": "#1D4ED8",
+            "dark-surface-subtle": "#111827",
+            "danger-soft": "#FEE2E2",
+            "positive-soft": "#DCFCE7",
+            "on-secondary-fixed-variant": "#00504a",
+            "warning": "#D97706",
+            "primary-container": "#2563eb",
+            "background": "#faf8ff",
+            "surface-dim": "#d2d9f4",
+            "border-strong": "#CBD5E1",
+            "on-secondary-container": "#006f67",
+            "on-tertiary-container": "#f7edff",
+            "border": "#E2E8F0",
+            "secondary-fixed-dim": "#80d5cb",
+            "warning-soft": "#FEF3C7",
+            "surface-tint": "#0053db",
+            "secondary": "#006a63",
+            "secondary-container": "#99efe5",
+            "danger": "#DC2626",
+            "on-primary-fixed": "#00174b",
+            "dark-ink-muted": "#94A3B8",
+            "dark-surface": "#0B1220",
+            "outline": "#737686",
+            "surface-container-low": "#f2f3ff",
+            "primary-fixed": "#dbe1ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-md": "0.75rem",
+            "margin-lg": "1.25rem",
+            "space-xl": "1.5rem",
+            "space-2xl": "2rem",
+            "space-4xl": "3rem",
+            "space-3xl": "2.5rem",
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "gutter-sm": "0.75rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Inter"],
+            "numeric-xl": ["Inter"],
+            "label-sm": ["Inter"],
+            "numeric-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "display": ["Inter"],
+            "numeric-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-md": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-sm": ["Inter"],
+            "body-lg": ["Inter"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "numeric-xl": ["32px", { "lineHeight": "32px", "letterSpacing": "-0.035em", "fontWeight": "750" }],
+            "label-sm": ["11px", { "lineHeight": "13px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "numeric-lg": ["24px", { "lineHeight": "24px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "17px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "display": ["34px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "numeric-md": ["18px", { "lineHeight": "18px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["22px", { "lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "headline-sm": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "650" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "450" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    /* Viewfinder scanning beam animation */
+    @keyframes scanBeam {
+      0% { transform: translateY(-10%); opacity: 0; }
+      20% { opacity: 0.85; }
+      80% { opacity: 0.85; }
+      100% { transform: translateY(220px); opacity: 0; }
+    }
+    .animate-scan-beam {
+      animation: scanBeam 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-subtle text-on-surface antialiased font-body-md selection:bg-primary-soft selection:text-primary min-h-screen flex justify-center">
+<!-- Mobile Layout Container: Max 480px, strictly ergonomic and task-focused -->
+<!-- Note: According to the Semantic Shell logic, global BottomNavBar is suppressed on focused task/transaction modal screens to prioritize the Canvas -->
+<main class="w-full max-w-lg bg-dark-surface min-h-screen relative flex flex-col shadow-2xl overflow-x-hidden pb-12">
+<!-- ========================================== -->
+<!-- 1. TOP VIEWFINDER ZONE (DARK CAMERA HUD) -->
+<!-- ========================================== -->
+<header class="relative w-full h-[320px] bg-dark-surface-subtle overflow-hidden flex flex-col justify-between p-4 select-none">
+<!-- Top HUD Action Bar -->
+<div class="relative z-30 flex items-center justify-between w-full pt-1">
+<!-- Close / Dismiss Screen -->
+<button aria-label="Dismiss scan" class="w-10 h-10 rounded-full bg-dark-surface/70 backdrop-blur-md border border-dark-border/40 text-dark-ink flex items-center justify-center active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<!-- Center Scan Mode Indicator -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-surface/75 backdrop-blur-md border border-dark-border/50 text-dark-ink text-label-sm font-label-sm tracking-wide">
+<span class="w-2 h-2 rounded-full bg-positive animate-pulse"></span>
+<span>Receipt detected • 98% confidence</span>
+</div>
+<!-- Flash & Gallery Actions Cluster -->
+<div class="flex items-center gap-2">
+<!-- Flash Toggle -->
+<button aria-label="Toggle Flash Auto" class="h-10 px-3 rounded-full bg-dark-surface/70 backdrop-blur-md border border-dark-border/40 text-dark-ink flex items-center gap-1.5 active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[18px] text-warning" data-icon="flash_auto" data-weight="fill" style="font-variation-settings: 'FILL' 1;">flash_auto</span>
+<span class="text-label-sm font-label-sm">Auto</span>
+</button>
+<!-- Gallery Import -->
+<button aria-label="Pick from gallery" class="w-10 h-10 rounded-full bg-dark-surface/70 backdrop-blur-md border border-dark-border/40 text-dark-ink flex items-center justify-center active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="photo_library">photo_library</span>
+</button>
+</div>
+</div>
+<!-- Real Viewfinder Simulation with Scanned Receipt Framing -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none pt-12 pb-4">
+<!-- Simulated Scanned Receipt Surface with Perspective and Live OCR Overlays -->
+<div class="relative w-[240px] h-[210px] bg-slate-900/60 rounded-xl overflow-hidden border border-slate-700/60 shadow-2xl flex flex-col p-3.5 backdrop-blur-[2px]">
+<!-- Background image of realistic receipt texture -->
+<div class="absolute inset-0 opacity-20 bg-cover bg-center" data-alt="A macro studio shot of an authentic printed supermarket receipt on thermal paper with faint line items, grocery totals, and store barcodes under calm studio lighting with cool neutral tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCtp6-p4-8FYL2TCXnzwpILbggWP2d4L5U6QF2OAVI0iBW_pXc4fRrU4liTqtYDjL12ziT4SNaJYSzxJncVHY10BIWhAckb8TPW39tbJq9aJSwvP-NOQBz4j5i59_OlhSvjPtWZOzxwxf2L2sW9thpliis-R9W8Nh_4RiuJJtbsklVO_s4lheNSRYWIrDE9vV2gnVHLVYcDU5jNM9ZEflmRgg9VD0ve6f4Ojn4s0h2TrZ6_SjXseqgbVQ')"></div>
+<!-- Animated Laser Scanning Beam -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent shadow-[0_0_12px_#2563EB] animate-scan-beam z-10"></div>
+<!-- Subtle Receipt Outline Guide / Micro-marks -->
+<div class="relative z-0 flex flex-col h-full justify-between opacity-80">
+<!-- Receipt Header OCR Box -->
+<div class="flex flex-col items-center border border-dashed border-primary-container/70 bg-primary-container/10 rounded px-2 py-1">
+<span class="text-[10px] font-mono uppercase tracking-wider text-primary-fixed">SM SUPERMARKET</span>
+<span class="text-[8px] font-mono text-dark-ink-muted">MEGAMALL BRANCH #042</span>
+</div>
+<!-- OCR Text Detect Blocks (Simulated bounding highlights) -->
+<div class="space-y-1.5 my-auto px-1">
+<div class="h-2 w-4/5 bg-primary-soft/30 rounded-sm"></div>
+<div class="h-2 w-3/5 bg-primary-soft/25 rounded-sm"></div>
+<div class="h-2 w-5/6 bg-emerald-400/25 border border-emerald-400/50 rounded-sm flex items-center px-1">
+<span class="text-[7px] font-mono text-emerald-200">TOTAL ₱525.50</span>
+</div>
+</div>
+<div class="flex justify-between items-center pt-1 border-t border-slate-700/40 text-[8px] font-mono text-dark-ink-muted">
+<span>24/10/2024</span>
+<span>11:42 AM</span>
+</div>
+</div>
+<!-- Viewfinder High-Contrast Corner Framing Brackets -->
+<div class="absolute -top-[1px] -left-[1px] w-6 h-6 border-t-2 border-l-2 border-primary-container rounded-tl-lg"></div>
+<div class="absolute -top-[1px] -right-[1px] w-6 h-6 border-t-2 border-r-2 border-primary-container rounded-tr-lg"></div>
+<div class="absolute -bottom-[1px] -left-[1px] w-6 h-6 border-b-2 border-l-2 border-primary-container rounded-bl-lg"></div>
+<div class="absolute -bottom-[1px] -right-[1px] w-6 h-6 border-b-2 border-r-2 border-primary-container rounded-br-lg"></div>
+</div>
+</div>
+<!-- Viewfinder Bottom Quick Controls -->
+<div class="relative z-30 flex items-center justify-between px-2 pb-1">
+<span class="text-body-sm font-body-sm text-dark-ink-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]" data-icon="auto_awesome">auto_awesome</span>
+          Auto-crop enabled
+        </span>
+<button class="text-body-sm font-body-sm text-primary-fixed-dim hover:text-white flex items-center gap-1 transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="crop">crop</span>
+          Adjust Frame
+        </button>
+</div>
+</header>
+<!-- ============================================================== -->
+<!-- 2. OCR EXTRACTED REVIEW CONTAINER (ELEVATED CARD / SURFACE)     -->
+<!-- ============================================================== -->
+<section class="relative z-40 -mt-4 bg-surface rounded-t-[24px] shadow-[0_-8px_30px_rgba(15,23,42,0.18)] flex-1 flex flex-col px-margin pb-6 pt-3">
+<!-- Drawer Handle Bar -->
+<div class="w-12 h-1.5 bg-border rounded-full mx-auto mb-4 mt-1 opacity-80"></div>
+<!-- Header & Verification State -->
+<div class="flex items-start justify-between mb-4">
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">Review Extracted Receipt</h1>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted mt-0.5">Scanned via PesoFlow Calm OCR Engine</p>
+</div>
+<div class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-positive-soft text-positive text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>Ready to save</span>
+</div>
+</div>
+<!-- Merchant & Meta Bento Section -->
+<div class="bg-surface-subtle border border-border rounded-xl p-3.5 mb-4 shadow-sm">
+<div class="flex items-center justify-between pb-3 border-b border-border/80">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-soft flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[22px]" data-icon="storefront">storefront</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-ink-muted block uppercase tracking-wider">Merchant</span>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-sm text-headline-sm text-on-surface">SM Supermarket Megamall</span>
+<button aria-label="Edit merchant name" class="text-ink-muted hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Date, Time & Verification Status -->
+<div class="flex items-center justify-between pt-2.5 text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5 text-ink-secondary">
+<span class="material-symbols-outlined text-[16px] text-ink-muted" data-icon="calendar_today">calendar_today</span>
+<span>Today, Oct 24, 2024</span>
+<span class="text-ink-muted">•</span>
+<span class="material-symbols-outlined text-[16px] text-ink-muted" data-icon="schedule">schedule</span>
+<span>11:42 AM</span>
+</div>
+<span class="text-label-sm font-label-sm text-positive flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[14px]" data-icon="verified">verified</span>
+            Parsed
+          </span>
+</div>
+</div>
+<!-- Uncertainty Warning / Quick Correction Prompt -->
+<div class="bg-warning-soft/70 border border-warning/30 rounded-xl p-3 mb-4 flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-7 h-7 rounded-full bg-warning/20 flex items-center justify-center text-warning">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning">warning</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">1 item needs quick check</p>
+<p class="text-body-sm font-body-sm text-ink-secondary">Item #4 had low barcode contrast</p>
+</div>
+</div>
+<button class="text-label-sm font-label-sm px-2.5 py-1 bg-surface rounded-lg border border-border shadow-xs text-primary-strong hover:bg-surface-subtle active:scale-95 transition-all" type="button">
+          Tap to review
+        </button>
+</div>
+<!-- Extracted Line Items Section -->
+<div class="mb-5">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Extracted Items (4)</h2>
+<button class="text-primary hover:text-primary-strong text-label-sm font-label-sm flex items-center gap-0.5" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="add">add</span>
+            Add Missing Item
+          </button>
+</div>
+<div class="border border-border rounded-xl divide-y divide-border overflow-hidden bg-surface shadow-sm">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-subtle transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="w-5 h-5 rounded-full bg-surface-muted text-ink-muted text-[10px] font-semibold flex items-center justify-center">1</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Select Fresh Milk 1L</p>
+<p class="font-body-sm text-body-sm text-ink-muted">Qty: 1 • Unit: ₱108.50</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-numeric-md text-numeric-md text-on-surface">₱108.50</span>
+<span class="block text-[11px] text-ink-muted font-mono">CONF: 99%</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-subtle transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="w-5 h-5 rounded-full bg-surface-muted text-ink-muted text-[10px] font-semibold flex items-center justify-center">2</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Gardenia Classic White Loaf</p>
+<p class="font-body-sm text-body-sm text-ink-muted">Qty: 1 • 600g</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-numeric-md text-numeric-md text-on-surface">₱75.00</span>
+<span class="block text-[11px] text-ink-muted font-mono">CONF: 98%</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center justify-between p-3 hover:bg-surface-subtle transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="w-5 h-5 rounded-full bg-surface-muted text-ink-muted text-[10px] font-semibold flex items-center justify-center">3</span>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Fuji Apples (Pack of 4)</p>
+<p class="font-body-sm text-body-sm text-ink-muted">Fresh Produce • SM Bonus</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-numeric-md text-numeric-md text-on-surface">₱160.00</span>
+<span class="block text-[11px] text-ink-muted font-mono">CONF: 95%</span>
+</div>
+</div>
+<!-- Item 4 (Marked for subtle review) -->
+<div class="flex items-center justify-between p-3 bg-warning-soft/30 hover:bg-warning-soft/40 transition-colors border-l-4 border-warning">
+<div class="flex items-center gap-2.5">
+<span class="w-5 h-5 rounded-full bg-warning/20 text-warning text-[10px] font-semibold flex items-center justify-center">4</span>
+<div>
+<div class="flex items-center gap-1.5">
+<p class="font-body-md text-body-md text-on-surface font-semibold">Purefoods Corned Beef 210g x2</p>
+<span class="px-1.5 py-0.2 bg-warning-soft text-warning text-[10px] font-medium rounded">Check</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">₱91.00 each • Promo bundle</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-numeric-md text-numeric-md text-on-surface">₱182.00</span>
+<span class="block text-[11px] text-warning font-mono">CONF: 81%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Financial Calculation / Summary Breakdown -->
+<div class="bg-surface-subtle border border-border rounded-xl p-4 mb-4 space-y-2">
+<div class="flex justify-between items-center text-body-sm font-body-sm text-ink-secondary">
+<span>Subtotal</span>
+<span class="font-numeric-md text-numeric-md text-ink-secondary">₱525.50</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm text-ink-muted">
+<span>VAT (12% Included)</span>
+<span class="font-numeric-md text-numeric-md text-ink-muted">₱63.06</span>
+</div>
+<div class="pt-2 border-t border-border flex justify-between items-baseline">
+<div>
+<span class="text-label-md font-label-md text-ink-muted uppercase tracking-wider block">Total Amount</span>
+<span class="text-[11px] text-positive font-medium">SM Advantage Card: +5 pts</span>
+</div>
+<!-- Hero Monetary Figure -->
+<div class="text-right">
+<span class="font-numeric-xl text-numeric-xl text-on-surface tracking-tight text-primary-strong">₱525.50</span>
+</div>
+</div>
+</div>
+<!-- Transaction Categorization & Payment Source -->
+<div class="grid grid-cols-2 gap-3 mb-6">
+<!-- Category Assignment Pill -->
+<div class="p-3 bg-surface border border-border rounded-xl flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-ink-muted uppercase tracking-wider mb-1">Category</span>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="shopping_basket">shopping_basket</span>
+</div>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Groceries</span>
+</div>
+<button aria-label="Change category" class="text-ink-muted hover:text-primary" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Paid With Account Card -->
+<div class="p-3 bg-surface border border-border rounded-xl flex flex-col justify-between">
+<span class="text-label-sm font-label-sm text-ink-muted uppercase tracking-wider mb-1">Paid With</span>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary-soft text-primary-strong flex items-center justify-center font-bold text-xs">
+                GC
+              </div>
+<div>
+<span class="font-body-md text-body-md font-semibold text-on-surface block leading-tight">GCash</span>
+<span class="text-[11px] text-ink-muted font-mono">₱4,250.00 left</span>
+</div>
+</div>
+<button aria-label="Change account" class="text-ink-muted hover:text-primary" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- 3. PRIMARY TASK CTAS (THE THUMB REACH ZONE) -->
+<!-- ========================================== -->
+<div class="mt-auto space-y-2.5 pt-2">
+<!-- Primary Save CTA -->
+<button class="w-full h-13 py-3.5 px-4 bg-primary-container hover:bg-primary-strong text-white font-headline-sm text-headline-sm rounded-xl shadow-md flex items-center justify-center gap-2 active:scale-[0.98] transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="task_alt">task_alt</span>
+<span>Confirm &amp; Save Transaction — ₱525.50</span>
+</button>
+<!-- Secondary Actions Grid -->
+<div class="grid grid-cols-2 gap-2.5">
+<button class="h-11 px-3 bg-surface-muted hover:bg-surface-subtle text-ink-secondary border border-border font-label-md text-label-md rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="replay">replay</span>
+<span>Retake Photo</span>
+</button>
+<button class="h-11 px-3 bg-surface-muted hover:bg-danger-soft hover:text-danger text-ink-secondary border border-border font-label-md text-label-md rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="delete_outline">delete_outline</span>
+<span>Discard</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+</body></html>

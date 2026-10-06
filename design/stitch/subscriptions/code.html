@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PesoFlow - Subscriptions</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;750&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "dark-ink-muted": "#94A3B8",
+            "dark-ink-secondary": "#CBD5E1",
+            "secondary-soft": "#CCFBF1",
+            "positive": "#16A34A",
+            "on-tertiary-fixed": "#25005a",
+            "danger": "#DC2626",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#dae2fd",
+            "on-tertiary-container": "#f7edff",
+            "surface-subtle": "#F8FAFC",
+            "outline": "#737686",
+            "on-primary-fixed": "#00174b",
+            "surface-muted": "#F1F5F9",
+            "dark-surface-subtle": "#111827",
+            "tertiary-fixed-dim": "#d2bbff",
+            "on-secondary-fixed": "#00201d",
+            "warning": "#D97706",
+            "tertiary": "#6a1edb",
+            "positive-soft": "#DCFCE7",
+            "primary": "#004ac6",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "border-strong": "#CBD5E1",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "dark-border": "#334155",
+            "surface-tint": "#0053db",
+            "secondary-fixed": "#9cf2e8",
+            "tertiary-container": "#8343f4",
+            "background": "#faf8ff",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#eaddff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "ink-muted": "#64748B",
+            "surface-bright": "#faf8ff",
+            "primary-strong": "#1D4ED8",
+            "dark-surface": "#0B1220",
+            "inverse-primary": "#b4c5ff",
+            "inverse-surface": "#283044",
+            "outline-variant": "#c3c6d7",
+            "dark-surface-muted": "#1E293B",
+            "surface": "#FFFFFF",
+            "primary-fixed-dim": "#b4c5ff",
+            "danger-soft": "#FEE2E2",
+            "surface-container-high": "#e2e7ff",
+            "secondary": "#006a63",
+            "on-background": "#131b2e",
+            "secondary-container": "#99efe5",
+            "dark-ink": "#F8FAFC",
+            "on-surface": "#131b2e",
+            "on-primary-fixed-variant": "#003ea8",
+            "warning-soft": "#FEF3C7",
+            "on-surface-variant": "#434655",
+            "error-container": "#ffdad6",
+            "primary-container": "#2563eb",
+            "inverse-on-surface": "#eef0ff",
+            "surface-dim": "#d2d9f4",
+            "primary-fixed": "#dbe1ff",
+            "surface-container-highest": "#dae2fd",
+            "border": "#E2E8F0",
+            "accent-soft": "#EDE9FE",
+            "on-secondary-fixed-variant": "#00504a",
+            "on-secondary-container": "#006f67",
+            "surface-container": "#eaedff",
+            "on-primary-container": "#eeefff",
+            "ink-secondary": "#475569",
+            "primary-soft": "#DBEAFE",
+            "secondary-fixed-dim": "#80d5cb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-3xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-4xl": "3rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "margin-lg": "1.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "numeric-xl": ["Inter"],
+            "label-sm": ["Inter"],
+            "display": ["Inter"],
+            "numeric-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "numeric-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["18px", {"lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "650"}],
+            "label-md": ["12px", {"lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+            "numeric-xl": ["32px", {"lineHeight": "32px", "letterSpacing": "-0.035em", "fontWeight": "750"}],
+            "label-sm": ["11px", {"lineHeight": "13px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+            "display": ["34px", {"lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+            "numeric-lg": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.025em", "fontWeight": "700"}],
+            "headline-md": ["22px", {"lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "headline-lg": ["28px", {"lineHeight": "32px", "letterSpacing": "-0.025em", "fontWeight": "700"}],
+            "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "450"}],
+            "body-sm": ["12px", {"lineHeight": "17px", "letterSpacing": "0em", "fontWeight": "450"}],
+            "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450"}],
+            "numeric-md": ["18px", {"lineHeight": "18px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-subtle text-on-surface antialiased font-body-md selection:bg-primary-soft selection:text-primary min-h-screen pb-28">
+<!-- Mobile Viewport Frame Container -->
+<div class="max-w-lg mx-auto bg-surface-subtle min-h-screen relative flex flex-col">
+<!-- Top App Bar (Task Sub-Screen Header) -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin h-14 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-muted active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[22px]">arrow_back</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm text-on-surface tracking-tight">Subscriptions</h1>
+</div>
+<button class="inline-flex items-center gap-1 bg-primary text-on-primary px-3 py-1.5 rounded-lg text-label-md font-label-md hover:bg-primary-strong active:scale-95 transition-all duration-150 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add</span>
+</button>
+</header>
+<!-- Main Content Stream -->
+<main class="px-margin pt-space-md space-y-space-lg flex-1">
+<!-- Summary Metric Hero Card (Level 2 Elevation) -->
+<section class="bg-surface rounded-xl p-space-lg border border-border-strong shadow-[0_4px_16px_0_rgba(15,23,42,0.06)] relative overflow-hidden">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="text-label-sm font-label-sm text-ink-muted">Total Monthly Commitment</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-soft text-secondary text-label-sm font-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-positive"></span>
+            4 active services
+          </span>
+</div>
+<div class="flex items-baseline gap-1.5 mb-space-sm">
+<span class="text-numeric-xl font-numeric-xl text-on-surface">₱1,550.00</span>
+<span class="text-body-sm font-body-sm text-ink-muted">/ month</span>
+</div>
+<div class="flex items-center gap-2 pb-space-md border-b border-border text-body-sm font-body-sm text-ink-secondary">
+<span class="material-symbols-outlined text-[16px] text-ink-muted">calendar_today</span>
+<span>Annualized commitment:</span>
+<span class="font-numeric-md text-on-surface">₱18,600.00</span>
+<span class="text-ink-muted">/ year</span>
+</div>
+<!-- Next Renewal Highlight Alert Chip -->
+<div class="mt-space-md flex items-center justify-between bg-warning-soft/70 border border-warning/20 rounded-lg p-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-7 h-7 rounded-full bg-warning/15 flex items-center justify-center text-warning shrink-0">
+<span class="material-symbols-outlined text-[16px]">notifications_active</span>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface">
+<span class="font-label-md text-ink-secondary">Next renewal:</span>
+<span class="font-headline-sm text-on-surface text-[13px] ml-1">Netflix (₱549)</span>
+</div>
+</div>
+<span class="text-label-sm font-label-sm bg-surface px-2 py-0.5 rounded text-warning font-semibold border border-warning/20">
+            in 4 days
+          </span>
+</div>
+</section>
+<!-- Subscriptions Optimization Insight Card -->
+<section class="bg-accent-soft/60 border border-tertiary-fixed rounded-xl p-space-md flex items-start gap-space-md shadow-sm">
+<div class="w-8 h-8 rounded-full bg-tertiary-container/15 flex items-center justify-center text-tertiary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[18px]">lightbulb</span>
+</div>
+<div class="space-y-0.5">
+<h2 class="text-label-md font-label-md text-tertiary">Intelligence Tip</h2>
+<p class="text-body-sm font-body-sm text-on-surface leading-snug">
+            You have 2 cloud storage subscriptions (<span class="font-semibold">Google One</span> and <span class="font-semibold">iCloud+</span>). Consolidating could save up to <span class="font-semibold text-primary">₱588/yr</span>.
+          </p>
+</div>
+</section>
+<!-- Upcoming Renewals Horizontal Micro-Timeline -->
+<section class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-on-surface text-[15px]">Upcoming this month</h2>
+<span class="text-label-sm font-label-sm text-ink-muted">4 scheduled</span>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<!-- Item 1 -->
+<div class="bg-surface border border-primary/40 rounded-lg p-2 flex flex-col items-center text-center shadow-sm relative overflow-hidden">
+<span class="absolute top-0 inset-x-0 h-0.5 bg-primary"></span>
+<span class="text-[10px] font-label-sm text-primary uppercase font-bold tracking-wider">Oct 28</span>
+<span class="text-label-md font-label-md text-on-surface truncate w-full mt-1">Netflix</span>
+<span class="text-[11px] font-numeric-md text-ink-secondary mt-0.5">₱549</span>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface border border-border rounded-lg p-2 flex flex-col items-center text-center shadow-sm">
+<span class="text-[10px] font-label-sm text-ink-muted uppercase tracking-wider">Nov 02</span>
+<span class="text-label-md font-label-md text-on-surface truncate w-full mt-1">Spotify</span>
+<span class="text-[11px] font-numeric-md text-ink-secondary mt-0.5">₱239</span>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface border border-border rounded-lg p-2 flex flex-col items-center text-center shadow-sm">
+<span class="text-[10px] font-label-sm text-ink-muted uppercase tracking-wider">Nov 12</span>
+<span class="text-label-md font-label-md text-on-surface truncate w-full mt-1">Google</span>
+<span class="text-[11px] font-numeric-md text-ink-secondary mt-0.5">₱479</span>
+</div>
+<!-- Item 4 -->
+<div class="bg-surface border border-border rounded-lg p-2 flex flex-col items-center text-center shadow-sm">
+<span class="text-[10px] font-label-sm text-ink-muted uppercase tracking-wider">Nov 18</span>
+<span class="text-label-md font-label-md text-on-surface truncate w-full mt-1">iCloud+</span>
+<span class="text-[11px] font-numeric-md text-ink-secondary mt-0.5">₱49</span>
+</div>
+</div>
+</section>
+<!-- Active Subscription List / Bento Cards -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-on-surface text-[15px]">Active Subscriptions (5)</h2>
+<button class="text-label-sm font-label-sm text-primary flex items-center gap-0.5 hover:underline" type="button">
+<span>Sort by Date</span>
+<span class="material-symbols-outlined text-[14px]">arrow_drop_down</span>
+</button>
+</div>
+<div class="space-y-2.5">
+<!-- Card 1: Netflix Standard -->
+<div class="bg-surface rounded-xl p-space-md border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-danger-soft text-danger flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">movie</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-body-md font-label-md text-on-surface">Netflix Standard</h3>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-positive-soft text-positive">Active</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Entertainment &amp; Leisure</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-numeric-md font-numeric-md text-on-surface">₱549.00</div>
+<div class="text-label-sm font-label-sm text-ink-muted">/ month</div>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-muted flex items-center justify-between text-body-sm font-body-sm text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-ink-muted">account_balance_wallet</span>
+<span>GCash Personal</span>
+</div>
+<div class="flex items-center gap-1 text-warning font-label-md">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+<span>Renews Oct 28, 2024 (in 4 days)</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Spotify Premium Family -->
+<div class="bg-surface rounded-xl p-space-md border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-positive-soft text-positive flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">headphones</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-body-md font-label-md text-on-surface">Spotify Premium Family</h3>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-positive-soft text-positive">Active</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Entertainment &amp; Leisure</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-numeric-md font-numeric-md text-on-surface">₱239.00</div>
+<div class="text-label-sm font-label-sm text-ink-muted">/ month</div>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-muted flex items-center justify-between text-body-sm font-body-sm text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-ink-muted">wallet</span>
+<span>Maya Wallet</span>
+</div>
+<div class="flex items-center gap-1 text-ink-muted">
+<span class="material-symbols-outlined text-[14px]">event_repeat</span>
+<span>Renews Nov 2, 2024</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Google One Storage (2TB) -->
+<div class="bg-surface rounded-xl p-space-md border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-soft text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">cloud</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-body-md font-label-md text-on-surface">Google One Storage (2TB)</h3>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-positive-soft text-positive">Active</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Productivity &amp; Cloud</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-numeric-md font-numeric-md text-on-surface">₱479.00</div>
+<div class="text-label-sm font-label-sm text-ink-muted">/ month</div>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-muted flex items-center justify-between text-body-sm font-body-sm text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-ink-muted">credit_card</span>
+<span>BDO Checking</span>
+</div>
+<div class="flex items-center gap-1 text-ink-muted">
+<span class="material-symbols-outlined text-[14px]">event_repeat</span>
+<span>Renews Nov 12, 2024</span>
+</div>
+</div>
+</div>
+<!-- Card 4: iCloud+ 50GB -->
+<div class="bg-surface rounded-xl p-space-md border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-muted text-ink-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">cloud_queue</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-body-md font-label-md text-on-surface">iCloud+ 50GB</h3>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-positive-soft text-positive">Active</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Cloud Storage</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-numeric-md font-numeric-md text-on-surface">₱49.00</div>
+<div class="text-label-sm font-label-sm text-ink-muted">/ month</div>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-muted flex items-center justify-between text-body-sm font-body-sm text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-ink-muted">account_balance_wallet</span>
+<span>GCash Personal</span>
+</div>
+<div class="flex items-center gap-1 text-ink-muted">
+<span class="material-symbols-outlined text-[14px]">event_repeat</span>
+<span>Renews Nov 18, 2024</span>
+</div>
+</div>
+</div>
+<!-- Card 5: Disney+ (Annualized) -->
+<div class="bg-surface rounded-xl p-space-md border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-soft text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">smart_display</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-body-md font-label-md text-on-surface">Disney+</h3>
+<span class="px-1.5 py-0.5 rounded text-[10px] font-label-sm bg-surface-muted text-ink-secondary">Annual</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">₱245.83/mo equivalent</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-numeric-md font-numeric-md text-on-surface">₱2,950.00</div>
+<div class="text-label-sm font-label-sm text-ink-muted">/ year</div>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-surface-muted flex items-center justify-between text-body-sm font-body-sm text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-ink-muted">credit_card</span>
+<span>BDO Checking</span>
+</div>
+<div class="flex items-center gap-1 text-ink-muted">
+<span class="material-symbols-outlined text-[14px]">event_repeat</span>
+<span>Renews Dec 15, 2024</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Manage & Analytics Quick Links -->
+<section class="p-space-md bg-surface rounded-xl border border-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-muted flex items-center justify-center text-ink-secondary">
+<span class="material-symbols-outlined text-[18px]">receipt_long</span>
+</div>
+<div>
+<div class="text-body-md font-label-md text-on-surface">Subscription History</div>
+<div class="text-body-sm font-body-sm text-ink-muted">View past automated billings</div>
+</div>
+</div>
+<button class="w-8 h-8 flex items-center justify-center text-ink-muted hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Semantic Shell from Shared Components) -->
+<!-- Screen intent is Subscriptions (Budgets/Recurring Commitment area) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 px-gutter max-w-lg mx-auto bg-surface shadow-[0_-4px_16px_0_rgba(15,23,42,0.06)]">
+<!-- Destination 1: Home -->
+<button class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" type="button">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-label-sm font-label-sm mt-0.5">Home</span>
+</button>
+<!-- Destination 2: Transactions -->
+<button class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" type="button">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+<span class="text-label-sm font-label-sm mt-0.5">Transactions</span>
+</button>
+<!-- Destination 3: Add (Quick Action) -->
+<button aria-label="Add Transaction or Subscription" class="flex flex-col items-center justify-center -mt-4 active:scale-95 transition-transform duration-150 ease-out" type="button">
+<div class="w-11 h-11 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md hover:bg-primary-strong">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</div>
+<span class="text-label-sm font-label-sm text-ink-muted mt-1">Add</span>
+</button>
+<!-- Destination 4: Analytics -->
+<button class="flex flex-col items-center justify-center text-ink-muted hover:text-primary active:scale-95 transition-transform duration-150 ease-out" type="button">
+<span class="material-symbols-outlined text-[22px]">analytics</span>
+<span class="text-label-sm font-label-sm mt-0.5">Analytics</span>
+</button>
+<!-- Destination 5: Budgets (Active semantic tab for Subscriptions & Recurring commitments) -->
+<button class="flex flex-col items-center justify-center text-primary font-semibold hover:text-primary active:scale-95 transition-transform duration-150 ease-out" type="button">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="text-label-sm font-label-sm mt-0.5">Budgets</span>
+</button>
+</nav>
+</div>
+</body></html>

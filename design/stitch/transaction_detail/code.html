@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PesoFlow - Transaction Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;750&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "dark-ink-muted": "#94A3B8",
+            "dark-ink-secondary": "#CBD5E1",
+            "secondary-soft": "#CCFBF1",
+            "positive": "#16A34A",
+            "on-tertiary-fixed": "#25005a",
+            "danger": "#DC2626",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#dae2fd",
+            "on-tertiary-container": "#f7edff",
+            "surface-subtle": "#F8FAFC",
+            "outline": "#737686",
+            "on-primary-fixed": "#00174b",
+            "surface-muted": "#F1F5F9",
+            "dark-surface-subtle": "#111827",
+            "tertiary-fixed-dim": "#d2bbff",
+            "on-secondary-fixed": "#00201d",
+            "warning": "#D97706",
+            "tertiary": "#6a1edb",
+            "positive-soft": "#DCFCE7",
+            "primary": "#004ac6",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "border-strong": "#CBD5E1",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "dark-border": "#334155",
+            "surface-tint": "#0053db",
+            "secondary-fixed": "#9cf2e8",
+            "tertiary-container": "#8343f4",
+            "background": "#faf8ff",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#eaddff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "ink-muted": "#64748B",
+            "surface-bright": "#faf8ff",
+            "primary-strong": "#1D4ED8",
+            "dark-surface": "#0B1220",
+            "inverse-primary": "#b4c5ff",
+            "inverse-surface": "#283044",
+            "outline-variant": "#c3c6d7",
+            "dark-surface-muted": "#1E293B",
+            "surface": "#FFFFFF",
+            "primary-fixed-dim": "#b4c5ff",
+            "danger-soft": "#FEE2E2",
+            "surface-container-high": "#e2e7ff",
+            "secondary": "#006a63",
+            "on-background": "#131b2e",
+            "secondary-container": "#99efe5",
+            "dark-ink": "#F8FAFC",
+            "on-surface": "#131b2e",
+            "on-primary-fixed-variant": "#003ea8",
+            "warning-soft": "#FEF3C7",
+            "on-surface-variant": "#434655",
+            "error-container": "#ffdad6",
+            "primary-container": "#2563eb",
+            "inverse-on-surface": "#eef0ff",
+            "surface-dim": "#d2d9f4",
+            "primary-fixed": "#dbe1ff",
+            "surface-container-highest": "#dae2fd",
+            "border": "#E2E8F0",
+            "accent-soft": "#EDE9FE",
+            "on-secondary-fixed-variant": "#00504a",
+            "on-secondary-container": "#006f67",
+            "surface-container": "#eaedff",
+            "on-primary-container": "#eeefff",
+            "ink-secondary": "#475569",
+            "primary-soft": "#DBEAFE",
+            "secondary-fixed-dim": "#80d5cb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-3xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-4xl": "3rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "margin-lg": "1.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "numeric-xl": ["Inter"],
+            "label-sm": ["Inter"],
+            "display": ["Inter"],
+            "numeric-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "numeric-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "650" }],
+            "label-md": ["12px", { "lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "numeric-xl": ["32px", { "lineHeight": "32px", "letterSpacing": "-0.035em", "fontWeight": "750" }],
+            "label-sm": ["11px", { "lineHeight": "13px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display": ["34px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "numeric-lg": ["24px", { "lineHeight": "24px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-md": ["22px", { "lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "body-sm": ["12px", { "lineHeight": "17px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "numeric-md": ["18px", { "lineHeight": "18px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .custom-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-subtle text-on-surface antialiased font-body-md min-h-screen flex justify-center selection:bg-primary-soft selection:text-primary">
+<!-- Mobile Viewport Container (420px standard ergonomic canvas) -->
+<main class="w-full max-w-md bg-surface-subtle min-h-screen flex flex-col relative pb-12 shadow-2xl">
+<!-- Top Bar Navigation (Task-focused sheet: Navigation Shell suppressed per UX goal) -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin h-14 flex items-center justify-between shadow-sm">
+<div class="flex items-center space-x-2">
+<button aria-label="Close" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-muted active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm text-on-surface">Transaction Detail</h1>
+</div>
+<div class="flex items-center space-x-1">
+<button aria-label="Share receipt" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-muted active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="ios_share">ios_share</span>
+</button>
+<button aria-label="More options" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-muted active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 px-margin space-y-4 pt-4">
+<!-- Hero Header & Amount Summary Card (Level 2 Elevation) -->
+<section class="bg-surface rounded-xl p-5 border border-border-strong shadow-[0_4px_16px_0_rgba(15,23,42,0.06)] flex flex-col items-center text-center relative overflow-hidden">
+<!-- Ambient subtle accent glow -->
+<div class="absolute -top-10 -right-10 w-28 h-28 bg-warning-soft/40 rounded-full blur-2xl pointer-events-none"></div>
+<!-- Merchant Avatar -->
+<div class="relative mb-3">
+<div class="w-16 h-16 rounded-full bg-danger flex items-center justify-center text-on-primary shadow-sm border-2 border-surface">
+<span class="material-symbols-outlined text-[32px]" data-icon="fastfood">fastfood</span>
+</div>
+<span class="absolute bottom-0 right-0 w-5 h-5 bg-positive rounded-full border-2 border-surface flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[12px]" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</span>
+</div>
+<!-- Expense Amount Display -->
+<div class="flex items-baseline justify-center space-x-0.5 text-on-surface mb-1">
+<span class="text-numeric-xl font-numeric-xl text-on-surface tracking-tight">-₱325.00</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-0.5">Jollibee Megamall Branch</h2>
+<p class="text-body-sm font-body-sm text-ink-muted mb-3">Food &amp; Dining • Fast Food</p>
+<!-- Status Pill -->
+<div class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-surface-muted border border-border">
+<span class="w-1.5 h-1.5 rounded-full bg-positive animate-pulse"></span>
+<span class="text-label-sm font-label-sm text-ink-secondary">Completed • Read-only synced</span>
+</div>
+</section>
+<!-- Transaction Provenance & Metadata Container (Level 1) -->
+<section class="bg-surface rounded-xl p-4 border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] space-y-3.5">
+<h3 class="text-label-md font-label-md text-ink-muted uppercase tracking-wider">Provenance &amp; Info</h3>
+<!-- Source / Institution Row -->
+<div class="flex items-center justify-between py-1">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-lg bg-primary-soft text-primary flex items-center justify-center font-bold text-xs">
+              GC
+            </div>
+<div>
+<p class="text-body-md font-body-md font-medium text-on-surface leading-tight">GCash Personal</p>
+<p class="text-body-sm font-body-sm text-ink-muted">0917 •••• 892</p>
+</div>
+</div>
+<span class="inline-flex items-center text-label-sm font-label-sm text-primary bg-primary-soft/60 px-2 py-0.5 rounded-md border border-primary/20">
+            Synced
+          </span>
+</div>
+<div class="h-px bg-border w-full"></div>
+<!-- Timestamp -->
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-ink-muted flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+            Date &amp; Time
+          </span>
+<span class="text-on-surface font-medium text-right">Thu, Oct 24, 2024 • 12:32 PM</span>
+</div>
+<!-- Category Selector Row -->
+<div class="flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-ink-muted flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="category">category</span>
+            Category
+          </span>
+<button class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-surface-muted hover:bg-border transition-colors border border-border text-on-surface active:scale-95" type="button">
+<span class="material-symbols-outlined text-[15px] text-warning" data-icon="restaurant">restaurant</span>
+<span class="text-body-sm font-body-sm font-medium">Food &amp; Dining</span>
+<span class="material-symbols-outlined text-[14px] text-ink-muted" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Budget Impact Meter -->
+<div class="p-3 rounded-lg bg-surface-subtle border border-border space-y-2">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="pie_chart">pie_chart</span>
+              Monthly Budget Impact
+            </span>
+<span class="font-medium text-warning">86% Used</span>
+</div>
+<!-- Linear Meter Bar (Color shifts to warning at 80%+) -->
+<div class="w-full bg-surface-muted h-2 rounded-full overflow-hidden">
+<div class="bg-warning h-full rounded-full" style="width: 86.25%;"></div>
+</div>
+<div class="flex justify-between items-center text-label-sm font-label-sm text-ink-muted pt-0.5">
+<span>₱6,900 / ₱8,000 limit</span>
+<span class="text-on-surface font-medium">₱1,100 remaining</span>
+</div>
+</div>
+<!-- Reference Identifier -->
+<div class="flex items-center justify-between text-body-sm font-body-sm pt-0.5">
+<span class="text-ink-muted flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="tag">tag</span>
+            Reference No.
+          </span>
+<span class="text-ink-secondary font-mono text-[11px] bg-surface-muted px-2 py-0.5 rounded">#TXN-902847291</span>
+</div>
+<!-- Notes Area -->
+<div class="pt-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-body-sm font-body-sm text-ink-muted flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="edit_note">edit_note</span>
+              Notes
+            </span>
+<button class="text-primary text-label-sm font-label-sm hover:underline" type="button">Edit</button>
+</div>
+<p class="text-body-sm font-body-sm text-ink-secondary bg-surface-subtle p-2.5 rounded-lg border border-border italic">
+            "Lunch combo with spicy chickenjoy and peach mango pie"
+          </p>
+</div>
+</section>
+<!-- Attached Receipt & OCR Breakdown Card (Level 1) -->
+<section class="bg-surface rounded-xl p-4 border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="receipt">receipt</span>
+<h3 class="text-label-md font-label-md text-ink-muted uppercase tracking-wider">Receipt &amp; Items</h3>
+</div>
+<span class="text-label-sm font-label-sm text-positive bg-positive-soft px-2 py-0.5 rounded-full font-medium">
+            OCR Verified
+          </span>
+</div>
+<!-- Interactive Receipt Preview Row -->
+<div class="flex items-center space-x-3 p-2.5 rounded-lg border border-border bg-surface-subtle hover:bg-surface-muted transition-colors cursor-pointer group active:scale-[0.99]">
+<div class="relative w-12 h-14 rounded bg-surface border border-border overflow-hidden flex-shrink-0 shadow-sm">
+<img class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" data-alt="A clean, high-contrast, minimalist photograph of a printed fast food sales receipt lying flat on a light oak wooden desktop with crisp typography and subtle paper folds under clean diffused daylight studio illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_1dV2b_TodXvc0XJGvkuR0IODrDcFpXKmY0Z-Wro_H_FZVCT0eh6MCslBKBpS2A3JD6VTtG_LSJERkAbFQ1T8_8bPmncFleaG_KOu0GcIAtRNZNp9YEYciCDgLuF_iZifQOJTYutamLXfNIu_xsL2bVEDFtcXIeqQU8nRl_Mhr0PFpM4n9SjCTuqWWBuobdQ7SX6jaE3_jJm04yK1HyEJh-WebynBobleozDKq0mzoD21knp8l1vkDQ"/>
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="zoom_in">zoom_in</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<p class="text-body-sm font-body-sm font-semibold text-on-surface truncate">1 receipt attached</p>
+<span class="text-numeric-md font-numeric-md text-on-surface">₱325.00</span>
+</div>
+<p class="text-label-sm font-label-sm text-ink-muted truncate">Scanned via PesoFlow OCR • 3 items extracted</p>
+</div>
+<span class="material-symbols-outlined text-[18px] text-ink-muted group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Micro Itemized Breakdown Preview -->
+<div class="mt-3 pt-2.5 border-t border-border space-y-1.5 text-body-sm font-body-sm">
+<div class="flex justify-between text-ink-secondary text-xs">
+<span>1x 1pc Spicy Chickenjoy w/ Rice</span>
+<span class="font-medium text-on-surface">₱115.00</span>
+</div>
+<div class="flex justify-between text-ink-secondary text-xs">
+<span>1x Jolly Spaghetti w/ Drink</span>
+<span class="font-medium text-on-surface">₱150.00</span>
+</div>
+<div class="flex justify-between text-ink-secondary text-xs">
+<span>1x Large Peach Mango Pie</span>
+<span class="font-medium text-on-surface">₱60.00</span>
+</div>
+</div>
+</section>
+<!-- Split Expense & Tagging Section -->
+<section class="bg-surface rounded-xl p-4 border border-border shadow-[0_1px_2px_0_rgba(15,23,42,0.04)] space-y-3.5">
+<!-- Split Header & Action -->
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-label-md font-label-md text-ink-muted uppercase tracking-wider">Expense Sharing</h3>
+<p class="text-body-sm font-body-sm text-ink-secondary">Split total or assign specific line items</p>
+</div>
+<button class="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-primary-soft text-primary hover:bg-primary/20 transition-colors text-label-md font-label-md active:scale-95" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="call_split">call_split</span>
+<span>Split Bill</span>
+</button>
+</div>
+<!-- Recent Companions Avatar Stack -->
+<div class="flex items-center space-x-2 pt-1">
+<span class="text-label-sm font-label-sm text-ink-muted">Quick add:</span>
+<div class="flex items-center space-x-1.5 overflow-x-auto custom-scrollbar py-0.5">
+<button class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-surface-muted hover:bg-border transition-colors text-label-sm font-label-sm border border-border" type="button">
+<span class="w-4 h-4 rounded-full bg-secondary text-on-secondary flex items-center justify-center text-[9px] font-bold">M</span>
+<span>Mark</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-surface-muted hover:bg-border transition-colors text-label-sm font-label-sm border border-border" type="button">
+<span class="w-4 h-4 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center text-[9px] font-bold">C</span>
+<span>Camille</span>
+</button>
+<button class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full bg-surface-muted hover:bg-border transition-colors text-label-sm font-label-sm border border-border" type="button">
+<span class="w-4 h-4 rounded-full bg-warning text-on-primary flex items-center justify-center text-[9px] font-bold">J</span>
+<span>JR</span>
+</button>
+</div>
+</div>
+<div class="h-px bg-border w-full"></div>
+<!-- Tags / Micro-filters -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-label-md font-label-md text-ink-muted uppercase tracking-wider">Tags</span>
+<button class="text-primary text-label-sm font-label-sm hover:underline" type="button">+ New Tag</button>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-accent-soft text-tertiary text-label-sm font-label-sm font-medium">
+              #Lunch
+            </span>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-secondary-soft text-secondary text-label-sm font-label-sm font-medium">
+              #Team
+            </span>
+<span class="inline-flex items-center px-2.5 py-1 rounded-md bg-surface-muted text-ink-secondary text-label-sm font-label-sm font-medium border border-border">
+              #OfficeDay
+            </span>
+</div>
+</div>
+</section>
+<!-- Action & Utility Button Cluster (Thumb-zone priority) -->
+<section class="space-y-2.5 pt-2 pb-6">
+<button class="w-full h-12 rounded-xl bg-surface border border-border-strong text-on-surface hover:bg-surface-muted flex items-center justify-center space-x-2 text-body-md font-body-md font-semibold active:scale-95 transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-ink-secondary" data-icon="edit">edit</span>
+<span>Edit Details</span>
+</button>
+<div class="grid grid-cols-2 gap-2.5">
+<button class="h-11 rounded-xl bg-surface border border-border text-ink-secondary hover:bg-surface-muted flex items-center justify-center space-x-1.5 text-label-md font-label-md active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px] text-ink-muted" data-icon="visibility_off">visibility_off</span>
+<span>Exclude from Budget</span>
+</button>
+<button class="h-11 rounded-xl bg-surface border border-border text-danger hover:bg-danger-soft/40 flex items-center justify-center space-x-1.5 text-label-md font-label-md active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="flag">flag</span>
+<span>Report Issue</span>
+</button>
+</div>
+<p class="text-center text-label-sm font-label-sm text-ink-muted pt-2 flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+          256-bit encrypted read-only telemetry
+        </p>
+</section>
+</div>
+</main>
+</body></html>

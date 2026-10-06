@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PesoFlow - Connected Accounts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700;750&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "dark-ink-muted": "#94A3B8",
+            "dark-ink-secondary": "#CBD5E1",
+            "secondary-soft": "#CCFBF1",
+            "positive": "#16A34A",
+            "on-tertiary-fixed": "#25005a",
+            "danger": "#DC2626",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#dae2fd",
+            "on-tertiary-container": "#f7edff",
+            "surface-subtle": "#F8FAFC",
+            "outline": "#737686",
+            "on-primary-fixed": "#00174b",
+            "surface-muted": "#F1F5F9",
+            "dark-surface-subtle": "#111827",
+            "tertiary-fixed-dim": "#d2bbff",
+            "on-secondary-fixed": "#00201d",
+            "warning": "#D97706",
+            "tertiary": "#6a1edb",
+            "positive-soft": "#DCFCE7",
+            "primary": "#004ac6",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "border-strong": "#CBD5E1",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-container-low": "#f2f3ff",
+            "dark-border": "#334155",
+            "surface-tint": "#0053db",
+            "secondary-fixed": "#9cf2e8",
+            "tertiary-container": "#8343f4",
+            "background": "#faf8ff",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#eaddff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#5a00c6",
+            "ink-muted": "#64748B",
+            "surface-bright": "#faf8ff",
+            "primary-strong": "#1D4ED8",
+            "dark-surface": "#0B1220",
+            "inverse-primary": "#b4c5ff",
+            "inverse-surface": "#283044",
+            "outline-variant": "#c3c6d7",
+            "dark-surface-muted": "#1E293B",
+            "surface": "#FFFFFF",
+            "primary-fixed-dim": "#b4c5ff",
+            "danger-soft": "#FEE2E2",
+            "surface-container-high": "#e2e7ff",
+            "secondary": "#006a63",
+            "on-background": "#131b2e",
+            "secondary-container": "#99efe5",
+            "dark-ink": "#F8FAFC",
+            "on-surface": "#131b2e",
+            "on-primary-fixed-variant": "#003ea8",
+            "warning-soft": "#FEF3C7",
+            "on-surface-variant": "#434655",
+            "error-container": "#ffdad6",
+            "primary-container": "#2563eb",
+            "inverse-on-surface": "#eef0ff",
+            "surface-dim": "#d2d9f4",
+            "primary-fixed": "#dbe1ff",
+            "surface-container-highest": "#dae2fd",
+            "border": "#E2E8F0",
+            "accent-soft": "#EDE9FE",
+            "on-secondary-fixed-variant": "#00504a",
+            "on-secondary-container": "#006f67",
+            "surface-container": "#eaedff",
+            "on-primary-container": "#eeefff",
+            "ink-secondary": "#475569",
+            "primary-soft": "#DBEAFE",
+            "secondary-fixed-dim": "#80d5cb"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1rem",
+            "space-3xl": "2.5rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "gutter-sm": "0.75rem",
+            "space-sm": "0.5rem",
+            "space-4xl": "3rem",
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "margin-lg": "1.25rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["Inter"],
+            "label-md": ["Inter"],
+            "numeric-xl": ["Inter"],
+            "label-sm": ["Inter"],
+            "display": ["Inter"],
+            "numeric-lg": ["Inter"],
+            "headline-md": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "body-md": ["Inter"],
+            "numeric-md": ["Inter"]
+          },
+          "fontSize": {
+            "headline-sm": ["18px", { "lineHeight": "22px", "letterSpacing": "-0.01em", "fontWeight": "650" }],
+            "label-md": ["12px", { "lineHeight": "14px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "numeric-xl": ["32px", { "lineHeight": "32px", "letterSpacing": "-0.035em", "fontWeight": "750" }],
+            "label-sm": ["11px", { "lineHeight": "13px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "display": ["34px", { "lineHeight": "38px", "letterSpacing": "-0.03em", "fontWeight": "700" }],
+            "numeric-lg": ["24px", { "lineHeight": "24px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "headline-md": ["22px", { "lineHeight": "26px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "32px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "body-sm": ["12px", { "lineHeight": "17px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "450" }],
+            "numeric-md": ["18px", { "lineHeight": "18px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface-subtle text-on-surface antialiased font-body-md selection:bg-primary-soft selection:text-primary min-h-screen pb-32">
+<!-- Mobile Screen Container -->
+<div class="max-w-lg mx-auto bg-surface-subtle min-h-screen relative flex flex-col">
+<!-- Top App Bar (Task-Focused with Back Navigation) -->
+<header class="sticky top-0 z-40 bg-surface/90 backdrop-blur-md px-margin h-14 flex items-center justify-between shadow-[0_1px_2px_0_rgba(15,23,42,0.04)]">
+<div class="flex items-center space-x-2">
+<button aria-label="Go back" class="w-9 h-9 rounded-full flex items-center justify-center text-ink-secondary hover:bg-surface-muted active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm text-on-surface font-bold">Connected Accounts</h1>
+</div>
+<button class="inline-flex items-center space-x-1 py-1.5 px-3 rounded-full text-label-md font-label-md text-primary bg-primary-soft/60 hover:bg-primary-soft active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span>Link Account</span>
+</button>
+</header>
+<!-- Content Canvas -->
+<main class="flex-1 px-margin pt-space-md space-y-space-lg">
+<!-- Reassurance Banner (Calm Institutional Clarity) -->
+<section class="bg-surface border border-border rounded-[14px] p-3.5 shadow-sm flex items-start space-x-3">
+<div class="w-8 h-8 rounded-full bg-secondary-soft flex items-center justify-center flex-shrink-0 text-secondary mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div class="flex-1">
+<p class="text-label-md font-label-md text-on-surface flex items-center gap-1.5">
+<span>Read-only Bank &amp; Wallet Sync</span>
+<span class="w-1 h-1 rounded-full bg-ink-muted"></span>
+<span class="text-secondary font-medium">256-bit Encrypted</span>
+</p>
+<p class="text-body-sm font-body-sm text-ink-muted mt-0.5 leading-relaxed">
+            PesoFlow operates with strict non-custodial access. We cannot initiate transfers, execute debits, or move funds.
+          </p>
+</div>
+</section>
+<!-- Total Synced Balance Hero Card (Level 2 Elevation) -->
+<section class="bg-surface border border-border-strong rounded-[18px] p-space-lg shadow-[0_4px_16px_0_rgba(15,23,42,0.06)] relative overflow-hidden">
+<div class="flex justify-between items-start">
+<div>
+<span class="text-label-md font-label-md text-ink-muted">Total Net Liquid Balance</span>
+<div class="mt-1 flex items-baseline">
+<span class="text-headline-md font-headline-md text-ink-secondary mr-1">₱</span>
+<span class="text-numeric-xl font-numeric-xl text-on-surface">34,300.00</span>
+</div>
+</div>
+<button class="inline-flex items-center space-x-1.5 py-1.5 px-3 rounded-lg border border-border bg-surface-subtle text-ink-secondary hover:text-primary hover:border-primary-soft active:scale-95 transition-all text-label-md font-label-md" id="sync-all-btn" type="button">
+<span class="material-symbols-outlined text-[16px] text-ink-muted transition-transform duration-700" data-icon="sync" id="sync-icon">sync</span>
+<span>Sync All</span>
+</button>
+</div>
+<div class="mt-4 pt-3.5 border-t border-border flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center gap-1.5 text-positive font-medium">
+<span class="w-2 h-2 rounded-full bg-positive animate-pulse"></span>
+<span>4 Institutions linked</span>
+</span>
+</div>
+<span class="text-ink-muted" id="last-synced-label">Last updated: Just now</span>
+</div>
+</section>
+<!-- Account Cards Section -->
+<section class="space-y-space-md">
+<div class="flex justify-between items-center px-0.5">
+<h2 class="text-label-md font-label-md text-ink-muted">LINKED SOURCES (4)</h2>
+<span class="text-label-sm font-label-sm text-ink-muted">Single-source view</span>
+</div>
+<!-- 1. GCash Personal -->
+<article class="bg-surface border border-border rounded-[16px] p-space-lg shadow-sm hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-primary-soft text-primary flex items-center justify-center font-bold text-headline-sm">
+<span class="material-symbols-outlined text-[22px]" data-icon="account_balance_wallet" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">GCash Personal</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+<span class="w-1.5 h-1.5 rounded-full bg-positive"></span>
+<span>Active</span>
+</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">0917 •••• 892 · E-Wallet</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-ink-muted block">Available</span>
+<span class="text-numeric-md font-numeric-md text-on-surface">₱4,250.00</span>
+</div>
+</div>
+<div class="mt-3.5 pt-3 border-t border-border/80 flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center text-ink-muted space-x-1.5">
+<span class="material-symbols-outlined text-[15px]" data-icon="schedule">schedule</span>
+<span>Synced 5m ago</span>
+</div>
+<div class="flex items-center space-x-3">
+<button class="text-ink-secondary hover:text-on-surface text-label-md font-label-md transition-colors" type="button">Settings</button>
+<span class="text-border">|</span>
+<button class="text-danger hover:text-danger/80 text-label-md font-label-md transition-colors" type="button">Disconnect</button>
+</div>
+</div>
+</article>
+<!-- 2. BDO Online Checking -->
+<article class="bg-surface border border-border rounded-[16px] p-space-lg shadow-sm hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-surface-muted text-ink-secondary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[22px]" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">BDO Online Checking</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+<span class="w-1.5 h-1.5 rounded-full bg-positive"></span>
+<span>Active</span>
+</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Account •••• 4120 · Bank</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-ink-muted block">Available</span>
+<span class="text-numeric-md font-numeric-md text-on-surface">₱28,400.00</span>
+</div>
+</div>
+<div class="mt-3.5 pt-3 border-t border-border/80 flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center text-ink-muted space-x-1.5">
+<span class="material-symbols-outlined text-[15px]" data-icon="schedule">schedule</span>
+<span>Synced 1h ago</span>
+</div>
+<div class="flex items-center space-x-3">
+<button class="text-ink-secondary hover:text-on-surface text-label-md font-label-md transition-colors" type="button">Settings</button>
+<span class="text-border">|</span>
+<button class="text-danger hover:text-danger/80 text-label-md font-label-md transition-colors" type="button">Disconnect</button>
+</div>
+</div>
+</article>
+<!-- 3. Maya Wallet -->
+<article class="bg-surface border border-border rounded-[16px] p-space-lg shadow-sm hover:border-border-strong transition-all">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-secondary-soft text-secondary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[22px]" data-icon="wallet">wallet</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Maya Wallet</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-positive-soft text-positive">
+<span class="w-1.5 h-1.5 rounded-full bg-positive"></span>
+<span>Active</span>
+</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">0918 •••• 331 · E-Wallet</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-ink-muted block">Available</span>
+<span class="text-numeric-md font-numeric-md text-on-surface">₱1,850.00</span>
+</div>
+</div>
+<div class="mt-3.5 pt-3 border-t border-border/80 flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center text-ink-muted space-x-1.5">
+<span class="material-symbols-outlined text-[15px]" data-icon="schedule">schedule</span>
+<span>Synced 12m ago</span>
+</div>
+<div class="flex items-center space-x-3">
+<button class="text-ink-secondary hover:text-on-surface text-label-md font-label-md transition-colors" type="button">Settings</button>
+<span class="text-border">|</span>
+<button class="text-danger hover:text-danger/80 text-label-md font-label-md transition-colors" type="button">Disconnect</button>
+</div>
+</div>
+</article>
+<!-- 4. BPI Savings (Requires Re-auth) -->
+<article class="bg-surface border border-warning/40 rounded-[16px] p-space-lg shadow-sm relative overflow-hidden bg-gradient-to-b from-warning-soft/10 to-surface">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-warning-soft text-warning flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[22px]" data-icon="account_balance">account_balance</span>
+</div>
+<div>
+<div class="flex items-center space-x-2">
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">BPI Savings</h3>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-warning-soft text-warning font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-warning"></span>
+<span>Needs Re-authentication</span>
+</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-muted">Account •••• 8841 · Last synced 2 days ago</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-ink-muted block">Last known</span>
+<span class="text-numeric-md font-numeric-md text-ink-muted">₱12,200.00</span>
+</div>
+</div>
+<div class="mt-3 pt-3 border-t border-border/70 flex items-center justify-between">
+<p class="text-body-sm font-body-sm text-ink-secondary">Institutional session expired for security.</p>
+<button class="inline-flex items-center space-x-1.5 py-1 px-3 rounded-md bg-warning text-on-primary hover:bg-warning/90 active:scale-95 transition-all text-label-md font-label-md shadow-xs" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="lock_reset">lock_reset</span>
+<span>Reconnect Account</span>
+</button>
+</div>
+</article>
+</section>
+<!-- Supported Providers & Trust Assurance Section -->
+<section class="bg-surface border border-border rounded-[18px] p-space-lg space-y-4">
+<div>
+<h3 class="text-label-md font-label-md text-on-surface">Supported Financial Institutions</h3>
+<p class="text-body-sm font-body-sm text-ink-muted mt-0.5">Automated direct API integration supported across PH providers</p>
+</div>
+<!-- Provider Badge Pills -->
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">GCash</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">Maya</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">BDO Unibank</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">BPI</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">UnionBank</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-secondary text-label-sm font-label-sm">RCBC</span>
+<span class="px-2.5 py-1.5 rounded-lg border border-border bg-surface-subtle text-ink-muted text-label-sm font-label-sm">+ 18 more</span>
+</div>
+<!-- Security Principles & Compliance Guarantees -->
+<div class="pt-3 border-t border-border space-y-2.5 text-body-sm font-body-sm text-ink-muted">
+<div class="flex items-start space-x-2.5">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0 mt-0.5" data-icon="verified_user">verified_user</span>
+<span><strong class="text-on-surface font-semibold">Open Finance Framework:</strong> We use authorized tokenized credentials. PesoFlow never sees or stores your bank passwords.</span>
+</div>
+<div class="flex items-start space-x-2.5">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0 mt-0.5" data-icon="security">security</span>
+<span><strong class="text-on-surface font-semibold">ISO 27001 &amp; NPC Compliant:</strong> Fully regulated in alignment with the Philippine Data Privacy Act of 2012.</span>
+</div>
+<div class="flex items-start space-x-2.5">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0 mt-0.5" data-icon="visibility_off">visibility_off</span>
+<span><strong class="text-on-surface font-semibold">Zero Fund Access:</strong> Read-only cryptographic access guarantees funds can never be manipulated.</span>
+</div>
+</div>
+</section>
+<!-- Insight Callout -->
+<section class="bg-accent-soft/50 border border-primary-soft/60 rounded-[18px] p-space-lg flex items-center space-x-3">
+<div class="w-9 h-9 rounded-full bg-surface flex items-center justify-center text-primary flex-shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="auto_graph">auto_graph</span>
+</div>
+<p class="text-body-sm font-body-sm text-ink-secondary leading-snug">
+          Connecting your accounts automates transaction tagging, saving an average of 42 minutes per week on manual logs.
+        </p>
+</section>
+</main>
+<!-- Docked Primary CTA (Ergonomic Thumb-Zone) -->
+<div class="sticky bottom-0 left-0 w-full z-30 p-margin bg-gradient-to-t from-surface-subtle via-surface-subtle to-transparent pt-6">
+<button class="w-full h-12 bg-primary-container text-on-primary rounded-xl font-body-md font-semibold flex items-center justify-center space-x-2 shadow-[0_4px_16px_0_rgba(15,23,42,0.12)] hover:bg-primary-strong active:scale-[0.98] transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_circle">add_circle</span>
+<span>+ Connect Another Institution</span>
+</button>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const syncBtn = document.getElementById('sync-all-btn');
+      const syncIcon = document.getElementById('sync-icon');
+      const lastSynced = document.getElementById('last-synced-label');
+
+      if (syncBtn && syncIcon) {
+        syncBtn.addEventListener('click', () => {
+          syncIcon.classList.add('rotate-180');
+          syncBtn.setAttribute('disabled', 'true');
+          syncBtn.classList.add('opacity-70');
+          if (lastSynced) lastSynced.textContent = 'Updating feeds...';
+
+          setTimeout(() => {
+            syncIcon.classList.remove('rotate-180');
+            syncBtn.removeAttribute('disabled');
+            syncBtn.classList.remove('opacity-70');
+            if (lastSynced) lastSynced.textContent = 'Last updated: Just now';
+          }, 800);
+        });
+      }
+    });
+  </script>
+</body></html>
