@@ -1,0 +1,78 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+
+import '../features/dashboard/presentation/home_screen.dart';
+import 'shell/app_shell.dart';
+import 'theme/app_spacing.dart';
+import 'theme/app_typography.dart';
+
+final routerProvider = Provider<GoRouter>((ref) {
+  final router = createRouter();
+  ref.onDispose(router.dispose);
+  return router;
+});
+
+GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
+  initialLocation: initialLocation,
+  routes: [
+    GoRoute(path: '/', redirect: (_, _) => '/home'),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, shell) => AppShell(shell: shell),
+      branches: [
+        StatefulShellBranch(
+          routes: [
+            GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
+          ],
+        ),
+        for (final (path, label) in [
+          ('/transactions', 'Transactions'),
+          ('/add', 'Add'),
+          ('/analytics', 'Analytics'),
+          ('/budgets', 'Budgets'),
+        ])
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: path,
+                builder: (_, _) => FoundationDestination(title: label),
+              ),
+            ],
+          ),
+      ],
+    ),
+  ],
+  errorBuilder: (_, _) =>
+      const Scaffold(body: FoundationDestination(title: 'Page not found')),
+);
+
+/// Navigation boundary; other approved screens are not implemented yet.
+class FoundationDestination extends StatelessWidget {
+  const FoundationDestination({required this.title, super.key});
+  final String title;
+  @override
+  Widget build(BuildContext context) => SafeArea(
+    child: Center(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: AppTypography.headlineMedium),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              'This screen is not available in the demo yet.',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodyMedium,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            FilledButton(
+              onPressed: () => context.go('/home'),
+              child: const Text('Back to Home'),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
