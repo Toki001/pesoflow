@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Only Home is implemented. Other destinations explicitly identify themselves
+- Home and Transactions are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -96,3 +96,18 @@ Also test a normal 390 × 844 viewport, compact 320px, large phone 430px,
 landscape, dark theme, safe insets, and increased text scale. Goldens use
 bundled Inter and fixed data; no network font or image requests.
 See `docs/architecture.md` for regeneration and check commands.
+
+## Transactions implementation
+
+Native feed includes the approved October snapshot, search (merchant/note/amount),
+month selection, type/account/category filters, dated cards and pending, transfer,
+income, refund and receipt states. Nine immutable records reproduce the feed.
+Month totals are a full-period fixture snapshot, not the sum of these nine rows.
+The demo ledger is session-only; no provider is connected.
+
+Financial correction: Yesterday shows -₱180 net rather than the screenshot's
++₱4,820, which incorrectly treats an internal ₱5,000 transfer as income. Pending
+Starbucks is excluded from posted cash flow. Transactions sort by timestamp,
+so SM Supermarket precedes Salary on October 20. Native icons, ellipsis and font
+rasterization differ from the web export. Full-page light/dark goldens at
+420 × 1300, phone interactions and 200% text at 320px are tested.

@@ -69,42 +69,6 @@ Map<String, dynamic> _$BudgetSnapshotToJson(_BudgetSnapshot instance) =>
       'status': instance.status,
     };
 
-_TransactionRecord _$TransactionRecordFromJson(Map<String, dynamic> json) =>
-    _TransactionRecord(
-      id: json['id'] as String,
-      merchant: json['merchant'] as String,
-      metadata: json['metadata'] as String,
-      amount: (json['amount'] as num).toInt(),
-      occurredAt: DateTime.parse(json['occurredAt'] as String),
-      kind: $enumDecode(_$TransactionKindEnumMap, json['kind']),
-      category: $enumDecode(_$TransactionCategoryEnumMap, json['category']),
-    );
-
-Map<String, dynamic> _$TransactionRecordToJson(_TransactionRecord instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'merchant': instance.merchant,
-      'metadata': instance.metadata,
-      'amount': instance.amount,
-      'occurredAt': instance.occurredAt.toIso8601String(),
-      'kind': _$TransactionKindEnumMap[instance.kind]!,
-      'category': _$TransactionCategoryEnumMap[instance.category]!,
-    };
-
-const _$TransactionKindEnumMap = {
-  TransactionKind.expense: 'expense',
-  TransactionKind.income: 'income',
-  TransactionKind.transfer: 'transfer',
-  TransactionKind.refund: 'refund',
-};
-
-const _$TransactionCategoryEnumMap = {
-  TransactionCategory.food: 'food',
-  TransactionCategory.transport: 'transport',
-  TransactionCategory.transfer: 'transfer',
-  TransactionCategory.income: 'income',
-};
-
 _UpcomingBill _$UpcomingBillFromJson(Map<String, dynamic> json) =>
     _UpcomingBill(
       name: json['name'] as String,

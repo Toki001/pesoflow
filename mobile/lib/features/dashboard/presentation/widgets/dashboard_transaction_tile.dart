@@ -38,6 +38,7 @@ class DashboardTransactionTile extends StatelessWidget {
         c.positive,
         c.soft(c.positive, AppColors.positiveSoft),
       ),
+      _ => (Icons.receipt_long_outlined, c.secondaryInk, c.mutedSurface),
     };
     return TransactionTile(
       merchant: transaction.merchant,

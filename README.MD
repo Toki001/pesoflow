@@ -40,7 +40,7 @@ Engineering and implementation instructions are defined in:
 ## Foundation available
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
-theme, routing, components and a deterministic Stitch Home demo. Other tabs
+theme, routing, components and deterministic Stitch Home and Transactions demos. Other tabs
 are explicit placeholders. `backend/` contains only a NestJS health endpoint.
 There are no real bank/e-wallet integrations.
 

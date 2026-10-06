@@ -1,11 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../transactions/domain/transaction.dart';
+export '../../transactions/domain/transaction.dart';
+
 part 'dashboard.freezed.dart';
 part 'dashboard.g.dart';
-
-enum TransactionKind { expense, income, transfer, refund }
-
-enum TransactionCategory { food, transport, transfer, income }
 
 @freezed
 abstract class Dashboard with _$Dashboard {
@@ -47,28 +46,6 @@ abstract class BudgetSnapshot with _$BudgetSnapshot {
   double get used => limit <= 0 ? 0 : spent / limit;
   bool get approaching => limit > 0 && spent * 100 >= limit * 80;
   bool get exceeded => limit > 0 && spent >= limit;
-}
-
-@freezed
-abstract class TransactionRecord with _$TransactionRecord {
-  const TransactionRecord._();
-  const factory TransactionRecord({
-    required String id,
-    required String merchant,
-    required String metadata,
-    required int amount,
-    required DateTime occurredAt,
-    required TransactionKind kind,
-    required TransactionCategory category,
-  }) = _TransactionRecord;
-  factory TransactionRecord.fromJson(Map<String, dynamic> json) =>
-      _$TransactionRecordFromJson(json);
-  int get displayAmount => kind == TransactionKind.expense ? -amount : amount;
-  int get expenseImpact => switch (kind) {
-    TransactionKind.expense => amount,
-    TransactionKind.refund => -amount,
-    TransactionKind.income || TransactionKind.transfer => 0,
-  };
 }
 
 @freezed

@@ -133,10 +133,7 @@ void main() {
     final scrollY = tester.getTopLeft(find.text('Recent Transactions')).dy;
     await tester.tap(find.text('See all'));
     await tester.pumpAndSettle();
-    expect(
-      find.text('This screen is not available in the demo yet.'),
-      findsOneWidget,
-    );
+    expect(find.text('October 2024'), findsOneWidget);
     await tester.tap(find.byKey(const ValueKey('nav-Home')));
     await tester.pumpAndSettle();
     expect(tester.getTopLeft(find.text('Recent Transactions')).dy, scrollY);

@@ -128,12 +128,16 @@ there is no supplied dark screenshot. Touch targets are at least 48px; 200%
 text uses stacked metrics/pairs and a taller navigation bar. Landscape and
 320/390/430px phone widths are covered.
 
-## Next step
+## Transactions phase
 
-Implement the approved Transactions screen using the existing transaction tile,
-theme and fixtures: month summary, search, horizontal filters, dated groups,
-pending/refund/transfer/income distinctions and navigation to a later detail
-screen. Keep provider integration and persistence out of that visual phase.
+`features/transactions` owns the shared Freezed transaction model, query/domain
+functions, deterministic recent-feed fixture, Riverpod session ledger and native
+feed. Dashboard imports the shared model. Search/filtering never changes the
+month snapshot. Internal transfers and pending amounts are excluded from cash
+flow; refunds reduce expense impact. No backend endpoints were added.
+
+The next approved screens are Transaction Detail and Add Expense, followed by
+Budgets and Analytics. Extend the session ledger first; persistence comes later.
 
 ## Foundation verification
 
