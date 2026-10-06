@@ -9,6 +9,7 @@ import '../features/accounts/presentation/accounts_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
+import '../features/subscriptions/presentation/subscriptions_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -23,6 +24,10 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
     GoRoute(path: '/', redirect: (_, _) => '/home'),
+    GoRoute(
+      path: '/subscriptions',
+      redirect: (_, _) => '/budgets/subscriptions',
+    ),
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(
@@ -43,6 +48,13 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
             routes: [
               GoRoute(
                 path: path,
+                routes: [
+                  if (path == '/budgets')
+                    GoRoute(
+                      path: 'subscriptions',
+                      builder: (_, _) => const SubscriptionsScreen(),
+                    ),
+                ],
                 builder: (_, _) => path == '/transactions'
                     ? const TransactionsScreen()
                     : path == '/budgets'

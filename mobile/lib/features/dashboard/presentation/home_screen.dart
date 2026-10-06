@@ -217,7 +217,15 @@ class HomeContent extends StatelessWidget {
           children: [
             const SectionHeader('Upcoming Bills', caption: 'Next 7 days'),
             const SizedBox(height: AppSpacing.xs),
-            UpcomingBills(bills: data.bills),
+            Semantics(
+              key: const ValueKey('open-subscriptions'),
+              button: true,
+              label: 'Manage subscriptions',
+              child: InkWell(
+                onTap: () => context.go('/subscriptions'),
+                child: UpcomingBills(bills: data.bills),
+              ),
+            ),
           ],
         ),
       ],

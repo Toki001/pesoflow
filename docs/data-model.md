@@ -63,3 +63,20 @@ separates available/last-known totals and represents local refresh progress/erro
 serialization/backend contract. Demo list changes do not mutate the ledger,
 Home snapshot, budgets or manual payment sources; no reported balance is derived
 from a manual transaction. Expired BPI remains excluded from available totals.
+
+
+`SubscriptionPlan` is immutable session tracking metadata: service ID/name,
+positive integer-centavo price, weekly/monthly/quarterly/yearly billing cycle,
+expected next renewal, sample payment-source label, category, active/paused flag,
+fixture/manual provenance and optional detection confidence (unknown in this demo).
+`SubscriptionOverview` validates unique IDs, exposes a read-only plan list and
+projects exact annualized/normalized monthly commitments from active plans only.
+Equivalent cost uses 52/12/4/1 annual payments and rounds half-up once to the nearest centavo for display after
+summing exact annual centavos. It does not advance dates or infer provider charges.
+
+Sorting is by expected date, name or annualized amount with an ID tie-breaker.
+The four earliest active dates form the timeline. The storage tip is conditional
+on both unedited original cloud fixtures being active. Plans never mutate ledger
+records; history filters existing posted recurring expense records and retains
+transaction provenance. There is no recurring-detection, persistence, subscription
+API or remote cancellation contract yet. Model edits withdraw fixture provenance.

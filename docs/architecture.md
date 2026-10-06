@@ -193,8 +193,8 @@ updates, compact/large/landscape layouts and 200% text with safe insets/keyboard
 Formatting, analysis, Android debug and iOS simulator debug builds pass. Backend
 format/lint/build and its existing health HTTP test pass.
 
-The next approved screen is Subscriptions. Use deterministic recurring-expense
-fixtures and the existing demo ledger; integrations remain deferred.
+The remaining approved screen is Receipt Scanner Review. Use deterministic
+receipt/review fixtures; actual OCR, camera and integrations remain deferred.
 
 Transactions/Add milestone verification (historical): 43 Flutter tests passed,
 including nine light/dark/phone
@@ -322,3 +322,66 @@ loading/empty/retry, navigation/back, compact/large/landscape, 200% text and saf
 insets. Accounts light/dark captures are visually reviewed at 390 × 1632; older
 screen goldens remain unchanged. Formatting/analysis, Android debug/iOS simulator
 builds and backend format/lint/build/health tests pass.
+
+
+## Subscriptions phase
+
+`features/subscriptions` separates immutable domain plans/projections, five Stitch
+fixtures, Riverpod session state, native hero/tip/timeline/service cards, and
+tracking editor/detail/history sheets. No packages, backend endpoints or storage
+contracts were added. Plain immutable Dart models suit these transient values;
+Freezed/JSON remains reserved for existing serializable contracts.
+
+`/subscriptions` redirects to `/budgets/subscriptions`, nested in the Budgets
+shell branch to preserve the approved active bottom tab. Home's Upcoming Bills
+card navigates there without altering Home's pixels. Back returns to Budgets;
+tab switching preserves subscription sorting/scroll and the Home scroll position.
+Plan state survives navigation and resets with the app's demo session.
+
+Every monetary amount is integer centavos. Annualization uses 52 weekly, 12
+monthly, 4 quarterly or 1 yearly payment. Monthly equivalence divides the exact
+annual amount by 12, with one nearest-centavo (half-up) display rounding step; overview totals sum exact
+annual amounts first. Paused plans remain listed but contribute no commitments
+or upcoming renewals. Calendar-day comparisons use UTC calendar dates to avoid
+clock-time/DST truncation; overdue expected dates remain visible, never implying
+that a charge occurred. Dates are explicitly tracked, not automatically advanced.
+
+The five approved plans total ₱18,742/year and ₱1,561.83/month, correcting the
+export's inconsistent ₱18,600/₱1,550 hero and four-service count. Cross-screen
+Home/Budgets/Analytics fixture aggregates remain independent. The four earliest
+active dates span October/November, so the timeline says Upcoming renewals.
+The cloud-storage saving tip appears only while the two original sample plans
+remain active and unedited; manual changes withdraw its unverified overlap claim.
+
+Add/edit validates a service name and exact positive PHP price; cadence, sample
+source, category and expected date are editable. Manual edits replace fixture
+provenance and keep detection confidence unknown. Pause/resume changes only
+tracking, and removal requires confirmation. Detail/confirmation copy explains
+that these controls cannot cancel subscriptions, stop payments or delete charges.
+No recurring detection engine is implied from the sparse demo history.
+
+History reads the shared ledger's posted recurring expenses only. Pending,
+income, transfers, refunds and unflagged expenses are excluded; an observed charge
+opens Transaction Detail. Plan creation/renewal never inserts expenses or changes
+balances, budgets or analytics. History source provenance stays on the existing
+transaction. This is not provider billing, payment scheduling or reconciliation.
+
+Loading skeletons, safe retry and empty tracking/history states are implemented.
+Rows stack on compact/large-text displays; forms and sheets scroll above keyboard
+and safe insets. Light/dark use existing semantic palette roles and Inter. Visual
+comparison corrected service title/badge wrapping, source/renewal alignment,
+header margins and excess list spacing. The reference-size 390 × 1205 light golden
+and full 390 × 1420 light/dark goldens preserve the screenshot hierarchy.
+
+Validation: 134 Flutter tests, including 18 golden comparisons, pass. Subscription
+tests cover exact money/cadences, aggregate rounding, duplicate IDs, immutable
+lists, paused/empty projections, calendar/leap-year boundaries, deterministic sort,
+manual edits/provenance, tip withdrawal, unchanged ledger, confirmed removal,
+recorded-charge history/detail navigation, date editing, cancellation, shell/tab
+state, loading/retry, compact/large/landscape, 200% text, keyboard and safe insets.
+Older screen goldens remain unchanged. Formatting, static analysis, Android debug
+and iOS simulator builds and backend format/lint/build/health regression checks pass.
+
+Next: translate the approved Receipt Scanner Review screen to native widgets with
+fixture line items and receipt totals. Actual camera/OCR/provider work remains a
+later integration phase.

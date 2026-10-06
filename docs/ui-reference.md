@@ -252,3 +252,36 @@ text action overflow and a clipped bottom insight. Light/dark goldens use
 wrapped demo-qualified badges, native font/icon rendering, truthful trust copy
 and the corrected total. Compact/200% text stacks balances; safe areas and the
 connect CTA stay usable. The shared task header defaults preserve older screens.
+
+
+## Subscriptions implementation
+
+Native widgets retain the Back/Add header, commitment hero, annualized line,
+amber renewal strip, purple cloud tip, four-date timeline, service list and
+Budgets-selected shared bottom navigation. Cards retain Netflix/Spotify/Google/
+iCloud+/Disney order, 40px tinted icons, active/annual badges, right-aligned prices,
+account/renewal footer, 12px radius and 16px outer margins. Inter and existing
+light/dark semantic roles are reused; no assets, HTML or WebViews were added.
+
+Amounts match the service rows: ₱549, ₱239, ₱479, ₱49 monthly and Disney+ ₱2,950
+annually (₱245.83 monthly equivalent). These yield **₱1,561.83/month** and
+**₱18,742/year**, with **5 active services**, correcting inconsistent export hero
+values. Upcoming dates are Oct 28, Nov 2, Nov 12 and Nov 18, so the heading says
+Upcoming renewals. Home's separate Spotify amount and screen-specific budget/
+analytics subscription totals remain unchanged. The sample clock is Oct 24, 2024.
+
+The HTML's Subscription History card appears below the five plans; it is below the
+screenshot crop. Its subtitle accurately says View recorded recurring charges,
+showing only observed posted recurring expenses from the shared demo ledger.
+The session note discloses the fixed demo date. Add/edit/detail/history sheets use
+existing native form/dialog patterns; cancellation/payment functions are not implied.
+Home's Upcoming Bills card opens the Budgets-nested Subscriptions route. Back goes
+to Budgets; the existing bottom tabs remain functional and preserve state.
+
+Screenshots were compared visually at 390 × 1205, with full light/dark captures at
+390 × 1420. Largest initial mismatches fixed: title/badge wrapping, centered account
+footers, header inset and excess heading spacing. Remaining differences: native
+font/icon rendering, slightly taller rows/spacing (roughly 6–13px cumulative list
+offset), 48px interactive targets, corrected financial/count/date copy and the
+truthful history/session copy. Compact/200% text deliberately stacks content.
+Older screen goldens and approved Stitch assets remain unchanged.
