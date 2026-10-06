@@ -33,3 +33,13 @@ Discard/reload requires confirmation and preserves posted records. Snapshots are
 session-only with immutable item lists; errors expose generic copy, not payloads.
 Actual receipt capture, parsing, file access/retention and protected persistence
 remain separate prerequisites before accepting real receipt imagery.
+
+
+Onboarding provides an explicit demo disclosure and entry action. It requests
+no credentials, permissions or personal information, makes no network request
+and does not establish authentication or provider consent. Deep links remain
+accessible deliberately; introduction routing is not an access-control boundary.
+Protected routes, secure authentication and provider consent require separate
+implementation before real financial data is accepted. The disclosure states
+that balances are illustrative, edits reset on restart, and real account
+connections, money movement, camera capture and OCR are unavailable.

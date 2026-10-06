@@ -32,6 +32,11 @@ Future<void> pumpHome(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        routerProvider.overrideWith((ref) {
+          final router = createRouter(initialLocation: '/home');
+          ref.onDispose(router.dispose);
+          return router;
+        }),
         if (repository != null)
           dashboardRepositoryProvider.overrideWithValue(repository),
       ],

@@ -11,6 +11,7 @@ import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
 import '../features/subscriptions/presentation/subscriptions_screen.dart';
 import '../features/receipts/presentation/receipt_review_screen.dart';
+import '../features/onboarding/presentation/onboarding_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -21,10 +22,11 @@ final routerProvider = Provider<GoRouter>((ref) {
   return router;
 });
 
-GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
+GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
-    GoRoute(path: '/', redirect: (_, _) => '/home'),
+    GoRoute(path: '/', redirect: (_, _) => '/onboarding'),
+    GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
     GoRoute(
       path: '/subscriptions',
       redirect: (_, _) => '/budgets/subscriptions',

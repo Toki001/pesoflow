@@ -39,6 +39,11 @@ Engineering and implementation instructions are defined in:
 
 ## App demo available
 
+The app starts with a three-step introduction and an explicit **Explore demo**
+entry. Skip goes to the demo disclosure; it does not bypass it. Sample data and
+edits are session-only, and no credentials or financial account connections are
+requested. Explicit screen deep links remain available.
+
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,
 Add Expense, Budgets, Analytics, Connected Accounts, Subscriptions and Receipt Review screens. Manual expenses, income and transfers update

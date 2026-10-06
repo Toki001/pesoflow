@@ -99,3 +99,12 @@ repeated save/reload return that same transaction, with the saved review read-on
 Item edits update only the review until save; removal/discard/reload never deletes
 posted expenses. Transaction Detail reads the saved item snapshot. These transient
 models add no backend API, JSON, persistence or actual image-storage contract.
+
+
+`OnboardingStep` is an enum (`overview`, `plans`, `demo`) controlled by a bounded
+Riverpod notifier. It retains the current introduction step only within the
+active ProviderScope; fresh sessions start at overview. Skip selects demo,
+Next/Back stop at their respective boundaries. Previews read existing immutable
+Home fixtures rather than duplicating financial data. Entering or revisiting the
+introduction never resets the demo ledger. No JSON, database, user identity,
+authentication session or consent record is introduced.

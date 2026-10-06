@@ -446,3 +446,42 @@ updated among earlier screens, for its newly available demo-review caption.
 Next: Phase 3 onboarding and explicit demo entry, using the established design
 system. Authentication/persistence and real capture/OCR/provider work require
 their own later implementation milestones.
+
+## Onboarding and explicit demo entry phase
+
+`features/onboarding` adds a bounded Riverpod `OnboardingStep` controller and
+a native three-step presentation: balance overview, budget preview and demo
+disclosure. It reuses Home's `BalanceHero` and `BudgetSummary`, existing October
+2024 fixtures, Inter typography, semantic palette, cards and themed buttons.
+There is no onboarding-specific financial calculation, repository, backend
+endpoint, dependency or persistence. Static local content needs no asynchronous
+loading/error state.
+
+Default startup and `/` now open `/onboarding`, outside the bottom navigation.
+Next/Back and system Back move through the introduction; Skip reaches the final
+disclosure. Explore demo replaces the route with `/home`, without an intro route
+on the back stack. Explicit feature deep links still work: this introduction is
+not an authentication or authorization gate. Returning to `/onboarding` retains
+the current step within the same ProviderScope and leaves all demo edits intact.
+A fresh app session starts at the first step.
+
+The final screen explicitly explains sample financial data, session-only edits,
+no account connection or money movement, and unavailable real capture/OCR. It
+collects no credentials and records no identity, authentication or consent.
+
+Light/dark visual review at 390 × 844 checked all three stages against Home and
+Budgets patterns. It corrected a header-height shift when Skip disappears. The
+body scrolls independently of the safe-area footer; headings and disclosure text
+scale normally. Six new golden baselines cover these inferred screens; previous
+approved screen baselines remain unchanged.
+
+Validation: formatting and static analysis pass; all 169 Flutter tests pass,
+including 26 golden comparisons (six new onboarding baselines). Tests cover
+bounded progression and fresh sessions, default/root startup, system Back,
+Skip/disclosure/explicit entry, preserved deep links, three viewport sizes,
+landscape, 200% text and safe insets. Android debug and iOS simulator builds
+and the existing backend format/lint/build/health test pass.
+
+Next: Settings and session preferences using the established design system.
+Real authentication, protected persistence and integrations remain separate
+implementation milestones.

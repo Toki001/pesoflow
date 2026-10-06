@@ -334,3 +334,23 @@ starts about 35px lower), and shorter payment-source cards without a fake balanc
 Preview text keeps illustration proportions at 200% scaling and has an accessible
 summary; review text and controls scale normally. Only Add Expense's two goldens
 change among earlier screens, for its now-available demo review caption.
+
+## Onboarding / demo entry (inferred, not a Stitch-approved screen)
+
+No onboarding screenshot or HTML exists in the approved export. The native
+three-step introduction inherits Home's balance and budget previews, the Budgets
+PF identity, 16px gutters, Inter hierarchy, semantic badges, neutral cards and
+48px primary actions. It introduces only the necessary demo disclosures and
+step navigation. It does not replace or redesign any approved screen.
+
+Steps: Understand your money; Make room for your plans; Explore PesoFlow with
+sample data. Preview amounts come from the existing October 2024 Home fixture.
+Next and Back control local state, Skip reaches the disclosure and Explore demo
+opens Home. There is no sign-in or account connection form. The introduction
+has a scrolling body, safe-area footer and no bottom navigation.
+
+Six 390 × 844 light/dark goldens were reviewed for hierarchy, spacing, typography,
+card shape and colors against neighboring references. Header height stays stable
+when Skip disappears. There is no pixel-level Stitch baseline for this new UI;
+its layout and copy are an implementation inference and await product review.
+Existing Stitch-backed screens and their goldens are unchanged.
