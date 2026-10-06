@@ -778,7 +778,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             children: [
                               Text('Scan or upload receipt', style: small),
                               Text(
-                                'Fixture review available next',
+                                'Demo review · no live OCR',
                                 style: AppTypography.labelSmall.copyWith(
                                   color: c.mutedInk,
                                 ),
@@ -787,21 +787,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           ),
                         ),
                         OutlinedButton.icon(
-                          onPressed: () => showDialog<void>(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Receipt review'),
-                              content: const Text(
-                                'The approved receipt review screen is next in the UI phase. Camera, upload and OCR are not connected yet.',
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Close'),
-                                ),
-                              ],
-                            ),
-                          ),
+                          onPressed: () => context.push('/receipt'),
                           icon: const Icon(
                             Icons.photo_camera_outlined,
                             size: 16,

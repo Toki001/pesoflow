@@ -23,3 +23,13 @@ consent revocation. Live connection consent/revocation and secure adapter work
 remain deferred. Local refresh errors use generic UI copy and do not log payloads
 or mark unchanged/stale balances as freshly synced. Unverified Stitch security,
 certification and provider-support claims are replaced by accurate demo wording.
+
+
+Receipt Review contains a native synthetic preview and in-memory demo corrections
+only. It requests no camera/photo permissions, loads no remote receipt image,
+performs no OCR and uploads/stores no receipt files. Sample confidence and the
+demo boundary are visible; uncertain lines cannot silently create an expense.
+Discard/reload requires confirmation and preserves posted records. Snapshots are
+session-only with immutable item lists; errors expose generic copy, not payloads.
+Actual receipt capture, parsing, file access/retention and protected persistence
+remain separate prerequisites before accepting real receipt imagery.

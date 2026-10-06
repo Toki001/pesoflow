@@ -10,6 +10,7 @@ import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
 import '../features/subscriptions/presentation/subscriptions_screen.dart';
+import '../features/receipts/presentation/receipt_review_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -29,6 +30,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
       redirect: (_, _) => '/budgets/subscriptions',
     ),
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
+    GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(
       path: '/transactions/:id',
@@ -70,7 +72,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
       const Scaffold(body: FoundationDestination(title: 'Page not found')),
 );
 
-/// Navigation boundary; other approved screens are not implemented yet.
+/// Fallback for unavailable routes.
 class FoundationDestination extends StatelessWidget {
   const FoundationDestination({required this.title, super.key});
   final String title;

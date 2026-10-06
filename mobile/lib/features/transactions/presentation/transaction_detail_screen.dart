@@ -11,6 +11,7 @@ import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../../../core/widgets/task_screen.dart';
 import '../application/transactions_provider.dart';
+import '../../receipts/application/receipts_provider.dart';
 import '../../budgets/application/budgets_provider.dart';
 import '../domain/transaction.dart';
 
@@ -125,6 +126,7 @@ class TransactionDetailScreen extends ConsumerWidget {
         t.source == TransactionSource.bankSync ||
         t.source == TransactionSource.walletSync;
     final jollibee = id == 'jollibee';
+    final reviewedReceipt = ref.watch(savedDemoReceiptsProvider)[id];
     ref.watch(demoBudgetPlansProvider);
     final plan = ref
         .read(demoBudgetPlansProvider.notifier)
@@ -454,7 +456,9 @@ class TransactionDetailScreen extends ConsumerWidget {
                             children: [
                               Text('1 receipt attached', style: small),
                               Text(
-                                'Fixture preview • ${jollibee ? '3 items' : 'Total only'}',
+                                reviewedReceipt == null
+                                    ? 'Fixture preview • ${jollibee ? '3 items' : 'Total only'}'
+                                    : 'Reviewed demo • ${reviewedReceipt.items.length} items',
                                 style: AppTypography.labelSmall.copyWith(
                                   color: c.mutedInk,
                                 ),
@@ -469,6 +473,32 @@ class TransactionDetailScreen extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  if (reviewedReceipt != null) ...[
+                    const SizedBox(height: 12),
+                    Divider(color: c.border),
+                    for (final item in reviewedReceipt.items)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${item.quantity}x ${item.name}',
+                                style: small,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(MoneyFormatter.php(item.total), style: small),
+                          ],
+                        ),
+                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Sample included VAT: ${MoneyFormatter.php(reviewedReceipt.includedVat)}',
+                      style: small,
+                    ),
+                  ],
                   if (jollibee) ...[
                     const SizedBox(height: 12),
                     Divider(color: c.border),

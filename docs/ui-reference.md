@@ -135,7 +135,7 @@ Expense/Income/Transfer selectors share its form language. Transfer additionally
 requires distinct source/destination accounts. Savings and budgets reflect
 session edits through baseline deltas, while reported balances stay unchanged.
 
-The receipt action explains that capture/upload/OCR is not connected. Unverified
+The receipt action opens the fixture-backed native review screen; capture/upload/OCR remains unconnected. Unverified
 read-only sync/security claims are replaced with explicit demo labels. Stable
 light/dark full-page goldens use 390 × 1600. At 390px the form is taller than
 the scaled Stitch screenshot because quick actions, selectors and links use
@@ -285,3 +285,52 @@ font/icon rendering, slightly taller rows/spacing (roughly 6–13px cumulative l
 offset), 48px interactive targets, corrected financial/count/date copy and the
 truthful history/session copy. Compact/200% text deliberately stacks content.
 Older screen goldens and approved Stitch assets remain unchanged.
+
+
+## Receipt Scanner Review implementation
+
+The native `/receipt` task route preserves the dark preview/HUD, flash/gallery/
+frame controls, 24px rounded review surface, handle, wrapped review heading,
+merchant/date card, amber uncertainty warning, four numbered item rows with
+confidence, subtotal/VAT/blue total, category/account cards and save/retake/discard
+controls. No bottom navigation appears. Preview and sheet scroll together with
+safe insets, a 512px maximum canvas and keyboard-safe item editors.
+
+The preview is a native illustration of the original SM Supermarket sample;
+no local licensed thermal-receipt photo exists. It is labelled Demo receipt,
+98% sample confidence, and Demo frame preview. No perpetual scan animation,
+remote image request, camera feed, capture permission or live OCR is implied.
+Flash changes only a demo preference. Gallery/Retake confirms sample reloading;
+Adjust Frame explains the unavailable actual crop/capture integration.
+
+Items retain ₱108.50 milk, ₱75 bread, ₱160 apples and two ₱91 corned-beef units;
+confidence is 99%, 98%, 95% and 81%. Total stays **₱525.50**. The export's
+₱63.06 is 12% of the gross amount, inconsistent with its included-tax label.
+The illustrative included portion is **₱56.30**, calculated as gross × 12/112,
+rounded half-up to centavos and never added again. This demo assumes every line
+has the same sample tax treatment; mixed taxes/discounts/exemptions are deferred.
+The loyalty-points claim becomes Demo receipt · no rewards applied. Account copy
+says Demo source and makes no current balance or payment claim.
+
+Ready to review replaces the misleading Ready to save while a line remains
+uncertain. Saving directs the user to the first flagged editor and cannot insert
+a transaction until it is confirmed or removed. Item correction preserves the
+original sample confidence and shows Reviewed; it never fabricates improved OCR
+confidence. Adding/removing/correcting items recomputes monetary totals.
+
+Add Expense's Scan opens the review and preserves its original unsaved form and
+scroll on discard. Close/system Back/discard requires confirmation; direct links
+fall back to Add. Saving opens Transaction Detail with a session snapshot of the
+reviewed items and receipt provenance. Reopening the same sample is read-only and
+offers View saved transaction, preventing duplicate postings. This saves an
+independent expense rather than submitting the still-unsaved Add Expense form.
+
+Light/dark goldens use the exact **427 × 1600** reference viewport. Human comparison
+corrected heading wrapping, item font/row density, summary amount alignment,
+secondary button widths and dark warning intensity. Remaining differences: the
+synthetic preview, truthful demo/confidence/tax/rewards/source copy, native fonts/
+icons, a taller accessible merchant/date card and item-header control (item list
+starts about 35px lower), and shorter payment-source cards without a fake balance.
+Preview text keeps illustration proportions at 200% scaling and has an accessible
+summary; review text and controls scale normally. Only Add Expense's two goldens
+change among earlier screens, for its now-available demo review caption.

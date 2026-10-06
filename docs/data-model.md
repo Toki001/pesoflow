@@ -80,3 +80,22 @@ on both unedited original cloud fixtures being active. Plans never mutate ledger
 records; history filters existing posted recurring expense records and retains
 transaction provenance. There is no recurring-detection, persistence, subscription
 API or remote cancellation contract yet. Model edits withdraw fixture provenance.
+
+
+`ReceiptItem` records immutable ID/name, whole quantity, integer-centavo unit
+price, optional sample confidence and explicit reviewed state. `ReceiptDraft`
+records merchant/date, read-only uniquely identified items, expense category,
+sample payment source and optional saved transaction ID. Unknown/below-90%
+confidence needs explicit review. Reviewed corrections retain sample confidence.
+Subtotal/total sum quantity × price; sample included VAT uses gross × 12/112 with
+half-up rounding. It assumes uniform sample tax treatment and is never an extra
+charge. Real discounts/mixed taxes/receipt matching are not modeled yet.
+
+`receiptReviewProvider` holds editable session state. `savedDemoReceiptsProvider`
+holds read-only reviewed snapshots keyed by ledger transaction ID. Save creates
+one posted expense with source `receipt`, `hasReceipt` and demo provenance note;
+it does not represent a stored photograph or OCR file. The stable sample ID makes
+repeated save/reload return that same transaction, with the saved review read-only.
+Item edits update only the review until save; removal/discard/reload never deletes
+posted expenses. Transaction Detail reads the saved item snapshot. These transient
+models add no backend API, JSON, persistence or actual image-storage contract.

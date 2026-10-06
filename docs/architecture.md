@@ -193,8 +193,8 @@ updates, compact/large/landscape layouts and 200% text with safe insets/keyboard
 Formatting, analysis, Android debug and iOS simulator debug builds pass. Backend
 format/lint/build and its existing health HTTP test pass.
 
-The remaining approved screen is Receipt Scanner Review. Use deterministic
-receipt/review fixtures; actual OCR, camera and integrations remain deferred.
+All nine approved references now have native demo implementations. The next
+phase begins with onboarding/demo-entry UI; real integrations remain deferred.
 
 Transactions/Add milestone verification (historical): 43 Flutter tests passed,
 including nine light/dark/phone
@@ -382,6 +382,67 @@ state, loading/retry, compact/large/landscape, 200% text, keyboard and safe inse
 Older screen goldens remain unchanged. Formatting, static analysis, Android debug
 and iOS simulator builds and backend format/lint/build/health regression checks pass.
 
-Next: translate the approved Receipt Scanner Review screen to native widgets with
-fixture line items and receipt totals. Actual camera/OCR/provider work remains a
-later integration phase.
+Receipt Scanner Review is completed below. Actual camera/OCR/provider work
+remains a later integration phase.
+
+
+## Receipt Scanner Review phase
+
+`features/receipts` separates immutable `ReceiptItem`/`ReceiptDraft` domain values,
+deterministic extraction fixtures, a local asynchronous loader, Riverpod review/
+saved-snapshot state, native preview/review cards and validated correction sheets.
+No new dependency, backend endpoint, serialized/storage contract, camera/OCR SDK
+or remote image asset was introduced. Plain immutable Dart models fit these
+session-only values. The loader supports deterministic loading/error/empty tests.
+
+`/receipt` is a task route above the shell. Add Expense's Scan opens it; confirmed
+close/discard preserves the original form and scroll, while direct-link dismissal
+falls back to Add. PopScope handles system Back with the same confirmation. Retake/
+gallery explicitly confirms reloading the original fixture. Frame controls disclose
+unavailable real crop/capture; flash is labelled as a demo preference.
+
+Line totals are positive integer-centavo unit prices × integer quantity. Subtotal
+and total sum those lines; the illustrative included tax is rounded half-up as
+gross × 12/112, never added to the total. All items use the same sample treatment;
+real receipt tax breakdowns, discounts, exemptions and reconciliation are outside
+this milestone. Quantity/price/name validation, duplicate item IDs and a total cap
+prevent invalid expenses. Unknown or under-90% unconfirmed confidence requires
+explicit correction/confirmation or removal. Confirmation retains the original
+confidence and marks the line Reviewed; manual additions are explicitly reviewed.
+
+Review edits never mutate the ledger. Save validates merchant/source/category,
+nonempty items, total and uncertainty, then synchronously inserts one posted
+receipt-source expense and publishes an immutable snapshot keyed by transaction
+ID. A stable sample receipt identity prevents repeat saves after navigation/reload;
+saved reviews lock financial controls and offer the existing transaction. This
+is idempotence for one local sample, not production duplicate detection or imported
+transaction matching. Receipt expenses update Home/budget/analytics through the
+existing shared ledger projections; reported account balances remain unchanged.
+
+Transaction Detail reads saved receipt snapshots and displays reviewed quantity/
+item amounts and included-tax metadata. Existing Jollibee fixture content/goldens
+remain unchanged. The original Add form stays independent, so scan/save cannot
+silently submit its previous manual values. No receipt photo/file is attached,
+shared, exported or uploaded. All review state disappears when the demo session
+ends. Loading skeletons, safe error retry and empty review/item states work.
+
+Visual review used 427 × 1600 light/dark captures. It corrected title wrapping,
+item typography/spacing, amount alignment, secondary button widths and overly
+bright dark uncertainty fill. Compact/landscape/200% text, safe areas and keyboard
+keep the review and editors scrollable. The decorative preview retains its text
+scale and exposes a semantic summary; editable review text scales normally.
+
+Validation: 156 Flutter tests, including 20 golden comparisons, pass. New tests
+cover item arithmetic, included-tax rounding, invalid/unknown-confidence states,
+immutable/duplicate items, edited total/category/source, save gating/idempotence,
+readonly reopening, unchanged reported balances, shared spending/budget deltas,
+item snapshot in Transaction Detail, merchant/date/time correction, confirmation,
+retake/flash/frame boundaries, system Back/direct link, original Add state/scroll,
+loading/empty/retry, phone sizes/landscape, 200% text and keyboard/safe insets.
+Formatting/static analysis, Android debug and iOS simulator builds and existing
+backend format/lint/build/health checks pass. Only the two Add Expense goldens were
+updated among earlier screens, for its newly available demo-review caption.
+
+Next: Phase 3 onboarding and explicit demo entry, using the established design
+system. Authentication/persistence and real capture/OCR/provider work require
+their own later implementation milestones.

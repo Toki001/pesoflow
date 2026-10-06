@@ -41,7 +41,7 @@ Engineering and implementation instructions are defined in:
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,
-Add Expense, Budgets, Analytics, Connected Accounts and Subscriptions screens. Manual expenses, income and transfers update
+Add Expense, Budgets, Analytics, Connected Accounts, Subscriptions and Receipt Review screens. Manual expenses, income and transfers update
 a session-only demo ledger. Budget creation, editing, filters and reallocation
 work with that ledger. Analytics supports date/period selection, category
 percentages, chart details and session spending updates. Connected Accounts offers
@@ -50,8 +50,10 @@ open it from Home's balance card. Tap Home's Upcoming Bills card for Subscriptio
 add/edit plans, sort renewals, pause/resume tracking, confirm removal and view
 recorded recurring charges. Weekly/monthly/quarterly/yearly plans update session
 commitments without posting expenses or cancelling services. `backend/` contains
-only a NestJS health endpoint.
-There are no real bank/e-wallet integrations.
+only a NestJS health endpoint. Add Expense’s Scan action opens the native demo
+receipt review: correct items, merchant/date, category and payment source, confirm
+uncertain items, and save one receipt expense with its item snapshot. No camera,
+upload, live OCR, receipt file storage or real bank/e-wallet integrations exist.
 
 Run mobile: `cd mobile && flutter pub get && flutter run`.
 Run backend: `cd backend && npm ci && npm run start:dev`.
