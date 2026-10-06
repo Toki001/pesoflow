@@ -137,7 +137,12 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('nav-Home')));
     await tester.pumpAndSettle();
     expect(tester.getTopLeft(find.text('Recent Transactions')).dy, scrollY);
-    for (final tab in ['Add', 'Analytics', 'Budgets']) {
+    await tester.tap(find.byKey(const ValueKey('nav-Add')));
+    await tester.pumpAndSettle();
+    expect(find.text('Add Expense'), findsOneWidget);
+    await tester.tap(find.byTooltip('Close'));
+    await tester.pumpAndSettle();
+    for (final tab in ['Analytics', 'Budgets']) {
       await tester.tap(find.byKey(ValueKey('nav-$tab')));
       await tester.pumpAndSettle();
       expect(find.text('Back to Home'), findsOneWidget);

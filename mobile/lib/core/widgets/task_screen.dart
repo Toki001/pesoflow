@@ -10,10 +10,12 @@ class TaskScreen extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions = const [],
+    this.centerTitle = false,
     this.footer,
     super.key,
   });
   final String title;
+  final bool centerTitle;
   final Widget child;
   final List<Widget> actions;
   final Widget? footer;
@@ -48,7 +50,13 @@ class TaskScreen extends StatelessWidget {
                         icon: const Icon(Icons.close),
                       ),
                       Expanded(
-                        child: Text(title, style: AppTypography.headlineSmall),
+                        child: Text(
+                          title,
+                          textAlign: centerTitle
+                              ? TextAlign.center
+                              : TextAlign.start,
+                          style: AppTypography.headlineSmall,
+                        ),
                       ),
                       ...actions,
                     ],

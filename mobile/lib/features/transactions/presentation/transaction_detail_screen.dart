@@ -253,7 +253,11 @@ class TransactionDetailScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 12),
                 StatusBadge(
-                  '${t.status == TransactionStatus.pending ? 'Pending' : 'Completed'} • ${synced ? 'Read-only synced' : 'Manual entry'}',
+                  '${t.status == TransactionStatus.pending ? 'Pending' : 'Completed'} • ${synced
+                      ? 'Read-only synced'
+                      : t.source == TransactionSource.receipt
+                      ? 'Receipt entry'
+                      : 'Manual entry'}',
                   foreground: c.secondaryInk,
                   background: c.mutedSurface,
                   icon: Icons.circle,
@@ -297,7 +301,11 @@ class TransactionDetailScreen extends ConsumerWidget {
                       ),
                     ),
                     StatusBadge(
-                      synced ? 'Synced' : 'Manual',
+                      synced
+                          ? 'Synced'
+                          : t.source == TransactionSource.receipt
+                          ? 'Receipt'
+                          : 'Manual',
                       foreground: c.primary,
                       background: c.soft(c.primary, AppColors.primarySoft),
                       pill: false,
@@ -324,7 +332,9 @@ class TransactionDetailScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (t.category == TransactionCategory.food)
+                if (t.category == TransactionCategory.food &&
+                    t.occurredAt.year == 2024 &&
+                    t.occurredAt.month == 10)
                   FinanceCard(
                     color: c.canvas,
                     padding: const EdgeInsets.all(12),

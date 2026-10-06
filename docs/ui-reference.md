@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Home, Transactions and Transaction Detail are implemented. Other destinations explicitly identify themselves
+- Home, Transactions, Transaction Detail and Add Expense are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -125,3 +125,19 @@ image is bundled. OCR/security copy explicitly identifies fixture/demo data.
 Sharing is an equal-split preview, not recorded debt or a payment. Reports and
 receipt export explain their unavailable state. Detail goldens cover both
 themes at 390 × 1447; 320px with 200% text remains scrollable.
+
+## Add Expense implementation
+
+Native amount input, +₱50/+₱100/+₱500, Exact focus, merchant suggestions, six
+category tiles, more categories, contextual budget meter, account switching,
+date/time, note/tags, Reset and fixed Save action follow the approved form.
+Expense/Income/Transfer selectors share its form language. Transfer additionally
+requires distinct source/destination accounts. Savings and budgets reflect
+session edits through baseline deltas, while reported balances stay unchanged.
+
+The receipt action explains that capture/upload/OCR is not connected. Unverified
+read-only sync/security claims are replaced with explicit demo labels. Stable
+light/dark full-page goldens use 390 × 1600. At 390px the form is taller than
+the scaled Stitch screenshot because quick actions, selectors and links use
+48px touch targets. Native glyphs and input typography differ slightly. The
+keyboard, errors and 200% text flow naturally without hiding the docked action.

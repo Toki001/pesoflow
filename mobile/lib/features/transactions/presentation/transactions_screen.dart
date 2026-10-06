@@ -32,6 +32,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   void changeMonth(int delta) {
     final query = ref.read(transactionQueryProvider);
     final date = DateTime(query.year, query.month + delta);
+    if (date.isBefore(DateTime(2020)) || date.isAfter(DateTime(2030, 12))) {
+      return;
+    }
     setQuery(query.copyWith(year: date.year, month: date.month));
   }
 

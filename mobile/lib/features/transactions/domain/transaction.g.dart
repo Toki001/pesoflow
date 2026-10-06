@@ -16,6 +16,7 @@ _TransactionRecord _$TransactionRecordFromJson(Map<String, dynamic> json) =>
       kind: $enumDecode(_$TransactionKindEnumMap, json['kind']),
       category: $enumDecode(_$TransactionCategoryEnumMap, json['category']),
       account: json['account'] as String? ?? 'GCash',
+      destinationAccount: json['destinationAccount'] as String?,
       status:
           $enumDecodeNullable(_$TransactionStatusEnumMap, json['status']) ??
           TransactionStatus.posted,
@@ -41,6 +42,7 @@ Map<String, dynamic> _$TransactionRecordToJson(_TransactionRecord instance) =>
       'kind': _$TransactionKindEnumMap[instance.kind]!,
       'category': _$TransactionCategoryEnumMap[instance.category]!,
       'account': instance.account,
+      'destinationAccount': instance.destinationAccount,
       'status': _$TransactionStatusEnumMap[instance.status]!,
       'source': _$TransactionSourceEnumMap[instance.source]!,
       'note': instance.note,

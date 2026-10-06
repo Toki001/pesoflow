@@ -34,6 +34,7 @@ abstract class TransactionRecord with _$TransactionRecord {
     required TransactionKind kind,
     required TransactionCategory category,
     @Default('GCash') String account,
+    String? destinationAccount,
     @Default(TransactionStatus.posted) TransactionStatus status,
     @Default(TransactionSource.manual) TransactionSource source,
     @Default('') String note,

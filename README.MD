@@ -37,11 +37,12 @@ Engineering and implementation instructions are defined in:
 - Subscriptions
 - Notifications
 
-## Foundation available
+## App demo available
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
-theme, routing, components and deterministic Stitch Home and Transactions demos. Other tabs
-are explicit placeholders. `backend/` contains only a NestJS health endpoint.
+theme, routing and native Stitch Home, Transactions, Transaction Detail and
+Add Expense screens. Manual expenses, income and transfers update a session-only
+demo ledger. Analytics and Budgets remain explicit placeholders. `backend/` contains only a NestJS health endpoint.
 There are no real bank/e-wallet integrations.
 
 Run mobile: `cd mobile && flutter pub get && flutter run`.

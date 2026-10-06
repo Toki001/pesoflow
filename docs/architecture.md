@@ -3,7 +3,8 @@
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
-GoRouter shell, fixture-backed Home, and minimal NestJS `/v1/health` endpoint.
+GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense, a session-only
+demo ledger, and minimal NestJS `/v1/health` endpoint.
 No HTML rendering, WebViews, provider calls, authentication, database, queues,
 OCR, notifications, persistence, or money movement are implemented.
 
@@ -24,16 +25,17 @@ hidden automatic requests. Empty lists have individual messages. Offline and
 refresh/sync state machines belong to a future persistence/API implementation;
 the current demo works entirely offline after installation.
 
-All money is integer PHP centavos. Utilization ratios alone use floating point
-for painting. Recent rows do not sum to the monthly snapshot. Dates are frozen
+All money is integer PHP centavos. Display ratios use floating point
+for painting/percentage formatting. Recent rows do not sum to the monthly snapshot. Dates are frozen
 Philippine wall-time fixture values, initialized with `en_PH` date symbols.
 Real event timestamps will require UTC storage and explicit timezone conversion.
 
-GoRouter's indexed stateful shell preserves each tab and Home scroll. Five
-routes exist: `/home`, `/transactions`, `/add`, `/analytics`, `/budgets`; `/`
-redirects to Home. Non-Home branches are clearly labeled demo placeholders.
-These are in-app route/deep-link targets; OS universal/app-link associations and
-transaction-detail back stacks are not yet configured.
+GoRouter's indexed stateful shell preserves tab state and Home scroll. Home,
+Transactions, Analytics and Budgets are shell destinations; Analytics/Budgets
+remain explicit placeholders. Add opens `/add` above the shell, and row taps open
+`/transactions/:id`; both suppress bottom navigation as approved in Stitch. Close
+pops to the originating screen, or goes to Transactions when directly linked.
+`/` redirects to Home. OS universal/app-link associations are not configured.
 
 The backend binds localhost and provides a versioned liveness response, Helmet
 headers, validation pipe and shutdown handling. Nest module composition is ready
@@ -141,8 +143,29 @@ Annotations live in the session ledger; monthly fixture totals use deltas agains
 the baseline records to avoid double counting. Budget exclusion does not remove
 real spending from cash flow.
 
-The next approved screen is Add Expense, followed by
-Budgets and Analytics. Extend the session ledger first; persistence comes later.
+Add Expense uses exact decimal parsing, native fields, amount increments, recent
+merchants, category and account pickers, date/time selection, and a docked save
+action. Expense, Income and Transfer use distinct domain semantics; transfers
+retain both accounts and cannot target the source account. All created entries
+are manual/posted and assigned unique session IDs. Invalid submissions and rapid
+repeat taps do not create records. Hashtags in notes become tags.
+
+Home and month summaries apply ledger deltas against their approved full-period
+fixture snapshots, preserving omitted historical totals. Budget exclusion changes
+budget utilization only. Reported account balances remain fixture values; saving
+a manual record does not invent a provider balance update. Session data is lost
+on restart; no storage or provider sync was added. Receipt camera/upload/OCR,
+export and issue reporting are explicitly unavailable; split sharing is a preview.
+
+The next approved screen is Budgets, followed by Analytics. Use the session ledger
+for state while preserving documented cross-screen fixture differences.
+
+Continuation verification: 43 Flutter tests pass, including nine light/dark/phone
+goldens, financial projections, queries, annotation edits, navigation and manual
+entry flows, keyboard/safe insets and validation of offscreen fields. Formatting
+and analysis pass. Android debug and iOS simulator debug builds pass. Backend
+format/lint/build and its HTTP test pass (the HTTP test requires localhost
+socket permission outside the filesystem sandbox). No dependencies were added.
 
 ## Foundation verification
 

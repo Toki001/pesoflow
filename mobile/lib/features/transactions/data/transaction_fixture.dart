@@ -44,6 +44,7 @@ List<TransactionRecord> transactionFixture() => [
     merchant: 'BDO Savings → GCash',
     metadata: 'Account Transfer',
     account: 'BDO Savings',
+    destinationAccount: 'GCash',
     amount: 500000,
     occurredAt: DateTime(2024, 10, 23, 16, 10),
     kind: TransactionKind.transfer,

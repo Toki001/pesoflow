@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../features/dashboard/presentation/home_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
+import '../features/expense/presentation/add_expense_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -19,6 +20,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
     GoRoute(path: '/', redirect: (_, _) => '/home'),
+    GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
     GoRoute(
       path: '/transactions/:id',
       builder: (_, state) =>
@@ -34,7 +36,6 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
         ),
         for (final (path, label) in [
           ('/transactions', 'Transactions'),
-          ('/add', 'Add'),
           ('/analytics', 'Analytics'),
           ('/budgets', 'Budgets'),
         ])

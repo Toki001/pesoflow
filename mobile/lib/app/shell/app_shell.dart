@@ -18,8 +18,16 @@ class AppShell extends StatelessWidget {
         child: Scaffold(
           body: shell,
           bottomNavigationBar: AppBottomNavigation(
-            selectedIndex: shell.currentIndex,
-            onSelected: (index) => shell.goBranch(index),
+            selectedIndex: shell.currentIndex >= 2
+                ? shell.currentIndex + 1
+                : shell.currentIndex,
+            onSelected: (index) {
+              if (index == 2) {
+                context.push('/add');
+              } else {
+                shell.goBranch(index > 2 ? index - 1 : index);
+              }
+            },
           ),
         ),
       ),
