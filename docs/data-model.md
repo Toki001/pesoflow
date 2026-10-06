@@ -37,3 +37,19 @@ pending records have zero budget impact; refunds offset spend; user exclusions
 change budgets while retaining expense/cash-flow semantics. Limits are shared
 across budget, entry, detail and Home views once explicitly edited. Initial
 Stitch cross-screen variants remain until then. No backend schema/API contract changed.
+
+`AnalyticsSelection` defines calendar ranges and prior periods. Computed immutable
+`AnalyticsReport`, `AnalyticsCategoryTotal`, `MerchantTotal`, `SpendingPoint` and
+`ExpenseComparison` use integer-centavo money and read-only lists. No JSON or
+storage contract is needed for these transient report values. `AnalyticsReference`
+is the explicit data-layer input to domain projection; domain logic does not
+import fixtures or Flutter.
+
+October Month/Year aggregates preserve omitted history using baseline deltas.
+Other ranges aggregate known records. Analytics uses expense impact independently
+of budget exclusion. Category totals sum to net expense, refunds stay signed,
+merchant ranking excludes nonpositive net totals, and undefined percentage change
+has a null value. The September comparison aggregate, October category trend
+badges, narrative and trajectory are separate illustrative reference inputs;
+there is no reconciled prior-period category history. See architecture.md for
+coverage and forecast limitations. No backend data model/API changed.

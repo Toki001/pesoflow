@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/dashboard/presentation/home_screen.dart';
 import '../features/budgets/presentation/budgets_screen.dart';
+import '../features/analytics/presentation/analytics_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
@@ -35,11 +36,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
             GoRoute(path: '/home', builder: (_, _) => const HomeScreen()),
           ],
         ),
-        for (final (path, label) in [
-          ('/transactions', 'Transactions'),
-          ('/analytics', 'Analytics'),
-          ('/budgets', 'Budgets'),
-        ])
+        for (final path in ['/transactions', '/analytics', '/budgets'])
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -48,7 +45,7 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
                     ? const TransactionsScreen()
                     : path == '/budgets'
                     ? const BudgetsScreen()
-                    : FoundationDestination(title: label),
+                    : const AnalyticsScreen(),
               ),
             ],
           ),

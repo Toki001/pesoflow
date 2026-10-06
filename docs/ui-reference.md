@@ -86,7 +86,7 @@ copy from being mistaken for live provider data.
 - Native layouts keep currency sign and amount together, unlike the export's
   wrapped transaction signs. Compact widths and large text wrap metadata and
   budget pairs instead of clipping. Links receive 48px tap areas.
-- Home, Transactions, Transaction Detail, Add Expense and Budgets are implemented. Other destinations explicitly identify themselves
+- Home, Transactions, Transaction Detail, Add Expense, Budgets and Analytics are implemented. Other destinations explicitly identify themselves
   as unavailable in this demo. Their placeholders are not approved-screen replacements.
 
 ## Visual validation
@@ -172,3 +172,45 @@ normal phones and wrap with large text; native glyphs/font rasterization differ.
 Provider/reset claims in the source footer are replaced by honest session-demo
 copy. Loading skeletons, retry, empty periods/filters, 320/390/430px, landscape,
 safe insets and 200% text with a keyboard are covered by tests.
+
+## Analytics implementation
+
+The native Analytics screen preserves the approved section order, 16px outer/card
+padding, 12px card radius, split currency/32px amount, green comparison pill,
+cumulative blue area/line with dashed target and endpoint, purple intelligence
+card, 12px stacked category strip, six category rows and four ranked merchants.
+The PF initials header and shared bottom navigation remain native widgets.
+
+Reference fixture: October 2024 expense ₱16,800, previous-period expense ₱18,340,
+8.4% / ₱1,540 decrease, ₱541.93 daily average, ₱21,800 projected month-end and
+12% below a ₱25,000 monthly target. Categories are Food ₱5,200, Shopping ₱3,400,
+Transport ₱2,150, Bills ₱2,000, Subscriptions ₱1,550 and Other ₱2,500. Targets
+start at ₱6,000/₱4,000/₱2,500 for the first three categories, independently of
+Home/Budgets until explicitly edited. The ranked merchant values/counts match
+the export, including SM Supermarket ₱3,420.50 and Jollibee ₱975.
+
+The export's Food “6%” trend and ₱1,200-decrease narrative do not form a consistent
+prior-category calculation. They remain separate illustrative fixture examples;
+changed categories suppress reference trends, and a changed category snapshot
+switches the intelligence narrative to an aggregate comparison. The initial
+trajectory uses four illustrative reference points with dated interpolation;
+actual session deltas apply at their dates. Forecasts are demo estimates, not a
+production forecasting engine. Chart details disclose these limitations. Day/
+Week show available dated records; Year includes the October aggregate and
+labels incomplete coverage. The September total is a comparison-only fixture.
+
+Date selection, period controls, Amount/% toggle, chart detail sheet, loading,
+empty/reset and retry states work. Share opens an explicitly labelled selectable
+demo summary; file export/system sharing and notifications are unavailable.
+Budget exclusion retains Analytics spending; refunds, transfers and pending state
+keep the existing ledger semantics.
+
+Light/dark goldens use the exact 384 × 1600 reference viewport. Human comparison
+fixed the missing category bar, cramped month selector, wrapped Month label,
+stacked hero badge and extra bends from redundant chart points. Remaining
+intentional differences: controls use 48px touch areas, making the header and
+category control taller; compact/large text layouts stack rows; Material Icons
+and native Inter rendering differ from the export. Chart dates map to actual
+calendar positions (the export's Oct 24 marker is at x=240/350 and does not align
+with its evenly spaced calendar labels). Tappable chart values supplement the
+accessible textual summary. No reference assets or earlier screen goldens changed.

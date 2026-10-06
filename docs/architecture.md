@@ -3,7 +3,7 @@
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
-GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets, a session-only
+GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets/Analytics, a session-only
 demo ledger, and minimal NestJS `/v1/health` endpoint.
 No HTML rendering, WebViews, provider calls, authentication, database, queues,
 OCR, notifications, persistence, or money movement are implemented.
@@ -31,8 +31,8 @@ Philippine wall-time fixture values, initialized with `en_PH` date symbols.
 Real event timestamps will require UTC storage and explicit timezone conversion.
 
 GoRouter's indexed stateful shell preserves tab state and Home scroll. Home,
-Transactions, Analytics and Budgets are shell destinations; Analytics remains
-an explicit placeholder. Add opens `/add` above the shell, and row taps open
+Transactions, Analytics and Budgets are implemented shell destinations.
+Add opens `/add` above the shell, and row taps open
 `/transactions/:id`; both suppress bottom navigation as approved in Stitch. Close
 pops to the originating screen, or goes to Transactions when directly linked.
 `/` redirects to Home. OS universal/app-link associations are not configured.
@@ -193,8 +193,8 @@ updates, compact/large/landscape layouts and 200% text with safe insets/keyboard
 Formatting, analysis, Android debug and iOS simulator debug builds pass. Backend
 format/lint/build and its existing health HTTP test pass.
 
-The next approved screen is Analytics. Reuse the session ledger and preserve
-its documented reference snapshot differences; integrations remain deferred.
+The next approved screen is Connected Accounts. Use truthful fixture connection
+states and preserve the approved trust layout; integrations remain deferred.
 
 Transactions/Add milestone verification (historical): 43 Flutter tests passed,
 including nine light/dark/phone
@@ -227,3 +227,53 @@ not tested. The GitHub Actions workflow has been added but not run remotely.
 
 Git was initialized on `main`. Work is committed at coherent milestones;
 future implementation should continue that practice. Nothing has been pushed.
+
+## Analytics phase
+
+`features/analytics` separates read-only design fixtures, immutable domain
+reports/selections/comparisons, aggregate projection, Riverpod application state
+and native screen/chart/category/merchant presentation. Reports are transient
+computed values; they have no serialization or persistence contract. No new
+packages, backend endpoints or financial integrations were added. A small native
+`CustomPainter` reproduces the approved trajectory without adding a chart package.
+
+Riverpod aggregates on selection, ledger or budget-plan changes, rather than on
+widget rebuilds. October Month uses the approved full-period category snapshot
+with baseline ledger deltas; Year includes that aggregate plus available dated
+records. Day, Week and other months use the dated demo ledger only. Week starts
+Monday; ranges include the start and exclude the end. Calendar arithmetic handles
+leap years and month/year rollover. Full-period daily averages truncate to integer
+centavos, matching the approved October ₱541.93 value.
+
+Analytics uses `expenseImpact`: pending entries, income and internal transfers
+are excluded; refunds offset expenses; budget exclusion does not conceal cash
+expenses. Category mapping groups Coffee with Food, and Groceries/Entertainment/
+uncategorized refunds under Other. Merchant grouping normalizes whitespace/case
+and the existing Grab Car alias, maintains snapshot visit counts, and ranks by
+net positive amount with deterministic name tie-breaking. Refund-only periods
+remain visible. Negative category values are retained; the bar uses positive
+spending and explicitly explains refunds. Zero previous expense has no percentage.
+
+October comparison uses the separate approved September aggregate. Category
+trend badges and intelligence narrative are independent illustrative Stitch
+examples, not an inferred reconciled September ledger; changed category totals
+lose those reference trends and use a computed period overview. The forecast
+preserves Analytics' ₱5,000 illustrative additional-spend estimate, distinct from
+Budgets' ₱5,600. Edited monthly/category limits update target context while
+retaining unedited screen-specific targets. Grouped categories include explicitly
+added allowances without replacing the original Food target with Coffee alone.
+
+Date and Day/Week/Month/Year selection and the category Amount/% toggle work;
+selection, toggle and scrolling survive tab navigation. Chart semantics summarize
+spending/target, and tapping opens dated values with a fixture
+qualification. Share opens a selectable demo summary, not a file export or system
+share. Notifications remain explicitly unavailable. Loading uses skeleton cards;
+empty periods offer the October demo, and errors provide a safe explicit retry.
+
+Validation: 91 Flutter tests, including 13 light/dark/phone golden comparisons.
+Analytics tests cover money/projections, calendar boundaries, refunds, transfers,
+pending state, recategorization, moved dates, comparisons, merchant ranking,
+shared target edits, period/toggle/navigation, loading/empty/retry, compact/large/
+landscape, 200% text, safe insets and accessible chart details. Existing goldens
+remain unchanged. Formatting, analysis, Android debug/iOS simulator builds and
+backend format/lint/build/health tests pass.

@@ -142,12 +142,10 @@ void main() {
     expect(find.text('Add Expense'), findsOneWidget);
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
-    for (final tab in ['Analytics']) {
-      await tester.tap(find.byKey(ValueKey('nav-$tab')));
-      await tester.pumpAndSettle();
-      expect(find.text('Back to Home'), findsOneWidget);
-    }
-    await tester.tap(find.text('Back to Home'));
+    await tester.tap(find.byKey(const ValueKey('nav-Analytics')));
+    await tester.pumpAndSettle();
+    expect(find.text('Spending Trajectory'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('nav-Home')));
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.text('View all'));
     await tester.tap(find.text('View all'));
