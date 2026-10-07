@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
@@ -97,30 +98,10 @@ class _AccountCatalog extends ConsumerWidget {
                 enabled:
                     overview != null &&
                     !overview.accounts.any((a) => a.id == account.id),
-                onTap: () async {
-                  final add = await showDialog<bool>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Add ${account.institution} sample?'),
-                      content: Text(
-                        '${account.name}\n${account.maskedIdentifier}\nThis adds a fixed demo balance, not a real connection.',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: const Text('Cancel'),
-                        ),
-                        FilledButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: const Text('Add demo account'),
-                        ),
-                      ],
-                    ),
-                  );
-                  if (add == true && context.mounted) {
-                    ref.read(accountsProvider.notifier).addSample(account.id);
-                    Navigator.pop(context);
-                  }
+                onTap: () {
+                  final router = GoRouter.of(context);
+                  Navigator.pop(context);
+                  router.push('/connections/demo/${account.id}');
                 },
               ),
             const SizedBox(height: 12),

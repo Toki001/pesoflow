@@ -22,3 +22,10 @@ the design's institution panel are illustrative, not verified integrations.
 Trust copy does not claim encryption, certification, Open Finance authorization,
 regulatory compliance or automated provider support. No bank/wallet website is
 scraped, and no remote connection is created or revoked.
+
+
+Link Account's catalog now opens a native demo access review for each unlisted
+profile. An explicit unchecked acknowledgment is required before adding fixed
+sample data. This is not legal consent, provider authentication or an authorization
+redirect. No scopes, tokens, credentials, remote grants or revocations exist.
+Stale profiles retain their status and reported timestamp after restoration.

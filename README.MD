@@ -52,7 +52,11 @@ fixed October 2024 snapshots, not live monitoring or delivered push messages.
 Tap a sample account’s identity or Settings action to open Account Detail: inspect
 its masked profile, reported balance/timestamp and related demo activity, run a
 local check, or confirm removal. Manual activity never changes reported balances;
-stale profiles remain labelled last known.
+stale profiles remain labelled last known. Link Account opens a sample catalog;
+selecting an unlisted profile opens Review Demo Access. Read the limits and check
+“I understand this adds sample data only” before adding it. Cancel changes
+nothing. This acknowledgment does not grant provider permissions or connect a
+real account.
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,

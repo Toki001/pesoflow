@@ -633,3 +633,46 @@ dark captures, compact/large/landscape layouts and 200% text/safe insets.
 Next: an explicit demo connection-consent flow using these trust patterns. It
 should explain sample-only access and revocation without collecting credentials
 or suggesting that real provider authorization has occurred.
+
+## Explicit demo connection review phase
+
+The catalog now opens `/connections/demo/:id` outside bottom navigation. The
+native presentation reuses the task shell and account summary rather than a
+provider web page. The financial_connections feature holds an auto-disposed
+Riverpod acknowledgment per profile and a typed local operation result. No
+package, backend endpoint, adapter or storage is added.
+
+The application guard requires acknowledgment, a unique catalog profile, loaded
+error-free account state and no pending local check. It revalidates current
+membership immediately before the existing sample-list mutation, preventing
+repeated additions. Provider loading/error or invalid/ambiguous IDs cannot add a
+profile. Listed direct links offer detail only. Cancel and Back do not mutate;
+leaving the review disposes acknowledgment so returning starts unchecked.
+Successful add replaces the review with Account Detail, preserving the preceding
+Accounts route; direct-entry Back falls back to Accounts.
+
+The fixed balance and original timestamp are preserved. Stale BPI remains stale
+and excluded from the available total. Neither acknowledgment nor addition
+changes the ledger, grants permissions, creates real consent, contacts a
+financial institution or writes to disk. The screen explains session-only data,
+read-only sample visibility, no credentials/money movement, and removal without
+revoking real consent or erasing transaction history.
+
+Visual review checked two light/dark 390 × 1500 captures against adjacent Accounts
+patterns. All earlier goldens remain unchanged. A dedicated consent design does
+not exist in Stitch, so this inferred layout awaits product review.
+
+Validation: formatting and static analysis pass. All 231 Flutter tests pass,
+including 36 golden comparisons. Fourteen new tests cover acknowledgment gating,
+idempotent additions and unchanged ledger/provenance, missing/ambiguous IDs,
+pending local checks, catalog cancel/reentry, accessible checkbox actions,
+stale restoration, listed direct links, loading/sanitized error/retry, light/dark
+captures, compact/large/landscape layouts, 200% text and safe insets. Existing
+catalog restoration tests now exercise review → detail → Accounts. Android debug
+and iOS simulator builds pass; backend format/lint/build and its one health test
+also pass.
+
+Next: start the domain/persistence milestone with stable account identifiers and
+explicit ledger associations, replacing the fixture-label bridge before adding
+local demo storage. Real authentication and financial integrations remain
+separate milestones.

@@ -144,3 +144,13 @@ Manual ledger edits update related activity without recalculating or advancing
 reported profile balances/timestamps. This local alias bridge introduces no JSON,
 provider identity, storage or API contract; real association requires stable
 financial account IDs during the domain/persistence milestone.
+
+
+`demoAccessProvider(id)` holds an ephemeral acknowledgment boolean per sample
+profile. Its typed `DemoAccessResult` reports added, acknowledgment required,
+already listed or unavailable; these describe local list operations, never
+provider consent. It has no serialization, consent record, token, scope, expiry
+or backend contract. The guard uses current catalog/account state and delegates
+to the existing sample-list mutation; balances, timestamps, connection status
+and ledger activity remain unchanged. Auto-disposal resets acknowledgment when
+the review closes.

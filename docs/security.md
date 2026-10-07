@@ -71,3 +71,13 @@ or authorization redirect. Removal requires the existing confirmation and leaves
 ledger history intact. Unknown/removed account links expose a safe unavailable
 state. No permissions, real account identifiers, remote connection revocation,
 authentication or production account-ownership guarantees are introduced.
+
+
+The demo access review requires an explicit sample-only acknowledgment. Its
+application guard rechecks profile uniqueness, loaded account state, local-check
+status and existing membership before adding; the CTA alone is not the guard.
+Acknowledgment is disposed on leaving the review, is never persisted and cannot
+serve as provider/legal consent. The route accepts only a matching catalog ID;
+there is no external URL, credential field, remote authorization or permission
+request. Cancel changes nothing; removal preserves ledger history. Production
+consent ownership, scope, expiry, audit and revocation are unimplemented.

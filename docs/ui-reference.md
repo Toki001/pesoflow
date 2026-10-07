@@ -417,3 +417,25 @@ against neighboring references for margins, hierarchy, typography, card shape,
 metadata, status and dark colors. Review fixed truncated transfer identities and
 activity date alignment. This inferred layout has no pixel-level Stitch baseline
 and awaits product review; all earlier goldens remain unchanged.
+
+## Demo connection review (inferred, not a Stitch-approved screen)
+
+Stitch has no consent screenshot or HTML. `/connections/demo/:id` therefore
+inherits Connected Accounts' task header, 16px gutters, neutral bordered cards,
+Inter typography and read-only trust language. It reuses Account Detail's masked
+identity, balance hero, semantic status and reported timestamp. Disclosure cards
+explain sample-only visibility, no credentials or money movement, and session
+removal with preserved history. Stale BPI retains a last-known warning and stays
+excluded from the available total.
+
+An unchecked acknowledgment card gates Add demo account. Actions scroll with the
+content to remain reachable in landscape and at 200% text. Cancel/Back preserve
+the list; successful addition replaces the review with Account Detail. Listed
+profiles offer View sample profile instead of a duplicate add. Missing profiles,
+loading and safe retry retain the same visual language. Existing Accounts and
+other Stitch-backed layouts remain unchanged.
+
+Two 390 × 1500 light/dark goldens were visually reviewed against adjacent Accounts
+patterns for gutters, hierarchy, numeric treatment, cards, badges, icons and dark
+fill. There is no pixel-level approved baseline for this screen; the inferred
+layout awaits product review.

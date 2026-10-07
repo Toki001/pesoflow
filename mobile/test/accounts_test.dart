@@ -94,7 +94,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('catalog-gcash')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('demo-access-acknowledgment')),
+    );
+    await tester.tap(find.byKey(const ValueKey('demo-access-acknowledgment')));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Add demo account'));
     await tester.tap(find.text('Add demo account'));
+    await tester.pumpAndSettle();
+    expect(find.text('Account Detail'), findsOneWidget);
+    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     expect(find.text('GCash Personal'), findsOneWidget);
     final container = ProviderScope.containerOf(
@@ -226,7 +235,16 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('catalog-gcash')));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('demo-access-acknowledgment')),
+    );
+    await tester.tap(find.byKey(const ValueKey('demo-access-acknowledgment')));
+    await tester.pump();
+    await tester.ensureVisible(find.text('Add demo account'));
     await tester.tap(find.text('Add demo account'));
+    await tester.pumpAndSettle();
+    expect(find.text('Account Detail'), findsOneWidget);
+    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
     expect(find.text('No sample accounts'), findsNothing);
     expect(find.text('GCash Personal'), findsOneWidget);
