@@ -318,3 +318,24 @@ sources are unchanged from the passing checkpoint 5 debug builds.
 See the [recorded evidence and deterministic physical test procedure](verification/backup-device-checklist.md).
 The physical-device task remains blocked on hardware; no release-readiness claim
 is made. Recovery still requires a saved portable backup and its password.
+
+## Receipt/OCR audit — 8 October 2026 (implementation in progress)
+
+The runtime `/receipt` route is an unavailable placeholder. The approved native
+review prototype exists under test/legacy only. No camera/gallery or OCR package,
+permission configuration, preprocessing or receipt-text parser exists at this
+baseline. ReceiptDraft supports items and per-item confidence, but assumes an
+item-sum total and calculated included VAT; those assumptions are unsuitable for
+real receipts. Production commands can post receipt metadata and expenses, and
+Drift can encrypt image bytes, but those operations are not yet one atomic capture
+commit and deletion does not clean up image rows. Backups already include metadata
+and all stored images. This task will connect those existing boundaries, preserve
+Stitch's review hierarchy and keep all fake OCR in tests. Physical hardware remains
+unavailable and is not required for automated completion.
+
+Receipt milestone 1: engine-independent OCR document geometry and deterministic
+Philippine receipt parser implemented. Label-ranked totals exclude tender/change
+and tax classifications; date ambiguity and missing fields remain explicit.
+Confidence represents parser heuristics, not measured recognition accuracy.
+Formatting/static analysis and 34 parser cases pass. Camera/OCR/review wiring
+remains the next milestone; this audit is not completion of the receipt feature.
