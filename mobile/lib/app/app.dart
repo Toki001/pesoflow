@@ -5,6 +5,7 @@ import 'router.dart';
 import 'theme/app_theme.dart';
 import '../features/settings/application/settings_provider.dart';
 import '../features/settings/domain/appearance.dart';
+import '../features/demo_workspace/presentation/demo_storage_status.dart';
 
 class PesoFlowApp extends ConsumerWidget {
   const PesoFlowApp({this.themeMode, super.key});
@@ -25,5 +26,6 @@ class PesoFlowApp extends ConsumerWidget {
           Appearance.dark => ThemeMode.dark,
         },
     routerConfig: ref.watch(routerProvider),
+    builder: (context, child) => DemoStorageBoundary(child: child!),
   );
 }

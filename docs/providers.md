@@ -37,3 +37,10 @@ BDO have separate identities; institution/label equality never associates a
 transaction with a profile. Removing/restoring a sample profile preserves ledger
 IDs and history. Some fixture payment sources have no connected profile and
 remain illustrative ledger sources only.
+
+
+Native local storage now retains demo transactions and reviewed receipt details.
+The Drift/SQLite repository never contacts a bank/wallet, changes a reported
+balance, stores credentials or grants consent. Sample account membership and
+connection acknowledgments remain transient. Local reset restores activity
+fixtures and clears saved receipt snapshots; it revokes no real connection.

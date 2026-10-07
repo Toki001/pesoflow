@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/widgets/finance_card.dart';
@@ -17,6 +18,7 @@ class OnboardingScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final persisted = ref.watch(demoPersistenceEnabledProvider);
     final step = ref.watch(onboardingProvider);
     final controller = ref.read(onboardingProvider.notifier);
     final c = context.colors;
@@ -125,7 +127,7 @@ class OnboardingScreen extends ConsumerWidget {
                             ),
                           ],
                           if (step == OnboardingStep.demo)
-                            const FinanceCard(
+                            FinanceCard(
                               padding: EdgeInsets.all(AppSpacing.md),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -138,8 +140,12 @@ class OnboardingScreen extends ConsumerWidget {
                                   ),
                                   _DemoFact(
                                     icon: Icons.history_outlined,
-                                    title: 'Changes last for this session',
-                                    detail: 'Expenses, budgets and receipt edits reset when you restart the app. Nothing is saved to a server.',
+                                    title: persisted
+                                        ? 'Demo activity stays on this device'
+                                        : 'Changes last for this session',
+                                    detail: persisted
+                                        ? 'Transactions and saved receipt details stay locally after restart. Other demo edits reset. Use sample data only; local demo storage is not encrypted. Nothing is saved to a server.'
+                                        : 'Expenses, budgets and receipt edits reset when you restart the app. Nothing is saved to a server.',
                                   ),
                                   _DemoFact(
                                     icon: Icons.lock_outline,

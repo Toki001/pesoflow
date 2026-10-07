@@ -1,4 +1,4 @@
-# Fixture data model
+# Demo data model
 
 Dashboard, BudgetSnapshot, TransactionRecord and UpcomingBill are immutable
 Freezed models with generated JSON serialization. Money is integer centavos;
@@ -9,7 +9,8 @@ production ledger or an API contract.
 The Home snapshot is fixed at October 24, 2024. Monthly totals are independent
 fixture aggregates, not totals computed from the four recent transactions.
 Cross-screen Stitch examples contain inconsistent values; see ui-reference.md.
-No database schema, migrations, reconciliation or salary matching exists yet.
+A versioned local demo snapshot now stores activity; provider reconciliation and
+salary matching remain unimplemented.
 
 Transactions now own the shared `TransactionRecord`: account/destination,
 posted/pending status, manual/bank/wallet/receipt source, note, tags, receipt and
@@ -21,9 +22,9 @@ The recent feed contains nine records from Stitch. `MonthSnapshot` and Home
 projection apply session additions/edits against baseline snapshots, so omitted
 history is preserved. `ManualTransactionDraft` validates integer-centavo amounts
 (up to ₱999,999,999.99), required merchant/account, and transfer destinations.
-The Riverpod ledger is immutable and session-only, rejects duplicate IDs and
-generates monotonically increasing demo IDs. Local editing is not provider sync
-or persistent storage. Financial fields on synced fixtures remain read-only.
+The Riverpod ledger is immutable, rejects duplicate IDs and restores its manual
+ID sequence from loaded records. Native startup injects saved local activity;
+previews/tests default to memory fixtures. Local editing is not provider sync. Financial fields on synced fixtures remain read-only.
 
 `BudgetPlan` and `BudgetAllowance` now model period, monthly/category limits,
 qualifying spend, fixed/settled status, projected additional spend and explicit
@@ -97,8 +98,9 @@ one posted expense with source `receipt`, `hasReceipt` and demo provenance note;
 it does not represent a stored photograph or OCR file. The stable sample ID makes
 repeated save/reload return that same transaction, with the saved review read-only.
 Item edits update only the review until save; removal/discard/reload never deletes
-posted expenses. Transaction Detail reads the saved item snapshot. These transient
-models add no backend API, JSON, persistence or actual image-storage contract.
+posted expenses. Transaction Detail reads the saved item snapshot. Saved review
+snapshots now serialize into the local activity workspace described below; unsaved
+corrections remain transient. There is no backend API or image-storage contract.
 
 
 `OnboardingStep` is an enum (`overview`, `plans`, `demo`) controlled by a bounded
@@ -174,4 +176,37 @@ label, retained in both the saved transaction and receipt snapshot. Account
 filters store IDs and include incoming/outgoing transfers once. Amounts,
 provenance, timestamps, refund/pending/transfer impacts and reported balances
 retain their existing semantics. There is no local database, ownership identity,
-provider adapter or backend contract in this milestone.
+provider adapter or backend contract in the identity milestone; the subsequent
+local activity phase is described below.
+
+## Local demo activity snapshot (v1)
+
+`DemoWorkspace` contains immutable ledger records and a map of saved transaction
+IDs to reviewed receipt drafts. Its validator rejects duplicate/empty transaction
+IDs, invalid amounts, orphaned receipt snapshots and receipt/source/amount/account
+inconsistencies. Receipt entries retain merchant/date, category, source ID/label,
+item IDs, descriptions, whole quantities, integer unit prices, confidence and
+review flags. Unsaved receipt review corrections remain transient.
+
+The Drift database has schema version 1 and one `demo_snapshots` row (ID 1).
+Its JSON envelope has integer `formatVersion: 1` and `fixtureVersion: 1`. The
+entire activity snapshot is replaced transactionally, so ledger receipt entries
+and their item snapshots cannot be partially committed. Persisted monetary JSON
+must be an integer before generated model decoding; fractional values are refused
+rather than truncated. Nullable legacy account IDs remain unresolved.
+
+Empty databases seed the deterministic October 2024 samples once. Valid existing
+rows load without reseeding. Corrupt payloads or unsupported schema/format/fixture
+versions produce recovery UI and leave stored data unchanged. Future fixture
+changes must bump/migrate the fixture version because financial projections use
+that baseline. This snapshot is an incremental demo format, not a normalized
+production schema or backend API contract.
+
+Bootstrap supplies loaded data through provider overrides. The persistence
+coordinator coalesces synchronous ledger/receipt publications into one snapshot,
+serializes writes, retains the newest snapshot on failure and retries it. A
+successful confirmed reset writes original fixtures and empty receipt snapshots
+before publishing them to memory; failure preserves current activity. Manual ID
+allocation resumes above the maximum restored `demo-N` ID. Reported balances,
+sample connection membership, budgets/limits, subscriptions, appearance,
+notification read state and onboarding progress are not stored in this phase.

@@ -12,6 +12,8 @@ import '../../../core/widgets/task_screen.dart';
 import '../../onboarding/application/onboarding_provider.dart';
 import '../application/settings_provider.dart';
 import '../domain/appearance.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
+import '../../demo_workspace/presentation/demo_storage_status.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -19,6 +21,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appearance = ref.watch(settingsProvider);
+    final persisted = ref.watch(demoPersistenceEnabledProvider);
     final c = context.colors;
     return TaskScreen(
       title: 'Settings',
@@ -112,7 +115,9 @@ class SettingsScreen extends ConsumerWidget {
                   Text('Your demo data', style: AppTypography.merchant),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Balances and transactions are samples. Edits stay in memory for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.',
+                    persisted
+                        ? 'Balances and transactions are samples. Transaction edits and saved receipt details stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
+                        : 'Balances and transactions are samples. Edits stay in memory for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,
                     ),
@@ -126,6 +131,10 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
+            if (persisted) ...[
+              const DemoStorageSettings(),
+              const SizedBox(height: AppSpacing.lg),
+            ],
             OutlinedButton(
               onPressed: appearance == Appearance.system
                   ? null

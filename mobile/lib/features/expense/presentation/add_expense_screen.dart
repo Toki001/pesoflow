@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/budget_progress_bar.dart';
@@ -220,7 +221,13 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         .set(TransactionQuery(year: date.year, month: date.month));
     context.go('/transactions');
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$typeLabel saved in this demo session.')),
+      SnackBar(
+        content: Text(
+          ref.read(demoPersistenceEnabledProvider)
+              ? '$typeLabel added to your demo. Local save is queued.'
+              : '$typeLabel saved in this demo session.',
+        ),
+      ),
     );
   }
 

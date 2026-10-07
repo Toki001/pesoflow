@@ -43,3 +43,9 @@ Thumbs.db
 *.key
 *.p12
 *.p8
+
+# Local demo databases and SQLite journal files
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*

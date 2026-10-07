@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../accounts/domain/ledger_account.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 
 import '../../transactions/application/transactions_provider.dart';
 import '../../transactions/domain/transaction.dart';
@@ -14,7 +15,10 @@ final receiptLoaderProvider = Provider<Future<ReceiptDraft?> Function()>(
 
 class SavedDemoReceipts extends Notifier<Map<String, ReceiptDraft>> {
   @override
-  Map<String, ReceiptDraft> build() => const {};
+  Map<String, ReceiptDraft> build() =>
+      ref.watch(initialDemoWorkspaceProvider)?.receipts ?? const {};
+  void restore(Map<String, ReceiptDraft> receipts) =>
+      state = Map.unmodifiable(receipts);
   void put(String transactionId, ReceiptDraft draft) =>
       state = Map.unmodifiable({...state, transactionId: draft});
 }

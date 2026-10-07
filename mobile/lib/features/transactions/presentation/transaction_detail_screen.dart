@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/budget_progress_bar.dart';
@@ -112,6 +113,7 @@ class TransactionDetailScreen extends ConsumerWidget {
       );
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final persisted = ref.watch(demoPersistenceEnabledProvider);
     final ledger = ref.watch(demoLedgerProvider);
     final matches = ledger.where((t) => t.id == id);
     if (matches.isEmpty) {
@@ -183,7 +185,9 @@ class TransactionDetailScreen extends ConsumerWidget {
           onPressed: () => _demoInfo(
             context,
             'Demo transaction',
-            'Notes, category, tags and budget exclusion are saved only for this app session. Synced amounts and provenance remain read-only.',
+            persisted
+                ? 'Transaction edits use local demo storage. Synced sample amounts and provenance remain read-only.'
+                : 'Notes, category, tags and budget exclusion are saved only for this app session. Synced amounts and provenance remain read-only.',
           ),
           icon: const Icon(Icons.more_vert),
         ),
@@ -656,7 +660,11 @@ class TransactionDetailScreen extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'Demo data • changes last for this session',
+            persisted
+                ? (ref.watch(demoPersistenceProvider) == DemoSaveStatus.saved
+                      ? 'Demo activity • saved on this device'
+                      : 'Demo activity • local save pending')
+                : 'Demo data • changes last for this session',
             style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
             textAlign: TextAlign.center,
           ),

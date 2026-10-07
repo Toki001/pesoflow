@@ -1,11 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../demo_workspace/application/demo_workspace_providers.dart';
+
 import '../data/transaction_fixture.dart';
 import '../domain/transaction.dart';
 import '../domain/manual_transaction_draft.dart';
 import '../domain/transaction_query.dart';
 
-/// Session-only demo ledger. No provider sync or persistent storage.
+/// Demo ledger; production bootstrap restores it from the local repository.
 class DemoLedger extends Notifier<List<TransactionRecord>> {
   int _sequence = 0;
   void createManual(ManualTransactionDraft draft) {
@@ -14,7 +16,27 @@ class DemoLedger extends Notifier<List<TransactionRecord>> {
   }
 
   @override
-  List<TransactionRecord> build() => List.unmodifiable(transactionFixture());
+  List<TransactionRecord> build() {
+    final records =
+        ref.watch(initialDemoWorkspaceProvider)?.ledger ?? transactionFixture();
+    _restoreSequence(records);
+    return List.unmodifiable(records);
+  }
+
+  void _restoreSequence(List<TransactionRecord> records) {
+    _sequence = 0;
+    for (final record in records) {
+      final match = RegExp(r'^demo-(\d+)$').firstMatch(record.id);
+      final sequence = match == null ? 0 : int.parse(match[1]!);
+      if (sequence > _sequence) _sequence = sequence;
+    }
+  }
+
+  void restore(List<TransactionRecord> records) {
+    _restoreSequence(records);
+    state = List.unmodifiable(records);
+  }
+
   void add(TransactionRecord record) {
     if (state.any((t) => t.id == record.id)) {
       throw ArgumentError('Duplicate transaction ID.');

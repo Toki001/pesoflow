@@ -447,3 +447,23 @@ labels, card layouts and all 36 golden baselines. Transfers appear once for each
 involved account, including a receiving-only account filter. Separate BDO products
 retain their individual labels; legacy records without an ID remain in All and
 are not guessed into an account view. No new screen or visual token is introduced.
+
+## Local demo activity storage (inferred additions)
+
+Native Settings conditionally adds a local activity card when bootstrap enables
+persistence. It reuses existing task headers, Inter hierarchy, 16px gutters,
+bordered neutral cards and outlined controls; the card explains stored versus
+session-only data, shows save status/retry and confirms Reset demo activity.
+Memory-only previews retain their prior layout. Onboarding disclosure and
+transaction feedback use truthful local-storage copy only in persistent mode.
+
+A restrained global save-error banner exposes safe retry on every route and
+labels retained in-memory changes. A reset progress message temporarily blocks
+pointer edits. Startup loading/recovery uses the same typography and calm
+reassurance, with retry and explicitly confirmed reset; it never renders a
+replacement fixture ledger after a read failure.
+
+Two local Settings light/dark 390 × 1600 goldens were reviewed for hierarchy,
+spacing, typography, card shape, state messaging and dark fill. All 36 prior
+baselines remain unchanged. There is no approved Stitch storage/reset screenshot;
+these inferred additions await product review.

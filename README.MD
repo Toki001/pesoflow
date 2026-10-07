@@ -40,9 +40,10 @@ Engineering and implementation instructions are defined in:
 ## App demo available
 
 The app starts with a three-step introduction and an explicit **Explore demo**
-entry. Skip goes to the demo disclosure; it does not bypass it. Sample data and
-edits are session-only, and no credentials or financial account connections are
-requested. Explicit screen deep links remain available. Tap Home’s avatar to open Settings:
+entry. Skip goes to the demo disclosure; it does not bypass it. Transaction edits and saved receipt details persist on this device in a local
+demo database. Other demo edits remain session-only. Local storage is not
+encrypted; use sample data only. No credentials or financial account connections
+are requested. Explicit screen deep links remain available. Tap Home’s avatar to open Settings:
 choose System, Light or Dark appearance for the current session, restore device
 appearance, view sample accounts or revisit the introduction. Appearance changes
 preserve demo edits and navigation. Home, Analytics and Budgets bells open a
@@ -61,9 +62,10 @@ real account.
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,
 Add Expense, Budgets, Analytics, Connected Accounts, Subscriptions and Receipt Review screens. Manual expenses, income and transfers update
-a session-only demo ledger. Transactions and receipt saves retain stable account
+a device-local demo ledger. Transactions and receipt saves retain stable account
 IDs separate from display labels; account filters include either side of a
-transfer. Distinct bank products remain separate, and no local storage exists yet. Budget creation, editing, filters and reallocation
+transfer. Distinct bank products remain separate, and saved activity can be reset
+from Settings. Budget creation, editing, filters and reallocation
 work with that ledger. Analytics supports date/period selection, category
 percentages, chart details and session spending updates. Connected Accounts offers
 masked sample profiles, local refresh checks, and confirmed session removal/restoration;
@@ -82,3 +84,11 @@ Run local checks from root: `bash scripts/check.sh`.
 
 See [approved UI inventory](docs/ui-reference.md) and
 [architecture, dependencies and validation](docs/architecture.md).
+
+Native startup restores the ledger and saved receipt snapshots before showing
+the app. Load failures offer retry or a confirmed reset; they never silently
+replace stored data. Settings shows local save status and **Reset demo activity**,
+which restores original transactions and clears saved receipts while preserving
+session preferences and account choices. Save failures keep edits in memory and
+show a retry action across routes. Only completed local saves survive restart;
+there is no server sync, authentication or encrypted production storage.

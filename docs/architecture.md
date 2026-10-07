@@ -720,3 +720,67 @@ Next: introduce versioned local demo persistence behind repositories, starting
 with the ledger and explicit account references, while retaining deterministic
 fixtures and a clear reset path. Real authentication and provider integrations
 remain separate milestones.
+
+## Versioned local demo activity persistence phase
+
+Native `main` now opens `DemoDatabase` through `drift_flutter` and presents
+`DemoBootstrap`. Bootstrap loads/validates the existing workspace before creating
+the financial ProviderScope. An empty database seeds the known fixtures once;
+read/format/schema errors show calm retry and explicitly confirmed reset options.
+The app never renders a fresh writable ledger over an unreadable stored one.
+
+`DemoWorkspaceRepository` separates activity storage from presentation. The
+SQLite adapter stores one transactional versioned snapshot containing the ledger
+and saved receipt map. Runtime database schema, JSON format and fixture baseline
+are independently versioned at 1. This small demo format preserves exact model
+semantics; normalized tables, indexes and query repositories remain later work.
+Its strict codec rejects noninteger money, duplicate transaction IDs, orphaned
+receipts and inconsistent receipt provenance/amount/account references. Unsupported
+future versions are refused without modifying their data or schema version.
+
+Existing synchronous providers retain responsive interaction and immutable
+state. Bootstrap injects loaded records and receipt snapshots; previews and
+ordinary widget tests use isolated memory fixtures with no filesystem/plugin
+calls. `DemoPersistence` listens to both providers, coalesces synchronous receipt
+publication, serializes snapshots, tracks saving/saved/error/resetting state and
+retains the newest activity after a failed save. Lifecycle inactive/paused events
+request a flush. Durability is confirmed after a completed save; a process killed
+before completion may lose pending edits. Loaded IDs initialize the manual entry
+sequence, and restored receipt reviews reuse saved IDs rather than posting twice.
+
+Settings adds a native local activity card with truthful scope, save status,
+retry and confirmed Reset demo activity. Reset commits the original ledger and
+empty receipt map before replacing memory and invalidating receipt review;
+failures preserve current activity. It does not reset appearance, session account
+choices, budget limits or subscription plans. A global live-region save-error
+banner offers retry on all routes; pending resets block pointer edits. Startup
+and Settings reset require explicit confirmation, with no remote revocation.
+
+Onboarding, transaction detail and entry feedback distinguish local activity
+from session-only edits when persistence is enabled. Existing memory preview
+copy and all old golden files stay unchanged. New Settings light/dark 390 × 1600
+captures were reviewed against adjacent card/header patterns. There is no approved
+Stitch storage/reset design; this inferred addition awaits product review.
+
+Dependencies: `drift` 2.35.1 and `drift_flutter` 0.3.1 at runtime, `drift_dev` 2.35.1
+for generated tables, reusing build_runner. The platform factory locates
+`pesoflow_demo.sqlite` in the application documents directory; native SQLite
+assets and path_provider are transitive dependencies. See the official
+[Drift Flutter setup](https://drift.simonbinder.eu/setup/).
+There is no account integration, backend endpoint, notification permission,
+network storage or production encrypted/owned data model in this milestone.
+
+Validation: code generation, formatting and analysis pass. All 256 Flutter tests
+pass, including 38 golden comparisons (two new local Settings captures and all
+36 earlier baselines unchanged). Seventeen new tests cover file reopen/ID
+allocation, saved receipt restart/idempotence, failed SQL rollback, corruption/
+fractional money/version refusal, ordered saves/latest retry, receipt integrity,
+failed/successful reset and preserved unrelated state, confirmation/cancel,
+global errors, startup retry/reset, light/dark layouts, 200% text and safe insets.
+Android debug and iOS simulator builds pass with the new native SQLite assets.
+Backend format/lint/build and its one health test pass.
+
+Next: persist budget plans and subscription tracking metadata through separate
+versioned repositories, retaining ledger-derived spending and explicit demo reset
+scope. Real authentication, encryption/ownership and provider integrations remain
+separate milestones before handling real financial data.

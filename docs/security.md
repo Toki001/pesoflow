@@ -88,3 +88,26 @@ references remain unresolved rather than matching a financial institution by
 label. Local IDs confer no authorization or ownership and expose no raw account
 numbers. Future authenticated storage/API work must verify account ownership and
 scope independently; this milestone adds neither persistence nor network access.
+
+## Local demo storage boundary
+
+The native app now writes demo transactions, notes, tags and reviewed receipt
+item snapshots into its application documents SQLite file. The database is not
+encrypted and has no authenticated ownership model; the UI explicitly says to
+use sample data only. There are no receipt images, account numbers, credentials,
+tokens, remote uploads or real-provider requests. Platform backups may include
+app data; encrypted storage, backup policy and authenticated access are required
+before real personal/financial data support.
+
+Exact-centavo validation and complete transactional snapshots prevent fractional
+money truncation and partial ledger/receipt commits. Invalid or future-version
+stored data is refused; it is not logged, silently deleted or overwritten with
+fixtures. Startup retry and confirmed reset expose only safe messages. Failed
+writes preserve memory and the previous committed database row with explicit
+retry; pending saves have no durability guarantee until completion.
+
+Reset requires confirmation and publishes fixtures only after a successful write.
+It logically removes added/edited activity and saved receipt snapshots, preserves
+unrelated session state and initiates no provider operation. This is a logical
+reset, not a promise of forensic erasure of SQLite pages/platform backups. Database
+files and financial payloads must never be checked into source control.
