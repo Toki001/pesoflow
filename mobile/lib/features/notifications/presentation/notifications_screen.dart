@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_spacing.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/date_formatter.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/status_badge.dart';
-import '../../../core/widgets/task_screen.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../application/notifications_provider.dart';
-import '../domain/demo_notice.dart';
-import 'widgets/notice_card.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/date_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/core/widgets/task_screen.dart';
+
+import 'package:pesoflow/features/notifications/application/notifications_provider.dart';
+import 'package:pesoflow/features/notifications/domain/notice_view.dart';
+import 'package:pesoflow/features/notifications/presentation/widgets/notice_card.dart';
 
 class NotificationsScreen extends ConsumerWidget {
   const NotificationsScreen({super.key});
@@ -40,7 +40,7 @@ class NotificationsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   StatusBadge(
-                    'Demo alerts',
+                    'Financial alerts',
                     foreground: c.primary,
                     background: c.soft(c.primary, AppColors.primarySoft),
                   ),
@@ -51,9 +51,7 @@ class NotificationsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    ref.watch(demoPersistenceEnabledProvider)
-                        ? 'Fixed sample events from October 2024. These snapshots do not update with your edits. Read markers stay on this device after restart. No push notifications or live financial monitoring are active.'
-                        : 'Fixed sample events from October 2024. These snapshots do not update with your edits. No push notifications or live financial monitoring are active.',
+                    'Notices reflect your saved budgets and tracked renewals. Read status stays on this device. Push delivery is not enabled.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,
                     ),
@@ -90,7 +88,13 @@ class NotificationsScreen extends ConsumerWidget {
                 TextButton(
                   onPressed: !state.hasValue || unread == 0
                       ? null
-                      : ref.read(noticeReadProvider.notifier).markAllRead,
+                      : () async {
+                          try {
+                            await ref
+                                .read(noticeReadProvider.notifier)
+                                .markAllRead();
+                          } catch (_) {}
+                        },
                   child: const Text('Mark all read'),
                 ),
               ],
@@ -100,7 +104,7 @@ class NotificationsScreen extends ConsumerWidget {
               Semantics(
                 liveRegion: true,
                 child: Text(
-                  '$unread unread · ${state.value!.length} sample alerts',
+                  '$unread unread · ${state.value!.length} alerts',
                   style: AppTypography.labelMedium.copyWith(color: c.mutedInk),
                 ),
               ),
@@ -108,7 +112,7 @@ class NotificationsScreen extends ConsumerWidget {
             const SizedBox(height: AppSpacing.md),
             state.when(
               loading: () => Semantics(
-                label: 'Loading demo alerts',
+                label: 'Loading alerts',
                 child: Column(
                   children: [
                     for (var i = 0; i < 3; i++)
@@ -126,7 +130,7 @@ class NotificationsScreen extends ConsumerWidget {
                 ),
               ),
               error: (_, _) => _InboxMessage(
-                title: "We couldn't load your sample alerts.",
+                title: "We couldn't load your alerts.",
                 message:
                     'Please try again. No financial institution was contacted.',
                 action: 'Try Again',
@@ -140,14 +144,14 @@ class NotificationsScreen extends ConsumerWidget {
                     .toList();
                 if (notices.isEmpty) {
                   return const _InboxMessage(
-                    title: 'No demo alerts',
-                    message: 'There are no sample events to show.',
+                    title: 'No alerts',
+                    message: 'There are no financial notices to show.',
                   );
                 }
                 if (visible.isEmpty) {
                   return _InboxMessage(
                     title: 'You’re all caught up',
-                    message: 'All sample alerts are marked as read.',
+                    message: 'All alerts are marked as read.',
                     action: 'View all alerts',
                     onAction: () => ref
                         .read(noticeFilterProvider.notifier)
@@ -179,17 +183,27 @@ class NotificationsScreen extends ConsumerWidget {
                       NoticeCard(
                         notice: visible[i],
                         read: read.contains(visible[i].id),
-                        onToggleRead: () => ref
-                            .read(noticeReadProvider.notifier)
-                            .setRead(
-                              visible[i].id,
-                              !read.contains(visible[i].id),
-                            ),
-                        onOpen: () {
-                          ref
-                              .read(noticeReadProvider.notifier)
-                              .setRead(visible[i].id, true);
-                          context.push(visible[i].destination.route);
+                        onToggleRead: () async {
+                          try {
+                            await ref
+                                .read(noticeReadProvider.notifier)
+                                .setRead(
+                                  visible[i].id,
+                                  !read.contains(visible[i].id),
+                                );
+                          } catch (_) {}
+                        },
+                        onOpen: () async {
+                          try {
+                            await ref
+                                .read(noticeReadProvider.notifier)
+                                .setRead(visible[i].id, true);
+                          } catch (_) {}
+                          if (context.mounted) {
+                            await context.push<void>(
+                              visible[i].destination.route,
+                            );
+                          }
                         },
                       ),
                       const SizedBox(height: AppSpacing.sm),

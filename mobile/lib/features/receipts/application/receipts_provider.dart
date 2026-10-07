@@ -1,32 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../accounts/domain/ledger_account.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
+import 'package:pesoflow/features/accounts/domain/ledger_account.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
 
-import '../../transactions/application/transactions_provider.dart';
-import '../../transactions/domain/transaction.dart';
-import '../data/receipt_fixture.dart';
-import '../domain/receipt_draft.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+
+import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 
 final receiptLoaderProvider = Provider<Future<ReceiptDraft?> Function()>(
   (ref) =>
-      () async => receiptFixture(),
+      () async => null,
 );
 
-class SavedDemoReceipts extends Notifier<Map<String, ReceiptDraft>> {
-  @override
-  Map<String, ReceiptDraft> build() =>
-      ref.watch(initialDemoWorkspaceProvider)?.receipts ?? const {};
-  void restore(Map<String, ReceiptDraft> receipts) =>
-      state = Map.unmodifiable(receipts);
-  void put(String transactionId, ReceiptDraft draft) =>
-      state = Map.unmodifiable({...state, transactionId: draft});
-}
-
-final savedDemoReceiptsProvider =
-    NotifierProvider<SavedDemoReceipts, Map<String, ReceiptDraft>>(
-      SavedDemoReceipts.new,
-    );
+final savedReceiptsProvider = Provider<Map<String, ReceiptDraft>>(
+  (ref) => ref.watch(workspaceProvider).receipts,
+);
 
 class ReceiptReview extends AsyncNotifier<ReceiptDraft?> {
   int _sequence = 0;
@@ -34,7 +22,12 @@ class ReceiptReview extends AsyncNotifier<ReceiptDraft?> {
   Future<ReceiptDraft?> build() async {
     final draft = await ref.watch(receiptLoaderProvider)();
     if (draft == null) return null;
-    return ref.read(savedDemoReceiptsProvider)['receipt-${draft.id}'] ?? draft;
+    return ref
+            .read(savedReceiptsProvider)
+            .values
+            .where((r) => r.id == draft.id)
+            .firstOrNull ??
+        draft;
   }
 
   void setDraft(ReceiptDraft draft) {
@@ -92,17 +85,14 @@ class ReceiptReview extends AsyncNotifier<ReceiptDraft?> {
     }
   }
 
-  String save() {
+  Future<String> save() async {
     final draft = state.value;
-    if (draft == null) throw StateError('No receipt available to review.');
+    if (draft == null) throw StateError('No captured receipt.');
     if (draft.savedTransactionId != null) return draft.savedTransactionId!;
-    final id = 'receipt-${draft.id}';
-    final record = draft.toTransaction(id);
-    // Synchronous ledger insertion and snapshot publication prevent double taps.
-    ref.read(demoLedgerProvider.notifier).add(record);
-    final saved = draft.copyWith(savedTransactionId: id);
-    ref.read(savedDemoReceiptsProvider.notifier).put(id, saved);
-    state = AsyncData(saved);
+    final id = await ref
+        .read(financeControllerProvider.notifier)
+        .saveReceipt(draft);
+    if (ref.mounted) state = AsyncData(draft.copyWith(savedTransactionId: id));
     return id;
   }
 }

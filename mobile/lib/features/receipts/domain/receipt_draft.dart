@@ -1,4 +1,4 @@
-import '../../transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 class ReceiptItem {
   ReceiptItem({
@@ -37,7 +37,7 @@ class ReceiptDraft {
     required this.occurredAt,
     required Iterable<ReceiptItem> items,
     this.category = TransactionCategory.groceries,
-    this.account = 'GCash',
+    this.account = '',
     this.savedTransactionId,
   }) : items = List.unmodifiable(items) {
     if (this.items.map((i) => i.id).toSet().length != this.items.length) {
@@ -109,7 +109,7 @@ class ReceiptDraft {
       accountId: accountId,
       source: TransactionSource.receipt,
       hasReceipt: true,
-      note: 'Reviewed demo receipt. No camera capture or live OCR.',
+      note: 'Reviewed receipt.',
     );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'router.dart';
-import 'theme/app_theme.dart';
-import '../features/settings/application/settings_provider.dart';
-import '../features/settings/domain/appearance.dart';
-import '../features/demo_workspace/presentation/demo_storage_status.dart';
+import 'package:pesoflow/app/router.dart';
+import 'package:pesoflow/app/theme/app_theme.dart';
+import 'package:pesoflow/features/settings/application/settings_provider.dart';
+import 'package:pesoflow/features/settings/domain/appearance.dart';
+import 'package:pesoflow/features/workspace/presentation/finance_storage_boundary.dart';
 
 class PesoFlowApp extends ConsumerWidget {
   const PesoFlowApp({this.themeMode, super.key});
@@ -14,7 +14,7 @@ class PesoFlowApp extends ConsumerWidget {
   final ThemeMode? themeMode;
   @override
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
-    title: 'PesoFlow Demo',
+    title: 'PesoFlow',
     debugShowCheckedModeBanner: false,
     theme: AppTheme.light,
     darkTheme: AppTheme.dark,
@@ -26,6 +26,6 @@ class PesoFlowApp extends ConsumerWidget {
           Appearance.dark => ThemeMode.dark,
         },
     routerConfig: ref.watch(routerProvider),
-    builder: (context, child) => DemoStorageBoundary(child: child!),
+    builder: (context, child) => FinanceStorageBoundary(child: child!),
   );
 }

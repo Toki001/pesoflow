@@ -1,4 +1,4 @@
-import '../../transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 enum AnalyticsPeriod { day, week, month, year }
 
@@ -36,9 +36,6 @@ class AnalyticsSelection {
   }, period);
   bool contains(DateTime value) =>
       !value.isBefore(start) && value.isBefore(end);
-  bool get includesOctoberSnapshot =>
-      (period == AnalyticsPeriod.month || period == AnalyticsPeriod.year) &&
-      contains(DateTime(2024, 10, 24));
 }
 
 enum AnalyticsCategory {

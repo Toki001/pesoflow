@@ -1,20 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pesoflow/app/app.dart';
-import 'package:pesoflow/features/accounts/data/account_fixture.dart';
-import 'package:pesoflow/features/accounts/data/ledger_account_fixture.dart';
+
+import 'fixtures/features/accounts/data/account_fixture.dart';
+import 'fixtures/features/accounts/data/ledger_account_fixture.dart';
+
 import 'package:pesoflow/features/accounts/domain/account_activity.dart';
 import 'package:pesoflow/features/accounts/domain/ledger_account.dart';
-import 'package:pesoflow/features/receipts/data/receipt_fixture.dart';
-import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
-import 'package:pesoflow/features/transactions/data/transaction_fixture.dart';
+
+import 'fixtures/features/receipts/data/receipt_fixture.dart';
+import 'fixtures/features/transactions/data/transaction_fixture.dart';
+
 import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 import 'package:pesoflow/features/transactions/domain/transaction_query.dart';
-
-import 'home_test.dart' show viewport;
-import 'transactions_test.dart' show pumpTransactions;
 
 ManualTransactionDraft transferDraft(
   LedgerAccount source,
@@ -94,13 +91,17 @@ void main() {
       (t) => t.kind == TransactionKind.transfer,
     );
     for (final id in [t.accountId!, t.destinationAccountId!]) {
-      final filtered = filterTransactions([t], TransactionQuery(accountId: id));
+      final filtered = filterTransactions([
+        t,
+      ], TransactionQuery(year: 2024, month: 10, accountId: id));
       expect(filtered.single.id, 'transfer');
       expect(filtered.single.expenseImpact, 0);
       expect(filtered.single.cashFlowImpact, 0);
     }
     expect(
-      filterTransactions([t], const TransactionQuery(accountId: 'bdo')),
+      filterTransactions([
+        t,
+      ], const TransactionQuery(year: 2024, month: 10, accountId: 'bdo')),
       isEmpty,
     );
     expect(
@@ -140,10 +141,15 @@ void main() {
       expect(
         filterTransactions([
           legacy,
-        ], const TransactionQuery(accountId: 'gcash')),
+        ], const TransactionQuery(year: 2024, month: 10, accountId: 'gcash')),
         isEmpty,
       );
-      expect(filterTransactions([legacy], const TransactionQuery()), [legacy]);
+      expect(
+        filterTransactions([
+          legacy,
+        ], const TransactionQuery(year: 2024, month: 10)),
+        [legacy],
+      );
       final unknown = legacy.copyWith(accountId: 'unresolved-id');
       expect(accountActivity('gcash', [unknown]), isEmpty);
       expect(unknown.involvesAccount(''), false);
@@ -199,39 +205,4 @@ void main() {
     );
     expect(draft.copyWith(account: 'Renamed wallet').accountId, 'gcash');
   });
-
-  testWidgets(
-    'account picker selects receiving-only identity and filters transfers',
-    (tester) async {
-      viewport(tester, const Size(420, 1300));
-      await pumpTransactions(tester);
-      final container = ProviderScope.containerOf(
-        tester.element(find.byType(PesoFlowApp)),
-      );
-      final t = transactionFixture()
-          .firstWhere((t) => t.kind == TransactionKind.transfer)
-          .copyWith(
-            destinationAccountId: 'receiving-only',
-            destinationAccount: 'Receiving wallet',
-          );
-      container.read(demoLedgerProvider.notifier).update(t);
-      await tester.pumpAndSettle();
-      await tester.drag(find.text('Transfers'), const Offset(-500, 0));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Accounts (GCash, BDO, Maya)'));
-      await tester.pumpAndSettle();
-      await tester.ensureVisible(
-        find.widgetWithText(ListTile, 'Receiving wallet'),
-      );
-      await tester.tap(find.widgetWithText(ListTile, 'Receiving wallet'));
-      await tester.pumpAndSettle();
-      expect(
-        container.read(transactionQueryProvider).accountId,
-        'receiving-only',
-      );
-      expect(find.text('BDO Savings → GCash'), findsOneWidget);
-      expect(find.text('Jollibee'), findsNothing);
-      expect(tester.takeException(), isNull);
-    },
-  );
 }

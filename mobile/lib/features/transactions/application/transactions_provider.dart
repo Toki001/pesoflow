@@ -1,65 +1,40 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pesoflow/core/identity/new_id.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
+import 'package:pesoflow/features/transactions/domain/transaction_query.dart';
 
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-
-import '../data/transaction_fixture.dart';
-import '../domain/transaction.dart';
-import '../domain/manual_transaction_draft.dart';
-import '../domain/transaction_query.dart';
-
-/// Demo ledger; production bootstrap restores it from the local repository.
-class DemoLedger extends Notifier<List<TransactionRecord>> {
-  int _sequence = 0;
-  void createManual(ManualTransactionDraft draft) {
-    final record = draft.toRecord('demo-${++_sequence}');
-    add(record);
-  }
-
+class LedgerController extends Notifier<List<TransactionRecord>> {
   @override
-  List<TransactionRecord> build() {
-    final records =
-        ref.watch(initialDemoWorkspaceProvider)?.ledger ?? transactionFixture();
-    _restoreSequence(records);
-    return List.unmodifiable(records);
-  }
-
-  void _restoreSequence(List<TransactionRecord> records) {
-    _sequence = 0;
-    for (final record in records) {
-      final match = RegExp(r'^demo-(\d+)$').firstMatch(record.id);
-      final sequence = match == null ? 0 : int.parse(match[1]!);
-      if (sequence > _sequence) _sequence = sequence;
-    }
-  }
-
-  void restore(List<TransactionRecord> records) {
-    _restoreSequence(records);
-    state = List.unmodifiable(records);
-  }
-
-  void add(TransactionRecord record) {
-    if (state.any((t) => t.id == record.id)) {
-      throw ArgumentError('Duplicate transaction ID.');
-    }
-    state = List.unmodifiable([record, ...state]);
-  }
-
-  void update(TransactionRecord record) => state = List.unmodifiable([
-    for (final t in state)
-      if (t.id == record.id) record else t,
-  ]);
+  List<TransactionRecord> build() => ref.watch(workspaceProvider).ledger;
+  Future<void> createManual(ManualTransactionDraft draft) => ref
+      .read(financeControllerProvider.notifier)
+      .saveTransaction(draft.toRecord(newId()), rememberCategory: true);
+  Future<void> update(TransactionRecord record) => ref
+      .read(financeControllerProvider.notifier)
+      .saveTransaction(record, editing: true, rememberCategory: true);
+  Future<void> remove(String id) =>
+      ref.read(financeControllerProvider.notifier).deleteTransaction(id);
 }
 
-final demoLedgerProvider =
-    NotifierProvider<DemoLedger, List<TransactionRecord>>(DemoLedger.new);
+final ledgerProvider =
+    NotifierProvider<LedgerController, List<TransactionRecord>>(
+      LedgerController.new,
+    );
 final transactionsProvider = FutureProvider<List<TransactionRecord>>(
-  (ref) async => ref.watch(demoLedgerProvider),
+  (ref) async => ref.watch(ledgerProvider),
   retry: (_, _) => null,
 );
 
 class QueryController extends Notifier<TransactionQuery> {
   @override
-  TransactionQuery build() => const TransactionQuery();
+  TransactionQuery build() {
+    final now = ref.read(clockProvider)();
+    return TransactionQuery(year: now.year, month: now.month);
+  }
+
   void set(TransactionQuery query) => state = query;
 }
 

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../transactions/domain/manual_transaction_draft.dart';
-import '../../transactions/domain/transaction.dart';
-import '../application/budgets_provider.dart';
-import '../domain/budget_plan.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+
+import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
+import 'package:pesoflow/features/budgets/domain/budget_plan.dart';
 
 Future<void> showBudgetEditor(
   BuildContext context,
@@ -41,6 +41,7 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
   late TransactionCategory? category = widget.initialCategory;
   late final amount = TextEditingController(text: _initialAmount());
   String? error;
+  bool saving = false;
   String _initialAmount() {
     final matches = widget.plan.allowances.where((a) => a.category == category);
     final limit = widget.creating
@@ -57,20 +58,27 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
     super.dispose();
   }
 
-  void save() {
-    if (!form.currentState!.validate()) return;
+  Future<void> save() async {
+    if (saving || !form.currentState!.validate()) return;
+    setState(() => saving = true);
     try {
-      ref
-          .read(demoBudgetPlansProvider.notifier)
+      await ref
+          .read(budgetPlansProvider.notifier)
           .setLimit(
             widget.plan.year,
             widget.plan.month,
             category,
             parsePhpAmount(amount.text)!,
           );
-      Navigator.pop(context);
-    } on ArgumentError catch (e) {
-      setState(() => error = e.message.toString());
+      if (mounted) Navigator.pop(context);
+    } catch (_) {
+      if (mounted) {
+        setState(() => saving = false);
+        setState(
+          () => error =
+              'Could not save the budget. Check your limit and try again.',
+        );
+      }
     }
   }
 
@@ -79,11 +87,7 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
     final options = TransactionCategory.values
         .where(
           (c) =>
-              ![
-                TransactionCategory.transfer,
-                TransactionCategory.income,
-                TransactionCategory.refund,
-              ].contains(c) &&
+              isExpenseCategory(c) &&
               (!widget.creating ||
                   !widget.plan.allowances.any((a) => a.category == c)),
         )
@@ -109,9 +113,7 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  ref.watch(demoPersistenceEnabledProvider)
-                      ? 'Demo budget plans are saved on this device.'
-                      : 'Changes apply to this demo session only.',
+                  'Monthly limits repeat from their starting month and use your saved transactions.',
                   style: AppTypography.bodySmall.copyWith(
                     color: context.colors.mutedInk,
                   ),
@@ -197,7 +199,46 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
                     ),
                   ),
                 const SizedBox(height: 16),
-                FilledButton(onPressed: save, child: const Text('Save budget')),
+                FilledButton(
+                  onPressed: saving ? null : save,
+                  child: Text(saving ? 'Saving…' : 'Save budget'),
+                ),
+                if (!widget.creating)
+                  TextButton(
+                    onPressed: () async {
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (c) => AlertDialog(
+                          title: const Text('Delete this budget?'),
+                          content: const Text('Transactions remain unchanged.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(c, false),
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(c, true),
+                              child: const Text('Delete'),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirmed != true) return;
+                      try {
+                        await ref
+                            .read(budgetPlansProvider.notifier)
+                            .remove(category);
+                        if (context.mounted) Navigator.pop(context);
+                      } catch (_) {
+                        if (mounted) {
+                          setState(
+                            () => error = 'Could not delete. Please try again.',
+                          );
+                        }
+                      }
+                    },
+                    child: const Text('Delete budget'),
+                  ),
                 const SizedBox(height: 4),
                 TextButton(
                   onPressed: () => Navigator.pop(context),

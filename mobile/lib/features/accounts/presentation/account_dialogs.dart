@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:pesoflow/features/accounts/domain/account_view.dart';
+import 'package:pesoflow/features/accounts/presentation/manual_account_editor.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../application/accounts_provider.dart';
-import '../domain/demo_account.dart';
-
-Future<bool> confirmDemoDisconnect(
+Future<void> showAccountCatalog(BuildContext context) =>
+    showManualAccountEditor(context);
+Future<bool> confirmAccountRemoval(
   BuildContext context,
-  DemoAccount account,
+  AccountView account,
 ) async =>
     await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Disconnect ${account.institution}?'),
-        content: const Text(
-          'Remove this sample account from the session list? Your transactions, budgets and manual payment sources remain available. No real connection is revoked.',
+        title: Text(account.archived ? 'Restore account?' : 'Remove account?'),
+        content: Text(
+          account.archived ? 'Restore this account for manual entry?' : 'Accounts with transactions will be archived to preserve history. An empty account will be deleted. This does not close any bank or wallet account.',
         ),
         actions: [
           TextButton(
@@ -25,99 +22,28 @@ Future<bool> confirmDemoDisconnect(
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: context.colors.danger),
-            child: const Text('Disconnect demo'),
+            child: const Text('Confirm'),
           ),
         ],
       ),
     ) ??
     false;
-
-Future<bool> showDemoReconnect(
+Future<bool> showConnectionUnavailable(
   BuildContext context,
-  DemoAccount account,
-) async =>
-    await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Reconnect ${account.institution}'),
-        content: const Text(
-          'This is a sample expired connection. Real reconnection is not available yet. The last-known balance remains stale and is excluded from the available total. You can remove the demo profile instead.',
+  AccountView account,
+) async {
+  await showDialog<void>(
+    context: context,
+    builder: (c) => AlertDialog(
+      title: const Text('Connections are not configured'),
+      content: const Text('Use a manual account to track your finances.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(c),
+          child: const Text('Close'),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Close'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Remove demo profile'),
-          ),
-        ],
-      ),
-    ) ??
-    false;
-
-Future<void> showAccountCatalog(BuildContext context) =>
-    showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      isScrollControlled: true,
-      builder: (context) => const _AccountCatalog(),
-    );
-
-class _AccountCatalog extends ConsumerWidget {
-  const _AccountCatalog();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final profiles = ref.watch(demoAccountCatalogProvider);
-    final overview = ref.watch(accountsProvider).value;
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Link a demo account', style: AppTypography.headlineSmall),
-            const SizedBox(height: 8),
-            const Text(
-              'Add a sample profile for this session. No financial institution will be contacted and no credentials are needed.',
-            ),
-            const SizedBox(height: 12),
-            for (final account in profiles)
-              ListTile(
-                key: ValueKey('catalog-${account.id}'),
-                contentPadding: EdgeInsets.zero,
-                title: Text(account.institution),
-                subtitle: Text(account.name),
-                trailing:
-                    overview?.accounts.any((a) => a.id == account.id) == true
-                    ? const Text('Listed')
-                    : null,
-                enabled:
-                    overview != null &&
-                    !overview.accounts.any((a) => a.id == account.id),
-                onTap: () {
-                  final router = GoRouter.of(context);
-                  Navigator.pop(context);
-                  router.push('/connections/demo/${account.id}');
-                },
-              ),
-            const SizedBox(height: 12),
-            Text(
-              'Live connections for GCash, Maya, banks and Open Finance are unavailable in this demo.',
-              style: AppTypography.bodySmall.copyWith(
-                color: context.colors.mutedInk,
-              ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+      ],
+    ),
+  );
+  return false;
 }

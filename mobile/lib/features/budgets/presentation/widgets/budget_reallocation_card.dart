@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_radius.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/category_icon.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../../../core/widgets/status_badge.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_radius.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/category_icon.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
 
 class BudgetReallocationCard extends StatelessWidget {
   const BudgetReallocationCard({
@@ -74,7 +74,7 @@ class BudgetReallocationCard extends StatelessWidget {
                   ),
                 const SizedBox(height: 8),
                 Text(
-                  'You have ${MoneyFormatter.php(surplus, decimals: false)} surplus in Entertainment. Reallocating ₱500 to Food & Dining will keep all categories comfortably balanced this month.',
+                  'You have ${MoneyFormatter.php(surplus, decimals: false)} surplus in Entertainment. Reallocating ₱500 to Food & Dining can help cover its projected shortfall. Review your plans before applying.',
                   style: AppTypography.bodySmall.copyWith(
                     color: c.secondaryInk,
                   ),

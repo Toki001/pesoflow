@@ -2,33 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/demo_workspace/application/demo_workspace_providers.dart';
-import '../features/dashboard/presentation/home_screen.dart';
-import '../features/budgets/presentation/budgets_screen.dart';
-import '../features/analytics/presentation/analytics_screen.dart';
-import '../features/accounts/presentation/accounts_screen.dart';
-import '../features/accounts/presentation/account_detail_screen.dart';
-import '../features/transactions/presentation/transactions_screen.dart';
-import '../features/transactions/presentation/transaction_detail_screen.dart';
-import '../features/expense/presentation/add_expense_screen.dart';
-import '../features/subscriptions/presentation/subscriptions_screen.dart';
-import '../features/receipts/presentation/receipt_review_screen.dart';
-import '../features/onboarding/presentation/onboarding_screen.dart';
-import '../features/settings/presentation/settings_screen.dart';
-import '../features/notifications/presentation/notifications_screen.dart';
-import '../features/financial_connections/presentation/demo_access_screen.dart';
-import 'shell/app_shell.dart';
-import 'theme/app_spacing.dart';
-import 'theme/app_typography.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/dashboard/presentation/home_screen.dart';
+import 'package:pesoflow/features/budgets/presentation/budgets_screen.dart';
+import 'package:pesoflow/features/analytics/presentation/analytics_screen.dart';
+import 'package:pesoflow/features/accounts/presentation/accounts_screen.dart';
+import 'package:pesoflow/features/accounts/presentation/account_detail_screen.dart';
+import 'package:pesoflow/features/transactions/presentation/transactions_screen.dart';
+import 'package:pesoflow/features/transactions/presentation/transaction_detail_screen.dart';
+import 'package:pesoflow/features/expense/presentation/add_expense_screen.dart';
+import 'package:pesoflow/features/subscriptions/presentation/subscriptions_screen.dart';
+
+import 'package:pesoflow/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:pesoflow/features/settings/presentation/settings_screen.dart';
+import 'package:pesoflow/features/notifications/presentation/notifications_screen.dart';
+
+import 'package:pesoflow/app/shell/app_shell.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   // Read once at startup: completing the introduction must not recreate navigation.
-  final completed =
-      ref
-          .read(initialDemoWorkspaceProvider)
-          ?.preferences
-          .introductionCompleted ??
-      false;
+  final completed = ref
+      .read(initialWorkspaceProvider)
+      .preferences
+      .onboardingCompleted;
   final router = createRouter(
     initialLocation: completed ? '/home' : '/onboarding',
   );
@@ -49,11 +47,20 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
       redirect: (_, _) => '/budgets/subscriptions',
     ),
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
-    GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
+    GoRoute(
+      path: '/receipt',
+      builder: (_, _) => const Scaffold(
+        body: FoundationDestination(
+          title: 'Receipt scanning is not available yet',
+        ),
+      ),
+    ),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(
-      path: '/connections/demo/:id',
-      builder: (_, state) => DemoAccessScreen(id: state.pathParameters['id']!),
+      path: '/connections',
+      builder: (_, state) => const Scaffold(
+        body: FoundationDestination(title: 'Connections are not configured'),
+      ),
     ),
     GoRoute(
       path: '/accounts/:id',
@@ -120,7 +127,7 @@ class FoundationDestination extends StatelessWidget {
             Text(title, style: AppTypography.headlineMedium),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'This screen is not available in the demo yet.',
+              'This feature is not available yet. Manual tracking remains available.',
               textAlign: TextAlign.center,
               style: AppTypography.bodyMedium,
             ),

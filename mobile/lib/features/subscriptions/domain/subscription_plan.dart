@@ -1,4 +1,4 @@
-import '../../transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 enum BillingCycle {
   weekly(52, 'week'),
@@ -101,16 +101,6 @@ class SubscriptionOverview {
           }))
           .take(4)
           .toList();
-
-  int get cloudSaving {
-    final google = active.where(
-      (p) => p.id == 'google' && p.origin == SubscriptionOrigin.stitchFixture,
-    );
-    final apple = active.where(
-      (p) => p.id == 'icloud' && p.origin == SubscriptionOrigin.stitchFixture,
-    );
-    return google.isNotEmpty && apple.isNotEmpty ? apple.single.annualized : 0;
-  }
 }
 
 /// Observed posted charges only; future plans are never presented as billings.

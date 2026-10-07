@@ -232,7 +232,7 @@ return $default(_that.id,_that.merchant,_that.metadata,_that.amount,_that.occurr
 @JsonSerializable()
 
 class _TransactionRecord extends TransactionRecord {
-  const _TransactionRecord({required this.id, required this.merchant, required this.metadata, required this.amount, required this.occurredAt, required this.kind, required this.category, this.account = 'GCash', this.accountId, this.destinationAccount, this.destinationAccountId, this.status = TransactionStatus.posted, this.source = TransactionSource.manual, this.note = '', this.hasReceipt = false, this.recurring = false, this.excludedFromBudget = false,  List<String> tags = const []}): _tags = tags,super._();
+  const _TransactionRecord({required this.id, required this.merchant, required this.metadata, required this.amount, required this.occurredAt, required this.kind, required this.category, this.account = '', this.accountId, this.destinationAccount, this.destinationAccountId, this.status = TransactionStatus.posted, this.source = TransactionSource.manual, this.note = '', this.hasReceipt = false, this.recurring = false, this.excludedFromBudget = false,  List<String> tags = const []}): _tags = tags,super._();
   factory _TransactionRecord.fromJson(Map<String, dynamic> json) => _$TransactionRecordFromJson(json);
 
 @override final  String id;

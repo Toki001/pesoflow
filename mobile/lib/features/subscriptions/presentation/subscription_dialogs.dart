@@ -3,16 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../transactions/application/transactions_provider.dart';
-import '../../transactions/data/transaction_fixture.dart';
-import '../../transactions/domain/manual_transaction_draft.dart';
-import '../application/subscriptions_provider.dart';
-import '../domain/subscription_plan.dart';
-import 'widgets/subscription_cards.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
+import 'package:pesoflow/features/subscriptions/application/subscriptions_provider.dart';
+import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
+import 'package:pesoflow/features/subscriptions/presentation/widgets/subscription_cards.dart';
 
 Future<void> showSubscriptionEditor(
   BuildContext context, {
@@ -41,11 +41,15 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
         : '${widget.plan!.amount ~/ 100}.${(widget.plan!.amount % 100).toString().padLeft(2, '0')}',
   );
   late BillingCycle cycle = widget.plan?.cycle ?? BillingCycle.monthly;
-  late String source = widget.plan?.paymentSource ?? 'GCash Personal';
+  late String source = widget.plan?.paymentSource ?? 'Not specified';
   late String category = widget.plan?.category ?? 'Entertainment & Leisure';
   late DateTime renewal =
       widget.plan?.nextRenewal ??
-      DateTime(demoClock.year, demoClock.month, demoClock.day);
+      DateTime(
+        ref.read(clockProvider)().year,
+        ref.read(clockProvider)().month,
+        ref.read(clockProvider)().day,
+      );
   @override
   void dispose() {
     name.dispose();
@@ -53,22 +57,24 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
     super.dispose();
   }
 
-  void save() {
+  Future<void> save() async {
     if (!form.currentState!.validate()) return;
-    final controller = ref.read(demoSubscriptionsProvider.notifier);
-    controller.save(
-      SubscriptionPlan(
-        id: widget.plan?.id ?? controller.nextId(),
-        name: name.text.trim(),
-        amount: parsePhpAmount(amount.text)!,
-        cycle: cycle,
-        nextRenewal: renewal,
-        paymentSource: source,
-        category: category,
-        active: widget.plan?.active ?? true,
-      ),
-    );
-    Navigator.pop(context);
+    final controller = ref.read(subscriptionPlansProvider.notifier);
+    try {
+      await controller.save(
+        SubscriptionPlan(
+          id: widget.plan?.id ?? controller.nextId(),
+          name: name.text.trim(),
+          amount: parsePhpAmount(amount.text)!,
+          cycle: cycle,
+          nextRenewal: renewal,
+          paymentSource: source,
+          category: category,
+          active: widget.plan?.active ?? true,
+        ),
+      );
+      if (mounted) Navigator.pop(context);
+    } catch (_) {}
   }
 
   @override
@@ -93,9 +99,7 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
               ),
               const SizedBox(height: 8),
               Text(
-                ref.watch(demoPersistenceEnabledProvider)
-                    ? 'Demo tracking is saved on this device. Renewals do not create charges.'
-                    : 'Demo tracking only. Changes last for this session and do not create charges.',
+                'Tracking is saved on this device. Renewals do not create charges.',
                 style: AppTypography.bodySmall.copyWith(
                   color: context.colors.mutedInk,
                 ),
@@ -157,15 +161,13 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
                 initialValue: source,
                 isExpanded: true,
                 decoration: const InputDecoration(
-                  labelText: 'Sample payment source',
+                  labelText: 'Payment source',
                   border: OutlineInputBorder(),
                 ),
                 items: [
                   for (final s in {
-                    'GCash Personal',
-                    'Maya Wallet',
-                    'BDO Checking',
-                    'Cash',
+                    'Not specified',
+                    ...ref.watch(workspaceProvider).accounts.map((a) => a.name),
                     source,
                   })
                     DropdownMenuItem(
@@ -279,13 +281,13 @@ class _SubscriptionDetails extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(plan.paymentSource),
           Text(plan.category),
-          Text(plan.active ? renewalLabel(plan, demoClock) : 'Tracking paused'),
-          const SizedBox(height: 12),
           Text(
-            plan.origin == SubscriptionOrigin.stitchFixture
-                ? 'Source: demo sample plan.'
-                : 'Source: manually entered demo plan.',
+            plan.active
+                ? renewalLabel(plan, ref.read(clockProvider)())
+                : 'Tracking paused',
           ),
+          const SizedBox(height: 12),
+          Text('Source: manually entered plan.'),
           const Text('Recurring detection confidence: unknown.'),
           const SizedBox(height: 12),
           Text(
@@ -303,11 +305,15 @@ class _SubscriptionDetails extends ConsumerWidget {
             child: const Text('Edit plan'),
           ),
           OutlinedButton(
-            onPressed: () {
-              ref
-                  .read(demoSubscriptionsProvider.notifier)
-                  .setActive(plan.id, !plan.active);
-              Navigator.pop(context);
+            onPressed: () async {
+              try {
+                await ref
+                    .read(subscriptionPlansProvider.notifier)
+                    .setActive(plan.id, !plan.active);
+                if (context.mounted) Navigator.pop(context);
+              } catch (_) {
+                /* The storage boundary displays the failure. */
+              }
             },
             child: Text(plan.active ? 'Pause tracking' : 'Resume tracking'),
           ),
@@ -318,7 +324,7 @@ class _SubscriptionDetails extends ConsumerWidget {
                 builder: (ctx) => AlertDialog(
                   title: const Text('Remove tracking?'),
                   content: Text(
-                    'Remove ${plan.name} from ${ref.read(demoPersistenceEnabledProvider) ? 'this device' : 'this demo session'}? This does not cancel your service or delete recorded charges.',
+                    'Remove ${plan.name} from this device? This does not cancel your service or delete recorded charges.',
                   ),
                   actions: [
                     TextButton(
@@ -333,8 +339,14 @@ class _SubscriptionDetails extends ConsumerWidget {
                 ),
               );
               if (remove == true && context.mounted) {
-                ref.read(demoSubscriptionsProvider.notifier).remove(plan.id);
-                Navigator.pop(context);
+                try {
+                  await ref
+                      .read(subscriptionPlansProvider.notifier)
+                      .remove(plan.id);
+                  if (context.mounted) Navigator.pop(context);
+                } catch (_) {
+                  /* The storage boundary displays the failure. */
+                }
               }
             },
             child: Text(
@@ -364,7 +376,7 @@ class _SubscriptionHistory extends ConsumerWidget {
   const _SubscriptionHistory();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = subscriptionHistory(ref.watch(demoLedgerProvider));
+    final history = subscriptionHistory(ref.watch(ledgerProvider));
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -375,7 +387,7 @@ class _SubscriptionHistory extends ConsumerWidget {
             Text('Subscription History', style: AppTypography.headlineMedium),
             const SizedBox(height: 8),
             const Text(
-              'Posted recurring expenses from the demo ledger. No automated billing is connected.',
+              'Posted recurring expenses from your saved records. No automated billing is connected.',
             ),
             const SizedBox(height: 16),
             if (history.isEmpty) const Text('No recorded recurring charges'),

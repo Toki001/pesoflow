@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_radius.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../domain/demo_account.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_radius.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/features/accounts/domain/account_view.dart';
 
 class AccountsBalanceHero extends StatelessWidget {
   const AccountsBalanceHero(
@@ -25,7 +25,7 @@ class AccountsBalanceHero extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Total Net Liquid Balance',
+          'Total tracked balance',
           style: AppTypography.labelMedium.copyWith(color: c.mutedInk),
         ),
         const SizedBox(height: 4),
@@ -56,7 +56,7 @@ class AccountsBalanceHero extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
       ),
       icon: const Icon(Icons.sync, size: 16),
-      label: Text(overview.refreshing ? 'Checking demo…' : 'Sync All'),
+      label: Text('Refresh'),
     );
     return FinanceCard(
       hero: true,
@@ -93,11 +93,11 @@ class AccountsBalanceHero extends StatelessWidget {
               runSpacing: 8,
               children: [
                 Text(
-                  '${overview.institutionCount} sample institutions',
+                  '${overview.accounts.length} tracked accounts',
                   style: AppTypography.bodySmall.copyWith(color: c.positive),
                 ),
                 Text(
-                  'Demo · ${DateFormat('MMM d, yyyy').format(asOf)}',
+                  DateFormat('MMM d, yyyy').format(asOf),
                   style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
                 ),
               ],
@@ -107,8 +107,8 @@ class AccountsBalanceHero extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               overview.refreshError
-                  ? "We couldn't check the demo data. Your previous balances are still shown."
-                  : 'Sample data checked. No live sync or balance changes.',
+                  ? "We couldn't refresh your saved records."
+                  : 'Balances calculated from saved records.',
               style: AppTypography.bodySmall.copyWith(
                 color: overview.refreshError ? c.warning : c.mutedInk,
               ),

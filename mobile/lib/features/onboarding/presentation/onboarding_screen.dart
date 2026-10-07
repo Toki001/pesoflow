@@ -2,36 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../../app/theme/app_spacing.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/status_badge.dart';
-import '../../dashboard/data/dashboard_fixture.dart';
-import '../../dashboard/presentation/widgets/balance_summary.dart';
-import '../../dashboard/presentation/widgets/budget_summary.dart';
-import '../application/onboarding_provider.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/features/onboarding/application/onboarding_provider.dart';
 
 class OnboardingScreen extends ConsumerWidget {
   const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final persisted = ref.watch(demoPersistenceEnabledProvider);
+    final saving = ref.watch(financeControllerProvider).saving;
     final step = ref.watch(onboardingProvider);
     final controller = ref.read(onboardingProvider.notifier);
     final c = context.colors;
     final title = switch (step) {
       OnboardingStep.overview => 'Understand your money',
       OnboardingStep.plans => 'Make room for your plans',
-      OnboardingStep.demo => 'Explore PesoFlow with sample data',
+      OnboardingStep.ready => 'Start with your own finances',
     };
     final description = switch (step) {
       OnboardingStep.overview =>
         'See your balance, spending and savings together in one calm overview.',
       OnboardingStep.plans => 'Follow your spending against your limits, with clear guidance on what is left.',
-      OnboardingStep.demo => 'Try the dashboard, budgets and receipt review without connecting an account.',
+      OnboardingStep.ready => 'Add an account and record your first transaction whenever you are ready.',
     };
     return PopScope(
       canPop: step == OnboardingStep.overview,
@@ -71,9 +68,9 @@ class OnboardingScreen extends ConsumerWidget {
                             style: AppTypography.headlineSmall,
                           ),
                         ),
-                        if (step != OnboardingStep.demo)
+                        if (step != OnboardingStep.ready)
                           TextButton(
-                            onPressed: controller.skipToDemo,
+                            onPressed: controller.skip,
                             child: const Text('Skip'),
                           ),
                       ],
@@ -89,7 +86,7 @@ class OnboardingScreen extends ConsumerWidget {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: StatusBadge(
-                              'Demo preview',
+                              'Private manual tracking',
                               foreground: c.primary,
                               background: c.soft(
                                 c.primary,
@@ -113,53 +110,30 @@ class OnboardingScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: AppSpacing.lg),
-                          if (step == OnboardingStep.overview)
-                            BalanceHero(data: homeFixture()),
-                          if (step == OnboardingStep.plans)
-                            BudgetSummary(data: homeFixture()),
-                          if (step != OnboardingStep.demo) ...[
-                            const SizedBox(height: AppSpacing.sm),
-                            Text(
-                              'Sample figures · October 2024',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: c.mutedInk,
-                              ),
+                          FinanceCard(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _OnboardingFact(
+                                  icon: Icons.account_balance_wallet_outlined,
+                                  title: 'Your accounts, your records',
+                                  detail: 'Start empty. Add a cash, bank or wallet account with its actual starting balance.',
+                                ),
+                                const SizedBox(height: 16),
+                                _OnboardingFact(
+                                  icon: Icons.pie_chart_outline,
+                                  title: 'Budgets based on real spending',
+                                  detail: 'Set optional monthly limits. Income and transfers stay separate from expenses.',
+                                ),
+                                const SizedBox(height: 16),
+                                _OnboardingFact(
+                                  icon: Icons.lock_outline,
+                                  title: 'Saved on this device',
+                                  detail: 'Your records are stored locally with encryption. No bank connection or server account is required. Currency: Philippine peso (PHP).',
+                                ),
+                              ],
                             ),
-                          ],
-                          if (step == OnboardingStep.demo)
-                            FinanceCard(
-                              padding: EdgeInsets.all(AppSpacing.md),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                spacing: AppSpacing.lg,
-                                children: [
-                                  _DemoFact(
-                                    icon: Icons.visibility_outlined,
-                                    title: 'Sample financial data',
-                                    detail: 'Balances, accounts and transactions are illustrative. They are not your real finances.',
-                                  ),
-                                  _DemoFact(
-                                    icon: Icons.history_outlined,
-                                    title: persisted
-                                        ? 'Demo activity stays on this device'
-                                        : 'Changes last for this session',
-                                    detail: persisted
-                                        ? 'Transactions, saved receipts, budget plans and subscription tracking stay locally after restart. Appearance, completed demo introduction and sample alert read markers are also saved. Sample connections reset. Use sample data only; local demo storage is not encrypted. Nothing is saved to a server.'
-                                        : 'Expenses, budgets and receipt edits reset when you restart the app. Nothing is saved to a server.',
-                                  ),
-                                  _DemoFact(
-                                    icon: Icons.lock_outline,
-                                    title: 'No account connection',
-                                    detail: 'No bank or wallet is connected. PesoFlow cannot transfer money in this demo and does not ask for credentials.',
-                                  ),
-                                  _DemoFact(
-                                    icon: Icons.receipt_long_outlined,
-                                    title: 'Receipt review uses a fixture',
-                                    detail: 'Camera capture and real receipt recognition are not available yet.',
-                                  ),
-                                ],
-                              ),
-                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -185,20 +159,32 @@ class OnboardingScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: AppSpacing.sm),
                         FilledButton(
-                          onPressed: step == OnboardingStep.demo
-                              ? () {
-                                  ref
-                                      .read(
-                                        demoIntroductionCompletedProvider
-                                            .notifier,
-                                      )
-                                      .complete();
-                                  context.go('/home');
+                          onPressed: saving
+                              ? null
+                              : step == OnboardingStep.ready
+                              ? () async {
+                                  try {
+                                    await ref
+                                        .read(
+                                          financeControllerProvider.notifier,
+                                        )
+                                        .savePreferences(
+                                          ref
+                                              .read(workspaceProvider)
+                                              .preferences
+                                              .copyWith(
+                                                onboardingCompleted: true,
+                                              ),
+                                        );
+                                    if (context.mounted) context.go('/home');
+                                  } catch (_) {
+                                    /* Shared save error retains this screen. */
+                                  }
                                 }
                               : controller.next,
                           child: Text(
-                            step == OnboardingStep.demo
-                                ? 'Explore demo'
+                            step == OnboardingStep.ready
+                                ? 'Get started'
                                 : 'Next',
                           ),
                         ),
@@ -220,8 +206,8 @@ class OnboardingScreen extends ConsumerWidget {
   }
 }
 
-class _DemoFact extends StatelessWidget {
-  const _DemoFact({
+class _OnboardingFact extends StatelessWidget {
+  const _OnboardingFact({
     required this.icon,
     required this.title,
     required this.detail,

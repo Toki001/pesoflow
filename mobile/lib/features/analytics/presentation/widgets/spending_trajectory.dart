@@ -3,11 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../domain/analytics_report.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
 
 class SpendingTrajectory extends StatelessWidget {
   const SpendingTrajectory(this.report, {super.key});
@@ -26,9 +26,7 @@ class SpendingTrajectory extends StatelessWidget {
             Text('Spending trajectory', style: AppTypography.headlineSmall),
             const SizedBox(height: 8),
             Text(
-              report.selection.includesOctoberSnapshot
-                  ? 'Demo aggregate with an illustrative October trajectory. Points between reference dates are interpolated; session edits apply dated changes.'
-                  : 'Cumulative net expenses from the available demo records. Refunds reduce expense; transfers and pending records are excluded.',
+              'Cumulative net expenses from your saved records. Refunds reduce expense; transfers, pending and future records are excluded.',
               style: AppTypography.bodySmall,
             ),
             for (final point in report.points)

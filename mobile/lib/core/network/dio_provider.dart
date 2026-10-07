@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Reserved transport. The demo repository never reads this provider.
+/// Reserved transport. Local financial storage does not use this provider.
 /// Set API_BASE_URL only when implementing an authenticated API repository.
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(

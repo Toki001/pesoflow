@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/core/formatting/date_formatter.dart';
 import 'package:pesoflow/core/formatting/money_formatter.dart';
-import 'package:pesoflow/features/dashboard/data/dashboard_fixture.dart';
+
+import 'fixtures/features/dashboard/data/dashboard_fixture.dart';
+
 import 'package:pesoflow/features/dashboard/domain/dashboard.dart';
 
 void main() {

@@ -1,10 +1,10 @@
-import '../../../core/identity/new_id.dart';
-import '../../analytics/domain/analytics_report.dart';
-import '../../budgets/domain/spending_budget.dart';
-import '../../transactions/domain/transaction.dart';
-import '../../workspace/domain/finance_workspace.dart';
-import 'demo_notice.dart';
-import 'financial_notice.dart';
+import 'package:pesoflow/core/identity/new_id.dart';
+import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
+import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
+import 'package:pesoflow/features/notifications/domain/notice_view.dart';
+import 'package:pesoflow/features/notifications/domain/financial_notice.dart';
 
 /// Persist the result with the financial mutation. Stable condition keys prevent
 /// repeated alerts across rebuilds, edits and restarts; periods reset thresholds.

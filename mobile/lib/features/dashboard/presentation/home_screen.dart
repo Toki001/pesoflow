@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../notifications/presentation/widgets/notification_button.dart';
-import '../../../app/theme/app_spacing.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/date_formatter.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/section_header.dart';
-import 'widgets/dashboard_transaction_tile.dart';
-import '../application/dashboard_provider.dart';
-import '../domain/dashboard.dart';
-import 'widgets/balance_summary.dart';
-import 'widgets/budget_summary.dart';
-import 'widgets/spending_insight.dart';
-import 'widgets/upcoming_bills.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/features/notifications/presentation/widgets/notification_button.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/date_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/section_header.dart';
+import 'package:pesoflow/features/dashboard/presentation/widgets/dashboard_transaction_tile.dart';
+import 'package:pesoflow/features/dashboard/application/dashboard_provider.dart';
+import 'package:pesoflow/features/dashboard/domain/dashboard.dart';
+import 'package:pesoflow/features/dashboard/presentation/widgets/balance_summary.dart';
+import 'package:pesoflow/features/dashboard/presentation/widgets/budget_summary.dart';
+import 'package:pesoflow/features/dashboard/presentation/widgets/spending_insight.dart';
+import 'package:pesoflow/features/dashboard/presentation/widgets/upcoming_bills.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -26,7 +26,7 @@ class HomeScreen extends ConsumerWidget {
       bottom: false,
       child: Column(
         children: [
-          HomeHeader(asOf: state.value?.asOf),
+          HomeHeader(asOf: state.value?.asOf, name: state.value?.name ?? ''),
           Expanded(
             child: state.when(
               data: (data) => data == null
@@ -52,7 +52,8 @@ class HomeScreen extends ConsumerWidget {
 }
 
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({required this.asOf, super.key});
+  const HomeHeader({required this.asOf, this.name = '', super.key});
+  final String name;
   final DateTime? asOf;
   @override
   Widget build(BuildContext context) {
@@ -87,7 +88,9 @@ class HomeHeader extends StatelessWidget {
                       radius: 16,
                       backgroundColor: c.soft(c.primary, AppColors.primarySoft),
                       child: Text(
-                        'A',
+                        name.trim().isEmpty
+                            ? 'PF'
+                            : name.trim().characters.first.toUpperCase(),
                         style: AppTypography.labelMedium.copyWith(
                           color: c.primary,
                         ),
@@ -110,7 +113,7 @@ class HomeHeader extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  asOf == null ? 'Demo overview' : DateFormatter.header(asOf!),
+                  asOf == null ? 'Your overview' : DateFormatter.header(asOf!),
                   style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
                 ),
               ],
@@ -144,7 +147,9 @@ class HomeContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Good morning, ${data.name}',
+              data.name.isEmpty
+                  ? 'Your financial overview'
+                  : 'Hello, ${data.name}',
               style: AppTypography.headlineMedium,
             ),
             const SizedBox(height: 2),
@@ -160,7 +165,7 @@ class HomeContent extends StatelessWidget {
         Semantics(
           key: const ValueKey('open-accounts'),
           button: true,
-          label: 'View connected accounts',
+          label: 'View accounts',
           child: InkWell(
             onTap: () => context.push('/accounts'),
             child: BalanceHero(data: data),
@@ -169,7 +174,10 @@ class HomeContent extends StatelessWidget {
         const SizedBox(height: AppSpacing.md),
         FlowSummary(data: data),
         const SizedBox(height: AppSpacing.md),
-        SpendingInsight(extraSavings: data.projectedExtraSavings),
+        SpendingInsight(
+          extraSavings: data.projectedExtraSavings,
+          hasBudget: data.budgetLimit > 0,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -178,7 +186,14 @@ class HomeContent extends StatelessWidget {
               action: 'View all',
               onAction: () => context.go('/budgets'),
             ),
-            BudgetSummary(data: data),
+            if (data.budgetLimit > 0 || data.budgets.isNotEmpty)
+              BudgetSummary(data: data)
+            else
+              const FinanceCard(
+                child: Text(
+                  'No budgets yet. Set a monthly limit to track your spending.',
+                ),
+              ),
           ],
         ),
         Column(
@@ -196,7 +211,7 @@ class HomeContent extends StatelessWidget {
                   if (data.transactions.isEmpty)
                     const Padding(
                       padding: EdgeInsets.all(AppSpacing.lg),
-                      child: Text('No transactions yet'),
+                      child: Text('No financial activity yet.'),
                     ),
                   for (var i = 0; i < data.transactions.length; i++) ...[
                     if (i > 0) const Divider(),
@@ -242,7 +257,7 @@ class _SyncStrip extends StatelessWidget {
         const SizedBox(width: 6),
         Expanded(
           child: Text(
-            'Synced 2m ago · GCash, BDO',
+            'Saved on this device',
             style: AppTypography.labelSmall.copyWith(
               color: context.colors.secondaryInk,
             ),
@@ -250,7 +265,7 @@ class _SyncStrip extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(
-          'Demo · Active',
+          'Manual tracking',
           style: AppTypography.labelSmall.copyWith(
             color: context.colors.primary,
           ),

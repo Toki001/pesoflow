@@ -1,158 +1,133 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_radius.dart';
-import '../../../app/theme/app_spacing.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/status_badge.dart';
-import '../../../core/widgets/task_screen.dart';
-import '../../onboarding/application/onboarding_provider.dart';
-import '../application/settings_provider.dart';
-import '../domain/appearance.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../demo_workspace/presentation/demo_storage_status.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_radius.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/task_screen.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/onboarding/application/onboarding_provider.dart';
+import 'package:pesoflow/features/settings/application/settings_provider.dart';
+import 'package:pesoflow/features/settings/domain/appearance.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final w = ref.watch(workspaceProvider);
     final appearance = ref.watch(settingsProvider);
-    final persisted = ref.watch(demoPersistenceEnabledProvider);
-    final c = context.colors;
     return TaskScreen(
       title: 'Settings',
       backIcon: Icons.arrow_back,
       backTooltip: 'Back',
       fallbackRoute: '/home',
-      child: SingleChildScrollView(
-        key: const PageStorageKey('settings-scroll'),
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            FinanceCard(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatusBadge(
-                    'Demo session',
-                    foreground: c.primary,
-                    background: c.soft(c.primary, AppColors.primarySoft),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'Make PesoFlow comfortable',
-                    style: AppTypography.headlineMedium,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    persisted
-                        ? 'Appearance applies across the app and stays on this device after restart.'
-                        : 'Preferences apply across the app for this session and reset when you restart.',
-                    style: AppTypography.bodySmall.copyWith(
-                      color: c.secondaryInk,
-                    ),
-                  ),
-                ],
-              ),
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          FinanceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Make PesoFlow comfortable',
+                  style: AppTypography.headlineMedium,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Preferences and financial records stay on this device after restart.',
+                ),
+              ],
             ),
-            const _SectionTitle('Appearance'),
-            FinanceCard(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  for (final option in Appearance.values) ...[
-                    if (option != Appearance.system) const Divider(),
-                    _AppearanceOption(
-                      option: option,
-                      selected: appearance == option,
-                      onSelect: () => ref
-                          .read(settingsProvider.notifier)
-                          .setAppearance(option),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'System follows changes to your device’s light or dark appearance.',
-              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-            ),
-            const _SectionTitle('Demo & data'),
-            FinanceCard(
-              padding: EdgeInsets.zero,
-              child: Column(
-                children: [
-                  _SettingsLink(
-                    icon: Icons.account_balance_wallet_outlined,
-                    title: 'Sample accounts',
-                    subtitle: 'View illustrative balances and account profiles',
-                    onTap: () => context.push('/accounts'),
-                  ),
-                  const Divider(),
-                  _SettingsLink(
-                    icon: Icons.info_outline,
-                    title: 'View introduction',
-                    subtitle: 'Review the demo and its limitations',
-                    onTap: () {
-                      ref.invalidate(onboardingProvider);
-                      context.push('/onboarding');
+          ),
+          const _SectionTitle('Appearance'),
+          FinanceCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (final option in Appearance.values) ...[
+                  if (option != Appearance.system) const Divider(),
+                  _AppearanceOption(
+                    option: option,
+                    selected: appearance == option,
+                    onSelect: () async {
+                      try {
+                        await ref
+                            .read(settingsProvider.notifier)
+                            .setAppearance(option);
+                      } catch (_) {}
                     },
                   ),
                 ],
+              ],
+            ),
+          ),
+          const _SectionTitle('Accounts & data'),
+          FinanceCard(
+            padding: EdgeInsets.zero,
+            child: Column(
+              children: [
+                _SettingsLink(
+                  icon: Icons.account_balance_wallet_outlined,
+                  title: 'Accounts',
+                  subtitle: 'Manage your manually tracked accounts',
+                  onTap: () => context.push('/accounts'),
+                ),
+                const Divider(),
+                _SettingsLink(
+                  icon: Icons.info_outline,
+                  title: 'View introduction',
+                  subtitle: 'Review how local tracking works',
+                  onTap: () {
+                    ref.invalidate(onboardingProvider);
+                    context.push('/onboarding');
+                  },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          FinanceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Your financial records', style: AppTypography.merchant),
+                const SizedBox(height: 8),
+                Text(
+                  'Currency: ${w.preferences.currency} • English (Philippines)',
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Stored locally with encryption. Cloud backup, bank connections and receipt scanning are not available yet. Keep this app installed to retain your records.',
+                ),
+              ],
+            ),
+          ),
+          const _SectionTitle('Notifications'),
+          FinanceCard(
+            child: Material(
+              color: Colors.transparent,
+              child: SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Financial alerts'),
+                subtitle: const Text(
+                  'Budget and tracked-renewal notices inside PesoFlow',
+                ),
+                value: w.preferences.notifications,
+                onChanged: (v) async {
+                  try {
+                    await ref
+                        .read(financeControllerProvider.notifier)
+                        .savePreferences(
+                          w.preferences.copyWith(notifications: v),
+                        );
+                  } catch (_) {}
+                },
               ),
             ),
-            const SizedBox(height: AppSpacing.md),
-            FinanceCard(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Your demo data', style: AppTypography.merchant),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    persisted
-                        ? 'Balances and transactions are samples. Transaction edits, saved receipts, budget plans and subscription tracking, appearance, completed demo introduction and alert read markers stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
-                        : 'Balances and transactions are samples. Edits stay in memory for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.',
-                    style: AppTypography.bodySmall.copyWith(
-                      color: c.secondaryInk,
-                    ),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'Currency · PHP (₱)\nFormatting · English (Philippines)',
-                    style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            if (persisted) ...[
-              const DemoStorageSettings(),
-              const SizedBox(height: AppSpacing.lg),
-            ],
-            OutlinedButton(
-              onPressed: appearance == Appearance.system
-                  ? null
-                  : () =>
-                        ref.read(settingsProvider.notifier).restoreAppearance(),
-              child: const Text('Restore device appearance'),
-            ),
-            const SizedBox(height: AppSpacing.xs),
-            Text(
-              'This changes only appearance. Your demo edits remain intact.',
-              textAlign: TextAlign.center,
-              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_radius.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/category_icon.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../../../core/widgets/status_badge.dart';
-import '../../domain/demo_account.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_radius.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/category_icon.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/features/accounts/domain/account_view.dart';
 
-String sampleBalanceAge(DemoAccount account, DateTime clock) {
+String balanceAge(AccountView account, DateTime clock) {
   final age = clock.difference(account.balanceAsOf);
   if (age.inDays >= 1) return '${age.inDays} days ago';
   if (age.inHours >= 1) return '${age.inHours}h ago';
   if (age.inMinutes >= 1) return '${age.inMinutes}m ago';
-  return 'at demo time';
+  return 'just now';
 }
 
 class AccountConnectionCard extends StatelessWidget {
@@ -27,7 +27,7 @@ class AccountConnectionCard extends StatelessWidget {
     required this.onReconnect,
     super.key,
   });
-  final DemoAccount account;
+  final AccountView account;
   final DateTime clock;
   final VoidCallback onSettings;
   final VoidCallback onDetails;
@@ -39,20 +39,26 @@ class AccountConnectionCard extends StatelessWidget {
     final expired = account.needsReauthentication;
     final color = expired
         ? c.warning
-        : account.id == 'gcash'
+        : account.kind == AccountKind.wallet
         ? c.primary
-        : account.id == 'maya'
+        : account.kind == AccountKind.bank
         ? c.secondary
         : c.secondaryInk;
     final soft = expired
         ? AppColors.warningSoft
-        : account.id == 'gcash'
+        : account.kind == AccountKind.wallet
         ? AppColors.primarySoft
-        : account.id == 'maya'
+        : account.kind == AccountKind.bank
         ? AppColors.secondarySoft
         : AppColors.surfaceMuted;
     final badge = StatusBadge(
-      expired ? 'Needs Re-authentication' : 'Demo · Active',
+      expired
+          ? 'Needs Re-authentication'
+          : account.archived
+          ? 'Archived'
+          : account.manual
+          ? 'Manual'
+          : 'Connected',
       foreground: expired ? c.warning : c.positive,
       background: c.soft(
         expired ? c.warning : c.positive,
@@ -65,7 +71,11 @@ class AccountConnectionCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
-          expired ? 'Last known' : 'Sample available',
+          expired
+              ? 'Last known'
+              : account.manual
+              ? 'Tracked balance'
+              : 'Reported balance',
           style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
         ),
         const SizedBox(height: 4),
@@ -79,9 +89,11 @@ class AccountConnectionCard extends StatelessWidget {
     );
     final metadata =
         '${account.maskedIdentifier} · ${expired
-            ? 'Last synced ${sampleBalanceAge(account, clock)}'
-            : account.kind == DemoAccountKind.wallet
+            ? 'Last synced ${balanceAge(account, clock)}'
+            : account.kind == AccountKind.wallet
             ? 'E-Wallet'
+            : account.kind == AccountKind.cash
+            ? 'Cash'
             : 'Bank'}';
     final footer = expired
         ? Row(
@@ -89,7 +101,7 @@ class AccountConnectionCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Sample session expired. Balance is stale.',
+                  'Connection expired. Balance is stale.',
                   style: AppTypography.bodySmall.copyWith(
                     color: c.secondaryInk,
                   ),
@@ -121,7 +133,9 @@ class AccountConnectionCard extends StatelessWidget {
                   Icon(Icons.schedule, size: 15, color: c.mutedInk),
                   const SizedBox(width: 6),
                   Text(
-                    'Demo sync ${sampleBalanceAge(account, clock)}',
+                    account.manual
+                        ? 'Manually tracked'
+                        : 'Synced ${balanceAge(account, clock)}',
                     style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
                   ),
                 ],
@@ -136,7 +150,7 @@ class AccountConnectionCard extends StatelessWidget {
                       foregroundColor: c.secondaryInk,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                     ),
-                    child: const Text('Settings'),
+                    child: const Text('Edit'),
                   ),
                   Container(width: 1, height: 14, color: c.border),
                   TextButton(
@@ -146,7 +160,7 @@ class AccountConnectionCard extends StatelessWidget {
                       foregroundColor: c.danger,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                     ),
-                    child: const Text('Disconnect'),
+                    child: Text(account.archived ? 'Restore' : 'Remove'),
                   ),
                 ],
               ),
@@ -193,7 +207,7 @@ class AccountConnectionCard extends StatelessWidget {
                   return Row(
                     children: [
                       CategoryIcon(
-                        account.kind == DemoAccountKind.bank
+                        account.kind == AccountKind.bank
                             ? Icons.account_balance
                             : Icons.account_balance_wallet,
                         foreground: color,

@@ -1,10 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'support/fixture_container.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/features/subscriptions/application/subscriptions_provider.dart';
-import 'package:pesoflow/features/subscriptions/data/subscription_fixture.dart';
+
+import 'fixtures/features/subscriptions/data/subscription_fixture.dart';
+
 import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
 import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
-import 'package:pesoflow/features/transactions/data/transaction_fixture.dart';
+
+import 'fixtures/features/transactions/data/transaction_fixture.dart';
+
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 SubscriptionPlan plan({
@@ -30,7 +35,6 @@ void main() {
     expect(overview.active.length, 5);
     expect(overview.annualized, 1874200);
     expect(overview.monthlyEquivalent, 156183);
-    expect(overview.cloudSaving, 58800);
     expect(overview.upcoming.map((p) => p.id), [
       'netflix',
       'spotify',
@@ -60,7 +64,6 @@ void main() {
     );
     expect(overview.annualized, 0);
     expect(overview.upcoming, isEmpty);
-    expect(overview.cloudSaving, 0);
     expect(SubscriptionOverview([]).monthlyEquivalent, 0);
   });
   test(
@@ -95,29 +98,9 @@ void main() {
       );
     },
   );
-  test(
-    'fixture tip is withdrawn after manual changes; duplicate IDs rejected',
-    () {
-      final fixtures = subscriptionFixture();
-      final edited = SubscriptionPlan(
-        id: 'google',
-        name: 'Different service',
-        amount: 47900,
-        cycle: BillingCycle.monthly,
-        nextRenewal: DateTime(2024, 11, 12),
-        paymentSource: 'Cash',
-        category: 'Other',
-      );
-      expect(
-        SubscriptionOverview([
-          for (final p in fixtures)
-            if (p.id == 'google') edited else p,
-        ]).cloudSaving,
-        0,
-      );
-      expect(() => SubscriptionOverview([plan(), plan()]), throwsArgumentError);
-    },
-  );
+  test('duplicate subscription IDs rejected', () {
+    expect(() => SubscriptionOverview([plan(), plan()]), throwsArgumentError);
+  });
   test('rejects invalid amount, identity and detection confidence', () {
     for (final amount in [0, -1, 100000000000]) {
       expect(() => plan(amount: amount), throwsArgumentError);
@@ -154,31 +137,30 @@ void main() {
     },
   );
   test('session CRUD preserves ledger; paused state and updates survive provider reads', () async {
-    final container = ProviderContainer();
+    final container = fixtureContainer();
     addTearDown(container.dispose);
-    final ledger = container.read(demoLedgerProvider);
-    final controller = container.read(demoSubscriptionsProvider.notifier);
-    controller.setActive('icloud', false);
-    expect((await container.read(subscriptionsProvider.future)).cloudSaving, 0);
+    final ledger = container.read(ledgerProvider);
+    final controller = container.read(subscriptionPlansProvider.notifier);
+    await controller.setActive('icloud', false);
     final id = controller.nextId();
-    controller.save(plan(id: id));
-    controller.save(plan(id: id, amount: 99));
+    await controller.save(plan(id: id));
+    await controller.save(plan(id: id, amount: 99));
     expect(
-      container.read(demoSubscriptionsProvider).where((p) => p.id == id).length,
+      container.read(subscriptionPlansProvider).where((p) => p.id == id).length,
       1,
     );
-    expect(container.read(demoSubscriptionsProvider).last.amount, 99);
+    expect(container.read(subscriptionPlansProvider).last.amount, 99);
     expect(
-      () => container.read(demoSubscriptionsProvider).clear(),
+      () => container.read(subscriptionPlansProvider).clear(),
       throwsUnsupportedError,
     );
-    controller.remove(id);
-    expect(container.read(demoSubscriptionsProvider).length, 5);
-    controller.setActive('icloud', true);
+    await controller.remove(id);
+    expect(container.read(subscriptionPlansProvider).length, 5);
+    await controller.setActive('icloud', true);
     expect(
       (await container.read(subscriptionsProvider.future)).monthlyEquivalent,
       156183,
     );
-    expect(container.read(demoLedgerProvider), same(ledger));
+    expect(container.read(ledgerProvider), ledger);
   });
 }

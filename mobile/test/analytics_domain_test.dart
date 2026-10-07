@@ -1,10 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pesoflow/features/analytics/data/analytics_fixture.dart';
+
+import 'fixtures/features/analytics/data/analytics_fixture.dart';
+
 import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
-import 'package:pesoflow/features/analytics/domain/project_analytics.dart';
-import 'package:pesoflow/features/budgets/data/budget_fixture.dart';
+
+import 'legacy/features/analytics/domain/project_analytics.dart';
+import 'fixtures/features/budgets/data/budget_fixture.dart';
+
 import 'package:pesoflow/features/budgets/domain/budget_plan.dart';
-import 'package:pesoflow/features/transactions/data/transaction_fixture.dart';
+
+import 'fixtures/features/transactions/data/transaction_fixture.dart';
+
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 AnalyticsReport report({

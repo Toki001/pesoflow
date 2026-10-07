@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../transactions/data/transaction_fixture.dart';
-import '../application/subscriptions_provider.dart';
-import '../domain/subscription_plan.dart';
-import 'subscription_dialogs.dart';
-import 'widgets/subscription_cards.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/subscriptions/application/subscriptions_provider.dart';
+import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
+import 'package:pesoflow/features/subscriptions/presentation/subscription_dialogs.dart';
+import 'package:pesoflow/features/subscriptions/presentation/widgets/subscription_cards.dart';
 
 class SubscriptionsScreen extends ConsumerWidget {
   const SubscriptionsScreen({super.key});
@@ -116,12 +116,8 @@ class SubscriptionsScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    CommitmentHero(overview, clock: demoClock),
+                    CommitmentHero(overview, clock: ref.read(clockProvider)()),
                     const SizedBox(height: 16),
-                    if (overview.cloudSaving > 0) ...[
-                      SubscriptionTip(saving: overview.cloudSaving),
-                      const SizedBox(height: 16),
-                    ],
                     Wrap(
                       alignment: WrapAlignment.spaceBetween,
                       spacing: 8,
@@ -214,7 +210,7 @@ class SubscriptionsScreen extends ConsumerWidget {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Add a demo plan to track its commitment and renewal.',
+                              'Add a plan to track its commitment and renewal.',
                               textAlign: TextAlign.center,
                             ),
                             TextButton(
@@ -227,7 +223,7 @@ class SubscriptionsScreen extends ConsumerWidget {
                     for (final p in overview.sorted(sort)) ...[
                       SubscriptionCard(
                         plan: p,
-                        clock: demoClock,
+                        clock: ref.read(clockProvider)(),
                         onTap: () => showSubscriptionDetails(context, p),
                       ),
                       const SizedBox(height: 10),
@@ -274,7 +270,7 @@ class SubscriptionsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Demo plans · Oct 24, 2024 · Session only',
+                      'Tracking saved on this device',
                       textAlign: TextAlign.center,
                       style: AppTypography.labelSmall.copyWith(
                         color: c.mutedInk,

@@ -1,5 +1,5 @@
-import '../../../core/serialization/values.dart';
-import 'demo_notice.dart';
+import 'package:pesoflow/core/serialization/values.dart';
+import 'package:pesoflow/features/notifications/domain/notice_view.dart';
 
 class FinancialNotice {
   const FinancialNotice({

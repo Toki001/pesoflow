@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../core/formatting/date_formatter.dart';
-import '../../../../core/widgets/transaction_tile.dart';
-import '../../domain/dashboard.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/core/formatting/date_formatter.dart';
+import 'package:pesoflow/core/widgets/transaction_tile.dart';
+import 'package:pesoflow/features/dashboard/domain/dashboard.dart';
 
 /// Feature-to-presentation mapping; the shared tile has no domain dependency.
 class DashboardTransactionTile extends StatelessWidget {
@@ -48,7 +48,7 @@ class DashboardTransactionTile extends StatelessWidget {
         child: TransactionTile(
           merchant: transaction.merchant,
           subtitle:
-              '${transaction.metadata} · ${DateFormatter.transaction(transaction.occurredAt, asOf)}',
+              '${transaction.metadata}${transaction.status == TransactionStatus.pending ? ' · Pending' : ''} · ${DateFormatter.transaction(transaction.occurredAt, asOf)}',
           amount: transaction.displayAmount,
           transfer: transaction.kind == TransactionKind.transfer,
           incoming:

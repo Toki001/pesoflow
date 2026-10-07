@@ -15,7 +15,7 @@ _TransactionRecord _$TransactionRecordFromJson(Map<String, dynamic> json) =>
       occurredAt: DateTime.parse(json['occurredAt'] as String),
       kind: $enumDecode(_$TransactionKindEnumMap, json['kind']),
       category: $enumDecode(_$TransactionCategoryEnumMap, json['category']),
-      account: json['account'] as String? ?? 'GCash',
+      account: json['account'] as String? ?? '',
       accountId: json['accountId'] as String?,
       destinationAccount: json['destinationAccount'] as String?,
       destinationAccountId: json['destinationAccountId'] as String?,

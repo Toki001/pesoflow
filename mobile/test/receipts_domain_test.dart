@@ -1,9 +1,13 @@
-import 'package:pesoflow/features/accounts/data/ledger_account_fixture.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'fixtures/features/accounts/data/ledger_account_fixture.dart';
+
+import 'support/fixture_container.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
 import 'package:pesoflow/features/dashboard/application/dashboard_provider.dart';
-import 'package:pesoflow/features/receipts/data/receipt_fixture.dart';
+
+import 'fixtures/features/receipts/data/receipt_fixture.dart';
+
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
@@ -171,31 +175,31 @@ void main() {
   test(
     'editing is ledger-free; save is idempotent across retries/reloads',
     () async {
-      final c = ProviderContainer();
+      final c = fixtureContainer();
       addTearDown(c.dispose);
       await c.read(receiptReviewProvider.future);
-      final ledger = c.read(demoLedgerProvider);
+      final ledger = c.read(ledgerProvider);
       final overviewBefore = (await c.read(dashboardProvider.future))!;
       final controller = c.read(receiptReviewProvider.notifier);
-      expect(controller.save, throwsArgumentError);
-      expect(c.read(demoLedgerProvider), same(ledger));
+      await expectLater(controller.save(), throwsArgumentError);
+      expect(c.read(ledgerProvider), same(ledger));
       controller.setMerchant('Reviewed Store');
       controller.setAccount(DemoLedgerAccounts.cash);
       controller.setCategory(TransactionCategory.shopping);
       controller.saveItem(
         confirmed(c.read(receiptReviewProvider).value!.items.last),
       );
-      expect(c.read(demoLedgerProvider), same(ledger));
-      final id = controller.save();
-      expect(c.read(demoLedgerProvider).first.accountId, 'cash');
+      expect(c.read(ledgerProvider), same(ledger));
+      final id = await controller.save();
+      expect(c.read(ledgerProvider).last.accountId, 'cash');
       expect(c.read(receiptReviewProvider).value!.accountId, 'cash');
-      expect(controller.save(), id);
-      expect(c.read(demoLedgerProvider).length, ledger.length + 1);
+      expect(await controller.save(), id);
+      expect(c.read(ledgerProvider).length, ledger.length + 1);
       final overviewAfter = (await c.read(dashboardProvider.future))!;
       expect(overviewAfter.outflow, overviewBefore.outflow + 52550);
       expect(overviewAfter.budgetSpent, overviewBefore.budgetSpent! + 52550);
-      expect(overviewAfter.balance, overviewBefore.balance);
-      final saved = c.read(savedDemoReceiptsProvider)[id]!;
+      expect(overviewAfter.balance, overviewBefore.balance - 52550);
+      final saved = c.read(savedReceiptsProvider)[id]!;
       expect(saved.merchant, 'Reviewed Store');
       expect(saved.account, 'Cash');
       expect(saved.category, TransactionCategory.shopping);
@@ -203,10 +207,10 @@ void main() {
       expect(c.read(receiptReviewProvider).value!.merchant, 'Reviewed Store');
       c.invalidate(receiptReviewProvider);
       await c.read(receiptReviewProvider.future);
-      expect(c.read(receiptReviewProvider.notifier).save(), id);
-      expect(c.read(demoLedgerProvider).length, ledger.length + 1);
+      expect(await c.read(receiptReviewProvider.notifier).save(), id);
+      expect(c.read(ledgerProvider).length, ledger.length + 1);
       expect(
-        () => c.read(savedDemoReceiptsProvider).clear(),
+        () => c.read(savedReceiptsProvider).clear(),
         throwsUnsupportedError,
       );
     },
@@ -214,7 +218,7 @@ void main() {
   test(
     'item add/update/removal recalculates; empty receipt never saves',
     () async {
-      final c = ProviderContainer();
+      final c = fixtureContainer();
       addTearDown(c.dispose);
       await c.read(receiptReviewProvider.future);
       final controller = c.read(receiptReviewProvider.notifier);
@@ -243,17 +247,18 @@ void main() {
       for (final item in c.read(receiptReviewProvider).value!.items) {
         controller.removeItem(item.id);
       }
-      expect(controller.save, throwsArgumentError);
-      expect(c.read(demoLedgerProvider).length, 9);
+      await expectLater(controller.save(), throwsArgumentError);
+      expect(c.read(ledgerProvider).length, 9);
     },
   );
   test('loader error and null state cannot create a transaction', () async {
-    final c = ProviderContainer(
-      overrides: [receiptLoaderProvider.overrideWithValue(() async => null)],
-    );
+    final c = fixtureContainer(receipt: false);
     addTearDown(c.dispose);
     expect(await c.read(receiptReviewProvider.future), isNull);
-    expect(c.read(receiptReviewProvider.notifier).save, throwsStateError);
-    expect(c.read(demoLedgerProvider).length, 9);
+    await expectLater(
+      c.read(receiptReviewProvider.notifier).save(),
+      throwsStateError,
+    );
+    expect(c.read(ledgerProvider).length, 9);
   });
 }

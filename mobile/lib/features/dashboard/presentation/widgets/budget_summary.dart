@@ -24,30 +24,38 @@ class BudgetSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _BudgetPair(budget: overall, overall: true),
-          const SizedBox(height: 6),
-          BudgetProgressBar(
-            value: overall.used,
-            color: overall.exceeded ? c.danger : AppColors.primary,
-            label: 'Overall budget',
-            height: 8,
-          ),
-          const SizedBox(height: 4),
-          _Pair(
-            left: Text(
-              '${(overall.used * 100).round()}% utilized',
-              style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
+          if (data.budgetLimit > 0) ...[
+            _BudgetPair(budget: overall, overall: true),
+            const SizedBox(height: 6),
+            BudgetProgressBar(
+              value: overall.used,
+              color: overall.exceeded ? c.danger : AppColors.primary,
+              label: 'Overall budget',
+              height: 8,
             ),
-            right: Text(
-              '${MoneyFormatter.php(overall.remaining, decimals: false)} remaining',
-              style: AppTypography.labelSmall.copyWith(
-                color: overall.exceeded ? c.danger : c.positive,
+            const SizedBox(height: 4),
+            _Pair(
+              left: Text(
+                '${(overall.used * 100).round()}% utilized',
+                style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
+              ),
+              right: Text(
+                '${MoneyFormatter.php(overall.remaining, decimals: false)} remaining',
+                style: AppTypography.labelSmall.copyWith(
+                  color: overall.exceeded ? c.danger : c.positive,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          const Divider(),
-          const SizedBox(height: AppSpacing.xs),
+            const SizedBox(height: AppSpacing.sm),
+            const Divider(),
+            const SizedBox(height: AppSpacing.xs),
+          ] else ...[
+            Text(
+              'No overall limit set',
+              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+          ],
           if (data.budgets.isEmpty) const Text('No category budgets yet'),
           for (var i = 0; i < data.budgets.length; i++) ...[
             if (i > 0) const SizedBox(height: AppSpacing.sm),

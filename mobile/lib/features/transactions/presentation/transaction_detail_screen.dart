@@ -1,197 +1,49 @@
+import 'package:pesoflow/core/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-
-import '../../../app/theme/app_colors.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
-import '../../../core/widgets/budget_progress_bar.dart';
-import '../../../core/widgets/category_icon.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/status_badge.dart';
-import '../../../core/widgets/task_screen.dart';
-import '../application/transactions_provider.dart';
-import '../../receipts/application/receipts_provider.dart';
-import '../../budgets/application/budgets_provider.dart';
-import '../domain/transaction.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/formatting/date_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/task_screen.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/core/widgets/budget_progress_bar.dart';
+import 'package:pesoflow/features/expense/presentation/add_expense_screen.dart';
+import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 class TransactionDetailScreen extends ConsumerWidget {
   const TransactionDetailScreen({required this.id, super.key});
   final String id;
-  Future<String?> _textInput(
-    BuildContext context,
-    String title,
-    String value, {
-    bool multiline = false,
-  }) => showDialog<String>(
-    context: context,
-    builder: (_) =>
-        _AnnotationDialog(title: title, value: value, multiline: multiline),
-  );
-  Future<void> _editNotes(
-    BuildContext context,
-    WidgetRef ref,
-    TransactionRecord t,
-  ) async {
-    final note = await _textInput(
-      context,
-      'Edit notes',
-      t.note,
-      multiline: true,
-    );
-    if (note != null) {
-      ref.read(demoLedgerProvider.notifier).update(t.copyWith(note: note));
-    }
-  }
-
-  Future<void> _category(
-    BuildContext context,
-    WidgetRef ref,
-    TransactionRecord t,
-  ) async {
-    final options = t.kind == TransactionKind.expense
-        ? TransactionCategory.values
-              .where(
-                (c) => ![
-                  TransactionCategory.transfer,
-                  TransactionCategory.income,
-                  TransactionCategory.refund,
-                ].contains(c),
-              )
-              .toList()
-        : [t.category];
-    final selected = await showModalBottomSheet<TransactionCategory>(
-      context: context,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Text(
-              'Category',
-              textAlign: TextAlign.center,
-              style: AppTypography.headlineMedium,
-            ),
-            for (final category in options)
-              ListTile(
-                title: Text(categoryLabel(category)),
-                trailing: t.category == category
-                    ? const Icon(Icons.check)
-                    : null,
-                onTap: () => Navigator.pop(context, category),
-              ),
-          ],
-        ),
-      ),
-    );
-    if (selected != null) {
-      ref
-          .read(demoLedgerProvider.notifier)
-          .update(
-            t.copyWith(
-              category: selected,
-              metadata: '${categoryLabel(selected)} · ${t.account}',
-            ),
-          );
-    }
-  }
-
-  Future<void> _demoInfo(BuildContext context, String title, String text) =>
-      showDialog<void>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(title),
-          content: Text(text),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
-            ),
-          ],
-        ),
-      );
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final persisted = ref.watch(demoPersistenceEnabledProvider);
-    final ledger = ref.watch(demoLedgerProvider);
-    final matches = ledger.where((t) => t.id == id);
+    final matches = ref.watch(ledgerProvider).where((t) => t.id == id);
     if (matches.isEmpty) {
       return const TaskScreen(
         title: 'Transaction Detail',
-        child: Center(child: Text('Transaction not found')),
+        child: Center(child: Text('Transaction not found.')),
       );
     }
-    final t = matches.first;
+    final t = matches.single;
     final c = context.colors;
-    final synced =
-        t.source == TransactionSource.bankSync ||
-        t.source == TransactionSource.walletSync;
-    final jollibee = id == 'jollibee';
-    final reviewedReceipt = ref.watch(savedDemoReceiptsProvider)[id];
-    ref.watch(demoBudgetPlansProvider);
+    ref.watch(budgetPlansProvider);
     final plan = ref
-        .read(demoBudgetPlansProvider.notifier)
+        .read(budgetPlansProvider.notifier)
         .viewFor(t.occurredAt.year, t.occurredAt.month);
-    final allowances = plan.allowances.where((a) => a.category == t.category);
-    final allowance = allowances.isEmpty ? null : allowances.first;
-    final categorySpent = allowance?.spent ?? 0;
-    final categoryLimit = allowance?.limit ?? 1;
-    final budgetColor = categorySpent >= categoryLimit
-        ? c.danger
-        : categorySpent * 100 >= categoryLimit * 80
-        ? c.warning
-        : c.primary;
-    Widget heading(String text) => Text(
-      text.toUpperCase(),
-      style: AppTypography.labelMedium.copyWith(
-        color: c.mutedInk,
-        letterSpacing: .7,
-      ),
-    );
-    Widget pair(String label, Widget value) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 7),
-      child: SizedBox(
-        width: double.infinity,
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          spacing: 12,
-          runSpacing: 6,
-          children: [
-            Text(
-              label,
-              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-            ),
-            value,
-          ],
-        ),
-      ),
-    );
-    final small = AppTypography.bodySmall;
+    final allowance = plan.allowances
+        .where((b) => b.category == t.category)
+        .firstOrNull;
+    final account = ref
+        .watch(workspaceProvider)
+        .accounts
+        .where((a) => a.id == t.accountId)
+        .firstOrNull;
     return TaskScreen(
       title: 'Transaction Detail',
-      actions: [
-        IconButton(
-          tooltip: 'Share receipt',
-          onPressed: () => _demoInfo(
-            context,
-            'Demo receipt',
-            'Receipt sharing will be available when local receipt files are stored.',
-          ),
-          icon: const Icon(Icons.ios_share_outlined),
-        ),
-        IconButton(
-          tooltip: 'More options',
-          onPressed: () => _demoInfo(
-            context,
-            'Demo transaction',
-            persisted
-                ? 'Transaction edits use local demo storage. Synced sample amounts and provenance remain read-only.'
-                : 'Notes, category, tags and budget exclusion are saved only for this app session. Synced amounts and provenance remain read-only.',
-          ),
-          icon: const Icon(Icons.more_vert),
-        ),
-      ],
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -203,17 +55,17 @@ class TransactionDetailScreen extends ConsumerWidget {
                 Stack(
                   children: [
                     CategoryIcon(
-                      jollibee
+                      t.category == TransactionCategory.food
                           ? Icons.fastfood_outlined
                           : t.kind == TransactionKind.transfer
                           ? Icons.swap_horiz
                           : Icons.receipt_long_outlined,
                       foreground: Colors.white,
                       iconSize: 32,
+                      size: 64,
                       background: t.kind == TransactionKind.expense
                           ? AppColors.danger
                           : AppColors.secondary,
-                      size: 64,
                     ),
                     Positioned(
                       bottom: 0,
@@ -237,33 +89,30 @@ class TransactionDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 Text(
                   MoneyFormatter.php(
-                    t.kind == TransactionKind.transfer
-                        ? t.amount
-                        : t.displayAmount,
+                    t.displayAmount,
                     signed:
                         t.kind == TransactionKind.income ||
                         t.kind == TransactionKind.refund,
                   ),
                   style: AppTypography.numericXL,
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
-                  jollibee ? 'Jollibee Megamall Branch' : t.merchant,
-                  style: AppTypography.headlineSmall,
+                  t.merchant,
                   textAlign: TextAlign.center,
+                  style: AppTypography.headlineSmall,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '${categoryLabel(t.category)}${jollibee ? ' • Fast Food' : ''}',
-                  style: small.copyWith(color: c.mutedInk),
-                ),
+                const SizedBox(height: 6),
+                Text(categoryLabel(t.category)),
                 const SizedBox(height: 12),
                 StatusBadge(
-                  '${t.status == TransactionStatus.pending ? 'Pending' : 'Completed'} • ${synced
-                      ? 'Read-only synced'
+                  t.status == TransactionStatus.pending
+                      ? 'Pending'
+                      : t.source == TransactionSource.manual
+                      ? 'Completed • Manual entry'
                       : t.source == TransactionSource.receipt
-                      ? 'Receipt entry'
-                      : 'Manual entry'}',
+                      ? 'Completed • Receipt entry'
+                      : 'Completed • Read-only synced',
                   foreground: c.secondaryInk,
                   background: c.mutedSurface,
                   icon: Icons.circle,
@@ -277,17 +126,16 @@ class TransactionDetailScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                heading('Provenance & Info'),
+                Text('PROVENANCE & INFO', style: AppTypography.labelMedium),
                 const SizedBox(height: 16),
                 Row(
                   children: [
                     CategoryIcon(
-                      t.account == 'GCash'
-                          ? Icons.account_balance_wallet_outlined
-                          : Icons.account_balance_outlined,
+                      Icons.account_balance_wallet_outlined,
                       foreground: c.primary,
                       background: c.soft(c.primary, AppColors.primarySoft),
-                      size: 32,
+                      round: false,
+                      size: 36,
                     ),
                     const SizedBox(width: 12),
                     Expanded(
@@ -295,23 +143,21 @@ class TransactionDetailScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            t.account == 'GCash' ? 'GCash Personal' : t.account,
+                            account?.name ?? t.account,
                             style: AppTypography.bodyMedium,
                           ),
-                          if (t.account == 'GCash')
+                          if (account?.maskedIdentifier.isNotEmpty ?? false)
                             Text(
-                              '0917 •••• 892',
-                              style: small.copyWith(color: c.mutedInk),
+                              account!.maskedIdentifier,
+                              style: AppTypography.bodySmall.copyWith(
+                                color: c.mutedInk,
+                              ),
                             ),
                         ],
                       ),
                     ),
                     StatusBadge(
-                      synced
-                          ? 'Synced'
-                          : t.source == TransactionSource.receipt
-                          ? 'Receipt'
-                          : 'Manual',
+                      'Manual',
                       foreground: c.primary,
                       background: c.soft(c.primary, AppColors.primarySoft),
                       pill: false,
@@ -319,26 +165,13 @@ class TransactionDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Divider(color: c.border),
-                pair(
-                  'Date & Time',
-                  Text(
-                    DateFormat('EEE, MMM d, yyyy • h:mm a')
-                        .format(t.occurredAt),
-                    style: small,
-                  ),
-                ),
-                pair(
-                  'Category',
-                  TextButton(
-                    onPressed: () => _category(context, ref, t),
-                    child: Text(
-                      '${categoryLabel(t.category)} ⌄',
-                      style: small.copyWith(color: c.ink),
-                    ),
-                  ),
-                ),
-                if (allowance != null)
+                const Divider(),
+                _Info('Date & Time', DateFormatter.timestamp(t.occurredAt)),
+                _Info('Category', categoryLabel(t.category)),
+                if (t.kind == TransactionKind.transfer)
+                  _Info('Transfer to', t.destinationAccount ?? ''),
+                if (allowance != null) ...[
+                  const SizedBox(height: 12),
                   FinanceCard(
                     color: c.canvas,
                     padding: const EdgeInsets.all(12),
@@ -349,21 +182,25 @@ class TransactionDetailScreen extends ConsumerWidget {
                           alignment: WrapAlignment.spaceBetween,
                           spacing: 8,
                           children: [
-                            Text('Monthly Budget Impact', style: small),
+                            Text(
+                              'Monthly Budget Impact',
+                              style: AppTypography.bodySmall,
+                            ),
                             Text(
                               t.excludedFromBudget
                                   ? 'Excluded'
-                                  : '${(categorySpent * 100 ~/ categoryLimit)}% Used',
-                              style: small.copyWith(color: c.warning),
+                                  : '${(allowance.used * 100).round()}% Used',
+                              style: AppTypography.bodySmall.copyWith(
+                                color: allowance.atRisk ? c.warning : c.primary,
+                              ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
                         BudgetProgressBar(
-                          value: categorySpent / categoryLimit,
-                          color: budgetColor,
-                          label: '${categoryLabel(t.category)} budget',
-                          height: 8,
+                          label: 'Monthly budget utilization',
+                          value: allowance.used,
+                          color: allowance.atRisk ? c.warning : c.primary,
                         ),
                         const SizedBox(height: 8),
                         Wrap(
@@ -371,351 +208,146 @@ class TransactionDetailScreen extends ConsumerWidget {
                           spacing: 8,
                           children: [
                             Text(
-                              '${MoneyFormatter.php(categorySpent, decimals: false)} / ${MoneyFormatter.php(categoryLimit, decimals: false)} limit',
-                              style: small,
+                              '${MoneyFormatter.php(allowance.spent, decimals: false)} / ${MoneyFormatter.php(allowance.limit, decimals: false)} limit',
+                              style: AppTypography.bodySmall,
                             ),
                             Text(
-                              '${MoneyFormatter.php(categoryLimit - categorySpent, decimals: false)} remaining',
-                              style: small,
+                              '${MoneyFormatter.php(allowance.remaining, decimals: false)} remaining',
+                              style: AppTypography.bodySmall,
                             ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                pair(
-                  'Reference No.',
-                  Text(
-                    jollibee ? '#TXN-902847291' : '#DEMO-${t.id.toUpperCase()}',
-                    style: small.copyWith(color: c.mutedInk),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Notes', style: small.copyWith(color: c.mutedInk)),
-                    TextButton(
-                      onPressed: () => _editNotes(context, ref, t),
-                      child: const Text('Edit'),
-                    ),
-                  ],
-                ),
+                ],
+                const SizedBox(height: 16),
+                Text('Notes', style: AppTypography.merchant),
+                const SizedBox(height: 8),
                 FinanceCard(
                   color: c.canvas,
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    t.note.isEmpty ? 'No notes added' : '“${t.note}”',
-                    style: small.copyWith(
-                      color: c.secondaryInk,
-                      fontStyle: FontStyle.italic,
+                  padding: const EdgeInsets.all(12),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      t.note.isEmpty ? 'No note added.' : t.note,
+                      style: AppTypography.bodySmall.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
-          if (t.hasReceipt) ...[
+          if (t.tags.isNotEmpty) ...[
+            const SizedBox(height: 16),
             FinanceCard(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Wrap(
+                spacing: 8,
                 children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.receipt_long_outlined,
-                        color: c.primary,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(child: heading('Receipt & Items')),
-                      StatusBadge(
-                        'Demo receipt',
-                        foreground: c.positive,
-                        background: c.soft(c.positive, AppColors.positiveSoft),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  FinanceCard(
-                    color: c.canvas,
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 56,
-                          color: c.mutedSurface,
-                          child: Icon(
-                            Icons.receipt_long,
-                            color: c.mutedInk,
-                            size: 32,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('1 receipt attached', style: small),
-                              Text(
-                                reviewedReceipt == null
-                                    ? 'Fixture preview • ${jollibee ? '3 items' : 'Total only'}'
-                                    : 'Reviewed demo • ${reviewedReceipt.items.length} items',
-                                style: AppTypography.labelSmall.copyWith(
-                                  color: c.mutedInk,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          MoneyFormatter.php(t.amount),
-                          style: AppTypography.numericMedium,
-                        ),
-                      ],
+                  for (final tag in t.tags)
+                    StatusBadge(
+                      '#$tag',
+                      foreground: c.accent,
+                      background: c.soft(c.accent, AppColors.accentSoft),
+                      pill: false,
                     ),
-                  ),
-                  if (reviewedReceipt != null) ...[
-                    const SizedBox(height: 12),
-                    Divider(color: c.border),
-                    for (final item in reviewedReceipt.items)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                '${item.quantity}x ${item.name}',
-                                style: small,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Text(MoneyFormatter.php(item.total), style: small),
-                          ],
-                        ),
-                      ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Sample included VAT: ${MoneyFormatter.php(reviewedReceipt.includedVat)}',
-                      style: small,
-                    ),
-                  ],
-                  if (jollibee) ...[
-                    const SizedBox(height: 12),
-                    Divider(color: c.border),
-                    for (final (name, amount) in [
-                      ('1x 1pc Spicy Chickenjoy w/ Rice', 11500),
-                      ('1x Jolly Spaghetti w/ Drink', 15000),
-                      ('1x Large Peach Mango Pie', 6000),
-                    ])
-                      Padding(
-                        padding: const EdgeInsets.only(top: 6),
-                        child: Row(
-                          children: [
-                            Expanded(child: Text(name, style: small)),
-                            Text(MoneyFormatter.php(amount), style: small),
-                          ],
-                        ),
-                      ),
-                  ],
                 ],
               ),
             ),
-            const SizedBox(height: 16),
           ],
-          FinanceCard(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        heading('Expense Sharing'),
-                        Text(
-                          'Split total or assign specific line items',
-                          style: small,
-                        ),
-                      ],
-                    ),
-                    TextButton.icon(
-                      onPressed: () => _demoInfo(
-                        context,
-                        'Split preview',
-                        '${MoneyFormatter.php(t.amount)} shared equally among 3 people:\n${MoneyFormatter.php(t.amount ~/ 3 + t.amount % 3)} for you and ${MoneyFormatter.php(t.amount ~/ 3)} each for two companions.\n\nThis preview creates no payment or debt.',
-                      ),
-                      icon: const Icon(Icons.call_split, size: 16),
-                      label: const Text('Split Bill'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    Text('Quick add:', style: AppTypography.labelSmall),
-                    for (final name in ['Mark', 'Camille', 'JR'])
-                      StatusBadge(
-                        name,
-                        foreground: c.secondaryInk,
-                        background: c.mutedSurface,
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Divider(color: c.border),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    heading('Tags'),
-                    TextButton(
-                      onPressed: () async {
-                        final tag = await _textInput(context, 'New tag', '');
-                        if (tag != null &&
-                            tag.isNotEmpty &&
-                            !t.tags.contains(tag)) {
-                          ref
-                              .read(demoLedgerProvider.notifier)
-                              .update(t.copyWith(tags: [...t.tags, tag]));
-                        }
-                      },
-                      child: const Text('+ New Tag'),
-                    ),
-                  ],
-                ),
-                Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    for (final (index, tag) in t.tags.indexed)
-                      StatusBadge(
-                        '#$tag',
-                        foreground: index == 0
-                            ? c.accent
-                            : index == 1
-                            ? c.secondary
-                            : c.secondaryInk,
-                        background: index == 0
-                            ? c.soft(c.accent, AppColors.accentSoft)
-                            : index == 1
-                            ? c.soft(c.secondary, AppColors.secondarySoft)
-                            : c.mutedSurface,
-                        pill: false,
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 24),
-          OutlinedButton.icon(
-            onPressed: () => _editNotes(context, ref, t),
-            icon: const Icon(Icons.edit_outlined, size: 18),
-            label: Text(synced ? 'Edit Details' : 'Edit Notes'),
-          ),
-          const SizedBox(height: 10),
-          Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              OutlinedButton.icon(
-                onPressed: () => ref
-                    .read(demoLedgerProvider.notifier)
-                    .update(
-                      t.copyWith(excludedFromBudget: !t.excludedFromBudget),
+          if (t.source == TransactionSource.manual)
+            OutlinedButton.icon(
+              onPressed: () => Navigator.of(context).push<void>(
+                MaterialPageRoute(
+                  builder: (_) => AddExpenseScreen(transaction: t),
+                ),
+              ),
+              icon: const Icon(Icons.edit_outlined),
+              label: const Text('Edit Details'),
+            ),
+          if (t.kind == TransactionKind.expense) ...[
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () async {
+                try {
+                  await ref
+                      .read(ledgerProvider.notifier)
+                      .update(
+                        t.copyWith(excludedFromBudget: !t.excludedFromBudget),
+                      );
+                } catch (_) {}
+              },
+              child: Text(
+                t.excludedFromBudget
+                    ? 'Include in Budget'
+                    : 'Exclude from Budget',
+              ),
+            ),
+          ],
+          const SizedBox(height: 8),
+          TextButton(
+            onPressed: () async {
+              final confirmed = await showDialog<bool>(
+                context: context,
+                builder: (c) => AlertDialog(
+                  title: const Text('Delete transaction?'),
+                  content: const Text(
+                    'Balances, budgets and analytics will be recalculated. This cannot be undone.',
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(c, false),
+                      child: const Text('Cancel'),
                     ),
-                icon: Icon(
-                  t.excludedFromBudget
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
-                  size: 16,
+                    TextButton(
+                      onPressed: () => Navigator.pop(c, true),
+                      child: const Text('Delete'),
+                    ),
+                  ],
                 ),
-                label: Text(
-                  t.excludedFromBudget
-                      ? 'Include in Budget'
-                      : 'Exclude from Budget',
-                ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => _demoInfo(
-                  context,
-                  'Report Issue',
-                  'This is fixture data. No report is sent. For now, use category and note edits to review the demo record.',
-                ),
-                icon: Icon(Icons.flag_outlined, size: 16, color: c.danger),
-                label: Text('Report Issue', style: TextStyle(color: c.danger)),
-              ),
-            ],
+              );
+              if (confirmed != true) return;
+              try {
+                await ref
+                    .read(financeControllerProvider.notifier)
+                    .deleteTransaction(id);
+                if (context.mounted) context.go('/transactions');
+              } catch (_) {}
+            },
+            child: Text(
+              'Delete transaction',
+              style: TextStyle(color: c.danger),
+            ),
           ),
           const SizedBox(height: 16),
           Text(
-            persisted
-                ? (ref.watch(demoPersistenceProvider) == DemoSaveStatus.saved
-                      ? 'Demo activity • saved on this device'
-                      : 'Demo activity • local save pending')
-                : 'Demo data • changes last for this session',
-            style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
+            'Saved on this device',
             textAlign: TextAlign.center,
+            style: AppTypography.bodySmall,
           ),
-          const SizedBox(height: 24),
         ],
       ),
     );
   }
 }
 
-class _AnnotationDialog extends StatefulWidget {
-  const _AnnotationDialog({
-    required this.title,
-    required this.value,
-    required this.multiline,
-  });
-  final String title;
-  final String value;
-  final bool multiline;
+class _Info extends StatelessWidget {
+  const _Info(this.label, this.value);
+  final String label, value;
   @override
-  State<_AnnotationDialog> createState() => _AnnotationDialogState();
-}
-
-class _AnnotationDialogState extends State<_AnnotationDialog> {
-  late final controller = TextEditingController(text: widget.value);
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(widget.title),
-    content: TextField(
-      key: const ValueKey('detail-input'),
-      controller: controller,
-      autofocus: true,
-      maxLines: widget.multiline ? 4 : 1,
-      maxLength: widget.multiline ? 500 : 40,
-      decoration: InputDecoration(labelText: widget.title),
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      spacing: 16,
+      runSpacing: 4,
+      children: [
+        Text(label, style: AppTypography.labelMedium),
+        Text(value, style: AppTypography.bodySmall),
+      ],
     ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
-      ),
-      TextButton(
-        onPressed: () => Navigator.pop(context, controller.text.trim()),
-        child: const Text('Save'),
-      ),
-    ],
   );
 }

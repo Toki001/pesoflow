@@ -46,7 +46,7 @@ abstract class TransactionRecord with _$TransactionRecord {
     required DateTime occurredAt,
     required TransactionKind kind,
     required TransactionCategory category,
-    @Default('GCash') String account,
+    @Default('') String account,
     String? accountId,
     String? destinationAccount,
     String? destinationAccountId,

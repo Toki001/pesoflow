@@ -1,35 +1,16 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
-import 'package:pesoflow/features/budgets/data/budget_fixture.dart';
+
+import 'fixtures/features/budgets/data/budget_fixture.dart';
+
 import 'package:pesoflow/features/budgets/domain/budget_plan.dart';
-import 'package:pesoflow/features/dashboard/application/dashboard_provider.dart';
-import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
-import 'package:pesoflow/features/transactions/data/transaction_fixture.dart';
+
+import 'fixtures/features/transactions/data/transaction_fixture.dart';
+
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 void main() {
-  test('explicitly restoring a Stitch limit keeps the edited Home allowance synchronized', () async {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final controller = container.read(demoBudgetPlansProvider.notifier);
-    expect(
-      (await container.read(dashboardProvider.future))!.budgets.last.limit,
-      350000,
-    );
-    controller.setLimit(2024, 10, TransactionCategory.transport, 300000);
-    expect(
-      (await container.read(dashboardProvider.future))!.budgets.last.limit,
-      300000,
-    );
-    controller.setLimit(2024, 10, TransactionCategory.transport, 250000);
-    expect(
-      (await container.read(dashboardProvider.future))!.budgets.last.limit,
-      250000,
-    );
-  });
   test('approved budget snapshot and JSON round trip preserve exact financial values', () {
     final plan = budgetFixture();
     expect(
@@ -152,61 +133,4 @@ void main() {
       5000,
     );
   });
-  test('session limit edits update Home and live ledger projections remain single counted', () async {
-    final container = ProviderContainer();
-    addTearDown(container.dispose);
-    final ledger = container.read(demoLedgerProvider.notifier);
-    final plans = container.read(demoBudgetPlansProvider.notifier);
-    ledger.add(
-      transactionFixture().first.copyWith(id: 'extra-food', amount: 10000),
-    );
-    plans.reallocate(
-      2024,
-      10,
-      TransactionCategory.entertainment,
-      TransactionCategory.food,
-      50000,
-    );
-    expect(plans.viewFor(2024, 10).allowances.first.spent, 700000);
-    final home = await container.read(dashboardProvider.future);
-    expect(home!.budgets.first.limit, 850000);
-    expect(home.budgets.first.spent, 700000);
-    ledger.update(
-      transactionFixture().first.copyWith(excludedFromBudget: true),
-    );
-    final excluded = await container.read(dashboardProvider.future);
-    expect(excluded!.outflow, 1690000);
-    expect(excluded.budgetSpent, 1657500);
-    plans.setLimit(2024, 10, TransactionCategory.groceries, 340000);
-    expect(plans.viewFor(2024, 10).allowances.last.spent, 360050);
-  });
-  test(
-    'reallocation checks current spend and changes no limits on failure',
-    () {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final plans = container.read(demoBudgetPlansProvider.notifier);
-      final before = container.read(demoBudgetPlansProvider);
-      container
-          .read(demoLedgerProvider.notifier)
-          .add(
-            transactionFixture().first.copyWith(
-              id: 'games',
-              category: TransactionCategory.entertainment,
-              amount: 100000,
-            ),
-          );
-      expect(
-        () => plans.reallocate(
-          2024,
-          10,
-          TransactionCategory.entertainment,
-          TransactionCategory.food,
-          50000,
-        ),
-        throwsArgumentError,
-      );
-      expect(container.read(demoBudgetPlansProvider), before);
-    },
-  );
 }

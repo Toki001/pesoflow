@@ -1,20 +1,21 @@
+import 'package:pesoflow/core/time/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../notifications/presentation/widgets/notification_button.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
-import '../../../core/widgets/category_icon.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../application/analytics_provider.dart';
-import '../domain/analytics_report.dart';
-import 'widgets/analytics_controls.dart';
-import 'widgets/expense_hero.dart';
-import 'widgets/spending_trajectory.dart';
-import 'widgets/category_breakdown.dart';
-import 'widgets/top_merchants.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/features/notifications/presentation/widgets/notification_button.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/category_icon.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/features/analytics/application/analytics_provider.dart';
+import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
+import 'package:pesoflow/features/analytics/presentation/widgets/analytics_controls.dart';
+import 'package:pesoflow/features/analytics/presentation/widgets/expense_hero.dart';
+import 'package:pesoflow/features/analytics/presentation/widgets/spending_trajectory.dart';
+import 'package:pesoflow/features/analytics/presentation/widgets/category_breakdown.dart';
+import 'package:pesoflow/features/analytics/presentation/widgets/top_merchants.dart';
 
 class AnalyticsScreen extends ConsumerStatefulWidget {
   const AnalyticsScreen({super.key});
@@ -52,14 +53,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             Text('Analytics summary', style: AppTypography.headlineSmall),
             const SizedBox(height: 12),
             SelectableText(
-              'PesoFlow demo · ${DateFormat('MMM d, yyyy').format(report.selection.start)} – ${DateFormat('MMM d, yyyy').format(report.selection.end.subtract(const Duration(days: 1)))}\n'
+              'PesoFlow · ${DateFormat('MMM d, yyyy').format(report.selection.start)} – ${DateFormat('MMM d, yyyy').format(report.selection.end.subtract(const Duration(days: 1)))}\n'
               'Net expenses: ${MoneyFormatter.php(report.totalExpense)}\nDaily average: ${MoneyFormatter.php(report.dailyAverage)}\n'
               '${report.categories.map((c) => '${analyticsCategoryName(c.category)}: ${MoneyFormatter.php(c.amount)}').join('\n')}',
               style: AppTypography.bodyMedium,
             ),
             const SizedBox(height: 16),
             const Text(
-              'This is a selectable demo summary. File export and system sharing are not available yet.',
+              'This is a selectable summary. File export and system sharing are not available yet.',
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -229,7 +230,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        'Please try again. Your demo records are still available.',
+                        'Please try again. Your saved records are still available.',
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
@@ -261,19 +262,19 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'Choose another period to explore your demo expenses.',
+                              'Add an expense or choose another period to view your spending.',
                               textAlign: TextAlign.center,
                             ),
                             TextButton(
                               onPressed: () {
                                 ref
                                     .read(analyticsSelectionProvider.notifier)
-                                    .selectDate(DateTime(2024, 10, 24));
+                                    .selectDate(ref.read(clockProvider)());
                                 ref
                                     .read(analyticsSelectionProvider.notifier)
                                     .selectPeriod(AnalyticsPeriod.month);
                               },
-                              child: const Text('View October demo'),
+                              child: const Text('View this month'),
                             ),
                           ],
                         ),
@@ -298,19 +299,13 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           ),
                           const SizedBox(height: 16),
                           TopMerchants(report),
-                          if (!report.selection.includesOctoberSnapshot ||
-                              report.selection.period ==
-                                  AnalyticsPeriod.year) ...[
-                            const SizedBox(height: 16),
-                            Text(
-                              report.selection.includesOctoberSnapshot
-                                  ? 'Includes the October demo aggregate and available dated records. Other months may be incomplete.'
-                                  : 'Based on available dated demo records; earlier history is not included.',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: c.mutedInk,
-                              ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Based on your saved, posted transactions up to today.',
+                            style: AppTypography.bodySmall.copyWith(
+                              color: c.mutedInk,
                             ),
-                          ],
+                          ),
                         ],
                       ),
                     ),
@@ -334,9 +329,8 @@ class _Intelligence extends StatelessWidget {
         : below >= 0
         ? 'Pacing Well'
         : 'Review Your Pace';
-    final copy = report.referenceInsight
-        ? 'Food & Dining decreased by ₱1,200 compared to last month, offsetting a slight rise in Transportation.'
-        : 'Your net expenses are ${MoneyFormatter.php(report.totalExpense)} this period. ${report.comparison.change <= 0 ? 'Spending is lower or unchanged from the previous period.' : 'Spending is higher than the previous period.'}';
+    final copy =
+        'Your net expenses are ${MoneyFormatter.php(report.totalExpense)} this period. ${report.comparison.change <= 0 ? 'Spending is lower or unchanged from the previous period.' : 'Spending is higher than the previous period.'}';
     return FinanceCard(
       color: c.insight,
       borderColor: c.accentBorder,

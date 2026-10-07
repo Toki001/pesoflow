@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_spacing.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../../../core/widgets/money_text.dart';
-import '../../../../core/widgets/status_badge.dart';
-import '../../domain/dashboard.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/money_text.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/features/dashboard/domain/dashboard.dart';
 
 class BalanceHero extends StatelessWidget {
   const BalanceHero({required this.data, super.key});
@@ -30,9 +30,12 @@ class BalanceHero extends StatelessWidget {
           Text.rich(
             TextSpan(
               children: [
-                TextSpan(text: '₱ ', style: AppTypography.numericLarge),
                 TextSpan(
-                  text: MoneyFormatter.php(data.balance).substring(1),
+                  text: data.balance < 0 ? '-₱ ' : '₱ ',
+                  style: AppTypography.numericLarge,
+                ),
+                TextSpan(
+                  text: MoneyFormatter.php(data.balance.abs()).substring(1),
                   style: AppTypography.numericXL,
                 ),
               ],
@@ -50,10 +53,12 @@ class BalanceHero extends StatelessWidget {
               runSpacing: 8,
               children: [
                 StatusBadge(
-                  '${MoneyFormatter.php(data.monthChange, decimals: false)} (${data.monthChangePercent}%) this month',
-                  foreground: c.positive,
+                  '${MoneyFormatter.php(data.monthChange, decimals: false)} net flow this month',
+                  foreground: data.monthChange < 0 ? c.warning : c.positive,
                   background: c.soft(c.positive, AppColors.positiveSoft),
-                  icon: Icons.arrow_upward,
+                  icon: data.monthChange < 0
+                      ? Icons.arrow_downward
+                      : Icons.arrow_upward,
                 ),
                 Text(
                   'Across ${data.accountCount} accounts',
@@ -75,7 +80,7 @@ class FlowSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final metrics = [
-      ('Inflow', data.inflow, 'Oct salary', c.positive, c.positive, true),
+      ('Inflow', data.inflow, 'This month', c.positive, c.positive, true),
       (
         'Outflow',
         -data.outflow,
@@ -87,7 +92,7 @@ class FlowSummary extends StatelessWidget {
       (
         'Savings',
         data.savings,
-        '${data.savingsRate}% rate',
+        data.savingsRate == '—' ? 'No income yet' : '${data.savingsRate}% rate',
         c.primary,
         c.secondary,
         false,

@@ -1,12 +1,12 @@
-import '../../../core/formatting/money_formatter.dart';
-import 'transaction.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 enum TransactionFilter { all, expenses, income, transfers, pending }
 
 class TransactionQuery {
   const TransactionQuery({
-    this.year = 2024,
-    this.month = 10,
+    required this.year,
+    required this.month,
     this.search = '',
     this.filter = TransactionFilter.all,
     this.accountId,

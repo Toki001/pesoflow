@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../notifications/presentation/widgets/notification_button.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/status_badge.dart';
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../transactions/data/transaction_fixture.dart';
-import '../../transactions/domain/transaction.dart';
-import '../application/budgets_provider.dart';
-import '../domain/budget_plan.dart';
-import 'budget_editor.dart';
-import 'widgets/budget_category_card.dart';
-import 'widgets/budget_hero.dart';
-import 'widgets/budget_reallocation_card.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/features/notifications/presentation/widgets/notification_button.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
+import 'package:pesoflow/features/budgets/domain/budget_plan.dart';
+import 'package:pesoflow/features/budgets/presentation/budget_editor.dart';
+import 'package:pesoflow/features/budgets/presentation/widgets/budget_category_card.dart';
+import 'package:pesoflow/features/budgets/presentation/widgets/budget_hero.dart';
+import 'package:pesoflow/features/budgets/presentation/widgets/budget_reallocation_card.dart';
 
 class BudgetsScreen extends ConsumerStatefulWidget {
   const BudgetsScreen({super.key});
@@ -90,8 +90,8 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
     );
     if (apply != true || !mounted) return;
     try {
-      ref
-          .read(demoBudgetPlansProvider.notifier)
+      await ref
+          .read(budgetPlansProvider.notifier)
           .reallocate(
             plan.year,
             plan.month,
@@ -99,7 +99,8 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
             TransactionCategory.food,
             50000,
           );
-    } on ArgumentError {
+    } catch (_) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
@@ -173,9 +174,21 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                                       style: AppTypography.headlineLarge,
                                     ),
                                     StatusBadge(
-                                      period.year == 2024 && period.month == 10
+                                      period.year ==
+                                                  ref
+                                                      .read(clockProvider)()
+                                                      .year &&
+                                              period.month ==
+                                                  ref
+                                                      .read(clockProvider)()
+                                                      .month
                                           ? 'Active'
-                                          : period.isBefore(DateTime(2024, 10))
+                                          : period.isBefore(
+                                              DateTime(
+                                                ref.read(clockProvider)().year,
+                                                ref.read(clockProvider)().month,
+                                              ),
+                                            )
                                           ? 'Past'
                                           : 'Upcoming',
                                       foreground: c.primary,
@@ -198,7 +211,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                                       ),
                                     ),
                                     Text(
-                                      '•  ${plan?.daysLeft(demoClock) ?? 0} days left',
+                                      '•  ${plan?.daysLeft(ref.watch(clockProvider)()) ?? 0} days left',
                                       style: AppTypography.bodySmall.copyWith(
                                         color: c.mutedInk,
                                       ),
@@ -259,7 +272,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                       if (plan.monthlyLimit > 0) ...[
                         BudgetHero(
                           plan: plan,
-                          clock: demoClock,
+                          clock: ref.watch(clockProvider)(),
                           onEdit: () => showBudgetEditor(context, plan),
                         ),
                         const SizedBox(height: 16),
@@ -384,7 +397,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                           BudgetCategoryCard(
                             allowance: allowance,
                             plan: plan,
-                            clock: demoClock,
+                            clock: ref.watch(clockProvider)(),
                             onEdit: () => showBudgetEditor(
                               context,
                               plan,
@@ -396,7 +409,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                       ],
                       const SizedBox(height: 16),
                       Text(
-                        'Demo budgets • ${ref.watch(demoPersistenceEnabledProvider) ? 'plans are saved on this device' : 'changes last for this session'}.\nNext period begins ${DateFormat('MMMM d, yyyy').format(DateTime(plan.year, plan.month + 1))}.',
+                        'Monthly limits repeat automatically. Spending comes from your saved transactions.',
                         style: AppTypography.bodySmall.copyWith(
                           color: c.mutedInk,
                         ),

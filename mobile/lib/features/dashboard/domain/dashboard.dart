@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../transactions/domain/transaction.dart';
-export '../../transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+export 'package:pesoflow/features/transactions/domain/transaction.dart';
 
 part 'dashboard.freezed.dart';
 part 'dashboard.g.dart';

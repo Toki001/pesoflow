@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../application/transactions_provider.dart';
-import '../data/transaction_fixture.dart';
-import '../domain/transaction.dart';
-import '../domain/month_snapshot.dart';
-import '../domain/transaction_query.dart';
-import 'transaction_list_row.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/domain/month_snapshot.dart';
+import 'package:pesoflow/features/transactions/domain/transaction_query.dart';
+import 'package:pesoflow/features/transactions/presentation/transaction_list_row.dart';
 
 class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
@@ -53,7 +53,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   }
 
   Future<void> chooseFilter({required bool account}) async {
-    final records = ref.read(demoLedgerProvider);
+    final records = ref.read(ledgerProvider);
     final query = ref.read(transactionQueryProvider);
     final accountOptions = <String, String>{};
     for (final t in records) {
@@ -144,9 +144,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                   onPressed: () => showDialog<void>(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Demo transactions'),
+                      title: const Text('Transaction export'),
                       content: const Text(
-                        'Export will be available when local transaction storage is implemented.',
+                        'File export is not available yet. Your transactions are saved on this device.',
                       ),
                       actions: [
                         TextButton(
@@ -177,10 +177,15 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                     final filtered = filterTransactions(records, query);
                     final groups = groupTransactions(filtered);
                     final snapshot = MonthSnapshot.fromLedger(
-                      records,
+                      records
+                          .where(
+                            (t) => !t.occurredAt.isAfter(
+                              ref.read(clockProvider)(),
+                            ),
+                          )
+                          .toList(),
                       query.year,
                       query.month,
-                      baseline: transactionFixture(),
                     );
                     final spent = snapshot.spent;
                     final income = snapshot.income;
@@ -342,7 +347,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                 label:
                                     accountLabel(
                                       query.accountId,
-                                      ref.watch(demoLedgerProvider),
+                                      ref.watch(ledgerProvider),
                                     ) ??
                                     'Accounts (GCash, BDO, Maya)',
                                 selected: query.accountId != null,
@@ -382,7 +387,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                 TextButton(
                                   onPressed: () {
                                     search.clear();
-                                    setQuery(const TransactionQuery());
+                                    setQuery(
+                                      TransactionQuery(
+                                        year: query.year,
+                                        month: query.month,
+                                      ),
+                                    );
                                   },
                                   child: const Text('Reset filters'),
                                 ),
@@ -439,7 +449,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   }
 
   String _dateLabel(DateTime date) {
-    final day = DateTime(demoClock.year, demoClock.month, demoClock.day);
+    final day = DateUtils.dateOnly(ref.read(clockProvider)());
     final prefix = date == day
         ? 'Today — '
         : date == day.subtract(const Duration(days: 1))

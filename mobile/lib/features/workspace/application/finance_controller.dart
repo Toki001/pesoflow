@@ -2,17 +2,17 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/identity/new_id.dart';
-import '../../../core/time/clock.dart';
-import '../../accounts/domain/financial_account.dart';
-import '../../budgets/domain/spending_budget.dart';
-import '../../notifications/domain/evaluate_notices.dart';
-import '../../receipts/domain/receipt_draft.dart';
-import '../../settings/domain/user_preferences.dart';
-import '../../subscriptions/domain/subscription_plan.dart';
-import '../../transactions/domain/categorization.dart';
-import '../../transactions/domain/transaction.dart';
-import '../domain/finance_workspace.dart';
+import 'package:pesoflow/core/identity/new_id.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/accounts/domain/financial_account.dart';
+import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
+import 'package:pesoflow/features/notifications/domain/evaluate_notices.dart';
+import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
+import 'package:pesoflow/features/settings/domain/user_preferences.dart';
+import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
+import 'package:pesoflow/features/transactions/domain/categorization.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
 
 final financeRepositoryProvider = Provider<FinanceRepository>(
   (ref) =>
@@ -227,6 +227,45 @@ class FinanceController extends Notifier<FinanceState> {
   });
   Future<void> deleteBudget(String id) =>
       _commit((w) => w.copyWith(budgets: w.budgets.where((b) => b.id != id)));
+
+  /// Change both allowances in one durable write, validating current spending.
+  Future<void> reallocateBudgets(
+    String fromId,
+    String toId,
+    int amount,
+    DateTime date,
+  ) => _commit((w) {
+    final from = w.budgets.firstWhere((b) => b.id == fromId);
+    final to = w.budgets.firstWhere((b) => b.id == toId);
+    final progress = evaluateBudget(
+      from,
+      w.ledger,
+      ref.read(clockProvider)(),
+      selectedDate: date,
+    );
+    if (fromId == toId ||
+        amount <= 0 ||
+        !from.enabled ||
+        !to.enabled ||
+        from.period != to.period ||
+        from.category == null ||
+        to.category == null ||
+        from.limit <= amount ||
+        from.limit - progress.projectedSpend < amount) {
+      throw ArgumentError('There is not enough projected allowance to move.');
+    }
+    return w.copyWith(
+      budgets: [
+        for (final b in w.budgets)
+          if (b.id == fromId)
+            b.copyWith(limit: b.limit - amount)
+          else if (b.id == toId)
+            b.copyWith(limit: b.limit + amount)
+          else
+            b,
+      ],
+    );
+  });
   Future<void> saveSubscription(SubscriptionPlan plan) => _commit(
     (w) => w.copyWith(
       subscriptions: [

@@ -1,110 +1,142 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pesoflow/core/identity/new_id.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
+import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/budgets/domain/budget_plan.dart';
+import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
 
-import '../../demo_workspace/application/demo_workspace_providers.dart';
-import '../../transactions/application/transactions_provider.dart';
-import '../../transactions/data/transaction_fixture.dart';
-import '../../transactions/domain/transaction.dart';
-import '../data/budget_fixture.dart';
-import '../domain/budget_plan.dart';
-
-class DemoBudgetPlans extends Notifier<Map<String, BudgetPlan>> {
+class BudgetPlans extends Notifier<Map<String, BudgetPlan>> {
   @override
   Map<String, BudgetPlan> build() {
-    final fixture = budgetFixture();
-    return Map.unmodifiable(
-      ref.watch(initialDemoWorkspaceProvider)?.budgets ??
-          {fixture.key: fixture},
+    final date = ref.watch(budgetPeriodProvider);
+    ref.watch(workspaceProvider);
+    final plan = viewFor(date.year, date.month);
+    return {plan.key: plan};
+  }
+
+  BudgetPlan viewFor(int year, int month) {
+    final w = ref.read(workspaceProvider);
+    final now = ref.read(clockProvider)();
+    final date = DateTime(year, month);
+    final plans = w.budgets
+        .where(
+          (b) =>
+              b.enabled &&
+              b.period == AnalyticsPeriod.month &&
+              !date.isBefore(DateTime(b.startDate.year, b.startDate.month)),
+        )
+        .toList();
+    final overall = plans.where((b) => b.category == null);
+    final progress = overall.isEmpty
+        ? null
+        : evaluateBudget(overall.first, w.ledger, now, selectedDate: date);
+    return BudgetPlan(
+      year: year,
+      month: month,
+      monthlyLimit: progress?.budget.limit ?? 0,
+      spent: progress?.spent ?? 0,
+      projectedAdditional: progress == null
+          ? null
+          : progress.projectedSpend - progress.spent,
+      allowances: [
+        for (final b in plans.where((b) => b.category != null))
+          () {
+            final p = evaluateBudget(b, w.ledger, now, selectedDate: date);
+            return BudgetAllowance(
+              category: b.category!,
+              description: 'Monthly spending allowance',
+              limit: b.limit,
+              spent: p.spent,
+              projectedAdditional: p.projectedSpend - p.spent,
+            );
+          }(),
+      ],
     );
   }
 
-  void restore(Map<String, BudgetPlan> plans) =>
-      state = Map.unmodifiable(plans);
-
-  BudgetPlan baseFor(int year, int month) =>
-      state['$year-$month'] ??
-      BudgetPlan(
-        year: year,
-        month: month,
-        monthlyLimit: 0,
-        allowances: const [],
-      );
-  BudgetPlan viewFor(int year, int month) => projectBudgetLedger(
-    baseFor(year, month),
-    ref.read(demoLedgerProvider),
-    transactionFixture(),
-  );
-  void setLimit(int year, int month, TransactionCategory? category, int limit) {
-    final base = baseFor(year, month);
-    // Validate against the base plan; ledger projection must never be persisted twice.
-    var next = base.withLimit(category, limit);
-    if (category != null &&
-        !base.allowances.any((a) => a.category == category)) {
-      final knownSpend = transactionFixture()
-          .where(
-            (t) =>
-                t.category == category &&
-                t.occurredAt.year == year &&
-                t.occurredAt.month == month,
+  Future<void> setLimit(
+    int year,
+    int month,
+    TransactionCategory? category,
+    int limit,
+  ) async {
+    final existing = ref
+        .read(workspaceProvider)
+        .budgets
+        .where(
+          (b) => b.period == AnalyticsPeriod.month && b.category == category,
+        );
+    final b = existing.isEmpty
+        ? SpendingBudget(
+            id: newId(),
+            name: category == null ? 'Monthly budget' : categoryLabel(category),
+            limit: limit,
+            period: AnalyticsPeriod.month,
+            startDate: DateTime(year, month),
+            category: category,
           )
-          .fold<int>(0, (sum, t) => sum + t.budgetImpact);
-      next = next.copyWith(
-        allowances: [
-          for (final a in next.allowances)
-            if (a.category == category) a.copyWith(spent: knownSpend) else a,
-        ],
-      );
-    }
-    state = Map.unmodifiable({...state, next.key: next});
+        : existing.first.copyWith(limit: limit, enabled: true);
+    await ref.read(financeControllerProvider.notifier).saveBudget(b);
   }
 
-  void reallocate(
+  Future<void> remove(TransactionCategory? category) async {
+    final matches = ref
+        .read(workspaceProvider)
+        .budgets
+        .where(
+          (b) => b.period == AnalyticsPeriod.month && b.category == category,
+        );
+    if (matches.isNotEmpty) {
+      await ref
+          .read(financeControllerProvider.notifier)
+          .deleteBudget(matches.first.id);
+    }
+  }
+
+  Future<void> reallocate(
     int year,
     int month,
     TransactionCategory from,
     TransactionCategory to,
     int amount,
-  ) {
-    final adjusted = viewFor(year, month).reallocate(from, to, amount);
-    final limits = {for (final a in adjusted.allowances) a.category: a.limit};
-    final base = baseFor(year, month);
-    final next = base.copyWith(
-      editedCategories: adjusted.editedCategories,
-      allowances: [
-        for (final a in base.allowances) a.copyWith(limit: limits[a.category]!),
-      ],
-    );
-    state = Map.unmodifiable({...state, next.key: next});
+  ) async {
+    final budgets = ref.read(workspaceProvider).budgets;
+    String idFor(TransactionCategory c) => budgets
+        .firstWhere((b) => b.category == c && b.period == AnalyticsPeriod.month)
+        .id;
+    await ref
+        .read(financeControllerProvider.notifier)
+        .reallocateBudgets(
+          idFor(from),
+          idFor(to),
+          amount,
+          DateTime(year, month),
+        );
   }
 }
 
-final demoBudgetPlansProvider =
-    NotifierProvider<DemoBudgetPlans, Map<String, BudgetPlan>>(
-      DemoBudgetPlans.new,
-    );
+final budgetPlansProvider =
+    NotifierProvider<BudgetPlans, Map<String, BudgetPlan>>(BudgetPlans.new);
 
 class BudgetPeriodController extends Notifier<DateTime> {
   @override
-  DateTime build() => DateTime(2024, 10);
+  DateTime build() {
+    final now = ref.read(clockProvider)();
+    return DateTime(now.year, now.month);
+  }
+
   void select(DateTime date) => state = DateTime(date.year, date.month);
 }
 
 final budgetPeriodProvider = NotifierProvider<BudgetPeriodController, DateTime>(
   BudgetPeriodController.new,
 );
-
 final budgetsProvider = FutureProvider<BudgetPlan>((ref) async {
   final date = ref.watch(budgetPeriodProvider);
-  final plans = ref.watch(demoBudgetPlansProvider);
-  final ledger = ref.watch(demoLedgerProvider);
-  final base =
-      plans['${date.year}-${date.month}'] ??
-      BudgetPlan(
-        year: date.year,
-        month: date.month,
-        monthlyLimit: 0,
-        allowances: const [],
-      );
-  return projectBudgetLedger(base, ledger, transactionFixture());
+  ref.watch(budgetPlansProvider);
+  return ref.read(budgetPlansProvider.notifier).viewFor(date.year, date.month);
 }, retry: (_, _) => null);
 
 class DismissedBudgetSuggestions extends Notifier<Set<String>> {
@@ -117,17 +149,16 @@ final dismissedBudgetSuggestionsProvider =
     NotifierProvider<DismissedBudgetSuggestions, Set<String>>(
       DismissedBudgetSuggestions.new,
     );
-
 bool canSuggestReallocation(BudgetPlan plan) {
-  final food = plan.allowances.where(
-    (a) => a.category == TransactionCategory.food,
-  );
-  final leisure = plan.allowances.where(
-    (a) => a.category == TransactionCategory.entertainment,
-  );
-  return food.isNotEmpty &&
-      leisure.isNotEmpty &&
-      food.single.projectedOverage > 0 &&
-      leisure.single.remaining >= 50000 &&
-      leisure.single.limit > 50000;
+  final from = plan.allowances
+      .where((a) => a.category == TransactionCategory.entertainment)
+      .firstOrNull;
+  final to = plan.allowances
+      .where((a) => a.category == TransactionCategory.food)
+      .firstOrNull;
+  return from != null &&
+      to != null &&
+      to.atRisk &&
+      from.limit > 50000 &&
+      from.limit - (from.projectedEndTotal ?? from.spent) >= 50000;
 }

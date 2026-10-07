@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_spacing.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/formatting/money_formatter.dart';
-import '../../../../core/widgets/category_icon.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../../../core/widgets/status_badge.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/formatting/money_formatter.dart';
+import 'package:pesoflow/core/widgets/category_icon.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
 
 class SpendingInsight extends StatelessWidget {
-  const SpendingInsight({required this.extraSavings, super.key});
+  const SpendingInsight({
+    required this.extraSavings,
+    this.hasBudget = false,
+    super.key,
+  });
   final int extraSavings;
+  final bool hasBudget;
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -43,7 +48,9 @@ class SpendingInsight extends StatelessWidget {
                       ),
                     ),
                     StatusBadge(
-                      'On Track',
+                      hasBudget
+                          ? (extraSavings >= 0 ? 'Within plan' : 'Above plan')
+                          : 'Get started',
                       foreground: c.secondaryInk,
                       background: c.surface,
                       pill: false,
@@ -57,20 +64,10 @@ class SpendingInsight extends StatelessWidget {
                       color: c.secondaryInk,
                     ),
                     children: [
-                      const TextSpan(text: "You're spending "),
                       TextSpan(
-                        text: '18% less on Dining Out',
-                        style: AppTypography.labelMedium.copyWith(color: c.ink),
-                      ),
-                      const TextSpan(
-                        text: ' compared to last month. On track to save an extra ',
-                      ),
-                      TextSpan(
-                        text:
-                            '${MoneyFormatter.php(extraSavings, decimals: false)}.',
-                        style: AppTypography.labelMedium.copyWith(
-                          color: c.positive,
-                        ),
+                        text: !hasBudget
+                            ? 'Create a monthly budget to see a spending pace estimate based on your records.'
+                            : 'At your recorded pace, projected spending is ${MoneyFormatter.php(extraSavings.abs())} ${extraSavings >= 0 ? 'below' : 'above'} your monthly limit. Estimates change as you add transactions.',
                       ),
                     ],
                   ),

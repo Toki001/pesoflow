@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../application/notifications_provider.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/features/notifications/application/notifications_provider.dart';
 
 /// Preserves each approved header's bell; Home alone uses its existing dot.
 class NotificationButton extends ConsumerWidget {
@@ -18,7 +18,7 @@ class NotificationButton extends ConsumerWidget {
       tooltip: 'Notifications',
       onPressed: () => context.push('/notifications'),
       icon: Semantics(
-        label: '$unread unread demo alerts',
+        label: '$unread unread alerts',
         child: showUnreadDot
             ? Badge(
                 smallSize: 7,

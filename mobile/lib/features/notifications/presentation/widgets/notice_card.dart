@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_spacing.dart';
-import '../../../../app/theme/app_typography.dart';
-import '../../../../core/widgets/finance_card.dart';
-import '../../../../core/widgets/status_badge.dart';
-import '../../domain/demo_notice.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_spacing.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/status_badge.dart';
+import 'package:pesoflow/features/notifications/domain/notice_view.dart';
 
 class NoticeCard extends StatelessWidget {
   const NoticeCard({
@@ -15,7 +15,7 @@ class NoticeCard extends StatelessWidget {
     required this.onOpen,
     super.key,
   });
-  final DemoNotice notice;
+  final NoticeView notice;
   final bool read;
   final VoidCallback onToggleRead;
   final VoidCallback onOpen;

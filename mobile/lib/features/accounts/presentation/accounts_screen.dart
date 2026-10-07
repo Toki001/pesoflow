@@ -2,36 +2,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../app/theme/app_colors.dart';
-import '../../../app/theme/app_typography.dart';
-import '../../../core/widgets/finance_card.dart';
-import '../../../core/widgets/task_screen.dart';
-import '../../transactions/data/transaction_fixture.dart';
-import '../application/accounts_provider.dart';
-import '../domain/demo_account.dart';
-import 'account_dialogs.dart';
-import 'widgets/account_connection_card.dart';
-import 'widgets/accounts_balance_hero.dart';
-import 'widgets/accounts_trust.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_typography.dart';
+import 'package:pesoflow/core/widgets/finance_card.dart';
+import 'package:pesoflow/core/widgets/task_screen.dart';
+import 'package:pesoflow/core/time/clock.dart';
+import 'package:pesoflow/features/workspace/application/finance_controller.dart';
+import 'package:pesoflow/features/accounts/presentation/manual_account_editor.dart';
+import 'package:pesoflow/features/accounts/application/accounts_provider.dart';
+import 'package:pesoflow/features/accounts/domain/account_view.dart';
+import 'package:pesoflow/features/accounts/presentation/account_dialogs.dart';
+import 'package:pesoflow/features/accounts/presentation/widgets/account_connection_card.dart';
+import 'package:pesoflow/features/accounts/presentation/widgets/accounts_balance_hero.dart';
+import 'package:pesoflow/features/accounts/presentation/widgets/accounts_trust.dart';
 
 class AccountsScreen extends ConsumerWidget {
   const AccountsScreen({super.key});
   Future<void> disconnect(
     BuildContext context,
     WidgetRef ref,
-    DemoAccount account,
+    AccountView account,
   ) async {
-    if (await confirmDemoDisconnect(context, account) && context.mounted) {
-      ref.read(accountsProvider.notifier).disconnect(account.id);
+    if (await confirmAccountRemoval(context, account) && context.mounted) {
+      try {
+        await ref.read(accountsProvider.notifier).disconnect(account.id);
+      } catch (_) {
+        /* Shared save banner retains the failure. */
+      }
     }
   }
 
   Future<void> reconnect(
     BuildContext context,
     WidgetRef ref,
-    DemoAccount account,
+    AccountView account,
   ) async {
-    if (await showDemoReconnect(context, account) && context.mounted) {
+    if (await showConnectionUnavailable(context, account) && context.mounted) {
       await disconnect(context, ref, account);
     }
   }
@@ -41,7 +47,7 @@ class AccountsScreen extends ConsumerWidget {
     final state = ref.watch(accountsProvider);
     final c = context.colors;
     return TaskScreen(
-      title: 'Connected Accounts',
+      title: 'Accounts',
       backIcon: Icons.arrow_back,
       backTooltip: 'Back',
       fallbackRoute: '/home',
@@ -51,7 +57,7 @@ class AccountsScreen extends ConsumerWidget {
               ? null
               : () => showAccountCatalog(context),
           icon: const Icon(Icons.add, size: 16),
-          label: const Text('Link Account'),
+          label: const Text('Add Account'),
           style: TextButton.styleFrom(
             backgroundColor: c.soft(c.primary, AppColors.primarySoft),
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -67,7 +73,7 @@ class AccountsScreen extends ConsumerWidget {
                 ? null
                 : () => showAccountCatalog(context),
             icon: const Icon(Icons.add_circle_outline, size: 20),
-            label: const Text('+ Connect Another Institution'),
+            label: const Text('Add Manual Account'),
           ),
         ),
       ),
@@ -97,7 +103,7 @@ class AccountsScreen extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "We couldn't load your sample accounts.",
+                  "We couldn't load your accounts.",
                   style: AppTypography.headlineSmall,
                   textAlign: TextAlign.center,
                 ),
@@ -125,9 +131,8 @@ class AccountsScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               AccountsBalanceHero(
                 overview,
-                asOf: demoClock,
-                onRefresh: () =>
-                    ref.read(accountsProvider.notifier).refreshDemo(),
+                asOf: ref.watch(clockProvider)(),
+                onRefresh: () => ref.read(accountsProvider.notifier).refresh(),
               ),
               const SizedBox(height: 16),
               Wrap(
@@ -136,13 +141,13 @@ class AccountsScreen extends ConsumerWidget {
                 runSpacing: 8,
                 children: [
                   Text(
-                    'LINKED SOURCES (${overview.accounts.length})',
+                    'TRACKED ACCOUNTS (${overview.accounts.length})',
                     style: AppTypography.labelMedium.copyWith(
                       color: c.mutedInk,
                     ),
                   ),
                   Text(
-                    'Single-source demo',
+                    'Local records',
                     style: AppTypography.labelSmall.copyWith(color: c.mutedInk),
                   ),
                 ],
@@ -154,17 +159,17 @@ class AccountsScreen extends ConsumerWidget {
                   child: Column(
                     children: [
                       Text(
-                        'No sample accounts',
+                        'No accounts yet',
                         style: AppTypography.headlineSmall,
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        'Add a demo profile to explore the connected accounts layout.',
+                        'Create a manual cash, wallet or bank account to begin.',
                         textAlign: TextAlign.center,
                       ),
                       TextButton(
                         onPressed: () => showAccountCatalog(context),
-                        child: const Text('Add a demo profile'),
+                        child: const Text('Add Manual Account'),
                       ),
                     ],
                   ),
@@ -172,8 +177,14 @@ class AccountsScreen extends ConsumerWidget {
               for (final account in overview.accounts) ...[
                 AccountConnectionCard(
                   account: account,
-                  clock: demoClock,
-                  onSettings: () => context.push('/accounts/${account.id}'),
+                  clock: ref.watch(clockProvider)(),
+                  onSettings: () => showManualAccountEditor(
+                    context,
+                    account: ref
+                        .read(workspaceProvider)
+                        .accounts
+                        .firstWhere((a) => a.id == account.id),
+                  ),
                   onDetails: () => context.push('/accounts/${account.id}'),
                   onDisconnect: () => disconnect(context, ref, account),
                   onReconnect: () => reconnect(context, ref, account),
