@@ -40,6 +40,19 @@ const _$TransactionCategoryEnumMap = {
   TransactionCategory.bills: 'bills',
   TransactionCategory.entertainment: 'entertainment',
   TransactionCategory.refund: 'refund',
+  TransactionCategory.housing: 'housing',
+  TransactionCategory.healthcare: 'healthcare',
+  TransactionCategory.education: 'education',
+  TransactionCategory.travel: 'travel',
+  TransactionCategory.personalCare: 'personalCare',
+  TransactionCategory.fees: 'fees',
+  TransactionCategory.other: 'other',
+  TransactionCategory.salary: 'salary',
+  TransactionCategory.freelance: 'freelance',
+  TransactionCategory.business: 'business',
+  TransactionCategory.allowance: 'allowance',
+  TransactionCategory.interest: 'interest',
+  TransactionCategory.otherIncome: 'otherIncome',
 };
 
 _BudgetPlan _$BudgetPlanFromJson(Map<String, dynamic> json) => _BudgetPlan(

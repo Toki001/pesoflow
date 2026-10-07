@@ -69,6 +69,13 @@ data; its key is held by platform secure storage. See the maintained
 The production repository is not yet connected to startup or screens; the app
 still runs the old demo while that wiring is migrated in the next checkpoint.
 
+Checkpoint 2 adds durable repository-backed account/transaction/budget/plan/
+preference commands, exact real-ledger analytics, the full product category enum,
+remembered categorization rules, recurring detection requiring three observed
+charges, and persistent condition/deduplication logic for budget thresholds,
+renewals and unusually large expenses. These engines contain no sample financial
+aggregates. Screens and startup still require their production wiring.
+
 All items marked Partial/Missing in the audit remain required local work until
 their implementation and verification are recorded here. They are not external
 blockers. No production build or security completion is claimed yet.
@@ -103,3 +110,9 @@ Checkpoint 1: `dart format` on changed sources, `flutter analyze` (no issues),
 `dart run drift_dev schema dump lib/core/storage/finance_database.dart drift_schemas`
 passed. No screenshot baseline changed. Real-device encryption/permissions and
 release builds still need verification after production startup is connected.
+
+Checkpoint 2: formatting and static analysis passed; the full Flutter suite
+passed (303 tests, existing golden comparisons unchanged). New command tests
+exercise serialized writes, save failure recovery, transfers, deletion guards,
+remembered corrections and atomic notice creation; calculation tests cover empty
+analytics, previous periods, recurring intervals and alert deduplication.

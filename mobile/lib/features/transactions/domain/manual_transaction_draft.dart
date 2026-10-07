@@ -62,14 +62,11 @@ class ManualTransactionDraft {
     final actualCategory = kind == TransactionKind.transfer
         ? TransactionCategory.transfer
         : kind == TransactionKind.income
-        ? TransactionCategory.income
+        ? isIncomeCategory(category)
+              ? category
+              : TransactionCategory.income
         : category;
-    if (kind == TransactionKind.expense &&
-        [
-          TransactionCategory.income,
-          TransactionCategory.transfer,
-          TransactionCategory.refund,
-        ].contains(actualCategory)) {
+    if (kind == TransactionKind.expense && !isExpenseCategory(actualCategory)) {
       throw ArgumentError('Choose an expense category.');
     }
     return TransactionRecord(

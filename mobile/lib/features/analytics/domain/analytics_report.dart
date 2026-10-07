@@ -127,6 +127,12 @@ class AnalyticsReport {
     this.target,
     this.projectedExpense,
     this.referenceInsight = false,
+    this.totalIncome = 0,
+    this.expenseCount = 0,
+    this.grossExpense = 0,
+    this.elapsedDays,
+    this.highestSpendingDay,
+    this.highestCategory,
   }) : categories = List.unmodifiable(categories),
        merchants = List.unmodifiable(merchants),
        points = List.unmodifiable(points);
@@ -140,7 +146,19 @@ class AnalyticsReport {
   final int? target;
   final int? projectedExpense;
   final bool referenceInsight;
-  int get dailyAverage => totalExpense ~/ selection.days;
+  final int totalIncome, expenseCount, grossExpense;
+  final int? elapsedDays;
+  final SpendingPoint? highestSpendingDay;
+  final TransactionCategory? highestCategory;
+  int get netFlow => totalIncome - totalExpense;
+  int get savings => netFlow;
+  double? get savingsRate =>
+      totalIncome == 0 ? null : savings * 100 / totalIncome;
+  int get averageTransaction =>
+      expenseCount == 0 ? 0 : grossExpense ~/ expenseCount;
+  int get dailyAverage => (elapsedDays ?? selection.days) == 0
+      ? 0
+      : totalExpense ~/ (elapsedDays ?? selection.days);
   int? get belowTargetPercent =>
       target == null || target! <= 0 || projectedExpense == null
       ? null

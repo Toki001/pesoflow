@@ -16,6 +16,19 @@ enum TransactionCategory {
   bills,
   entertainment,
   refund,
+  housing,
+  healthcare,
+  education,
+  travel,
+  personalCare,
+  fees,
+  other,
+  salary,
+  freelance,
+  business,
+  allowance,
+  interest,
+  otherIncome,
 }
 
 enum TransactionStatus { posted, pending }
@@ -80,4 +93,32 @@ String categoryLabel(TransactionCategory category) => switch (category) {
   TransactionCategory.bills => 'Bills & Utilities',
   TransactionCategory.entertainment => 'Entertainment & Leisure',
   TransactionCategory.refund => 'Refund',
+  TransactionCategory.housing => 'Housing',
+  TransactionCategory.healthcare => 'Healthcare',
+  TransactionCategory.education => 'Education',
+  TransactionCategory.travel => 'Travel',
+  TransactionCategory.personalCare => 'Personal Care',
+  TransactionCategory.fees => 'Fees',
+  TransactionCategory.other => 'Other',
+  TransactionCategory.salary => 'Salary',
+  TransactionCategory.freelance => 'Freelance',
+  TransactionCategory.business => 'Business',
+  TransactionCategory.allowance => 'Allowance',
+  TransactionCategory.interest => 'Interest',
+  TransactionCategory.otherIncome => 'Other Income',
 };
+
+bool isIncomeCategory(TransactionCategory category) => const {
+  TransactionCategory.income,
+  TransactionCategory.salary,
+  TransactionCategory.freelance,
+  TransactionCategory.business,
+  TransactionCategory.allowance,
+  TransactionCategory.interest,
+  TransactionCategory.otherIncome,
+}.contains(category);
+
+bool isExpenseCategory(TransactionCategory category) =>
+    !isIncomeCategory(category) &&
+    category != TransactionCategory.transfer &&
+    category != TransactionCategory.refund;

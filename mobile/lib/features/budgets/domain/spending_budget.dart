@@ -21,12 +21,7 @@ class SpendingBudget {
         limit > maxMoney ||
         thresholds.any((v) => v < 1 || v > 100) ||
         thresholds.toSet().length != thresholds.length ||
-        (category != null &&
-            [
-              TransactionCategory.income,
-              TransactionCategory.transfer,
-              TransactionCategory.refund,
-            ].contains(category))) {
+        (category != null && !isExpenseCategory(category!))) {
       throw ArgumentError('Invalid budget.');
     }
   }
