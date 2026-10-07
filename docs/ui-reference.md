@@ -500,3 +500,21 @@ Two persistent inbox light/dark 390 × 1480 goldens supplement the earlier memor
 baselines; local Settings captures change for copy/control height. There is no
 separate approved Stitch inbox or reset screen, so these inferred views retain the
 existing design language and await dedicated product visual approval.
+
+## Production-data checkpoint
+
+The approved Stitch exports remain the visual source of truth. The production
+runtime now uses the same screen hierarchy and design tokens with real saved
+records. Test-only workspaces supply the 14 `production_*.png` light/dark goldens;
+the original screenshot aggregates are not injected into application totals.
+
+Home retains its balance, flow, insight, budgets, recent activity and upcoming
+bills sequence. Counts and card heights follow available data. Manual account
+cards retain the approved balance/card/action structure with actual account names
+and calculated balances. Transaction detail retains the amount hero, provenance,
+budget impact, notes, tags and edit controls; invented receipt contents, contact
+names and bank identifiers are omitted. The receipt reference remains available
+for the later OCR task; its prototype implementation is test-only.
+
+See [production readiness](production-readiness.md) for native restart evidence,
+current verification and remaining fidelity differences.

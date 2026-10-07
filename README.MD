@@ -1,113 +1,40 @@
 # PesoFlow
 
-PesoFlow is a cross-platform personal finance and expense tracking application built with Flutter.
+PesoFlow is a native Flutter personal-finance app based on the approved
+[Stitch UI](design/stitch/). Engineering instructions live in [CODEX.md](CODEX.md).
 
-The approved UI design is located in:
+## Current application
 
-`design/stitch/`
+The app opens an encrypted, device-local financial workspace. New installations
+start with an introduction and empty finances. Create a manual account, then add
+expenses, income or transfers. Home, Transactions, Accounts, monthly Budgets and
+Analytics use your saved records; edits and deletions recalculate their totals.
+Account history is preserved by archiving used accounts. Appearance, introduction
+completion, manual subscription plans and in-app notice read status also persist.
 
-Engineering and implementation instructions are defined in:
+Balances are manually tracked, not bank-reported. No backend account or credentials
+are required. Receipt scanning, external providers, backend authentication, cloud
+sync, export/recovery and release distribution are not implemented. Keep the app
+installed to retain local records. Old `pesoflow_demo` databases are preserved but
+are never imported automatically into real finances.
 
-`CODEX.md`
+## Run and verify
 
-## Planned Stack
+```sh
+cd mobile
+flutter pub get
+flutter run
+```
 
-### Mobile
-- Flutter
-- Dart
-- Riverpod
-- GoRouter
-- Dio
-- Drift
+From the repository root, `bash scripts/check.sh` runs mobile and backend checks.
+The backend remains a minimal NestJS health service; run it with
+`cd backend && npm ci && npm run start:dev` when needed.
 
-### Backend
-- NestJS
-- TypeScript
-- PostgreSQL
-- Redis
+The mobile stack uses Riverpod, GoRouter, Drift, platform secure storage,
+AES-256-GCM, Freezed and json_serializable. Dio is reserved for future API work.
+Test fixtures are confined to `mobile/test/`; production has no sample-data entry
+or reset controls.
 
-### Major Features
-- Expense tracking
-- Income tracking
-- Transfers
-- Bank/e-wallet connectivity
-- Receipt OCR
-- Budgets
-- Analytics
-- Subscriptions
-- Notifications
-
-## App demo available
-
-The app starts with a three-step introduction and an explicit **Explore demo**
-entry. Skip goes to the demo disclosure; it does not bypass it. Transaction edits and saved receipt details persist on this device in a local
-demo database. Other demo edits remain session-only. Local storage is not
-encrypted; use sample data only. No credentials or financial account connections
-are requested. Explicit screen deep links remain available. Tap Home’s avatar to open Settings:
-choose System, Light or Dark appearance for the current session, restore device
-appearance, view sample accounts or revisit the introduction. Appearance changes
-preserve demo edits and navigation. Home, Analytics and Budgets bells open a
-session-only notification center: filter All/Unread, mark individual/all alerts
-read, and open budgets, subscriptions, sample accounts or analytics. These are
-fixed October 2024 snapshots, not live monitoring or delivered push messages.
-Tap a sample account’s identity or Settings action to open Account Detail: inspect
-its masked profile, reported balance/timestamp and related demo activity, run a
-local check, or confirm removal. Manual activity never changes reported balances;
-stale profiles remain labelled last known. Link Account opens a sample catalog;
-selecting an unlisted profile opens Review Demo Access. Read the limits and check
-“I understand this adds sample data only” before adding it. Cancel changes
-nothing. This acknowledgment does not grant provider permissions or connect a
-real account.
-
-`mobile/` now contains the Android/iOS Flutter application, shared light/dark
-theme, routing and native Stitch Home, Transactions, Transaction Detail,
-Add Expense, Budgets, Analytics, Connected Accounts, Subscriptions and Receipt Review screens. Manual expenses, income and transfers update
-a device-local demo ledger. Transactions and receipt saves retain stable account
-IDs separate from display labels; account filters include either side of a
-transfer. Distinct bank products remain separate, and saved activity can be reset
-from Settings. Budget creation, editing, filters and reallocation
-work with that ledger. Analytics supports date/period selection, category
-percentages, chart details and session spending updates. Connected Accounts offers
-masked sample profiles, local refresh checks, and confirmed session removal/restoration;
-open it from Home's balance card. Tap Home's Upcoming Bills card for Subscriptions:
-add/edit plans, sort renewals, pause/resume tracking, confirm removal and view
-recorded recurring charges. Weekly/monthly/quarterly/yearly plans update locally saved
-commitments without posting expenses or cancelling services. `backend/` contains
-only a NestJS health endpoint. Add Expense’s Scan action opens the native demo
-receipt review: correct items, merchant/date, category and payment source, confirm
-uncertain items, and save one receipt expense with its item snapshot. No camera,
-upload, live OCR, receipt file storage or real bank/e-wallet integrations exist.
-
-Run mobile: `cd mobile && flutter pub get && flutter run`.
-Run backend: `cd backend && npm ci && npm run start:dev`.
-Run local checks from root: `bash scripts/check.sh`.
-
-See [approved UI inventory](docs/ui-reference.md) and
-[architecture, dependencies and validation](docs/architecture.md).
-
-Native startup restores transactions, saved receipts, budget plans and subscription
-tracking and appearance before showing the app. Older snapshots migrate automatically. Load failures offer retry or a confirmed reset; they never silently
-replace stored data. Settings shows local save status and **Reset demo activity**,
-which restores original transactions and clears saved receipts while preserving
-budget plans, subscription tracking, saved preferences and session account choices.
-**Reset demo plans** restores sample budgets and subscription tracking while keeping
-transactions and receipts. Save failures keep edits in memory and
-show a retry action across routes. Only completed local saves survive restart;
-there is no server sync, authentication or encrypted production storage.
-
-
-Appearance (System/Light/Dark) and completed demo introduction now survive restart.
-After explicitly choosing **Explore demo**, returning users open Home; **View
-introduction** in Settings still reopens the disclosure. Skip alone does not mark
-completion. **Restore device appearance** saves System without altering financial
-activity, plans or introduction completion. Sample account choices, filters and
-unfinished introduction steps remain session-only. Startup
-recovery's confirmed full reset also restores these saved preferences to defaults.
-
-
-Sample notification read markers now survive restart. Individual read/unread,
-opening an alert and Mark all read update local storage; alert content remains a
-fixed October 2024 sample. **Reset demo alerts** restores the original three
-unread/one read markers and preserves transactions, receipts, plans and preferences.
-Activity/plan resets preserve alert markers. Startup's confirmed full reset also
-restores alert defaults. No push permissions, delivery or live monitoring exist.
+See [production readiness](docs/production-readiness.md) for verified checkpoints,
+limitations and the next task, and [UI references](docs/ui-reference.md) for the
+approved visual patterns.

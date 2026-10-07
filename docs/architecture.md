@@ -1,5 +1,13 @@
 # Foundation architecture
 
+> Current runtime: see [production readiness](production-readiness.md). The
+> prototype milestones below are historical. `main.dart` now loads the encrypted
+> FinanceWorkspace through FinanceBootstrap; Riverpod feature projections and
+> commands share FinanceController. Runtime fixtures, demo bootstrap/reset controls
+> and prototype receipt entry have been removed. Database schema and core engines
+> remain those introduced in the three production foundation commits.
+
+
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
