@@ -17,12 +17,20 @@ regressions remain, supplemented by production forms and cross-screen projection
 `production_app_test.dart` compares 14 light/dark baselines covering Home,
 Transactions, Accounts, Budgets, Analytics, Add and Detail, and checks empty starts,
 large-text layouts, onboarding, command forms and restart. Historical golden PNGs
-without the `production_` prefix are prototype references, not current comparisons.
+without the `production_` or `backup_` prefix are prototype references, not current comparisons.
 The screenshots intentionally show exact fixture-ledger totals, not the omitted
 history/aggregate offsets from the original prototype.
 
 Run `flutter test`. Regenerate a reviewed production baseline only with:
 `flutter test test/production_app_test.dart --update-goldens`.
+
+`backup_test.dart` covers portable encryption, strict import validation, whole-store
+atomic replacement, new-key recovery, file-backed reopen and projection refresh.
+`backup_screen_test.dart` covers review/confirmation/cancel/failure/retry and two
+light/dark settings goldens. File pickers and UI cryptography are injected for
+widget tests; codec/repository tests use real encryption. Regenerate only reviewed
+backup baselines with `flutter test test/backup_screen_test.dart --update-goldens`.
+Native file-picker and physical-device recovery steps are in `docs/backup.md`.
 
 For native persistence, use a dedicated empty simulator only:
 

@@ -518,3 +518,14 @@ for the later OCR task; its prototype implementation is test-only.
 
 See [production readiness](production-readiness.md) for native restart evidence,
 current verification and remaining fidelity differences.
+
+## Backup and recovery extension
+
+Backup & export is a Settings destination with no dedicated approved Stitch
+screen. It inherits TaskScreen navigation, FinanceCard borders/radii, bundled
+Inter, existing input/button treatments and light/dark tokens. Cards group the
+password-protected backup, restore preview and plaintext CSV disclosure. Startup
+recovery uses the same screen with export controls hidden. Replacement requires
+an explicit confirmation dialog; the main approved financial layouts are unchanged.
+Reviewed light/dark regression images are `mobile/test/goldens/backup_light.png`
+and `backup_dark.png`; these extend, rather than replace, the Stitch references.

@@ -14,8 +14,10 @@ completion, manual subscription plans and in-app notice read status also persist
 
 Balances are manually tracked, not bank-reported. No backend account or credentials
 are required. Receipt scanning, external providers, backend authentication, cloud
-sync, export/recovery and release distribution are not implemented. Keep the app
-installed to retain local records. Old `pesoflow_demo` databases are preserved but
+sync and release distribution are not implemented. Settings → Backup & export
+can save a password-encrypted portable backup, restore it after review, or export
+a readable transaction CSV. Keep the backup and its password safely outside the
+app; see [backup and recovery](docs/backup.md). Old `pesoflow_demo` databases are preserved but
 are never imported automatically into real finances.
 
 ## Run and verify

@@ -71,6 +71,9 @@ layout primitives, query filters and theme can be preserved and extended.
 - Android backup disabled for the device-bound key; iOS Keychain entitlement wired.
   The schema, encryption design and financial engines from the foundation remain.
   An atomic budget-reallocation command was added for the existing approved UI.
+- User-controlled password-encrypted portable backups, transaction CSV export,
+  reviewed atomic restore and missing-device-key recovery. See [backup and
+  recovery](backup.md) for scope, format limits and native file-picker checks.
 
 ## Completed foundation checkpoints
 
@@ -102,7 +105,7 @@ Accounts, Transactions totals and Analytics use the same as-of boundary; transfe
 affect each account but never inflate aggregate income or expense. Category-only
 budgets do not invent an overall limit.
 
-No database or financial-engine rewrite, new package dependency, backend feature,
+For checkpoints 1–4, no database or financial-engine rewrite, new package dependency, backend feature,
 OCR implementation, provider integration or release packaging was needed.
 
 ## Remaining work / next recommended task
@@ -110,11 +113,18 @@ OCR implementation, provider integration or release packaging was needed.
 The requested local manual-finance launch milestone is complete. No external
 credential is needed to run it. This does not certify release readiness.
 
-Recommended next task: user-controlled data export/backup and tested restore,
-including recovery UX. Device-bound local storage currently has no recovery path
-after uninstall or loss of its encryption key. Old demo databases are preserved
-but not automatically imported; any migration must distinguish user edits from
-sample records and show a review before import.
+The data export/backup and tested restore task is now complete. Recovery after
+uninstall or device-key loss requires a previously saved `.pfbackup` and its
+password. There is no recovery service or password reset. SQLite corruption,
+inaccessible secure storage and exhausted disk space can still block a restore;
+the original database is preserved when replacement fails.
+
+Recommended next task: physical Android/iOS resilience verification, including
+native local/cloud document save and selection, backup transfer to another test
+installation, force-stop/restart, lock/unlock, interrupted restore and low-storage
+failures. Follow the [device checklist](backup.md#verification-and-device-checks).
+Old demo databases remain outside backup/import; any later migration must
+distinguish user edits from sample records and show a review before import.
 
 Separate future tasks remain:
 
@@ -219,3 +229,50 @@ tracking copy. Fake receipt items, named bill-sharing contacts and provider IDs
 are absent from transaction detail. Empty states and resulting content heights
 therefore differ from the populated Stitch examples. Pixel-identical rendering
 across devices is not claimed; native font/icon rasterization still varies.
+
+## Checkpoint 5 — portable export and tested restore
+
+Implementation: `a608c86`, 7 October 2026. Settings → Backup & export now saves
+password-encrypted `.pfbackup` files, previews and confirms whole-workspace
+replacement, and exports explicitly disclosed plaintext transaction CSV. Startup
+errors offer the same restore flow for recovery from a previously saved backup.
+
+Backups include full workspace metadata and encrypted-at-rest receipt image
+contents. They exclude device keys, sync ownership and biometric enrollment.
+PBKDF2-HMAC-SHA256 and AES-256-GCM run off the UI isolate. The new `file_picker`
+13.1.0 dependency supplies native save/selection; existing cryptography, Drift,
+Riverpod and financial calculations are reused. No database schema change,
+backend functionality, OCR, authentication, provider or release packaging was added.
+
+Restore validates before preview, checks the reviewed revision and replaces both
+workspace and images atomically. Tests prove rollback after a deliberate image
+insert failure, new-device-key recovery, no duplication on repeated restores,
+updates to all five financial projections, and exact workspace/image persistence
+after a file-backed close/reopen. Unsupported, malformed, tampered and oversized
+files fail without destructive fallback. CSV reads only transactions/workspace,
+so receipt-image limits do not block a transaction export.
+
+Verification completed:
+
+- `bash scripts/check.sh`: formatting clean, analysis clean, **130 Flutter tests
+  pass**, including **16 light/dark golden comparisons** (14 existing production
+  comparisons unchanged; two reviewed new Backup screens). Backend formatting,
+  lint, build and health test pass; backend sources unchanged.
+- `flutter build apk --debug` and `flutter build ios --simulator --debug`: pass.
+  These verify native plugin compilation, not physical file-provider behavior.
+- Android merged debug manifest retains `allowBackup="false"` and adds no broad
+  storage permission; only the existing debug Internet/internal receiver
+  permissions appear.
+- Visual review: the new screen inherits TaskScreen, FinanceCard, Inter, existing
+  blue actions, light/dark colors and spacing. No approved financial-screen
+  layout or existing golden baseline changed. Backup has no separate Stitch
+  screenshot; its form/dialog content is derived from the existing components.
+- Native picker dialogs are injected in widget tests. No new physical-device,
+  cloud-document-provider or native end-to-end backup round trip was performed in
+  this checkpoint. The prior simulator launch/restart evidence remains checkpoint 4.
+
+See [backup format, limits and device checklist](backup.md) and the updated
+[current security boundary](security.md). There is no remaining implementation
+blocker for this scoped local export/restore milestone. Physical-device resilience
+verification is the next task; forgotten passwords, missing backup files and
+unreadable underlying SQLite storage cannot be repaired by this feature.
