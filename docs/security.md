@@ -52,3 +52,13 @@ appearance do not erase or transmit financial demo edits. Formatting is fixed
 to PHP and English (Philippines). No biometric lock, security certification,
 notification delivery, account connection or persistence is implied by these
 controls. Real authentication and protected storage remain later milestones.
+
+
+The notification center loads local illustrative events only. It requests no
+notification permission, obtains no push token, sends no network request and
+logs no financial payload. Typed destinations link only to existing internal
+screens. Read actions affect local inbox state and never initiate financial
+operations, connection consent or money movement. Alerts disclose their sample
+date and static nature; expired-connection copy does not request credentials.
+Actual alerts require authenticated event ownership, protected persistence,
+deduplication/cooldowns and delivery/privacy controls in a separate milestone.

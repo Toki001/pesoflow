@@ -116,3 +116,19 @@ that default without changing financial providers. The app maps the preference
 to `ThemeMode` at the presentation boundary. It introduces no JSON, disk storage,
 backend contract, identity or authentication state. The Settings introduction
 link resets only `onboardingProvider`; other session data remains untouched.
+
+
+`DemoNotice` records immutable ID/title/message, sample event date, `NoticeKind`
+and a typed `NoticeDestination`. The enum limits destinations to budgets,
+subscriptions, accounts and analytics; it does not accept arbitrary external
+URLs. The asynchronous loader validates nonempty/unique IDs and returns an
+unmodifiable newest-first list (ID breaks timestamp ties). Monetary text is
+formatted from integer-centavo fixture values using the central formatter.
+
+`noticeReadProvider` stores an unmodifiable set of read IDs separately from the
+loaded inbox. Individual actions validate membership, bulk-read covers known
+items, and repeated actions do not duplicate IDs. Read state survives reloads
+and defaults to the sample read set on fresh sessions. `noticeFilterProvider`
+selects All/Unread; unread count is derived from loaded notices and read IDs.
+There is no financial mutation, serialization, persistence, notification token
+or delivery/event contract. Fixed snapshots do not recompute after demo edits.

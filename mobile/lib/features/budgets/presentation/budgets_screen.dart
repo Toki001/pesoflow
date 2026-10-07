@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../notifications/presentation/widgets/notification_button.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/status_badge.dart';
@@ -146,25 +147,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                         style: AppTypography.headlineSmall,
                       ),
                     ),
-                    IconButton(
-                      tooltip: 'Notifications',
-                      onPressed: () => showDialog<void>(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Demo notifications'),
-                          content: const Text(
-                            'You’re viewing sample budgets. No financial accounts are connected.',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text('Close'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      icon: const Icon(Icons.notifications_none),
-                    ),
+                    const NotificationButton(),
                   ],
                 ),
                 Padding(

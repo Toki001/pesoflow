@@ -529,3 +529,52 @@ backend format/lint/build/health test pass.
 Next: a session-only notification center with deterministic demo alerts,
 read/unread state and links to the existing financial screens. No push delivery
 or background monitoring should be implied before those integrations exist.
+
+## Demo notification center phase
+
+`features/notifications` separates immutable `DemoNotice` snapshots, a typed
+`NoticeDestination` allowlist, deterministic October 2024 fixtures, an injectable
+async loader, read-state/filter Riverpod controllers and native presentation.
+The loader rejects duplicate/empty IDs, sorts newest first with an ID tie-breaker
+and exposes an unmodifiable list. Read IDs are held independently so retries/
+reloads preserve read state; unknown IDs are ignored. Read/unread and bulk-read
+actions change no financial provider. A new session restores the fixture default
+(three unread, one read). The loader supports loading, empty and safe retry UI.
+No repository/API/storage contract, dependency or backend function is added.
+
+`/notifications` uses the existing task shell and has no bottom navigation. The
+shared NotificationButton replaces Home/Analytics/Budgets placeholder dialogs
+without changing their approved bell geometry/colors. Only Home retains its
+existing blue dot; it now disappears at zero unread. Bells expose an accessible
+unread summary. All/Unread filters and explicit Read/Unread badges convey state
+without relying on color; wrapped action rows accommodate large text.
+
+Opening an alert marks it read and pushes a typed existing destination. Returning
+restores the inbox/filter/scroll; direct-link header Back falls back to Home.
+Alerts point to overall screens without overriding users' active financial
+filters/periods. The snapshot date and financial values remain visibly historic
+even when those destination views contain session edits.
+
+Fixtures illustrate Food's sample limit, Netflix's recorded renewal, BPI's sample
+expired connection and an October analytics review. The banner explicitly says
+fixed snapshots do not update with edits. There is no live event generation,
+background monitoring, OS permission, push token, scheduling or delivery. Unique
+fixture IDs prevent duplicate inbox entries; production event deduplication and
+cooldowns remain part of a later integration milestone.
+
+Light/dark captures at 390 × 1480 were reviewed against Home's bell, Accounts'
+task/header/cards and existing typography/spacing. The new inbox has no approved
+Stitch screenshot; its inferred layout awaits product review. Existing approved
+screen and inferred onboarding/settings goldens remain unchanged.
+
+Validation: formatting/static analysis pass; 196 Flutter tests pass, including
+30 golden comparisons. Sixteen new tests cover immutable/sorted/unique fixtures,
+idempotent read actions, reload/fresh-session behavior, unchanged ledger, All/
+Unread and caught-up states, all four destinations/return scroll, Home badge
+clearing, Budgets entry/direct link, loading/empty/safe retry, light/dark goldens,
+compact/large/landscape devices, 200% text and safe areas. Android debug and
+iOS simulator builds and the existing backend format/lint/build/health test
+also pass.
+
+Next: native account detail for the sample profiles, preserving reported balance
+semantics, masked identifiers, provenance and truthful demo connection status.

@@ -199,14 +199,17 @@ void main() {
     expect(find.text('Good morning, Alex'), findsOneWidget);
   });
 
-  testWidgets('notification control explains demo data', (tester) async {
+  testWidgets('notification control opens demo inbox and returns Home', (
+    tester,
+  ) async {
     viewport(tester, const Size(390, 844));
     await pumpHome(tester);
     await tester.tap(find.byTooltip('Notifications'));
     await tester.pumpAndSettle();
-    expect(find.text('Demo notifications'), findsOneWidget);
-    await tester.tap(find.text('Close'));
+    expect(find.text('Demo alerts'), findsOneWidget);
+    await tester.tap(find.byTooltip('Back'));
     await tester.pumpAndSettle();
-    expect(find.text('Demo notifications'), findsNothing);
+    expect(find.text('Demo alerts'), findsNothing);
+    expect(find.text('Good morning, Alex'), findsOneWidget);
   });
 }

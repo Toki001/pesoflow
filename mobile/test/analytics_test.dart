@@ -160,7 +160,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Notifications'));
     await tester.pumpAndSettle();
-    expect(find.text('Demo notifications'), findsOneWidget);
+    expect(find.text('Demo alerts'), findsOneWidget);
   });
   testWidgets('loading, safe errors and retry preserve shell', (tester) async {
     final pending = Completer<AnalyticsReport>();

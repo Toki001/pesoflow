@@ -375,3 +375,23 @@ Two 390 × 1100 light/dark goldens were reviewed against neighboring reference
 patterns for grouping, density, spacing, typography and color. This inferred
 layout awaits product review; there is no pixel-level Settings reference. All
 existing Stitch-backed and onboarding goldens remain unchanged.
+
+## Notifications (inferred, not a Stitch-approved screen)
+
+No notification-center screenshot or HTML exists in Stitch. The new native task
+screen inherits Connected Accounts' back header and neutral cards, Home's bell
+and subtle unread dot, Inter hierarchy, 16px gutters, semantic icon containers
+and text badges. It groups fixed sample events by date with All/Unread filters,
+individual read/unread actions, Mark all read and links to existing screens.
+Cards use explicit Read/Unread labels and wrap actions at compact/large-text sizes.
+Loading skeletons, safe retry, no-alert and caught-up states retain that language.
+
+The demo banner identifies historic October 2024 snapshots and says they do not
+update with session edits. There is no push delivery/live monitoring claim.
+Three existing bells now route to the inbox; their visible geometry is unchanged.
+Home's existing unread dot follows the shared count and disappears when read.
+
+Two 390 × 1480 light/dark goldens were reviewed against neighboring card/header
+patterns for hierarchy, density, gutters, typography, icons and dark fill.
+There is no pixel-level Stitch inbox baseline; the inferred screen awaits product
+review. Every earlier screen golden remains unchanged.

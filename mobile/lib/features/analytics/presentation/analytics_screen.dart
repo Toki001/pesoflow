@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../notifications/presentation/widgets/notification_button.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/category_icon.dart';
@@ -164,29 +165,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           color: c.mutedInk,
                         ),
                       ),
-                      IconButton(
-                        tooltip: 'Notifications',
-                        onPressed: () => showDialog<void>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Demo notifications'),
-                            content: const Text(
-                              'Notifications are not available in this demo yet.',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Close'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        icon: Icon(
-                          Icons.notifications_none,
-                          size: 20,
-                          color: c.mutedInk,
-                        ),
-                      ),
+                      NotificationButton(color: c.mutedInk),
                     ],
                   ),
                 ),

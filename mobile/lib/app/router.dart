@@ -13,6 +13,7 @@ import '../features/subscriptions/presentation/subscriptions_screen.dart';
 import '../features/receipts/presentation/receipt_review_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../features/notifications/presentation/notifications_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -36,6 +37,10 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
     GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
+    GoRoute(
+      path: '/notifications',
+      builder: (_, _) => const NotificationsScreen(),
+    ),
     GoRoute(
       path: '/transactions/:id',
       builder: (_, state) =>

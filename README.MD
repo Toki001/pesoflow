@@ -45,7 +45,10 @@ edits are session-only, and no credentials or financial account connections are
 requested. Explicit screen deep links remain available. Tap Home’s avatar to open Settings:
 choose System, Light or Dark appearance for the current session, restore device
 appearance, view sample accounts or revisit the introduction. Appearance changes
-preserve demo edits and navigation.
+preserve demo edits and navigation. Home, Analytics and Budgets bells open a
+session-only notification center: filter All/Unread, mark individual/all alerts
+read, and open budgets, subscriptions, sample accounts or analytics. These are
+fixed October 2024 snapshots, not live monitoring or delivered push messages.
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,

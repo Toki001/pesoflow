@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
+import '../../notifications/presentation/widgets/notification_button.dart';
 import '../../../app/theme/app_spacing.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/date_formatter.dart';
@@ -115,29 +116,7 @@ class HomeHeader extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(
-            tooltip: 'Notifications',
-            onPressed: () => showDialog<void>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Demo notifications'),
-                content: const Text(
-                  'You’re viewing sample data. No financial accounts are connected.',
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Close'),
-                  ),
-                ],
-              ),
-            ),
-            icon: Badge(
-              smallSize: 7,
-              backgroundColor: c.primary,
-              child: const Icon(Icons.notifications_none, size: 20),
-            ),
-          ),
+          const NotificationButton(showUnreadDot: true),
         ],
       ),
     );
