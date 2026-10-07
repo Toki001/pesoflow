@@ -129,3 +129,12 @@ financial-provider consent, permission or protected access. Reopening the intro
 does not erase that preference. Existing scoped resets preserve preferences;
 startup full-reset confirmation explicitly names their default restoration.
 Storage remains unencrypted and sample-only; no credentials or real data are added.
+
+
+Sample alert read markers are now stored locally with a versioned catalog contract.
+They are not delivery receipts, consent, authenticated event ownership or financial
+monitoring. Invalid/future catalogs and unknown IDs are refused without logging or
+silently replacing state. Migration and confirmed marker-only reset are atomic;
+activity/plan resets preserve markers. Full recovery disclosure names alert reset.
+No notification permission, token, scheduling, push service or backend was added;
+all content remains fixed sample data in the existing unencrypted demo boundary.

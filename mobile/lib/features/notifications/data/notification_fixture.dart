@@ -1,6 +1,10 @@
 import '../../../core/formatting/money_formatter.dart';
 import '../domain/demo_notice.dart';
 
+// Bump and explicitly migrate when removing IDs or changing their event meaning.
+const demoNoticeCatalogVersion = 1;
+const initialNoticeReadIds = <String>{'spending-review'};
+
 List<DemoNotice> notificationFixture() => [
   DemoNotice(
     id: 'food-limit',

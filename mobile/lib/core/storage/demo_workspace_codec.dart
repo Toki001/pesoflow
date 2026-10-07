@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../features/notifications/data/notice_read_codec.dart';
+import '../../features/notifications/data/notification_fixture.dart';
 import '../../features/settings/data/demo_preferences_codec.dart';
 import '../../features/settings/domain/demo_preferences.dart';
 import '../../features/budgets/data/budget_fixture.dart';
@@ -13,8 +15,9 @@ import '../../features/transactions/domain/transaction.dart';
 /// Versioned, exact-centavo demo snapshot. No labels are converted into IDs.
 abstract final class DemoWorkspaceCodec {
   static String encode(DemoWorkspace workspace) => jsonEncode({
-    'formatVersion': 3,
+    'formatVersion': 4,
     'fixtureVersion': 1,
+    'noticeReadState': NoticeReadCodec.encode(workspace.noticeReadIds),
     'preferences': DemoPreferencesCodec.encode(workspace.preferences),
     'budgets': BudgetPlansCodec.encode(workspace.budgets),
     'subscriptions': SubscriptionPlansCodec.encode(workspace.subscriptions),
@@ -25,13 +28,13 @@ abstract final class DemoWorkspaceCodec {
   });
 
   static bool needsMigration(String payload) =>
-      (jsonDecode(payload) as Map<String, dynamic>)['formatVersion'] != 3;
+      (jsonDecode(payload) as Map<String, dynamic>)['formatVersion'] != 4;
 
   static DemoWorkspace decode(String payload) {
     final json = jsonDecode(payload) as Map<String, dynamic>;
     if (json['formatVersion'] is! int ||
         json['fixtureVersion'] is! int ||
-        ![1, 2, 3].contains(json['formatVersion']) ||
+        ![1, 2, 3, 4].contains(json['formatVersion']) ||
         json['fixtureVersion'] != 1) {
       throw const FormatException('Unsupported demo format.');
     }
@@ -44,7 +47,12 @@ abstract final class DemoWorkspaceCodec {
     }
     return DemoWorkspace(
       ledger: ledger,
-      preferences: json['formatVersion'] == 3
+      noticeReadIds: json['formatVersion'] == 4
+          ? NoticeReadCodec.decode(
+              json['noticeReadState'] as Map<String, dynamic>,
+            )
+          : initialNoticeReadIds,
+      preferences: (json['formatVersion'] as int) >= 3
           ? DemoPreferencesCodec.decode(
               json['preferences'] as Map<String, dynamic>,
             )

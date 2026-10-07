@@ -60,7 +60,9 @@ void main() {
     await tester.tap(find.text('Reset demo plans'));
     await tester.pumpAndSettle();
     expect(
-      find.textContaining('Transactions and saved receipts stay as they are'),
+      find.textContaining(
+        'Transactions, saved receipts, preferences and alert read markers stay as they are',
+      ),
       findsOneWidget,
     );
     await tester.tap(find.text('Cancel'));
@@ -236,6 +238,8 @@ void main() {
       expect(find.text('Reset demo activity').hitTestable(), findsOneWidget);
       await tester.ensureVisible(find.text('Reset demo plans'));
       expect(find.text('Reset demo plans').hitTestable(), findsOneWidget);
+      await tester.ensureVisible(find.text('Reset demo alerts'));
+      expect(find.text('Reset demo alerts').hitTestable(), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await pumpLocalSettings(

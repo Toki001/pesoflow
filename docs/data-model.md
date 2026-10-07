@@ -254,3 +254,19 @@ not identity, consent or permission. Step progress, notification reads, account
 membership, filters/sorts and selected periods stay transient. Reset activity and
 reset plans preserve preferences; Restore device appearance saves only System;
 startup full recovery reset restores both preferences and all financial samples.
+
+
+## Sample alert markers (workspace v4)
+
+`noticeReadState: {version: 1, catalogVersion: 1, readIds: [string...]}` stores only
+read markers. IDs must be unique and present in the fixed sample catalog. Empty
+lists are valid, sorted serialization is deterministic, and unknown/future catalog
+or codec versions are refused. Reusing/removing fixture IDs or changing event
+meaning requires an explicit catalog migration; appended new IDs are unread unless
+explicitly marked. Notification payloads/timestamps/routes stay in fixtures.
+
+Older v1/v2/v3 workspaces receive original markers transactionally, preserving all
+previously stored collections. Reset alerts restores three unread/one read markers;
+reset activity/plans preserves read state. Alert reset preserves financial data
+and preferences; startup full reset restores all defaults. Inbox filter selection
+remains ephemeral. Markers cannot affect money, provider state or alert delivery.

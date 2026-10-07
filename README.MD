@@ -100,6 +100,14 @@ Appearance (System/Light/Dark) and completed demo introduction now survive resta
 After explicitly choosing **Explore demo**, returning users open Home; **View
 introduction** in Settings still reopens the disclosure. Skip alone does not mark
 completion. **Restore device appearance** saves System without altering financial
-activity, plans or introduction completion. Notification read state, sample account
-choices, filters and unfinished introduction steps remain session-only. Startup
+activity, plans or introduction completion. Sample account choices, filters and
+unfinished introduction steps remain session-only. Startup
 recovery's confirmed full reset also restores these saved preferences to defaults.
+
+
+Sample notification read markers now survive restart. Individual read/unread,
+opening an alert and Mark all read update local storage; alert content remains a
+fixed October 2024 sample. **Reset demo alerts** restores the original three
+unread/one read markers and preserves transactions, receipts, plans and preferences.
+Activity/plan resets preserve alert markers. Startup's confirmed full reset also
+restores alert defaults. No push permissions, delivery or live monitoring exist.

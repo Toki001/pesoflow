@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+import '../../features/notifications/data/notification_fixture.dart';
 import '../../features/budgets/data/budget_fixture.dart';
 import '../../features/subscriptions/data/subscription_fixture.dart';
 import '../../features/demo_workspace/domain/demo_workspace.dart';
@@ -9,6 +10,7 @@ import 'demo_workspace_codec.dart';
 
 DemoWorkspace initialDemoWorkspace() => DemoWorkspace(
   ledger: transactionFixture(),
+  noticeReadIds: initialNoticeReadIds,
   budgets: {budgetFixture().key: budgetFixture()},
   subscriptions: subscriptionFixture(),
 );

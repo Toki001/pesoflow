@@ -488,3 +488,15 @@ Returning demo users enter the existing Home layout with their saved appearance;
 View introduction still opens the existing native introduction. Only the two
 local Settings goldens change for disclosure text; these inferred Settings views
 still have no dedicated approved Stitch screenshot.
+
+
+Persistent inbox disclosure now states that read markers survive restart. Mark
+read/unread, Mark all read, navigation actions, filter controls, badges and alert
+cards retain their established layouts. Native Settings adds Reset demo alerts as
+another existing outlined control, with explicit confirmation of three-unread/
+one-read defaults and preserved financial/preferences data. Startup full-reset
+copy also names markers. Compact 200% text and safe-inset layouts are checked.
+Two persistent inbox light/dark 390 × 1480 goldens supplement the earlier memory
+baselines; local Settings captures change for copy/control height. There is no
+separate approved Stitch inbox or reset screen, so these inferred views retain the
+existing design language and await dedicated product visual approval.

@@ -13,10 +13,15 @@ class DemoWorkspace {
     Map<String, BudgetPlan> budgets = const {},
     Iterable<SubscriptionPlan> subscriptions = const [],
     this.preferences = const DemoPreferences(),
+    Set<String> noticeReadIds = const {},
   }) : ledger = List.unmodifiable(ledger),
        receipts = Map.unmodifiable(receipts),
        budgets = Map.unmodifiable(budgets),
-       subscriptions = List.unmodifiable(subscriptions) {
+       subscriptions = List.unmodifiable(subscriptions),
+       noticeReadIds = Set.unmodifiable(noticeReadIds) {
+    if (this.noticeReadIds.any((id) => id.trim().isEmpty)) {
+      throw const FormatException('Invalid demo alert marker.');
+    }
     for (final entry in this.budgets.entries) {
       final plan = entry.value;
       final categories = plan.allowances.map((a) => a.category).toSet();
@@ -74,6 +79,7 @@ class DemoWorkspace {
   final Map<String, BudgetPlan> budgets;
   final List<SubscriptionPlan> subscriptions;
   final DemoPreferences preferences;
+  final Set<String> noticeReadIds;
 }
 
 abstract interface class DemoWorkspaceRepository {

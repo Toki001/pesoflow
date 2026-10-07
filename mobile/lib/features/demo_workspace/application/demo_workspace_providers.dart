@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/storage/sqlite_demo_workspace_repository.dart';
+import '../../notifications/application/notifications_provider.dart';
 import '../../settings/application/settings_provider.dart';
 import '../../settings/domain/demo_preferences.dart';
 import '../../onboarding/application/onboarding_provider.dart';
@@ -23,6 +24,8 @@ final demoPersistenceEnabledProvider = Provider<bool>(
 
 enum DemoSaveStatus { memory, saved, saving, error, resetting }
 
+enum _ResetScope { activity, plans, alerts }
+
 class DemoPersistence extends Notifier<DemoSaveStatus> {
   DemoWorkspace? _pending;
   Future<void>? _draining;
@@ -39,6 +42,7 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     ref.listen(demoBudgetPlansProvider, (_, _) => _schedule());
     ref.listen(demoSubscriptionsProvider, (_, _) => _schedule());
     ref.listen(settingsProvider, (_, _) => _schedule());
+    ref.listen(noticeReadProvider, (_, _) => _schedule());
     ref.listen(demoIntroductionCompletedProvider, (_, _) => _schedule());
     return DemoSaveStatus.saved;
   }
@@ -64,6 +68,7 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     try {
       _pending = DemoWorkspace(
         preferences: _preferences(),
+        noticeReadIds: ref.read(noticeReadProvider),
         ledger: ref.read(demoLedgerProvider),
         receipts: ref.read(savedDemoReceiptsProvider),
         budgets: ref.read(demoBudgetPlansProvider),
@@ -113,10 +118,13 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     if (!_resetting) state = DemoSaveStatus.saved;
   }
 
-  Future<bool> resetActivity() => _reset(plans: false);
-  Future<bool> resetPlans() => _reset(plans: true);
+  Future<bool> resetActivity() => _reset(_ResetScope.activity);
+  Future<bool> resetPlans() => _reset(_ResetScope.plans);
+  Future<bool> resetAlerts() => _reset(_ResetScope.alerts);
 
-  Future<bool> _reset({required bool plans}) async {
+  Future<bool> _reset(_ResetScope scope) async {
+    final plans = scope == _ResetScope.plans;
+    final activity = scope == _ResetScope.activity;
     if (_resetting || !ref.read(demoPersistenceEnabledProvider)) return false;
     _resetting = true;
     state = DemoSaveStatus.resetting;
@@ -127,8 +135,11 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
       final fixture = initialDemoWorkspace();
       seed = DemoWorkspace(
         preferences: _preferences(),
-        ledger: plans ? ref.read(demoLedgerProvider) : fixture.ledger,
-        receipts: plans
+        noticeReadIds: scope == _ResetScope.alerts
+            ? fixture.noticeReadIds
+            : ref.read(noticeReadProvider),
+        ledger: !activity ? ref.read(demoLedgerProvider) : fixture.ledger,
+        receipts: !activity
             ? ref.read(savedDemoReceiptsProvider)
             : fixture.receipts,
         budgets: plans ? fixture.budgets : ref.read(demoBudgetPlansProvider),
@@ -144,7 +155,9 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     }
     if (!ref.mounted) return false;
     _pending = null;
-    if (plans) {
+    if (scope == _ResetScope.alerts) {
+      ref.read(noticeReadProvider.notifier).restore(seed.noticeReadIds);
+    } else if (plans) {
       ref.read(demoBudgetPlansProvider.notifier).restore(seed.budgets);
       ref.read(demoSubscriptionsProvider.notifier).restore(seed.subscriptions);
       ref.invalidate(dismissedBudgetSuggestionsProvider);

@@ -6,8 +6,9 @@ Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
 GoRouter shell, all nine native Stitch-backed demo screens, onboarding, Settings,
 a demo notification center, and a minimal NestJS `/v1/health` endpoint. Drift/SQLite
 stores the demo ledger, reviewed receipts, budget plans, subscription tracking,
-appearance and completed demo introduction. Notification read state, unfinished
-introduction steps and sample connection membership remain transient. No HTML rendering, WebViews, real provider calls, authentication,
+appearance, completed demo introduction and sample alert read markers. Unfinished
+introduction steps and sample connection membership remain transient. No HTML
+rendering, WebViews, real provider calls, authentication,
 server persistence, queues, camera/OCR, notification delivery or money movement
 are implemented. The phase notes below describe earlier implementation boundaries.
 
@@ -882,3 +883,56 @@ Backend formatting, lint, build and its health test pass.
 Next: persist demo notification read state with fixture-aware migration and clear
 reset scope, retaining existing calm notification UI. Real financial data still
 requires authentication, ownership and protected storage before integrations.
+
+
+## Durable sample notification read state phase
+
+Workspace v4 adds an immutable `noticeReadIds` set, serialized by the feature-owned
+`NoticeReadCodec` as `{version: 1, catalogVersion: 1, readIds: [...]}`. The marker
+list is sorted on write. It validates unique string IDs against the current fixed
+sample catalog and rejects malformed/future versions or unknown IDs without
+replacing stored data. Database/financial fixture versions remain at 1. Alert
+content/dates/destinations stay in the fixture layer and never become saved events.
+
+Valid v1/v2/v3 rows migrate transactionally with the original one-read/three-unread
+markers. Existing transactions/receipts, v2 plans and v3 preferences remain intact.
+Failed migrations roll back. Explicit empty read sets stay empty: the originally
+read sample must not be silently reseeded. Newly appended catalog IDs remain
+unread when absent from saved markers. Removing/reusing an existing ID or changing
+its event meaning requires a catalog-version bump and an explicit migration;
+unsupported catalogs fail closed into recovery rather than resetting markers.
+
+The existing provider hydrates markers before rendering. Single read/unread,
+opening an alert and Mark all read flow through the shared snapshot coordinator,
+which serializes saves, preserves the newest snapshot on failure and exposes retry
+across routes. Filters and asynchronous fixture loading remain independent and
+transient. No financial state, reported balances or alert content are modified by
+read actions; no alert generation, scheduling, permissions, delivery, FCM setup or
+backend endpoint was introduced. No dependencies were added.
+
+A third independently confirmed Settings reset restores only original read markers.
+It commits before publishing; failures preserve memory and stored data. Activity
+and plan resets preserve markers, and alert reset preserves both financial domains
+and preferences. Startup full recovery explicitly names resetting alert markers.
+All markers remain sample-only, unencrypted device data without authenticated
+ownership, delivery receipt or provider-consent meaning.
+
+Only persistence-mode disclosure copy changes in the inbox, Settings and demo
+introduction. Existing components/tokens/navigation remain intact. Local Settings
+light/dark goldens reflect the additional outlined reset; two new persistent-inbox
+goldens capture the updated disclosure without changing earlier memory baselines.
+
+Validation: formatting and Flutter analysis pass; all 280 Flutter tests pass,
+including 40 golden comparisons. Nine added tests cover file reopen with mixed/
+all-read/empty markers, migration from v1/v2/v3 with rollback and preserved data,
+invalid marker/catalog refusal, newest-save retry, independent reset durability,
+opened-alert restart/badge restoration, confirmed/cancelled Settings reset, two
+persistent inbox goldens and compact 200% text/safe insets. The local Settings
+compact test also verifies the new reset control. All 36 earlier memory baselines
+remain unchanged; the two local Settings images were updated and two persistent
+inbox images added. Native Android debug/iOS simulator builds and backend
+formatting/lint/build/health test pass.
+
+Next: persist sample account membership/configuration behind the demo repository,
+with explicit reset scope and the existing sample-access acknowledgment. Restored
+sample connections must remain clearly distinct from real provider authorization.

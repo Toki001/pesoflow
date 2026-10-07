@@ -24,7 +24,7 @@ class DemoStorageSettings extends ConsumerWidget {
           Text('Local demo activity', style: AppTypography.merchant),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Transactions, saved receipt details, budget plans and subscription tracking stay on this device after restart. Appearance and completed demo introduction are also saved. Notifications and sample connections remain session-only. Local demo storage is not encrypted; use sample data only.',
+            'Transactions, saved receipt details, budget plans and subscription tracking stay on this device after restart. Appearance, completed demo introduction and sample alert read markers are also saved. Sample connections remain session-only. Local demo storage is not encrypted; use sample data only.',
             style: AppTypography.bodySmall.copyWith(
               color: context.colors.secondaryInk,
             ),
@@ -64,7 +64,7 @@ class DemoStorageSettings extends ConsumerWidget {
                       builder: (context) => AlertDialog(
                         title: const Text('Reset demo activity?'),
                         content: const Text(
-                          'Restore the original sample transactions and remove saved demo receipts from this device. Transaction edits and added entries will be removed. Budget plans, subscription tracking, appearance and sample account choices stay as they are. No financial institution is contacted.',
+                          'Restore the original sample transactions and remove saved demo receipts from this device. Transaction edits and added entries will be removed. Budget plans, subscription tracking, appearance, alert read markers and sample account choices stay as they are. No financial institution is contacted.',
                         ),
                         actions: [
                           TextButton(
@@ -105,7 +105,7 @@ class DemoStorageSettings extends ConsumerWidget {
                       builder: (context) => AlertDialog(
                         title: const Text('Reset demo plans?'),
                         content: const Text(
-                          'Restore the original sample budget plans and subscription tracking. Added plans, edited limits and tracking changes will be removed. Transactions and saved receipts stay as they are, so budget spending still reflects recorded activity. This does not cancel services or create charges.',
+                          'Restore the original sample budget plans and subscription tracking. Added plans, edited limits and tracking changes will be removed. Transactions, saved receipts, preferences and alert read markers stay as they are, so budget spending still reflects recorded activity. This does not cancel services or create charges.',
                         ),
                         actions: [
                           TextButton(
@@ -135,6 +135,47 @@ class DemoStorageSettings extends ConsumerWidget {
                     );
                   },
             child: const Text('Reset demo plans'),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          OutlinedButton(
+            onPressed: busy
+                ? null
+                : () async {
+                    final reset = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Reset demo alerts?'),
+                        content: const Text(
+                          'Restore the original sample read markers: three alerts unread and one read. Alert content, transactions, saved receipts, plans and preferences stay unchanged. This sends no notifications and contacts no financial institution.',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text('Reset alerts'),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (reset != true || !context.mounted) return;
+                    final success = await ref
+                        .read(demoPersistenceProvider.notifier)
+                        .resetAlerts();
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          success
+                              ? 'Original demo alert read markers restored on this device.'
+                              : 'We could not reset local alert markers. Please try again.',
+                        ),
+                      ),
+                    );
+                  },
+            child: const Text('Reset demo alerts'),
           ),
         ],
       ),

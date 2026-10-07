@@ -9,6 +9,7 @@ import '../../../core/formatting/date_formatter.dart';
 import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../../../core/widgets/task_screen.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../application/notifications_provider.dart';
 import '../domain/demo_notice.dart';
 import 'widgets/notice_card.dart';
@@ -50,7 +51,9 @@ class NotificationsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Fixed sample events from October 2024. These snapshots do not update with your edits. No push notifications or live financial monitoring are active.',
+                    ref.watch(demoPersistenceEnabledProvider)
+                        ? 'Fixed sample events from October 2024. These snapshots do not update with your edits. Read markers stay on this device after restart. No push notifications or live financial monitoring are active.'
+                        : 'Fixed sample events from October 2024. These snapshots do not update with your edits. No push notifications or live financial monitoring are active.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,
                     ),

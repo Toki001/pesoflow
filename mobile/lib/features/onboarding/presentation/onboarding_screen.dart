@@ -144,7 +144,7 @@ class OnboardingScreen extends ConsumerWidget {
                                         ? 'Demo activity stays on this device'
                                         : 'Changes last for this session',
                                     detail: persisted
-                                        ? 'Transactions, saved receipts, budget plans and subscription tracking stay locally after restart. Appearance and completed demo introduction are also saved. Notifications and sample connections reset. Use sample data only; local demo storage is not encrypted. Nothing is saved to a server.'
+                                        ? 'Transactions, saved receipts, budget plans and subscription tracking stay locally after restart. Appearance, completed demo introduction and sample alert read markers are also saved. Sample connections reset. Use sample data only; local demo storage is not encrypted. Nothing is saved to a server.'
                                         : 'Expenses, budgets and receipt edits reset when you restart the app. Nothing is saved to a server.',
                                   ),
                                   _DemoFact(

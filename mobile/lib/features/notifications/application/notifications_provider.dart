@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../data/notification_fixture.dart';
 import '../domain/demo_notice.dart';
 
@@ -23,10 +24,15 @@ final notificationsProvider = FutureProvider<List<DemoNotice>>((ref) async {
   return List.unmodifiable(sorted);
 }, retry: (_, _) => null);
 
-/// Read state survives inbox reloads, but disappears with the demo session.
+/// Read state hydrates from local storage; previews remain memory-only.
 class NoticeReadController extends Notifier<Set<String>> {
   @override
-  Set<String> build() => Set.unmodifiable({'spending-review'});
+  Set<String> build() => Set.unmodifiable(
+    ref.watch(initialDemoWorkspaceProvider)?.noticeReadIds ??
+        initialNoticeReadIds,
+  );
+
+  void restore(Set<String> readIds) => state = Set.unmodifiable(readIds);
 
   void setRead(String id, bool read) {
     final notices = ref.read(notificationsProvider).value;
