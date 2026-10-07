@@ -123,6 +123,11 @@ Recommended next task: physical Android/iOS resilience verification, including
 native local/cloud document save and selection, backup transfer to another test
 installation, force-stop/restart, lock/unlock, interrupted restore and low-storage
 failures. Follow the [device checklist](backup.md#verification-and-device-checks).
+Physical verification is currently blocked: discovery found no Android/iOS
+hardware and the owner cannot connect devices. The [resilience evidence and
+device procedure](verification/backup-device-checklist.md) distinguishes the
+completed host checks from pending native checks. Do not treat these checks as
+physical-device sign-off.
 Old demo databases remain outside backup/import; any later migration must
 distinguish user edits from sample records and show a review before import.
 
@@ -276,3 +281,40 @@ See [backup format, limits and device checklist](backup.md) and the updated
 blocker for this scoped local export/restore milestone. Physical-device resilience
 verification is the next task; forgotten passwords, missing backup files and
 unreadable underlying SQLite storage cannot be repaired by this feature.
+
+## Checkpoint 6 — resilience checks; physical verification blocked
+
+Test implementation: `df6a41c`.
+
+8 October 2026: no physical Android or iOS device was available and the owner
+confirmed devices cannot be connected. Native file dialogs, cloud document
+providers, cross-platform phone-to-phone restore, real lock/unlock and device
+storage exhaustion remain **unverified**. No connected personal device was altered.
+
+Added test-only coverage without changing application code, the database schema,
+financial engines, dependencies or approved layouts:
+
+- Real `SQLITE_FULL` during restore in bounded temporary databases, in DELETE and
+  WAL journal modes. Controller state stays unchanged; reopening preserves exact
+  prior workspace/images and passes integrity checking. Retry succeeds after
+  lifting the database-specific growth limit. Host disks were not filled.
+- Temporary key-store failure leaves records and key unchanged; retry succeeds
+  when access returns. This is injected failure, not native secure-storage proof.
+- File-provider read/write errors, safe messages without path leakage, retry,
+  stale-preview rejection and simulated background/resume without duplicate
+  submission. Native dialogs remain injected in widget tests.
+- Four separate host process-interruption cases: SIGKILL before/after restore
+  commit in DELETE/WAL mode. The before-commit barrier follows workspace/image
+  mutations with forced SQLite cache spill. A fresh process verifies complete
+  original or restored state and images, never a partial mixture.
+
+Verification: `bash scripts/check.sh` passes formatting, static analysis,
+**136 Flutter tests including the unchanged 16 golden comparisons**, and backend
+format/lint/build/health checks. `python3 scripts/check_backup_interruptions.py`
+passes all **four** additional interruption cases. These are host tests, not
+hardware power-loss tests. No native rebuild was needed: application/plugin
+sources are unchanged from the passing checkpoint 5 debug builds.
+
+See the [recorded evidence and deterministic physical test procedure](verification/backup-device-checklist.md).
+The physical-device task remains blocked on hardware; no release-readiness claim
+is made. Recovery still requires a saved portable backup and its password.

@@ -106,3 +106,10 @@ budgets, plans and theme; force-stop/relaunch and compare again. Exercise lock/
 unlock, provider download failures, interruption and storage exhaustion. Keep
 source backups throughout. No physical-device or cloud-provider verification is
 claimed by automated tests or simulator builds.
+
+Current physical-device availability, host interruption/storage-failure results
+and an exact Android/iOS test sequence are recorded in the
+[backup device checklist](verification/backup-device-checklist.md). The host
+process-interruption runner is `python3 scripts/check_backup_interruptions.py`;
+it targets only isolated temporary test databases and processes. Passing it does
+not replace native file-dialog, device lock or cloud-provider testing.

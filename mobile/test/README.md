@@ -32,6 +32,20 @@ widget tests; codec/repository tests use real encryption. Regenerate only review
 backup baselines with `flutter test test/backup_screen_test.dart --update-goldens`.
 Native file-picker and physical-device recovery steps are in `docs/backup.md`.
 
+`backup_resilience_test.dart` constrains temporary SQLite files to produce actual
+`SQLITE_FULL` in DELETE/WAL mode, checks controller state and close/reopen rollback,
+then retries after lifting the ceiling. It also injects unavailable key storage.
+Backup widget checks inject provider errors and lifecycle transitions; they do
+not operate native dialogs or lock physical devices.
+
+From the repository root, run `python3 scripts/check_backup_interruptions.py`
+for four additional POSIX process-kill/reopen cases. The runner explicitly invokes
+`test/device/backup_interrupt_worker.dart`, verifies PID ownership, kills only its
+own isolated worker and checks the data in a fresh process. That worker is not a
+normal `*_test.dart` target and must not run without the runner's temporary marker
+and environment. These cases are separate from the standard Flutter test count.
+See [device evidence and pending steps](../../docs/verification/backup-device-checklist.md).
+
 For native persistence, use a dedicated empty simulator only:
 
 ```sh
