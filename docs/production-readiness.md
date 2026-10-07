@@ -76,6 +76,28 @@ charges, and persistent condition/deduplication logic for budget thresholds,
 renewals and unusually large expenses. These engines contain no sample financial
 aggregates. Screens and startup still require their production wiring.
 
+Checkpoint 3 adds a native manual-account editor using existing TaskScreen,
+FinanceCard and typography components, a real Home projection, and startup/save
+boundary components for the new repository. The editor validates signed opening
+balances and stores only optional masked identifiers; failed saves keep inputs
+for retry. Widget tests inject the real controller with a fake repository.
+`main.dart` and the existing router have deliberately not switched yet: the
+remaining feature providers still require migration. These components therefore
+do not make the current app a production/manual app on their own.
+
+Next required local work, in order:
+
+1. Wire bootstrap and all feature providers to the finance controller, remove
+   runtime fixtures and demo presentation/reset controls, and migrate test setup.
+2. Connect manual-account creation/editing, real transaction CRUD, onboarding,
+   preferences, all budget periods, recurring suggestions and live empty states.
+3. Implement camera/OCR/review/image lifecycle, notification delivery, export,
+   deletion and reviewed legacy-data migration.
+4. Implement PostgreSQL backend modules, authenticated sessions, ownership,
+   API/offline sync and truthful unconfigured provider behavior.
+5. Finish platform configuration, device/release builds, visual review and the
+   final readiness/device-launch documentation.
+
 All items marked Partial/Missing in the audit remain required local work until
 their implementation and verification are recorded here. They are not external
 blockers. No production build or security completion is claimed yet.
@@ -116,3 +138,9 @@ passed (303 tests, existing golden comparisons unchanged). New command tests
 exercise serialized writes, save failure recovery, transfers, deletion guards,
 remembered corrections and atomic notice creation; calculation tests cover empty
 analytics, previous periods, recurring intervals and alert deduplication.
+
+Checkpoint 3: `dart format lib test`, `flutter analyze` and `flutter test` passed
+(307 tests, all existing goldens unchanged). Account-form tests cover durable
+creation and retry; the Home projection test verifies empty finances. No Android
+or iOS release build has been attempted for this migration yet. No signed release
+or complete production authentication/OCR integration is claimed.

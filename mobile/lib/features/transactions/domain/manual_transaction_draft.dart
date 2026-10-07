@@ -1,5 +1,17 @@
 import 'transaction.dart';
 
+/// Opening balances may be zero or negative (credit/overdraft liabilities).
+int? parseStartingBalance(String input) {
+  final text = input.trim();
+  if (!RegExp(r'^-?\d{1,9}(\.\d{1,2})?$').hasMatch(text)) return null;
+  final negative = text.startsWith('-');
+  final parts = (negative ? text.substring(1) : text).split('.');
+  final amount =
+      int.parse(parts[0]) * 100 +
+      (parts.length == 1 ? 0 : int.parse(parts[1].padRight(2, '0')));
+  return negative ? -amount : amount;
+}
+
 /// Exact decimal parsing into centavos. Reject malformed or over-precise input.
 int? parsePhpAmount(String input) {
   final text = input.trim();
