@@ -61,7 +61,9 @@ real account.
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,
 Add Expense, Budgets, Analytics, Connected Accounts, Subscriptions and Receipt Review screens. Manual expenses, income and transfers update
-a session-only demo ledger. Budget creation, editing, filters and reallocation
+a session-only demo ledger. Transactions and receipt saves retain stable account
+IDs separate from display labels; account filters include either side of a
+transfer. Distinct bank products remain separate, and no local storage exists yet. Budget creation, editing, filters and reallocation
 work with that ledger. Analytics supports date/period selection, category
 percentages, chart details and session spending updates. Connected Accounts offers
 masked sample profiles, local refresh checks, and confirmed session removal/restoration;

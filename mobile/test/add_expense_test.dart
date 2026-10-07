@@ -1,3 +1,4 @@
+import 'package:pesoflow/features/accounts/data/ledger_account_fixture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,7 +44,13 @@ ManualTransactionDraft draft({
   amount: amount,
   merchant: 'Demo Lunch',
   account: 'GCash',
+  accountId: DemoLedgerAccounts.gcash.id,
   destinationAccount: destination,
+  destinationAccountId: destination == 'Maya'
+      ? DemoLedgerAccounts.maya.id
+      : destination == 'GCash'
+      ? DemoLedgerAccounts.gcash.id
+      : null,
   occurredAt: demoClock,
   kind: kind,
   category: TransactionCategory.food,
@@ -187,6 +194,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(container.read(demoLedgerProvider).length, 10);
       expect(container.read(demoLedgerProvider).first.amount, 32500);
+      expect(container.read(demoLedgerProvider).first.accountId, 'gcash');
       expect(find.text('October 2024'), findsOneWidget);
       expect(find.text('Expense saved in this demo session.'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('nav-Home')));
@@ -217,6 +225,11 @@ void main() {
     await tester.tap(find.text('Save Transfer — ₱325.00'));
     await tester.pumpAndSettle();
     expect(container.read(demoLedgerProvider).first.destinationAccount, 'Maya');
+    expect(container.read(demoLedgerProvider).first.accountId, 'gcash');
+    expect(
+      container.read(demoLedgerProvider).first.destinationAccountId,
+      'maya',
+    );
     expect(container.read(demoLedgerProvider).first.expenseImpact, 0);
   });
   testWidgets('Add Expense supports 320px and enlarged text', (tester) async {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../accounts/data/ledger_account_fixture.dart';
+import '../../accounts/domain/ledger_account.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../transactions/domain/manual_transaction_draft.dart';
 import '../../transactions/domain/transaction.dart';
@@ -273,8 +275,8 @@ Future<TransactionCategory?> chooseReceiptCategory(BuildContext context) =>
         ),
       ),
     );
-Future<String?> chooseReceiptAccount(BuildContext context) =>
-    showModalBottomSheet<String>(
+Future<LedgerAccount?> chooseReceiptAccount(BuildContext context) =>
+    showModalBottomSheet<LedgerAccount>(
       context: context,
       showDragHandle: true,
       builder: (context) => SafeArea(
@@ -286,9 +288,14 @@ Future<String?> chooseReceiptAccount(BuildContext context) =>
                 'Choose sample payment source',
                 style: AppTypography.headlineSmall,
               ),
-              for (final account in ['GCash', 'Maya', 'BDO Checking', 'Cash'])
+              for (final account in [
+                DemoLedgerAccounts.gcash,
+                DemoLedgerAccounts.maya,
+                DemoLedgerAccounts.bdo,
+                DemoLedgerAccounts.cash,
+              ])
                 ListTile(
-                  title: Text(account),
+                  title: Text(account.label),
                   subtitle: const Text(
                     'Demo source only · no payment initiated',
                   ),

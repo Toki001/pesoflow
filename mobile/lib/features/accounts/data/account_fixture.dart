@@ -1,9 +1,10 @@
 import '../../transactions/data/transaction_fixture.dart';
 import '../domain/demo_account.dart';
+import 'ledger_account_fixture.dart';
 
 List<DemoAccount> accountFixture() => List.unmodifiable([
   DemoAccount(
-    id: 'gcash',
+    id: DemoLedgerAccounts.gcash.id,
     institution: 'GCash',
     name: 'GCash Personal',
     maskedIdentifier: '0917 •••• 892',
@@ -12,7 +13,7 @@ List<DemoAccount> accountFixture() => List.unmodifiable([
     balanceAsOf: demoClock.subtract(const Duration(minutes: 5)),
   ),
   DemoAccount(
-    id: 'bdo',
+    id: DemoLedgerAccounts.bdo.id,
     institution: 'BDO Unibank',
     name: 'BDO Online Checking',
     maskedIdentifier: 'Account •••• 4120',
@@ -21,7 +22,7 @@ List<DemoAccount> accountFixture() => List.unmodifiable([
     balanceAsOf: demoClock.subtract(const Duration(hours: 1)),
   ),
   DemoAccount(
-    id: 'maya',
+    id: DemoLedgerAccounts.maya.id,
     institution: 'Maya',
     name: 'Maya Wallet',
     maskedIdentifier: '0918 •••• 331',
@@ -30,7 +31,7 @@ List<DemoAccount> accountFixture() => List.unmodifiable([
     balanceAsOf: demoClock.subtract(const Duration(minutes: 12)),
   ),
   DemoAccount(
-    id: 'bpi',
+    id: DemoLedgerAccounts.bpi.id,
     institution: 'BPI',
     name: 'BPI Savings',
     maskedIdentifier: 'Account •••• 8841',

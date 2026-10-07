@@ -9,21 +9,21 @@ class TransactionQuery {
     this.month = 10,
     this.search = '',
     this.filter = TransactionFilter.all,
-    this.account,
+    this.accountId,
     this.category,
   });
   final int year;
   final int month;
   final String search;
   final TransactionFilter filter;
-  final String? account;
+  final String? accountId;
   final TransactionCategory? category;
   TransactionQuery copyWith({
     int? year,
     int? month,
     String? search,
     TransactionFilter? filter,
-    String? account,
+    String? accountId,
     TransactionCategory? category,
     bool clearAccount = false,
     bool clearCategory = false,
@@ -32,12 +32,12 @@ class TransactionQuery {
     month: month ?? this.month,
     search: search ?? this.search,
     filter: filter ?? this.filter,
-    account: clearAccount ? null : account ?? this.account,
+    accountId: clearAccount ? null : accountId ?? this.accountId,
     category: clearCategory ? null : category ?? this.category,
   );
   bool matches(TransactionRecord t) {
     if (t.occurredAt.year != year || t.occurredAt.month != month) return false;
-    if (account != null && t.account != account) return false;
+    if (accountId != null && !t.involvesAccount(accountId!)) return false;
     if (category != null && t.category != category) return false;
     final typeMatch = switch (filter) {
       TransactionFilter.all => true,

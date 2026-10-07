@@ -439,3 +439,11 @@ Two 390 × 1500 light/dark goldens were visually reviewed against adjacent Accou
 patterns for gutters, hierarchy, numeric treatment, cards, badges, icons and dark
 fill. There is no pixel-level approved baseline for this screen; the inferred
 layout awaits product review.
+
+## Stable account references (no visual redesign)
+
+Account associations and filters now use internal IDs while preserving visible
+labels, card layouts and all 36 golden baselines. Transfers appear once for each
+involved account, including a receiving-only account filter. Separate BDO products
+retain their individual labels; legacy records without an ID remain in All and
+are not guessed into an account view. No new screen or visual token is introduced.

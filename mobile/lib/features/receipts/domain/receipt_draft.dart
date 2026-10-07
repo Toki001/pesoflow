@@ -33,6 +33,7 @@ class ReceiptDraft {
   ReceiptDraft({
     required this.id,
     required this.merchant,
+    required this.accountId,
     required this.occurredAt,
     required Iterable<ReceiptItem> items,
     this.category = TransactionCategory.groceries,
@@ -44,6 +45,7 @@ class ReceiptDraft {
     }
   }
   final String id, merchant, account;
+  final String accountId;
   final DateTime occurredAt;
   final List<ReceiptItem> items;
   final TransactionCategory category;
@@ -56,7 +58,9 @@ class ReceiptDraft {
     if (merchant.trim().isEmpty || merchant.length > 100) {
       return 'Enter a valid merchant name.';
     }
-    if (account.trim().isEmpty) return 'Choose a payment source.';
+    if (account.trim().isEmpty || accountId.trim().isEmpty) {
+      return 'Choose a payment source.';
+    }
     if ([
       TransactionCategory.income,
       TransactionCategory.transfer,
@@ -78,6 +82,7 @@ class ReceiptDraft {
     List<ReceiptItem>? items,
     TransactionCategory? category,
     String? account,
+    String? accountId,
     String? savedTransactionId,
   }) => ReceiptDraft(
     id: id,
@@ -86,6 +91,7 @@ class ReceiptDraft {
     items: items ?? this.items,
     category: category ?? this.category,
     account: account ?? this.account,
+    accountId: accountId ?? this.accountId,
     savedTransactionId: savedTransactionId ?? this.savedTransactionId,
   );
   TransactionRecord toTransaction(String transactionId) {
@@ -100,6 +106,7 @@ class ReceiptDraft {
       kind: TransactionKind.expense,
       category: category,
       account: account,
+      accountId: accountId,
       source: TransactionSource.receipt,
       hasReceipt: true,
       note: 'Reviewed demo receipt. No camera capture or live OCR.',

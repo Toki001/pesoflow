@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../accounts/domain/ledger_account.dart';
+
 import '../../transactions/application/transactions_provider.dart';
 import '../../transactions/domain/transaction.dart';
 import '../data/receipt_fixture.dart';
@@ -56,9 +58,11 @@ class ReceiptReview extends AsyncNotifier<ReceiptDraft?> {
     if (d != null) setDraft(d.copyWith(category: value));
   }
 
-  void setAccount(String value) {
+  void setAccount(LedgerAccount value) {
     final d = state.value;
-    if (d != null) setDraft(d.copyWith(account: value));
+    if (d != null) {
+      setDraft(d.copyWith(account: value.label, accountId: value.id));
+    }
   }
 
   String nextItemId() => 'receipt-item-${++_sequence}';

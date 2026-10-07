@@ -1,7 +1,9 @@
+import '../../accounts/data/ledger_account_fixture.dart';
 import '../domain/receipt_draft.dart';
 
 ReceiptDraft receiptFixture() => ReceiptDraft(
   id: 'sm-megamall-demo',
+  accountId: DemoLedgerAccounts.gcash.id,
   merchant: 'SM Supermarket Megamall',
   occurredAt: DateTime(2024, 10, 24, 11, 42),
   items: [

@@ -55,8 +55,22 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   Future<void> chooseFilter({required bool account}) async {
     final records = ref.read(demoLedgerProvider);
     final query = ref.read(transactionQueryProvider);
+    final accountOptions = <String, String>{};
+    for (final t in records) {
+      if (t.accountId != null && t.accountId!.trim().isNotEmpty) {
+        accountOptions.putIfAbsent(t.accountId!, () => t.account);
+      }
+      if (t.kind == TransactionKind.transfer &&
+          t.destinationAccountId != null &&
+          t.destinationAccountId!.trim().isNotEmpty) {
+        accountOptions.putIfAbsent(
+          t.destinationAccountId!,
+          () => t.destinationAccount ?? 'Transfer account',
+        );
+      }
+    }
     final options = account
-        ? records.map((t) => t.account).toSet().toList()
+        ? accountOptions.keys.toList()
         : records.map((t) => categoryLabel(t.category)).toSet().toList();
     final selected = await showModalBottomSheet<String>(
       context: context,
@@ -76,7 +90,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
               ),
               for (final option in options)
                 ListTile(
-                  title: Text(option),
+                  title: Text(account ? accountOptions[option]! : option),
                   onTap: () => Navigator.pop(context, option),
                 ),
             ],
@@ -87,7 +101,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
     if (selected == null || !mounted) return;
     setQuery(
       account
-          ? query.copyWith(account: selected, clearAccount: selected == 'All')
+          ? query.copyWith(accountId: selected, clearAccount: selected == 'All')
           : query.copyWith(
               category: selected == 'All'
                   ? null
@@ -326,9 +340,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                 ),
                               _FilterPill(
                                 label:
-                                    query.account ??
+                                    accountLabel(
+                                      query.accountId,
+                                      ref.watch(demoLedgerProvider),
+                                    ) ??
                                     'Accounts (GCash, BDO, Maya)',
-                                selected: query.account != null,
+                                selected: query.accountId != null,
                                 onTap: () => chooseFilter(account: true),
                               ),
                               const SizedBox(width: 8),
@@ -471,4 +488,16 @@ class _FilterPill extends StatelessWidget {
       ),
     ),
   );
+}
+
+/// Resolve a display snapshot without using it as account identity.
+String? accountLabel(String? id, List<TransactionRecord> records) {
+  if (id == null) return null;
+  for (final t in records) {
+    if (t.accountId == id) return t.account;
+    if (t.kind == TransactionKind.transfer && t.destinationAccountId == id) {
+      return t.destinationAccount ?? 'Transfer account';
+    }
+  }
+  return 'Selected account';
 }

@@ -16,24 +16,29 @@ class ManualTransactionDraft {
     required this.amount,
     required this.merchant,
     required this.account,
+    required this.accountId,
     required this.occurredAt,
     required this.kind,
     required this.category,
     this.destinationAccount,
+    this.destinationAccountId,
     this.note = '',
   });
   final int amount;
   final String merchant;
   final String account;
+  final String accountId;
   final DateTime occurredAt;
   final TransactionKind kind;
   final TransactionCategory category;
   final String? destinationAccount;
+  final String? destinationAccountId;
   final String note;
   TransactionRecord toRecord(String id) {
     if (amount <= 0 ||
         amount > 99999999999 ||
         account.trim().isEmpty ||
+        accountId.trim().isEmpty ||
         merchant.trim().isEmpty) {
       throw ArgumentError(
         'A positive amount, account and merchant are required.',
@@ -49,7 +54,9 @@ class ManualTransactionDraft {
     if (kind == TransactionKind.transfer &&
         (destinationAccount == null ||
             destinationAccount!.trim().isEmpty ||
-            destinationAccount == account)) {
+            destinationAccountId == null ||
+            destinationAccountId!.trim().isEmpty ||
+            destinationAccountId == accountId)) {
       throw ArgumentError('Choose two distinct transfer accounts.');
     }
     final actualCategory = kind == TransactionKind.transfer
@@ -78,8 +85,12 @@ class ManualTransactionDraft {
       kind: kind,
       category: actualCategory,
       account: account,
+      accountId: accountId,
       destinationAccount: kind == TransactionKind.transfer
           ? destinationAccount
+          : null,
+      destinationAccountId: kind == TransactionKind.transfer
+          ? destinationAccountId
           : null,
       note: note.trim(),
       tags: RegExp(r'#([a-zA-Z0-9_]+)')

@@ -1,3 +1,4 @@
+import '../../accounts/data/ledger_account_fixture.dart';
 import '../domain/transaction.dart';
 
 final demoClock = DateTime(2024, 10, 24, 12, 35);
@@ -5,6 +6,7 @@ final demoClock = DateTime(2024, 10, 24, 12, 35);
 List<TransactionRecord> transactionFixture() => [
   TransactionRecord(
     id: 'jollibee',
+    accountId: DemoLedgerAccounts.gcash.id,
     merchant: 'Jollibee',
     metadata: 'Food & Dining · GCash',
     amount: 32500,
@@ -18,6 +20,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'grab',
+    accountId: DemoLedgerAccounts.maya.id,
     merchant: 'Grab Car',
     metadata: 'Transport · Maya',
     account: 'Maya',
@@ -29,6 +32,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'starbucks',
+    accountId: DemoLedgerAccounts.bdoDebit.id,
     merchant: 'Starbucks Reserve',
     metadata: 'Coffee & Drinks · BDO Debit',
     account: 'BDO Debit',
@@ -41,10 +45,12 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'transfer',
+    accountId: DemoLedgerAccounts.bdoSavings.id,
     merchant: 'BDO Savings → GCash',
     metadata: 'Account Transfer',
     account: 'BDO Savings',
     destinationAccount: 'GCash',
+    destinationAccountId: DemoLedgerAccounts.gcash.id,
     amount: 500000,
     occurredAt: DateTime(2024, 10, 23, 16, 10),
     kind: TransactionKind.transfer,
@@ -53,6 +59,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'seven-eleven',
+    accountId: DemoLedgerAccounts.gcash.id,
     merchant: '7-Eleven',
     metadata: 'Groceries & Convenience · GCash',
     amount: 18000,
@@ -63,6 +70,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'salary',
+    accountId: DemoLedgerAccounts.bdo.id,
     merchant: 'Monthly Salary (Acme Corp)',
     metadata: 'Income · BDO Checking',
     account: 'BDO Checking',
@@ -74,6 +82,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'supermarket',
+    accountId: DemoLedgerAccounts.bdoCredit.id,
     merchant: 'SM Supermarket',
     metadata: 'Groceries · BDO Credit Card',
     account: 'BDO Credit Card',
@@ -86,6 +95,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'refund',
+    accountId: DemoLedgerAccounts.maya.id,
     merchant: 'Shopee Refund',
     metadata: 'Refund · Maya',
     account: 'Maya',
@@ -97,6 +107,7 @@ List<TransactionRecord> transactionFixture() => [
   ),
   TransactionRecord(
     id: 'netflix',
+    accountId: DemoLedgerAccounts.gcash.id,
     merchant: 'Netflix Subscription',
     metadata: 'Subscriptions · GCash · Recurring',
     amount: 54900,

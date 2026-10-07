@@ -58,7 +58,7 @@ void main() {
         filterTransactions(
           records,
           const TransactionQuery(
-            account: 'Maya',
+            accountId: 'maya',
             filter: TransactionFilter.expenses,
           ),
         ).single.id,

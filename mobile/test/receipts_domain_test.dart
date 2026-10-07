@@ -1,3 +1,4 @@
+import 'package:pesoflow/features/accounts/data/ledger_account_fixture.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
@@ -179,13 +180,15 @@ void main() {
       expect(controller.save, throwsArgumentError);
       expect(c.read(demoLedgerProvider), same(ledger));
       controller.setMerchant('Reviewed Store');
-      controller.setAccount('Cash');
+      controller.setAccount(DemoLedgerAccounts.cash);
       controller.setCategory(TransactionCategory.shopping);
       controller.saveItem(
         confirmed(c.read(receiptReviewProvider).value!.items.last),
       );
       expect(c.read(demoLedgerProvider), same(ledger));
       final id = controller.save();
+      expect(c.read(demoLedgerProvider).first.accountId, 'cash');
+      expect(c.read(receiptReviewProvider).value!.accountId, 'cash');
       expect(controller.save(), id);
       expect(c.read(demoLedgerProvider).length, ledger.length + 1);
       final overviewAfter = (await c.read(dashboardProvider.future))!;

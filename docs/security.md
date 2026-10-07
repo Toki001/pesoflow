@@ -81,3 +81,10 @@ serve as provider/legal consent. The route accepts only a matching catalog ID;
 there is no external URL, credential field, remote authorization or permission
 request. Cancel changes nothing; removal preserves ledger history. Production
 consent ownership, scope, expiry, audit and revocation are unimplemented.
+
+
+Stable ledger account references replace name-based associations. Missing legacy
+references remain unresolved rather than matching a financial institution by
+label. Local IDs confer no authorization or ownership and expose no raw account
+numbers. Future authenticated storage/API work must verify account ownership and
+scope independently; this milestone adds neither persistence nor network access.

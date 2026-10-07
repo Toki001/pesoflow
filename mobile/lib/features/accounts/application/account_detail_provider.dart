@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../transactions/application/transactions_provider.dart';
-import '../data/account_activity.dart';
+import '../domain/account_activity.dart';
 import '../domain/account_detail.dart';
 import 'accounts_provider.dart';
 
@@ -14,7 +14,7 @@ final accountDetailProvider =
         if (matching.isEmpty) return null;
         return AccountDetail(
           account: matching.single,
-          activity: sampleAccountActivity(id, ledger),
+          activity: accountActivity(id, ledger),
         );
       });
     });

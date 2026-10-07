@@ -676,3 +676,47 @@ Next: start the domain/persistence milestone with stable account identifiers and
 explicit ledger associations, replacing the fixture-label bridge before adding
 local demo storage. Real authentication and financial integrations remain
 separate milestones.
+
+## Stable account identity phase
+
+The label-alias bridge is replaced by explicit `accountId` and
+`destinationAccountId` references on the Freezed transaction model, with
+regenerated JSON/copy/equality support. Display strings remain snapshots.
+`LedgerAccount` and a deterministic fixture catalog distinguish wallet, checking,
+savings, debit, credit-card and cash identities. Existing connected-profile IDs
+are preserved; additional ledger sources are not presented as connected profiles.
+The catalog is independent of session connection removal/restoration.
+
+`accountActivity` moves from fixture data into the account domain. It uses the
+shared transaction membership predicate, includes a transfer once for either
+endpoint, preserves sorting/immutability and never matches institution/label
+text. Account filters also store IDs and expose receiving-only transfer accounts.
+Labels shown in the picker/chip come from record snapshots; equal labels remain
+separate choices. An ID without current display data shows a safe generic label.
+
+Add Expense retains its visible design and stores selected source/destination
+IDs. Manual validation compares IDs, preventing same-account transfers even
+when labels differ, and allowing distinct identities with identical labels.
+Receipt selections carry typed identities and publish ID/label together; saved
+receipt snapshots and transactions retain the selected reference. Balance data
+remains separate from ledger edits.
+
+JSON compatibility is additive: missing ID fields decode as null. Unresolved
+legacy records remain visible and included in totals, but do not join a profile
+or ID filter by name. No saved data currently requires a disk migration because
+the app remains session-only. No dependencies, persistence, user identity,
+authentication, backend endpoints or financial integrations are introduced.
+
+Validation: code generation, formatting and static analysis pass. All 239 Flutter
+tests pass, including all 36 unchanged golden comparisons. Eight new tests cover
+fixture reference integrity, renamed/colliding labels, product separation,
+source/destination transfer filtering and zero impact, JSON round trips, missing/
+unknown references, ID-based transfer validation, receipt identity validation
+and a receiving-only account picker. Existing manual/receipt widget/domain tests
+now verify saved IDs. Android debug and iOS simulator builds and existing backend
+format/lint/build/health checks pass.
+
+Next: introduce versioned local demo persistence behind repositories, starting
+with the ledger and explicit account references, while retaining deterministic
+fixtures and a clear reset path. Real authentication and provider integrations
+remain separate milestones.

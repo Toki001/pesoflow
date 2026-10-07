@@ -136,15 +136,11 @@ or delivery/event contract. Fixed snapshots do not recompute after demo edits.
 
 `AccountDetail` holds a `DemoAccount` and an unmodifiable newest-first activity
 list. `accountDetailProvider(id)` projects the current account overview plus
-ledger and returns null for missing/removed IDs. An explicit fixture alias map
-associates gcash→GCash, maya→Maya, bdo→BDO Checking and bpi→BPI Savings. Source
-and destination membership include transfers once; institution-name prefix
-matching is deliberately absent. Other BDO products are separate fixture sources.
-Manual ledger edits update related activity without recalculating or advancing
-reported profile balances/timestamps. This local alias bridge introduces no JSON,
-provider identity, storage or API contract; real association requires stable
-financial account IDs during the domain/persistence milestone.
-
+ledger and returns null for missing/removed profiles. `accountActivity` now lives
+in the account domain and matches explicit source/destination IDs. Transfers
+include either endpoint once. Label changes do not change association. Manual
+ledger edits update related activity without recalculating or advancing reported
+profile balances/timestamps.
 
 `demoAccessProvider(id)` holds an ephemeral acknowledgment boolean per sample
 profile. Its typed `DemoAccessResult` reports added, acknowledgment required,
@@ -154,3 +150,28 @@ or backend contract. The guard uses current catalog/account state and delegates
 to the existing sample-list mutation; balances, timestamps, connection status
 and ledger activity remain unchanged. Auto-disposal resets acknowledgment when
 the review closes.
+
+## Stable ledger account identities
+
+`LedgerAccount` separates an internal ID from its display label. The deterministic
+catalog keeps existing profile IDs (`gcash`, `maya`, `bdo`, `bpi`) so routes and
+session restoration remain compatible. `bdo` identifies Checking only; Debit,
+Savings and Credit Card use distinct `bdo-debit`, `bdo-savings` and `bdo-credit`
+IDs. `cash` is a manual ledger identity with no provider profile or reported
+balance. A ledger identity does not imply an active financial connection.
+
+`TransactionRecord.accountId` and `destinationAccountId` are additive nullable
+JSON fields. Existing account/destination strings remain display snapshots.
+Every current fixture supplies explicit IDs; JSON without IDs decodes with null
+references and is never associated by display/institution name. Such records
+remain in the unfiltered feed and aggregate totals. Future storage/import
+migration must supply verified references instead of guessing from labels.
+
+Manual drafts require a nonempty source ID, and transfers require a nonempty,
+distinct destination ID. Non-transfer saves clear destination labels/IDs.
+Receipt drafts require a source ID; picker changes atomically update its ID and
+label, retained in both the saved transaction and receipt snapshot. Account
+filters store IDs and include incoming/outgoing transfers once. Amounts,
+provenance, timestamps, refund/pending/transfer impacts and reported balances
+retain their existing semantics. There is no local database, ownership identity,
+provider adapter or backend contract in this milestone.

@@ -10,6 +10,7 @@ import '../../../core/widgets/budget_progress_bar.dart';
 import '../../../core/widgets/category_icon.dart';
 import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/task_screen.dart';
+import '../../accounts/data/ledger_account_fixture.dart';
 import '../../transactions/application/transactions_provider.dart';
 import '../../budgets/application/budgets_provider.dart';
 import '../../transactions/data/transaction_fixture.dart';
@@ -31,16 +32,18 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
   final formKey = GlobalKey<FormState>();
   TransactionKind kind = TransactionKind.expense;
   TransactionCategory category = TransactionCategory.food;
-  String account = 'GCash';
-  String destination = 'Maya';
+  String accountId = DemoLedgerAccounts.gcash.id;
+  String get account => DemoLedgerAccounts.byId(accountId)!.label;
+  String destinationId = DemoLedgerAccounts.maya.id;
+  String get destination => DemoLedgerAccounts.byId(destinationId)!.label;
   DateTime date = demoClock;
   bool saving = false;
-  static const accounts = {
-    'GCash': ('GCash Personal', 425000),
-    'BDO Checking': ('BDO Checking', 2840000),
-    'Maya': ('Maya Wallet', 185000),
-    'Cash': ('Cash', 0),
-  };
+  static final Map<String, (String, int)> accounts = Map.unmodifiable({
+    DemoLedgerAccounts.gcash.id: ('GCash Personal', 425000),
+    DemoLedgerAccounts.bdo.id: ('BDO Checking', 2840000),
+    DemoLedgerAccounts.maya.id: ('Maya Wallet', 185000),
+    DemoLedgerAccounts.cash.id: ('Cash', 0),
+  });
   static const categories = [
     (TransactionCategory.food, Icons.restaurant),
     (TransactionCategory.groceries, Icons.shopping_basket_outlined),
@@ -78,8 +81,8 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     merchant.clear();
     note.clear();
     category = TransactionCategory.food;
-    account = 'GCash';
-    destination = 'Maya';
+    accountId = DemoLedgerAccounts.gcash.id;
+    destinationId = DemoLedgerAccounts.maya.id;
     date = demoClock;
   });
   void increment(int centavos) => setState(() {
@@ -127,7 +130,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               ListTile(
                 title: Text(entry.value.$1),
                 subtitle: Text(
-                  entry.key == 'Cash'
+                  entry.key == DemoLedgerAccounts.cash.id
                       ? 'Manual cash ledger'
                       : 'Demo balance: ${MoneyFormatter.php(entry.value.$2)}',
                 ),
@@ -140,9 +143,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     if (selected != null && mounted) {
       setState(() {
         if (receiving) {
-          destination = selected;
+          destinationId = selected;
         } else {
-          account = selected;
+          accountId = selected;
         }
       });
     }
@@ -190,7 +193,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       return;
     }
     if (!validFields) return;
-    if (kind == TransactionKind.transfer && account == destination) {
+    if (kind == TransactionKind.transfer && accountId == destinationId) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Choose two different transfer accounts.'),
@@ -203,7 +206,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       amount: parsedAmount,
       merchant: kind == TransactionKind.transfer ? 'Transfer' : merchant.text,
       account: account,
+      accountId: accountId,
       destinationAccount: destination,
+      destinationAccountId: destinationId,
       occurredAt: date,
       kind: kind,
       category: category,
@@ -656,13 +661,13 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                accounts[account]!.$1,
+                                accounts[accountId]!.$1,
                                 style: AppTypography.merchant,
                               ),
                               Text(
-                                account == 'Cash'
+                                accountId == DemoLedgerAccounts.cash.id
                                     ? 'Manual cash ledger'
-                                    : 'Balance: ${MoneyFormatter.php(accounts[account]!.$2)} available',
+                                    : 'Balance: ${MoneyFormatter.php(accounts[accountId]!.$2)} available',
                                 style: small.copyWith(color: c.mutedInk),
                               ),
                             ],
@@ -681,15 +686,15 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                     child: Row(
                       children: [
                         for (final entry in accounts.entries.where(
-                          (entry) => entry.key != account,
+                          (entry) => entry.key != accountId,
                         ))
                           Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: quickButton(
-                              entry.key == 'Cash'
+                              entry.key == DemoLedgerAccounts.cash.id
                                   ? 'Cash'
                                   : '${entry.value.$1} (${MoneyFormatter.php(entry.value.$2, decimals: false)})',
-                              () => setState(() => account = entry.key),
+                              () => setState(() => accountId = entry.key),
                             ),
                           ),
                       ],
@@ -702,7 +707,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                     OutlinedButton.icon(
                       onPressed: () => switchAccount(receiving: true),
                       icon: const Icon(Icons.swap_horiz),
-                      label: Text(accounts[destination]!.$1),
+                      label: Text(accounts[destinationId]!.$1),
                     ),
                   ],
                 ],

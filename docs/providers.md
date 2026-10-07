@@ -29,3 +29,11 @@ profile. An explicit unchecked acknowledgment is required before adding fixed
 sample data. This is not legal consent, provider authentication or an authorization
 redirect. No scopes, tokens, credentials, remote grants or revocations exist.
 Stale profiles retain their status and reported timestamp after restoration.
+
+
+Ledger account IDs are internal demo references, not provider-issued account
+numbers, tokens or consent grants. Checking, Savings, Debit and Credit Card at
+BDO have separate identities; institution/label equality never associates a
+transaction with a profile. Removing/restoring a sample profile preserves ledger
+IDs and history. Some fixture payment sources have no connected profile and
+remain illustrative ledger sources only.

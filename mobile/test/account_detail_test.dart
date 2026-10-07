@@ -7,7 +7,7 @@ import 'package:pesoflow/app/app.dart';
 import 'package:pesoflow/app/router.dart';
 import 'package:pesoflow/features/accounts/application/account_detail_provider.dart';
 import 'package:pesoflow/features/accounts/application/accounts_provider.dart';
-import 'package:pesoflow/features/accounts/data/account_activity.dart';
+import 'package:pesoflow/features/accounts/domain/account_activity.dart';
 import 'package:pesoflow/features/accounts/data/account_fixture.dart';
 import 'package:pesoflow/features/accounts/domain/demo_account.dart';
 import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
@@ -46,25 +46,25 @@ Future<ProviderContainer> pumpDetail(
 }
 
 void main() {
-  test('explicit account aliases exclude unrelated bank products and include both transfer sides once', () {
+  test('explicit account IDs exclude unrelated bank products and include both transfer sides once', () {
     final fixture = transactionFixture();
-    expect(sampleAccountActivity('bdo', fixture).map((t) => t.id), ['salary']);
-    expect(sampleAccountActivity('maya', fixture).map((t) => t.id), [
+    expect(accountActivity('bdo', fixture).map((t) => t.id), ['salary']);
+    expect(accountActivity('maya', fixture).map((t) => t.id), [
       'grab',
       'refund',
     ]);
-    expect(sampleAccountActivity('gcash', fixture).map((t) => t.id), [
+    expect(accountActivity('gcash', fixture).map((t) => t.id), [
       'jollibee',
       'transfer',
       'seven-eleven',
       'netflix',
     ]);
-    expect(sampleAccountActivity('bpi', fixture), isEmpty);
-    expect(sampleAccountActivity('unknown', fixture), isEmpty);
+    expect(accountActivity('bpi', fixture), isEmpty);
+    expect(accountActivity('unknown', fixture), isEmpty);
     final transfer = fixture
         .firstWhere((t) => t.kind == TransactionKind.transfer)
-        .copyWith(account: 'GCash', destinationAccount: 'GCash');
-    final activity = sampleAccountActivity('gcash', [transfer]);
+        .copyWith(accountId: 'gcash', destinationAccountId: 'gcash');
+    final activity = accountActivity('gcash', [transfer]);
     expect(activity, hasLength(1));
     expect(activity.single.expenseImpact, 0);
     expect(() => activity.clear(), throwsUnsupportedError);

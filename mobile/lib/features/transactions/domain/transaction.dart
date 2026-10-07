@@ -34,7 +34,9 @@ abstract class TransactionRecord with _$TransactionRecord {
     required TransactionKind kind,
     required TransactionCategory category,
     @Default('GCash') String account,
+    String? accountId,
     String? destinationAccount,
+    String? destinationAccountId,
     @Default(TransactionStatus.posted) TransactionStatus status,
     @Default(TransactionSource.manual) TransactionSource source,
     @Default('') String note,
@@ -45,6 +47,12 @@ abstract class TransactionRecord with _$TransactionRecord {
   }) = _TransactionRecord;
   factory TransactionRecord.fromJson(Map<String, dynamic> json) =>
       _$TransactionRecordFromJson(json);
+
+  /// No label fallback: older/unassociated records remain explicitly unresolved.
+  bool involvesAccount(String id) =>
+      id.trim().isNotEmpty &&
+      (accountId == id ||
+          (kind == TransactionKind.transfer && destinationAccountId == id));
   int get displayAmount => kind == TransactionKind.expense ? -amount : amount;
   int get expenseImpact => status == TransactionStatus.pending
       ? 0
