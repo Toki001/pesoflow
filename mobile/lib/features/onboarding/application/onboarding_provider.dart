@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../demo_workspace/application/demo_workspace_providers.dart';
+
 enum OnboardingStep { overview, plans, demo }
 
 final onboardingProvider =
@@ -26,3 +28,20 @@ class OnboardingController extends Notifier<OnboardingStep> {
 
   void skipToDemo() => state = OnboardingStep.demo;
 }
+
+/// Remembers explicit demo entry only; step navigation remains session-only.
+class DemoIntroductionCompleted extends Notifier<bool> {
+  @override
+  bool build() =>
+      ref
+          .watch(initialDemoWorkspaceProvider)
+          ?.preferences
+          .introductionCompleted ??
+      false;
+  void complete() => state = true;
+}
+
+final demoIntroductionCompletedProvider =
+    NotifierProvider<DemoIntroductionCompleted, bool>(
+      DemoIntroductionCompleted.new,
+    );

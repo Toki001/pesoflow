@@ -24,7 +24,7 @@ class DemoStorageSettings extends ConsumerWidget {
           Text('Local demo activity', style: AppTypography.merchant),
           const SizedBox(height: AppSpacing.xs),
           Text(
-            'Transactions, saved receipt details, budget plans and subscription tracking stay on this device after restart. Preferences, notifications and sample connections remain session-only. Local demo storage is not encrypted; use sample data only.',
+            'Transactions, saved receipt details, budget plans and subscription tracking stay on this device after restart. Appearance and completed demo introduction are also saved. Notifications and sample connections remain session-only. Local demo storage is not encrypted; use sample data only.',
             style: AppTypography.bodySmall.copyWith(
               color: context.colors.secondaryInk,
             ),

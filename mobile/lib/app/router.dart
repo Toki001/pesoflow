@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/demo_workspace/application/demo_workspace_providers.dart';
 import '../features/dashboard/presentation/home_screen.dart';
 import '../features/budgets/presentation/budgets_screen.dart';
 import '../features/analytics/presentation/analytics_screen.dart';
@@ -21,7 +22,16 @@ import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  final router = createRouter();
+  // Read once at startup: completing the introduction must not recreate navigation.
+  final completed =
+      ref
+          .read(initialDemoWorkspaceProvider)
+          ?.preferences
+          .introductionCompleted ??
+      false;
+  final router = createRouter(
+    initialLocation: completed ? '/home' : '/onboarding',
+  );
   ref.onDispose(router.dispose);
   return router;
 });
@@ -29,7 +39,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
-    GoRoute(path: '/', redirect: (_, _) => '/onboarding'),
+    GoRoute(
+      path: '/',
+      redirect: (_, _) => initialLocation == '/home' ? '/home' : '/onboarding',
+    ),
     GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
     GoRoute(
       path: '/subscriptions',

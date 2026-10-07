@@ -121,3 +121,11 @@ logging payloads or silently replacing stored data. A failed v1 migration rolls
 back atomically. Activity and planning resets have separate confirmations and
 preserve the other domain; startup recovery explicitly confirms a full reset.
 Logical reset does not guarantee forensic erasure or removal from platform backups.
+
+
+Saved appearance and demo introduction completion use the same versioned local
+snapshot. Completion is only a navigation preference: it grants no authentication,
+financial-provider consent, permission or protected access. Reopening the intro
+does not erase that preference. Existing scoped resets preserve preferences;
+startup full-reset confirmation explicitly names their default restoration.
+Storage remains unencrypted and sample-only; no credentials or real data are added.

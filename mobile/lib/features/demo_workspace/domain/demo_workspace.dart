@@ -1,3 +1,4 @@
+import '../../settings/domain/demo_preferences.dart';
 import '../../budgets/domain/budget_plan.dart';
 import '../../subscriptions/domain/subscription_plan.dart';
 
@@ -11,6 +12,7 @@ class DemoWorkspace {
     Map<String, ReceiptDraft> receipts = const {},
     Map<String, BudgetPlan> budgets = const {},
     Iterable<SubscriptionPlan> subscriptions = const [],
+    this.preferences = const DemoPreferences(),
   }) : ledger = List.unmodifiable(ledger),
        receipts = Map.unmodifiable(receipts),
        budgets = Map.unmodifiable(budgets),
@@ -71,6 +73,7 @@ class DemoWorkspace {
   final Map<String, ReceiptDraft> receipts;
   final Map<String, BudgetPlan> budgets;
   final List<SubscriptionPlan> subscriptions;
+  final DemoPreferences preferences;
 }
 
 abstract interface class DemoWorkspaceRepository {

@@ -217,7 +217,7 @@ void main() {
       jsonDecode(
         (await database.select(database.demoSnapshots).getSingle()).payload,
       )['formatVersion'],
-      2,
+      3,
     );
   });
 

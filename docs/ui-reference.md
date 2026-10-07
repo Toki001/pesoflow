@@ -478,3 +478,13 @@ Budget/subscription editor and onboarding disclosures use local-storage copy onl
 when bootstrap enables persistence. The approved screen hierarchy, components,
 financial typography and navigation remain unchanged; memory-mode golden baselines
 are retained. Local Settings additions still have no dedicated Stitch reference.
+
+
+Persistent Settings now states that appearance survives restart; its existing
+Restore device appearance action saves System while preserving financial edits
+and demo entry completion. The local storage card and onboarding disclosure name
+these two saved preferences. No controls, tokens or layout patterns were added.
+Returning demo users enter the existing Home layout with their saved appearance;
+View introduction still opens the existing native introduction. Only the two
+local Settings goldens change for disclosure text; these inferred Settings views
+still have no dedicated approved Stitch screenshot.

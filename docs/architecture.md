@@ -5,9 +5,9 @@
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
 GoRouter shell, all nine native Stitch-backed demo screens, onboarding, Settings,
 a demo notification center, and a minimal NestJS `/v1/health` endpoint. Drift/SQLite
-stores the demo ledger, reviewed receipts, budget plans and subscription tracking.
-Appearance, notification read state, onboarding and sample connection membership
-remain transient. No HTML rendering, WebViews, real provider calls, authentication,
+stores the demo ledger, reviewed receipts, budget plans, subscription tracking,
+appearance and completed demo introduction. Notification read state, unfinished
+introduction steps and sample connection membership remain transient. No HTML rendering, WebViews, real provider calls, authentication,
 server persistence, queues, camera/OCR, notification delivery or money movement
 are implemented. The phase notes below describe earlier implementation boundaries.
 
@@ -840,3 +840,45 @@ simulator builds pass. Backend formatting, lint, build and its health test pass.
 Next: persist appearance and other explicitly scoped demo preferences, with a
 versioned migration and clear reset behavior. Authentication, protected storage
 and ownership remain prerequisites for real personal financial data.
+
+
+## Durable demo preference phase
+
+`DemoPreferences` contains only `Appearance` and `introductionCompleted`; its
+feature codec uses version 1. Workspace format v3 stores preferences in the same
+atomic SQLite snapshot. Database schema/fixture versions stay at 1. Loading v1 or
+v2 migrates transactionally with System/false defaults, preserving activity,
+receipts and any v2 budget/subscription edits. Unsupported/malformed preferences
+or a failed migration never replace the stored row. No dependencies were added.
+
+Settings and the completion provider hydrate from bootstrap. The existing save
+coordinator watches both, coalesces writes with financial state and retries the
+newest complete snapshot after failure. Restore device appearance changes and
+saves only the theme; activity and plan resets preserve both preferences. Startup
+recovery explicitly confirms resetting all stored demo data, System appearance
+and introduction completion.
+
+The router reads completion once from the loaded snapshot, so finishing the
+introduction or changing appearance cannot recreate the navigation stack. Only
+Explore demo marks completion; Skip shows the disclosure first. Returning users
+open Home in the saved theme. Settings can push the introduction again without
+clearing completion. Unfinished step navigation remains ephemeral; this flag is
+not authenticated onboarding, provider consent or a security acknowledgment.
+
+Only persistence-enabled disclosure copy changed. No layout/component/token
+redesign was introduced; memory preview baselines retain the existing session-only
+copy. The two local Settings goldens are refreshed for the truthful disclosures.
+
+Validation: formatting and Flutter analysis pass; all 271 Flutter tests pass,
+including 38 golden comparisons. Six added tests cover file reopen for all themes,
+v1/v2 migration preservation and rollback, invalid preference refusal, latest-save
+retry and scoped reset preservation, startup full-reset disclosure/defaults, and
+explicit completion/restart in dark Home/reviewing the introduction. Existing
+compact 200% text and safe-inset tests pass. Only the two local Settings goldens
+changed for disclosure text; reviewed light/dark typography, spacing and cards
+retain the established design. Android debug and iOS simulator builds pass.
+Backend formatting, lint, build and its health test pass.
+
+Next: persist demo notification read state with fixture-aware migration and clear
+reset scope, retaining existing calm notification UI. Real financial data still
+requires authentication, ownership and protected storage before integrations.

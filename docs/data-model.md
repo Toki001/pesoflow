@@ -239,3 +239,18 @@ Reset activity preserves plans; reset plans preserves activity. Only the startup
 recovery reset replaces all stored collections, with explicit confirmation.
 Appearance, filters/sorts, selected periods, dismissed suggestions, notification
 read state, onboarding and sample connections remain session-only.
+
+
+## Demo preferences (workspace v3)
+
+`preferences: {version: 1, appearance: "system" | "light" | "dark",
+introductionCompleted: bool}` joins the atomic workspace. Unknown versions/enums,
+missing required values and non-boolean completion are refused. Valid v1/v2
+snapshots migrate with default preferences; all previously stored collections are
+preserved. SQLite schema and fixture versions stay at 1.
+
+Only explicit Explore demo sets completion. It records a device navigation choice,
+not identity, consent or permission. Step progress, notification reads, account
+membership, filters/sorts and selected periods stay transient. Reset activity and
+reset plans preserve preferences; Restore device appearance saves only System;
+startup full recovery reset restores both preferences and all financial samples.

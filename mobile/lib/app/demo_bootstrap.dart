@@ -65,7 +65,7 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         state.hasError
-                            ? 'Stored data has not been replaced. Retry, or confirm a reset of saved transactions, receipts, budget plans and subscription tracking. No financial institution was contacted.'
+                            ? 'Stored data has not been replaced. Retry, or confirm a reset of saved transactions, receipts, budget plans, subscription tracking and demo preferences. No financial institution was contacted.'
                             : 'Restoring demo data saved on this device.',
                         textAlign: TextAlign.center,
                         style: AppTypography.bodyMedium,
@@ -83,7 +83,7 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                               builder: (context) => AlertDialog(
                                 title: const Text('Reset stored demo data?'),
                                 content: const Text(
-                                  'Replace stored transactions, saved receipts, budget plans and subscription tracking with the original samples. This removes all saved demo edits on this device. No financial institution is contacted.',
+                                  'Replace stored transactions, saved receipts, budget plans and subscription tracking with the original samples, restore System appearance and show the introduction again. This removes all saved demo edits on this device. No financial institution is contacted.',
                                 ),
                                 actions: [
                                   TextButton(

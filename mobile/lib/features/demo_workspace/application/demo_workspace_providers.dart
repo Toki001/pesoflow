@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/storage/sqlite_demo_workspace_repository.dart';
+import '../../settings/application/settings_provider.dart';
+import '../../settings/domain/demo_preferences.dart';
+import '../../onboarding/application/onboarding_provider.dart';
 import '../../budgets/application/budgets_provider.dart';
 import '../../subscriptions/application/subscriptions_provider.dart';
 import '../../receipts/application/receipts_provider.dart';
@@ -35,6 +38,8 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     ref.listen(savedDemoReceiptsProvider, (_, _) => _schedule());
     ref.listen(demoBudgetPlansProvider, (_, _) => _schedule());
     ref.listen(demoSubscriptionsProvider, (_, _) => _schedule());
+    ref.listen(settingsProvider, (_, _) => _schedule());
+    ref.listen(demoIntroductionCompletedProvider, (_, _) => _schedule());
     return DemoSaveStatus.saved;
   }
 
@@ -50,9 +55,15 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     });
   }
 
+  DemoPreferences _preferences() => DemoPreferences(
+    appearance: ref.read(settingsProvider),
+    introductionCompleted: ref.read(demoIntroductionCompletedProvider),
+  );
+
   bool _capture() {
     try {
       _pending = DemoWorkspace(
+        preferences: _preferences(),
         ledger: ref.read(demoLedgerProvider),
         receipts: ref.read(savedDemoReceiptsProvider),
         budgets: ref.read(demoBudgetPlansProvider),
@@ -115,6 +126,7 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     try {
       final fixture = initialDemoWorkspace();
       seed = DemoWorkspace(
+        preferences: _preferences(),
         ledger: plans ? ref.read(demoLedgerProvider) : fixture.ledger,
         receipts: plans
             ? ref.read(savedDemoReceiptsProvider)

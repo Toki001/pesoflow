@@ -86,11 +86,20 @@ See [approved UI inventory](docs/ui-reference.md) and
 [architecture, dependencies and validation](docs/architecture.md).
 
 Native startup restores transactions, saved receipts, budget plans and subscription
-tracking before showing the app. Existing activity-only snapshots migrate automatically. Load failures offer retry or a confirmed reset; they never silently
+tracking and appearance before showing the app. Older snapshots migrate automatically. Load failures offer retry or a confirmed reset; they never silently
 replace stored data. Settings shows local save status and **Reset demo activity**,
 which restores original transactions and clears saved receipts while preserving
-budget plans, subscription tracking, session preferences and account choices.
+budget plans, subscription tracking, saved preferences and session account choices.
 **Reset demo plans** restores sample budgets and subscription tracking while keeping
 transactions and receipts. Save failures keep edits in memory and
 show a retry action across routes. Only completed local saves survive restart;
 there is no server sync, authentication or encrypted production storage.
+
+
+Appearance (System/Light/Dark) and completed demo introduction now survive restart.
+After explicitly choosing **Explore demo**, returning users open Home; **View
+introduction** in Settings still reopens the disclosure. Skip alone does not mark
+completion. **Restore device appearance** saves System without altering financial
+activity, plans or introduction completion. Notification read state, sample account
+choices, filters and unfinished introduction steps remain session-only. Startup
+recovery's confirmed full reset also restores these saved preferences to defaults.

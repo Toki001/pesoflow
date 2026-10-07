@@ -1,11 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../domain/appearance.dart';
 
-/// Local appearance preference. No disk writes or financial state changes.
+/// Hydrated appearance; the workspace coordinator handles durable demo saves.
 class SettingsController extends Notifier<Appearance> {
   @override
-  Appearance build() => Appearance.system;
+  Appearance build() =>
+      ref.watch(initialDemoWorkspaceProvider)?.preferences.appearance ??
+      Appearance.system;
 
   void setAppearance(Appearance appearance) => state = appearance;
   void restoreAppearance() => state = Appearance.system;

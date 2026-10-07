@@ -51,7 +51,9 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: AppSpacing.xs),
                   Text(
-                    'Preferences apply across the app for this session and reset when you restart.',
+                    persisted
+                        ? 'Appearance applies across the app and stays on this device after restart.'
+                        : 'Preferences apply across the app for this session and reset when you restart.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,
                     ),
@@ -116,7 +118,7 @@ class SettingsScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     persisted
-                        ? 'Balances and transactions are samples. Transaction edits, saved receipts, budget plans and subscription tracking stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
+                        ? 'Balances and transactions are samples. Transaction edits, saved receipts, budget plans and subscription tracking, appearance and completed demo introduction stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
                         : 'Balances and transactions are samples. Edits stay in memory for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,
