@@ -6,6 +6,7 @@ import '../features/dashboard/presentation/home_screen.dart';
 import '../features/budgets/presentation/budgets_screen.dart';
 import '../features/analytics/presentation/analytics_screen.dart';
 import '../features/accounts/presentation/accounts_screen.dart';
+import '../features/accounts/presentation/account_detail_screen.dart';
 import '../features/transactions/presentation/transactions_screen.dart';
 import '../features/transactions/presentation/transaction_detail_screen.dart';
 import '../features/expense/presentation/add_expense_screen.dart';
@@ -36,6 +37,11 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
     GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
+    GoRoute(
+      path: '/accounts/:id',
+      builder: (_, state) =>
+          AccountDetailScreen(id: state.pathParameters['id']!),
+    ),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
     GoRoute(
       path: '/notifications',

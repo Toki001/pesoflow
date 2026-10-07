@@ -395,3 +395,25 @@ Two 390 × 1480 light/dark goldens were reviewed against neighboring card/header
 patterns for hierarchy, density, gutters, typography, icons and dark fill.
 There is no pixel-level Stitch inbox baseline; the inferred screen awaits product
 review. Every earlier screen golden remains unchanged.
+
+## Account Detail (inferred, not a Stitch-approved screen)
+
+No dedicated account-detail screenshot or HTML exists. The native screen reuses
+Connected Accounts' task header, read-only demo reassurance, masked identities,
+semantic connection badges and neutral balance cards; Transaction Detail informs
+its grouped provenance and activity. The numeric hero retains reported balance
+semantics and the original timestamp. BPI has a last-known balance, explicit stale
+warning and a truthful reconnection explanation.
+
+Related activity reuses native Transactions rows with text wrapping enabled and
+date groups; transfers retain their full source/destination and neutral amount.
+Activity does not reconcile the reported balance. Local check and confirmed
+removal reuse existing state. Empty activity, unknown/removed profiles, loading
+and safe retry states follow the same system. Account identity and the existing
+Settings action open detail without altering Connected Accounts' visible layout.
+
+Four active/stale light/dark goldens (GCash 390 × 1700, BPI 390 × 1300) were reviewed
+against neighboring references for margins, hierarchy, typography, card shape,
+metadata, status and dark colors. Review fixed truncated transfer identities and
+activity date alignment. This inferred layout has no pixel-level Stitch baseline
+and awaits product review; all earlier goldens remain unchanged.

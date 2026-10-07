@@ -1,6 +1,8 @@
 import 'package:intl/intl.dart';
 
 abstract final class DateFormatter {
+  static String timestamp(DateTime date) =>
+      DateFormat('MMM d, yyyy · h:mm a', 'en_PH').format(date);
   static String header(DateTime date) =>
       DateFormat('EEEE, MMM d', 'en_PH').format(date);
   static String transaction(DateTime date, DateTime now) {

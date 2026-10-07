@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
-import '../../../core/formatting/money_formatter.dart';
 import '../application/accounts_provider.dart';
 import '../domain/demo_account.dart';
 
@@ -33,41 +31,6 @@ Future<bool> confirmDemoDisconnect(
       ),
     ) ??
     false;
-
-Future<void> showAccountSettings(
-  BuildContext context,
-  DemoAccount account,
-) => showModalBottomSheet<void>(
-  context: context,
-  showDragHandle: true,
-  isScrollControlled: true,
-  builder: (context) => SafeArea(
-    child: SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(account.name, style: AppTypography.headlineSmall),
-          const SizedBox(height: 12),
-          Text(
-            '${account.maskedIdentifier}\nSample balance: ${MoneyFormatter.php(account.balance)}\nAs of ${DateFormat('MMM d, yyyy · h:mm a').format(account.balanceAsOf)}',
-            style: AppTypography.bodyMedium,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Read-only demo profile. No provider permissions have been granted. Live sync, account editing and real reconnection are not available yet.',
-          ),
-          const SizedBox(height: 12),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    ),
-  ),
-);
 
 Future<bool> showDemoReconnect(
   BuildContext context,

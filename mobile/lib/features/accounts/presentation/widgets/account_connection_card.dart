@@ -22,6 +22,7 @@ class AccountConnectionCard extends StatelessWidget {
     required this.account,
     required this.clock,
     required this.onSettings,
+    required this.onDetails,
     required this.onDisconnect,
     required this.onReconnect,
     super.key,
@@ -29,6 +30,7 @@ class AccountConnectionCard extends StatelessWidget {
   final DemoAccount account;
   final DateTime clock;
   final VoidCallback onSettings;
+  final VoidCallback onDetails;
   final VoidCallback onDisconnect;
   final VoidCallback onReconnect;
   @override
@@ -157,67 +159,76 @@ class AccountConnectionCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LayoutBuilder(
-            builder: (context, bounds) {
-              final stacked =
-                  bounds.maxWidth < 320 ||
-                  MediaQuery.textScalerOf(context).scale(14) > 19;
-              final identity = Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    crossAxisAlignment: WrapCrossAlignment.center,
+          Semantics(
+            button: true,
+            child: InkWell(
+              key: ValueKey('account-details-${account.id}'),
+              onTap: onDetails,
+              child: LayoutBuilder(
+                builder: (context, bounds) {
+                  final stacked =
+                      bounds.maxWidth < 320 ||
+                      MediaQuery.textScalerOf(context).scale(14) > 19;
+                  final identity = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(account.name, style: AppTypography.merchant),
-                      badge,
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(account.name, style: AppTypography.merchant),
+                          badge,
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        metadata,
+                        style: AppTypography.bodySmall.copyWith(
+                          color: c.mutedInk,
+                        ),
+                      ),
                     ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    metadata,
-                    style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-                  ),
-                ],
-              );
-              return Row(
-                children: [
-                  CategoryIcon(
-                    account.kind == DemoAccountKind.bank
-                        ? Icons.account_balance
-                        : Icons.account_balance_wallet,
-                    foreground: color,
-                    background: c.soft(color, soft),
-                    size: 40,
-                    iconSize: 22,
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: stacked
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              identity,
-                              const SizedBox(height: 8),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: balance,
+                  );
+                  return Row(
+                    children: [
+                      CategoryIcon(
+                        account.kind == DemoAccountKind.bank
+                            ? Icons.account_balance
+                            : Icons.account_balance_wallet,
+                        foreground: color,
+                        background: c.soft(color, soft),
+                        size: 40,
+                        iconSize: 22,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: stacked
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  identity,
+                                  const SizedBox(height: 8),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: balance,
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(child: identity),
+                                  const SizedBox(width: 8),
+                                  balance,
+                                ],
                               ),
-                            ],
-                          )
-                        : Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(child: identity),
-                              const SizedBox(width: 8),
-                              balance,
-                            ],
-                          ),
-                  ),
-                ],
-              );
-            },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
           const SizedBox(height: 14),
           Divider(height: 1, color: c.border),

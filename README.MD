@@ -49,6 +49,10 @@ preserve demo edits and navigation. Home, Analytics and Budgets bells open a
 session-only notification center: filter All/Unread, mark individual/all alerts
 read, and open budgets, subscriptions, sample accounts or analytics. These are
 fixed October 2024 snapshots, not live monitoring or delivered push messages.
+Tap a sample account’s identity or Settings action to open Account Detail: inspect
+its masked profile, reported balance/timestamp and related demo activity, run a
+local check, or confirm removal. Manual activity never changes reported balances;
+stale profiles remain labelled last known.
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,

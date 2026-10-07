@@ -111,7 +111,8 @@ void main() {
       await tester.ensureVisible(find.byKey(const ValueKey('settings-gcash')));
       await tester.tap(find.byKey(const ValueKey('settings-gcash')));
       await tester.pumpAndSettle();
-      expect(find.textContaining('As of Oct 24, 2024'), findsOneWidget);
+      expect(find.text('Account Detail'), findsOneWidget);
+      expect(find.text('Oct 24, 2024 · 12:30 PM'), findsOneWidget);
       expect(find.textContaining('No provider permissions'), findsOneWidget);
       expect(find.textContaining('256-bit'), findsNothing);
       expect(find.byType(TextField), findsNothing);

@@ -578,3 +578,58 @@ also pass.
 
 Next: native account detail for the sample profiles, preserving reported balance
 semantics, masked identifiers, provenance and truthful demo connection status.
+
+## Native sample account detail phase
+
+`/accounts/:id` uses the task shell and reads `accountDetailProvider(id)`, a
+Riverpod projection of the existing account overview and session ledger. A missing
+or removed profile produces a safe unavailable state rather than showing the
+original catalog balance. Loading/load errors inherit the account repository;
+retry reloads that repository. No new dependency, backend endpoint, persistence
+or provider adapter is introduced.
+
+`AccountDetail` exposes an immutable profile/activity view. A dedicated fixture
+association maps profile IDs to exact legacy ledger account labels: GCash, Maya,
+BDO Checking and BPI Savings. It never matches institution prefixes; BDO Debit,
+Savings and Credit Card records are not assigned to the Checking profile. A
+transfer is included once if either its source or destination matches. Activity
+sorts newest first with an ID tie-breaker, retains transaction provenance/status,
+and opens the existing Transaction Detail. Date groups use centralized formatting;
+long identity/metadata text wraps through an opt-in Transactions row option. The
+existing Transactions feed retains its original layout. This mapping is a local
+fixture bridge; production association needs stable account IDs.
+
+The balance hero keeps the reported amount separate from ledger activity. It
+shows only masked identifiers, currency, account type, institution and the
+original October 2024 timestamp. Stale BPI keeps a last-known label and warning,
+remains excluded from the available total and cannot be promoted by a local
+check or the reconnection explanation. The related activity explicitly states
+it is not a bank statement and does not reconcile the sample balance.
+
+Identity areas and existing Settings actions on Connected Accounts now push the
+detail, preserving visible card geometry. Header Back restores the Accounts
+scroll; a direct detail link falls back to Accounts. Local checks reuse the
+existing pending/error/retry state and never advance balance timestamps. Removal
+reuses the existing confirmation, changes only the sample account list and
+returns to the preceding screen or Accounts. The old Settings preview sheet
+is replaced by the native detail. No credentials, real consent or live sync
+are claimed.
+
+Visual review checked four light/dark captures for active GCash (390 × 1700) and
+stale BPI (390 × 1300) against neighboring Accounts/Transaction Detail patterns.
+It corrected truncated transfer destinations and aligned activity date groups.
+No approved account-detail screenshot exists; the inferred layout awaits product
+review. All previous goldens remain unchanged.
+
+Validation: formatting/static analysis, Android debug and iOS simulator builds
+and existing backend format/lint/build/health checks pass. All 217 Flutter tests
+pass, including 34 golden comparisons. Twenty-one new tests cover exact alias
+association/transfer deduplication, immutable activity, reactive manual entries,
+unchanged reported balances, identity entry/return scroll, transaction drilldown,
+stale reconnection boundaries, local check pending/error/retry, confirmed removal
+and intact ledger history, missing profiles, loading/retry, active/stale light/
+dark captures, compact/large/landscape layouts and 200% text/safe insets.
+
+Next: an explicit demo connection-consent flow using these trust patterns. It
+should explain sample-only access and revocation without collecting credentials
+or suggesting that real provider authorization has occurred.

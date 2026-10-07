@@ -11,8 +11,13 @@ import '../domain/transaction.dart';
 
 /// Compact row used by the approved Transactions feed, distinct from Home.
 class TransactionListRow extends StatelessWidget {
-  const TransactionListRow({required this.transaction, super.key});
+  const TransactionListRow({
+    required this.transaction,
+    this.wrapText = false,
+    super.key,
+  });
   final TransactionRecord transaction;
+  final bool wrapText;
   @override
   Widget build(BuildContext context) {
     final t = transaction;
@@ -107,8 +112,10 @@ class TransactionListRow extends StatelessWidget {
                       Expanded(
                         child: Text(
                           t.merchant,
-                          maxLines: large ? null : 1,
-                          overflow: large ? null : TextOverflow.ellipsis,
+                          maxLines: large || wrapText ? null : 1,
+                          overflow: large || wrapText
+                              ? null
+                              : TextOverflow.ellipsis,
                           style: AppTypography.merchant,
                         ),
                       ),
@@ -130,8 +137,8 @@ class TransactionListRow extends StatelessWidget {
                   const SizedBox(height: 3),
                   Text(
                     '${t.metadata} · ${DateFormat('h:mm a').format(t.occurredAt)}',
-                    maxLines: large ? null : 1,
-                    overflow: large ? null : TextOverflow.ellipsis,
+                    maxLines: large || wrapText ? null : 1,
+                    overflow: large || wrapText ? null : TextOverflow.ellipsis,
                     style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
                   ),
                   if (large) ...[const SizedBox(height: 8), money],

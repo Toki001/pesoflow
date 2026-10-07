@@ -132,3 +132,15 @@ and defaults to the sample read set on fresh sessions. `noticeFilterProvider`
 selects All/Unread; unread count is derived from loaded notices and read IDs.
 There is no financial mutation, serialization, persistence, notification token
 or delivery/event contract. Fixed snapshots do not recompute after demo edits.
+
+
+`AccountDetail` holds a `DemoAccount` and an unmodifiable newest-first activity
+list. `accountDetailProvider(id)` projects the current account overview plus
+ledger and returns null for missing/removed IDs. An explicit fixture alias map
+associates gcash→GCash, maya→Maya, bdo→BDO Checking and bpi→BPI Savings. Source
+and destination membership include transfers once; institution-name prefix
+matching is deliberately absent. Other BDO products are separate fixture sources.
+Manual ledger edits update related activity without recalculating or advancing
+reported profile balances/timestamps. This local alias bridge introduces no JSON,
+provider identity, storage or API contract; real association requires stable
+financial account IDs during the domain/persistence milestone.

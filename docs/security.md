@@ -62,3 +62,12 @@ operations, connection consent or money movement. Alerts disclose their sample
 date and static nature; expired-connection copy does not request credentials.
 Actual alerts require authenticated event ownership, protected persistence,
 deduplication/cooldowns and delivery/privacy controls in a separate milestone.
+
+
+Account Detail reads masked sample profiles and session activity only. Its local
+check contacts no financial institution and changes no balance timestamp; expired
+profiles remain stale. Reconnection is an explanation with no credential fields
+or authorization redirect. Removal requires the existing confirmation and leaves
+ledger history intact. Unknown/removed account links expose a safe unavailable
+state. No permissions, real account identifiers, remote connection revocation,
+authentication or production account-ownership guarantees are introduced.

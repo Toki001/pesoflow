@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
@@ -172,7 +173,8 @@ class AccountsScreen extends ConsumerWidget {
                 AccountConnectionCard(
                   account: account,
                   clock: demoClock,
-                  onSettings: () => showAccountSettings(context, account),
+                  onSettings: () => context.push('/accounts/${account.id}'),
+                  onDetails: () => context.push('/accounts/${account.id}'),
                   onDisconnect: () => disconnect(context, ref, account),
                   onReconnect: () => reconnect(context, ref, account),
                 ),
