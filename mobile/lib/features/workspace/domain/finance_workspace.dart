@@ -60,6 +60,7 @@ class FinanceWorkspace {
     unique(ledger.map((v) => v.id));
     unique(budgets.map((v) => v.id));
     unique(subscriptions.map((v) => v.id));
+    unique(receipts.values.map((v) => v.id));
     unique(notices.map((v) => v.id));
     unique(notices.map((v) => v.conditionKey));
     final byId = {for (final a in accounts) a.id: a};

@@ -21,10 +21,10 @@ ReceiptItem confirmed(ReceiptItem i) => ReceiptItem(
   reviewed: true,
 );
 void main() {
-  test('fixture items sum exactly; included VAT is not added to the total', () {
+  test('legacy item sum remains exact and missing tax is not fabricated', () {
     final d = receiptFixture();
     expect(d.total, 52550);
-    expect(d.includedVat, 5630);
+    expect(d.includedVat, 0);
     expect(d.uncertain.map((i) => i.id), ['beef']);
     expect(d.validationError, 'Review the flagged items before saving.');
     expect(() => d.items.clear(), throwsUnsupportedError);
@@ -49,7 +49,7 @@ void main() {
       expect(t.account, 'GCash');
     },
   );
-  test('quantity and tax arithmetic use centavos and half-up rounding', () {
+  test('quantity arithmetic is exact; absent tax remains unknown', () {
     final d = receiptFixture().copyWith(
       items: [
         ReceiptItem(
@@ -62,7 +62,7 @@ void main() {
       ],
     );
     expect(d.total, 303);
-    expect(d.includedVat, 32);
+    expect(d.includedVat, 0);
     expect(
       receiptFixture()
           .copyWith(
@@ -77,7 +77,7 @@ void main() {
             ],
           )
           .includedVat,
-      2,
+      0,
     );
   });
   test(

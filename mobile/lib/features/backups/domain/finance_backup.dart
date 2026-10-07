@@ -18,6 +18,13 @@ class FinanceBackup {
           e.key: Uint8List.fromList(e.value).asUnmodifiableView(),
       }) {
     workspace.validate();
+    if (workspace.receipts.values.any(
+      (r) => r.evidence != null && !images.containsKey(r.evidence!.imageId),
+    )) {
+      throw const BackupFailure(
+        'A required receipt image is missing from this backup.',
+      );
+    }
     if (images.entries.any(
           (e) =>
               e.key.isEmpty ||

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,6 +10,7 @@ import 'package:pesoflow/features/backups/domain/finance_backup.dart';
 import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
 import 'package:pesoflow/features/notifications/domain/evaluate_notices.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
+import 'package:pesoflow/features/receipts/domain/receipt_image_repository.dart';
 import 'package:pesoflow/features/settings/domain/user_preferences.dart';
 import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
 import 'package:pesoflow/features/transactions/domain/categorization.dart';
@@ -206,22 +208,48 @@ class FinanceController extends Notifier<FinanceState> {
     );
   });
 
-  Future<String> saveReceipt(ReceiptDraft draft) async {
+  Future<String> saveReceipt(
+    ReceiptDraft draft, {
+    Uint8List? imageBytes,
+    bool rememberCategory = false,
+  }) async {
+    if (draft.evidence != null && (imageBytes == null || imageBytes.isEmpty)) {
+      throw ArgumentError('The receipt image is required.');
+    }
     final id = draft.savedTransactionId ?? newId();
-    await _commit((w) {
-      if (w.receipts.values.any((r) => r.id == draft.id)) {
-        throw ArgumentError('This receipt has already been saved.');
-      }
-      _checkAccount(w, draft.accountId);
-      final record = draft.toTransaction(id);
-      return w.copyWith(
-        ledger: [...w.ledger, record],
-        receipts: {
-          ...w.receipts,
-          id: draft.copyWith(savedTransactionId: id),
-        },
-      );
-    });
+    await _commit(
+      (w) {
+        if (w.receipts.values.any((r) => r.id == draft.id)) {
+          throw ArgumentError('This receipt has already been saved.');
+        }
+        _checkAccount(w, draft.accountId);
+        final record = draft.toTransaction(id);
+        return w.copyWith(
+          ledger: [...w.ledger, record],
+          receipts: {
+            ...w.receipts,
+            id: draft.copyWith(savedTransactionId: id),
+          },
+          merchantRules: rememberCategory
+              ? {
+                  ...w.merchantRules,
+                  merchantRuleKey(TransactionKind.expense, draft.merchant):
+                      draft.category,
+                }
+              : w.merchantRules,
+        );
+      },
+      persist: draft.evidence == null
+          ? null
+          : (workspace, revision) =>
+                (ref.read(financeRepositoryProvider) as ReceiptImageRepository)
+                    .saveWithReceiptImage(
+                      workspace,
+                      expectedRevision: revision,
+                      imageId: draft.evidence!.imageId,
+                      bytes: imageBytes!,
+                    ),
+    );
     return id;
   }
 

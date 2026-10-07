@@ -5,6 +5,7 @@ import '../../accounts/domain/financial_account.dart';
 import '../../budgets/domain/spending_budget.dart';
 import '../../notifications/domain/financial_notice.dart';
 import '../../receipts/domain/receipt_draft.dart';
+import '../../receipts/domain/receipt_evidence.dart';
 import '../../settings/domain/user_preferences.dart';
 import '../../subscriptions/data/subscription_plans_codec.dart';
 import '../../transactions/domain/transaction.dart';
@@ -86,6 +87,7 @@ abstract final class FinanceWorkspaceCodec {
     'occurredAt': d.occurredAt.toIso8601String(),
     'category': d.category.name,
     'savedTransactionId': d.savedTransactionId,
+    if (d.evidence != null) 'evidence': d.evidence!.toJson(),
     'items': [
       for (final i in d.items)
         {
@@ -107,6 +109,9 @@ abstract final class FinanceWorkspaceCodec {
     occurredAt: jsonDate(d, 'occurredAt'),
     category: TransactionCategory.values.byName(d['category'] as String),
     savedTransactionId: d['savedTransactionId'] as String?,
+    evidence: d['evidence'] == null
+        ? null
+        : ReceiptEvidence.fromJson(d['evidence'] as Json),
     items: [
       for (final i in jsonObjects(d, 'items'))
         ReceiptItem(

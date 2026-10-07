@@ -339,3 +339,14 @@ and tax classifications; date ambiguity and missing fields remain explicit.
 Confidence represents parser heuristics, not measured recognition accuracy.
 Formatting/static analysis and 34 parser cases pass. Camera/OCR/review wiring
 remains the next milestone; this audit is not completion of the receipt feature.
+
+Receipt milestone 2: reviewed evidence now retains raw OCR text, parser version,
+creation time, field confidence, independent final total and actual adjustments.
+Legacy snapshots remain readable through an optional evidence extension; no Drift
+schema rewrite. Missing tax is no longer fabricated from a blanket percentage.
+Image plus expense/metadata saves are atomic; deleting the receipt transaction
+removes its image in the same transaction. Backup rejects missing required image
+references. Full Flutter validation passes: analysis clean, 172 tests including
+all 16 existing goldens. New tests cover failed image-write rollback, retry,
+balance/budget/analytics updates, categorization, duplicate submission, file-backed
+restart, encrypted backup round trip and image deletion. Native capture/UI pending.

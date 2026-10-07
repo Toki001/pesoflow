@@ -1,5 +1,7 @@
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 
+import 'receipt_evidence.dart';
+
 class ReceiptItem {
   ReceiptItem({
     required this.id,
@@ -39,6 +41,7 @@ class ReceiptDraft {
     this.category = TransactionCategory.groceries,
     this.account = '',
     this.savedTransactionId,
+    this.evidence,
   }) : items = List.unmodifiable(items) {
     if (this.items.map((i) => i.id).toSet().length != this.items.length) {
       throw ArgumentError('Duplicate receipt item ID.');
@@ -50,9 +53,10 @@ class ReceiptDraft {
   final List<ReceiptItem> items;
   final TransactionCategory category;
   final String? savedTransactionId;
-  int get total => items.fold(0, (sum, i) => sum + i.total);
-  // Demo assumes every line includes the sample 12% tax. Never add it again.
-  int get includedVat => (total * 12 + 56) ~/ 112;
+  final ReceiptEvidence? evidence;
+  int get total => evidence?.total ?? items.fold(0, (sum, i) => sum + i.total);
+  // Tax is captured evidence, never inferred from a blanket percentage.
+  int get includedVat => evidence?.tax ?? 0;
   List<ReceiptItem> get uncertain => items.where((i) => i.needsReview).toList();
   String? get validationError {
     if (merchant.trim().isEmpty || merchant.length > 100) {
@@ -68,11 +72,22 @@ class ReceiptDraft {
     ].contains(category)) {
       return 'Choose an expense category.';
     }
-    if (items.isEmpty) return 'Add at least one receipt item.';
+    if (evidence == null && items.isEmpty) {
+      return 'Add at least one receipt item.';
+    }
+    if (evidence != null &&
+        (evidence!.imageId != id || evidence!.currency != 'PHP')) {
+      return 'Verify the receipt image and PHP currency.';
+    }
     if (total <= 0 || total > 99999999999) {
       return 'Receipt total is outside the supported amount range.';
     }
-    if (uncertain.isNotEmpty) return 'Review the flagged items before saving.';
+    if (evidence != null && !evidence!.confirmed) {
+      return 'Verify the merchant, date, total and items before saving.';
+    }
+    if (evidence == null && uncertain.isNotEmpty) {
+      return 'Review the flagged items before saving.';
+    }
     return null;
   }
 
@@ -84,6 +99,7 @@ class ReceiptDraft {
     String? account,
     String? accountId,
     String? savedTransactionId,
+    ReceiptEvidence? evidence,
   }) => ReceiptDraft(
     id: id,
     merchant: merchant ?? this.merchant,
@@ -93,6 +109,7 @@ class ReceiptDraft {
     account: account ?? this.account,
     accountId: accountId ?? this.accountId,
     savedTransactionId: savedTransactionId ?? this.savedTransactionId,
+    evidence: evidence ?? this.evidence,
   );
   TransactionRecord toTransaction(String transactionId) {
     final error = validationError;

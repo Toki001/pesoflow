@@ -5,10 +5,12 @@ import 'package:drift/drift.dart';
 import '../../../core/storage/finance_database.dart';
 import '../../../core/storage/financial_cipher.dart';
 import '../../backups/domain/finance_backup.dart';
+import '../../receipts/domain/receipt_image_repository.dart';
 import '../domain/finance_workspace.dart';
 import 'finance_workspace_codec.dart';
 
-class SqliteFinanceRepository implements FinanceRepository, BackupRepository {
+class SqliteFinanceRepository
+    implements FinanceRepository, BackupRepository, ReceiptImageRepository {
   SqliteFinanceRepository(this.database, this.cipher);
   final FinanceDatabase database;
   final FinancialCipher cipher;
@@ -58,6 +60,11 @@ class SqliteFinanceRepository implements FinanceRepository, BackupRepository {
         workspace.revision != expectedRevision) {
       throw const WorkspaceConflict();
     }
+    final previous = await load();
+    final retainedImages = workspace.receipts.values
+        .map((r) => r.evidence?.imageId)
+        .whereType<String>()
+        .toSet();
     final next = workspace.copyWith(revision: expectedRevision + 1);
     final payload = await cipher.seal(
       utf8.encode(FinanceWorkspaceCodec.encode(next)),
@@ -72,7 +79,28 @@ class SqliteFinanceRepository implements FinanceRepository, BackupRepository {
             payload: payload,
           ),
         );
+    for (final receipt in previous.receipts.values) {
+      final imageId = receipt.evidence?.imageId;
+      if (imageId != null && !retainedImages.contains(imageId)) {
+        await deleteReceiptImage(imageId);
+      }
+    }
     return next;
+  });
+
+  @override
+  Future<FinanceWorkspace> saveWithReceiptImage(
+    FinanceWorkspace workspace, {
+    required int expectedRevision,
+    required String imageId,
+    required Uint8List bytes,
+  }) => database.transaction(() async {
+    if (!workspace.receipts.values.any((r) => r.evidence?.imageId == imageId)) {
+      throw const FormatException('Receipt image is not referenced.');
+    }
+    final saved = await save(workspace, expectedRevision: expectedRevision);
+    await saveReceiptImage(imageId, bytes);
+    return saved;
   });
 
   Future<void> saveReceiptImage(String id, Uint8List bytes) async {
@@ -87,6 +115,7 @@ class SqliteFinanceRepository implements FinanceRepository, BackupRepository {
         );
   }
 
+  @override
   Future<Uint8List?> loadReceiptImage(String id) async {
     final row = await (database.select(
       database.encryptedReceipts,
