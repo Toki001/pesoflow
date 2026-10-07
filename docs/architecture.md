@@ -3,10 +3,13 @@
 ## Current scope
 
 Native Android/iOS Flutter scaffold, shared theme/components, Riverpod state,
-GoRouter shell, fixture-backed Home/Transactions/Detail/Add Expense/Budgets/Analytics/Accounts, a session-only
-demo ledger, and minimal NestJS `/v1/health` endpoint.
-No HTML rendering, WebViews, provider calls, authentication, database, queues,
-OCR, notifications, persistence, or money movement are implemented.
+GoRouter shell, all nine native Stitch-backed demo screens, onboarding, Settings,
+a demo notification center, and a minimal NestJS `/v1/health` endpoint. Drift/SQLite
+stores the demo ledger, reviewed receipts, budget plans and subscription tracking.
+Appearance, notification read state, onboarding and sample connection membership
+remain transient. No HTML rendering, WebViews, real provider calls, authentication,
+server persistence, queues, camera/OCR, notification delivery or money movement
+are implemented. The phase notes below describe earlier implementation boundaries.
 
 `mobile/lib/app` owns composition, navigation and the light/dark design system.
 `core` contains presentation primitives, deterministic formatters and a reserved
@@ -784,3 +787,56 @@ Next: persist budget plans and subscription tracking metadata through separate
 versioned repositories, retaining ledger-derived spending and explicit demo reset
 scope. Real authentication, encryption/ownership and provider integrations remain
 separate milestones before handling real financial data.
+
+
+## Local budget and subscription persistence phase
+
+`DemoWorkspace` now includes immutable base budget plans keyed by year/month and
+subscription tracking records. Separate feature codecs (`BudgetPlansCodec` and
+`SubscriptionPlansCodec`, each version 1) define their storage contracts. They
+share the existing `DemoWorkspaceRepository` and one transactional SQLite snapshot,
+so activity and plans cannot be independently replaced by stale concurrent saves.
+No additional database, repository singleton, backend endpoint or dependency was
+introduced. SQLite schema remains version 1; the workspace envelope is version 2.
+
+Loading a valid v1 activity snapshot preserves its ledger/receipts, seeds the
+previously transient plans, and writes the migrated v2 row within the same load
+transaction. Failed migration rolls back; malformed or unknown feature/workspace
+versions never trigger replacement. Empty v2 plan collections remain empty.
+Budget integer fields are checked before generated decoding; monthly keys,
+calendar periods, category uniqueness, expense categories, edited-category
+references, limits and allocations are validated. Subscription IDs, integer
+amounts, billing cycle, canonical renewal date, origin, active flag and confidence
+are preserved and validated. No money is persisted as floating point.
+
+Riverpod hydrates each feature from bootstrap and the shared coordinator listens
+to both plan stores as well as activity. It stores base budget spending/forecasts,
+never the `budgetsProvider` ledger projection: adding expenses/refunds or reopening
+the app cannot apply a ledger delta twice. Subscription ID allocation resumes
+above surviving saved manual IDs. Plan changes, renewal dates, pauses and removals
+never post ledger charges, move money, cancel services or change reported balances.
+
+Settings offers two separately confirmed durable resets. Reset demo activity
+restores transactions/clears reviewed receipts while preserving plans. Reset demo
+plans restores budget/subscription samples while preserving the ledger/receipts;
+budget spending still reflects recorded activity. Resets publish state only after
+successful storage and block pointer edits while pending. Startup recovery instead
+explicitly confirms replacement of all four stored collections. Failed writes
+retain the newest complete snapshot for retry. Unstored UI choices stay transient.
+
+Storage disclosure/editor copy is conditional on persistence; memory previews and
+the approved screens retain their prior visual baselines. The two local Settings
+goldens reflect the added reset control and updated copy. This remains unencrypted,
+unauthenticated sample-data storage; no real integration is implied.
+
+Validation: Dart formatting and Flutter analysis pass. All 265 Flutter tests pass,
+including 38 golden comparisons; only the two local Settings images were updated.
+Nine added tests cover file reopen/no double projection, all subscription cycles,
+empty tracking, migration rollback and preservation, invalid stored plans, queued
+save retry, independent durable resets, confirmation/cancel and editor disclosures.
+Compact 200% text/safe-inset checks cover the added control. Android debug and iOS
+simulator builds pass. Backend formatting, lint, build and its health test pass.
+
+Next: persist appearance and other explicitly scoped demo preferences, with a
+versioned migration and clear reset behavior. Authentication, protected storage
+and ownership remain prerequisites for real personal financial data.

@@ -111,3 +111,13 @@ It logically removes added/edited activity and saved receipt snapshots, preserve
 unrelated session state and initiates no provider operation. This is a logical
 reset, not a promise of forensic erasure of SQLite pages/platform backups. Database
 files and financial payloads must never be checked into source control.
+
+
+Local demo budget limits and subscription tracking now share the same unencrypted
+SQLite boundary. They contain sample planning metadata, not credentials, provider
+consent, authenticated ownership or automated charges. Only sample data is
+supported. Strict version/integer/identity validation rejects corruption without
+logging payloads or silently replacing stored data. A failed v1 migration rolls
+back atomically. Activity and planning resets have separate confirmations and
+preserve the other domain; startup recovery explicitly confirms a full reset.
+Logical reset does not guarantee forensic erasure or removal from platform backups.

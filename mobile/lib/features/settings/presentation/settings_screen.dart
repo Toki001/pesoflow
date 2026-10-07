@@ -116,7 +116,7 @@ class SettingsScreen extends ConsumerWidget {
                   const SizedBox(height: AppSpacing.xs),
                   Text(
                     persisted
-                        ? 'Balances and transactions are samples. Transaction edits and saved receipt details stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
+                        ? 'Balances and transactions are samples. Transaction edits, saved receipts, budget plans and subscription tracking stay on this device. Other edits last for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.'
                         : 'Balances and transactions are samples. Edits stay in memory for this session. No bank or wallet is connected, no funds can move, and real camera capture and OCR are unavailable.',
                     style: AppTypography.bodySmall.copyWith(
                       color: c.secondaryInk,

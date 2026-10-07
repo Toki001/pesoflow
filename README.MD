@@ -71,7 +71,7 @@ percentages, chart details and session spending updates. Connected Accounts offe
 masked sample profiles, local refresh checks, and confirmed session removal/restoration;
 open it from Home's balance card. Tap Home's Upcoming Bills card for Subscriptions:
 add/edit plans, sort renewals, pause/resume tracking, confirm removal and view
-recorded recurring charges. Weekly/monthly/quarterly/yearly plans update session
+recorded recurring charges. Weekly/monthly/quarterly/yearly plans update locally saved
 commitments without posting expenses or cancelling services. `backend/` contains
 only a NestJS health endpoint. Add Expense’s Scan action opens the native demo
 receipt review: correct items, merchant/date, category and payment source, confirm
@@ -85,10 +85,12 @@ Run local checks from root: `bash scripts/check.sh`.
 See [approved UI inventory](docs/ui-reference.md) and
 [architecture, dependencies and validation](docs/architecture.md).
 
-Native startup restores the ledger and saved receipt snapshots before showing
-the app. Load failures offer retry or a confirmed reset; they never silently
+Native startup restores transactions, saved receipts, budget plans and subscription
+tracking before showing the app. Existing activity-only snapshots migrate automatically. Load failures offer retry or a confirmed reset; they never silently
 replace stored data. Settings shows local save status and **Reset demo activity**,
 which restores original transactions and clears saved receipts while preserving
-session preferences and account choices. Save failures keep edits in memory and
+budget plans, subscription tracking, session preferences and account choices.
+**Reset demo plans** restores sample budgets and subscription tracking while keeping
+transactions and receipts. Save failures keep edits in memory and
 show a retry action across routes. Only completed local saves survive restart;
 there is no server sync, authentication or encrypted production storage.

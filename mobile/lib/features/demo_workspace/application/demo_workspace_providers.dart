@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/storage/sqlite_demo_workspace_repository.dart';
+import '../../budgets/application/budgets_provider.dart';
+import '../../subscriptions/application/subscriptions_provider.dart';
 import '../../receipts/application/receipts_provider.dart';
 import '../../transactions/application/transactions_provider.dart';
 import '../domain/demo_workspace.dart';
@@ -31,6 +33,8 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     }
     ref.listen(demoLedgerProvider, (_, _) => _schedule());
     ref.listen(savedDemoReceiptsProvider, (_, _) => _schedule());
+    ref.listen(demoBudgetPlansProvider, (_, _) => _schedule());
+    ref.listen(demoSubscriptionsProvider, (_, _) => _schedule());
     return DemoSaveStatus.saved;
   }
 
@@ -51,6 +55,8 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
       _pending = DemoWorkspace(
         ledger: ref.read(demoLedgerProvider),
         receipts: ref.read(savedDemoReceiptsProvider),
+        budgets: ref.read(demoBudgetPlansProvider),
+        subscriptions: ref.read(demoSubscriptionsProvider),
       );
       return true;
     } catch (_) {
@@ -96,14 +102,28 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     if (!_resetting) state = DemoSaveStatus.saved;
   }
 
-  Future<bool> resetActivity() async {
+  Future<bool> resetActivity() => _reset(plans: false);
+  Future<bool> resetPlans() => _reset(plans: true);
+
+  Future<bool> _reset({required bool plans}) async {
     if (_resetting || !ref.read(demoPersistenceEnabledProvider)) return false;
     _resetting = true;
     state = DemoSaveStatus.resetting;
     await flush();
     if (!ref.mounted) return false;
-    final seed = initialDemoWorkspace();
+    late final DemoWorkspace seed;
     try {
+      final fixture = initialDemoWorkspace();
+      seed = DemoWorkspace(
+        ledger: plans ? ref.read(demoLedgerProvider) : fixture.ledger,
+        receipts: plans
+            ? ref.read(savedDemoReceiptsProvider)
+            : fixture.receipts,
+        budgets: plans ? fixture.budgets : ref.read(demoBudgetPlansProvider),
+        subscriptions: plans
+            ? fixture.subscriptions
+            : ref.read(demoSubscriptionsProvider),
+      );
       await ref.read(demoWorkspaceRepositoryProvider)!.save(seed);
     } catch (_) {
       _resetting = false;
@@ -112,9 +132,15 @@ class DemoPersistence extends Notifier<DemoSaveStatus> {
     }
     if (!ref.mounted) return false;
     _pending = null;
-    ref.read(demoLedgerProvider.notifier).restore(seed.ledger);
-    ref.read(savedDemoReceiptsProvider.notifier).restore(seed.receipts);
-    ref.invalidate(receiptReviewProvider);
+    if (plans) {
+      ref.read(demoBudgetPlansProvider.notifier).restore(seed.budgets);
+      ref.read(demoSubscriptionsProvider.notifier).restore(seed.subscriptions);
+      ref.invalidate(dismissedBudgetSuggestionsProvider);
+    } else {
+      ref.read(demoLedgerProvider.notifier).restore(seed.ledger);
+      ref.read(savedDemoReceiptsProvider.notifier).restore(seed.receipts);
+      ref.invalidate(receiptReviewProvider);
+    }
     _resetting = false;
     state = DemoSaveStatus.saved;
     return true;

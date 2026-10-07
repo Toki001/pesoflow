@@ -467,3 +467,14 @@ Two local Settings light/dark 390 × 1600 goldens were reviewed for hierarchy,
 spacing, typography, card shape, state messaging and dark fill. All 36 prior
 baselines remain unchanged. There is no approved Stitch storage/reset screenshot;
 these inferred additions await product review.
+
+
+The local Settings card now discloses saved budget/subscription plans and adds a
+separate outlined Reset demo plans control. Its confirmation preserves transactions
+and saved receipts and explains that tracking changes cannot cancel services or
+create charges. Reset demo activity explicitly preserves both plan stores.
+Startup recovery names all stored collections before confirming a full reset.
+Budget/subscription editor and onboarding disclosures use local-storage copy only
+when bootstrap enables persistence. The approved screen hierarchy, components,
+financial typography and navigation remain unchanged; memory-mode golden baselines
+are retained. Local Settings additions still have no dedicated Stitch reference.

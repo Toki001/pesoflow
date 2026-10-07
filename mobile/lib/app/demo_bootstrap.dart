@@ -65,8 +65,8 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         state.hasError
-                            ? 'Stored data has not been replaced. Retry, or confirm a reset of saved transactions and receipts. No financial institution was contacted.'
-                            : 'Restoring activity saved on this device.',
+                            ? 'Stored data has not been replaced. Retry, or confirm a reset of saved transactions, receipts, budget plans and subscription tracking. No financial institution was contacted.'
+                            : 'Restoring demo data saved on this device.',
                         textAlign: TextAlign.center,
                         style: AppTypography.bodyMedium,
                       ),
@@ -81,11 +81,9 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                             final reset = await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text(
-                                  'Reset stored demo activity?',
-                                ),
+                                title: const Text('Reset stored demo data?'),
                                 content: const Text(
-                                  'Replace stored transactions and saved receipt details with the original samples. This removes all saved demo activity edits on this device.',
+                                  'Replace stored transactions, saved receipts, budget plans and subscription tracking with the original samples. This removes all saved demo edits on this device. No financial institution is contacted.',
                                 ),
                                 actions: [
                                   TextButton(
@@ -96,7 +94,7 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.pop(context, true),
-                                    child: const Text('Reset activity'),
+                                    child: const Text('Reset demo data'),
                                   ),
                                 ],
                               ),
@@ -106,7 +104,7 @@ class _DemoBootstrapState extends State<DemoBootstrap> {
                               loading = _reset();
                             });
                           },
-                          child: const Text('Reset stored demo activity'),
+                          child: const Text('Reset stored demo data'),
                         ),
                       ],
                     ],

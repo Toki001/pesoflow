@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../transactions/domain/manual_transaction_draft.dart';
 import '../../transactions/domain/transaction.dart';
 import '../application/budgets_provider.dart';
@@ -108,7 +109,9 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Changes apply to this demo session only.',
+                  ref.watch(demoPersistenceEnabledProvider)
+                      ? 'Demo budget plans are saved on this device.'
+                      : 'Changes apply to this demo session only.',
                   style: AppTypography.bodySmall.copyWith(
                     color: context.colors.mutedInk,
                   ),

@@ -7,6 +7,7 @@ import '../../notifications/presentation/widgets/notification_button.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/widgets/finance_card.dart';
 import '../../../core/widgets/status_badge.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../transactions/data/transaction_fixture.dart';
 import '../../transactions/domain/transaction.dart';
 import '../application/budgets_provider.dart';
@@ -395,7 +396,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                       ],
                       const SizedBox(height: 16),
                       Text(
-                        'Demo budgets • changes last for this session.\nNext period begins ${DateFormat('MMMM d, yyyy').format(DateTime(plan.year, plan.month + 1))}.',
+                        'Demo budgets • ${ref.watch(demoPersistenceEnabledProvider) ? 'plans are saved on this device' : 'changes last for this session'}.\nNext period begins ${DateFormat('MMMM d, yyyy').format(DateTime(plan.year, plan.month + 1))}.',
                         style: AppTypography.bodySmall.copyWith(
                           color: c.mutedInk,
                         ),

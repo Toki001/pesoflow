@@ -5,6 +5,8 @@ import 'package:pesoflow/app/app.dart';
 import 'package:pesoflow/app/demo_bootstrap.dart';
 import 'package:pesoflow/app/router.dart';
 import 'package:pesoflow/features/demo_workspace/application/demo_workspace_providers.dart';
+import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
+import 'package:pesoflow/features/subscriptions/application/subscriptions_provider.dart';
 import 'package:pesoflow/features/transactions/application/transactions_provider.dart';
 
 import 'add_expense_test.dart' show draft;
@@ -39,6 +41,78 @@ Future<ProviderContainer> pumpLocalSettings(
 }
 
 void main() {
+  testWidgets('plan reset confirms scope and preserves recorded activity', (
+    tester,
+  ) async {
+    viewport(tester, const Size(390, 844));
+    final repository = ControlledWorkspaceRepository();
+    final container = await pumpLocalSettings(tester, repository);
+    container.read(demoLedgerProvider.notifier).createManual(draft());
+    container
+        .read(demoBudgetPlansProvider.notifier)
+        .setLimit(2024, 10, null, 3000000);
+    container
+        .read(demoSubscriptionsProvider.notifier)
+        .setActive('netflix', false);
+    await container.read(demoPersistenceProvider.notifier).flush();
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('Reset demo plans'));
+    await tester.tap(find.text('Reset demo plans'));
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Transactions and saved receipts stay as they are'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(repository.workspace.budgets['2024-10']!.monthlyLimit, 3000000);
+    await tester.tap(find.text('Reset demo plans'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Reset plans'));
+    await tester.pumpAndSettle();
+    expect(repository.workspace.ledger, hasLength(10));
+    expect(repository.workspace.budgets['2024-10']!.monthlyLimit, 2500000);
+    expect(repository.workspace.subscriptions.first.active, true);
+    expect(
+      find.text('Original demo plans restored on this device.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets(
+    'persistent budget and subscription editors disclose local storage',
+    (tester) async {
+      viewport(tester, const Size(390, 844));
+      await pumpLocalSettings(
+        tester,
+        ControlledWorkspaceRepository(),
+        location: '/budgets',
+      );
+      await tester.tap(find.text('MONTHLY BUDGET'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Demo budget plans are saved on this device.'),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox());
+      await pumpLocalSettings(
+        tester,
+        ControlledWorkspaceRepository(),
+        location: '/subscriptions',
+      );
+      await tester.tap(find.byKey(const ValueKey('add-subscription')));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(
+          'Demo tracking is saved on this device. Renewals do not create charges.',
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   testWidgets(
     'Settings reset needs confirmation; cancel preserves edits and reset persists samples',
     (tester) async {
@@ -104,7 +178,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Your local demo could not load'), findsOneWidget);
       expect(find.textContaining('private payload'), findsNothing);
-      await tester.tap(find.text('Reset stored demo activity'));
+      await tester.tap(find.text('Reset stored demo data'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();
@@ -126,9 +200,9 @@ void main() {
         throw const FormatException('bad saved data');
     await tester.pumpWidget(DemoBootstrap(repository: repository));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Reset stored demo activity'));
+    await tester.tap(find.text('Reset stored demo data'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Reset activity'));
+    await tester.tap(find.text('Reset demo data'));
     await tester.pumpAndSettle();
     expect(find.text('Understand your money'), findsOneWidget);
     expect(repository.writes.single.ledger, hasLength(9));
@@ -160,6 +234,8 @@ void main() {
       await pumpLocalSettings(tester, ControlledWorkspaceRepository());
       await tester.ensureVisible(find.text('Reset demo activity'));
       expect(find.text('Reset demo activity').hitTestable(), findsOneWidget);
+      await tester.ensureVisible(find.text('Reset demo plans'));
+      expect(find.text('Reset demo plans').hitTestable(), findsOneWidget);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
       await pumpLocalSettings(

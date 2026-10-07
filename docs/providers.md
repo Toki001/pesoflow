@@ -44,3 +44,10 @@ The Drift/SQLite repository never contacts a bank/wallet, changes a reported
 balance, stores credentials or grants consent. Sample account membership and
 connection acknowledgments remain transient. Local reset restores activity
 fixtures and clears saved receipt snapshots; it revokes no real connection.
+
+
+Budget plans and subscription tracking also survive restart locally. Subscription
+payment-source names remain tracking labels; saved renewal dates, pausing/removing
+tracking and resetting plans never contact a provider, create charges or cancel
+services. Reset activity preserves plans; reset plans preserves recorded activity.
+Startup recovery explicitly confirms replacing all saved demo data.

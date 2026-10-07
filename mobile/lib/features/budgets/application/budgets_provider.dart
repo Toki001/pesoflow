@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../transactions/application/transactions_provider.dart';
 import '../../transactions/data/transaction_fixture.dart';
 import '../../transactions/domain/transaction.dart';
@@ -10,8 +11,14 @@ class DemoBudgetPlans extends Notifier<Map<String, BudgetPlan>> {
   @override
   Map<String, BudgetPlan> build() {
     final fixture = budgetFixture();
-    return Map.unmodifiable({fixture.key: fixture});
+    return Map.unmodifiable(
+      ref.watch(initialDemoWorkspaceProvider)?.budgets ??
+          {fixture.key: fixture},
+    );
   }
+
+  void restore(Map<String, BudgetPlan> plans) =>
+      state = Map.unmodifiable(plans);
 
   BudgetPlan baseFor(int year, int month) =>
       state['$year-$month'] ??

@@ -171,7 +171,7 @@ void main() {
       DemoWorkspaceCodec.encode(initialDemoWorkspace())
           .replaceFirst('"amount":32500', '"amount":32500.5'),
       DemoWorkspaceCodec.encode(initialDemoWorkspace())
-          .replaceFirst('"formatVersion":1', '"formatVersion":2'),
+          .replaceFirst('"formatVersion":2', '"formatVersion":3'),
     ]) {
       await database
           .into(database.demoSnapshots)

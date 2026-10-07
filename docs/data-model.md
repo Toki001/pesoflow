@@ -210,3 +210,32 @@ before publishing them to memory; failure preserves current activity. Manual ID
 allocation resumes above the maximum restored `demo-N` ID. Reported balances,
 sample connection membership, budgets/limits, subscriptions, appearance,
 notification read state and onboarding progress are not stored in this phase.
+
+
+## Local plans snapshot (workspace v2)
+
+Workspace v2 adds `budgets: {version: 1, plans: {periodKey: BudgetPlan JSON}}`
+and `subscriptions: {version: 1, plans: [SubscriptionPlan JSON]}`. The entire
+workspace still occupies the singleton row in SQLite schema v1. Valid workspace
+v1 rows migrate transactionally; ledger and reviewed receipts remain unchanged,
+while plans seed from the approved fixtures. Unknown versions, invalid payloads
+and failed migration writes preserve the original row.
+
+Budget storage retains base spending/forecast offsets, monthly/category limits,
+description, fixed/settled flags and edited-category markers across all created
+months. Ledger-derived projections are recomputed after loading and never saved
+as base values. Stored keys must match year/month, category allocations must fit
+the monthly limit, and categories/edited references must be consistent. Integer
+money/calendar fields are validated before generated JSON decoding can truncate.
+
+Subscriptions retain ID, service name, exact amount, billing cycle, canonical ISO
+renewal date, payment-source label, category, active state, provenance and optional
+confidence. Payment sources remain descriptive tracking labels, not provider
+account grants. All four billing cycles survive restart; empty tracking lists do
+not reseed. Renewal tracking never creates ledger entries. Restored manual IDs
+advance allocation above surviving `subscription-demo-N` records.
+
+Reset activity preserves plans; reset plans preserves activity. Only the startup
+recovery reset replaces all stored collections, with explicit confirmation.
+Appearance, filters/sorts, selected periods, dismissed suggestions, notification
+read state, onboarding and sample connections remain session-only.

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
+import '../../demo_workspace/application/demo_workspace_providers.dart';
 import '../../transactions/application/transactions_provider.dart';
 import '../../transactions/data/transaction_fixture.dart';
 import '../../transactions/domain/manual_transaction_draft.dart';
@@ -92,7 +93,9 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Demo tracking only. Changes last for this session and do not create charges.',
+                ref.watch(demoPersistenceEnabledProvider)
+                    ? 'Demo tracking is saved on this device. Renewals do not create charges.'
+                    : 'Demo tracking only. Changes last for this session and do not create charges.',
                 style: AppTypography.bodySmall.copyWith(
                   color: context.colors.mutedInk,
                 ),
@@ -315,7 +318,7 @@ class _SubscriptionDetails extends ConsumerWidget {
                 builder: (ctx) => AlertDialog(
                   title: const Text('Remove tracking?'),
                   content: Text(
-                    'Remove ${plan.name} from this demo session? This does not cancel your service or delete recorded charges.',
+                    'Remove ${plan.name} from ${ref.read(demoPersistenceEnabledProvider) ? 'this device' : 'this demo session'}? This does not cancel your service or delete recorded charges.',
                   ),
                   actions: [
                     TextButton(

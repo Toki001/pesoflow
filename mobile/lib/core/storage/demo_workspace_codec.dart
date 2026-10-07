@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import '../../features/budgets/data/budget_fixture.dart';
+import '../../features/budgets/data/budget_plans_codec.dart';
+import '../../features/subscriptions/data/subscription_fixture.dart';
+import '../../features/subscriptions/data/subscription_plans_codec.dart';
 import '../../features/demo_workspace/domain/demo_workspace.dart';
 import '../../features/receipts/domain/receipt_draft.dart';
 import '../../features/transactions/domain/transaction.dart';
@@ -7,19 +11,24 @@ import '../../features/transactions/domain/transaction.dart';
 /// Versioned, exact-centavo demo snapshot. No labels are converted into IDs.
 abstract final class DemoWorkspaceCodec {
   static String encode(DemoWorkspace workspace) => jsonEncode({
-    'formatVersion': 1,
+    'formatVersion': 2,
     'fixtureVersion': 1,
+    'budgets': BudgetPlansCodec.encode(workspace.budgets),
+    'subscriptions': SubscriptionPlansCodec.encode(workspace.subscriptions),
     'ledger': [for (final t in workspace.ledger) t.toJson()],
     'receipts': {
       for (final e in workspace.receipts.entries) e.key: _receiptJson(e.value),
     },
   });
 
+  static bool needsMigration(String payload) =>
+      (jsonDecode(payload) as Map<String, dynamic>)['formatVersion'] == 1;
+
   static DemoWorkspace decode(String payload) {
     final json = jsonDecode(payload) as Map<String, dynamic>;
     if (json['formatVersion'] is! int ||
         json['fixtureVersion'] is! int ||
-        json['formatVersion'] != 1 ||
+        ![1, 2].contains(json['formatVersion']) ||
         json['fixtureVersion'] != 1) {
       throw const FormatException('Unsupported demo format.');
     }
@@ -32,6 +41,14 @@ abstract final class DemoWorkspaceCodec {
     }
     return DemoWorkspace(
       ledger: ledger,
+      budgets: json['formatVersion'] == 1
+          ? {budgetFixture().key: budgetFixture()}
+          : BudgetPlansCodec.decode(json['budgets'] as Map<String, dynamic>),
+      subscriptions: json['formatVersion'] == 1
+          ? subscriptionFixture()
+          : SubscriptionPlansCodec.decode(
+              json['subscriptions'] as Map<String, dynamic>,
+            ),
       receipts: {
         for (final e in (json['receipts'] as Map<String, dynamic>).entries)
           e.key: _receiptFromJson(e.value as Map<String, dynamic>),

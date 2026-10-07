@@ -1,13 +1,52 @@
+import '../../budgets/domain/budget_plan.dart';
+import '../../subscriptions/domain/subscription_plan.dart';
+
 import '../../receipts/domain/receipt_draft.dart';
 import '../../transactions/domain/transaction.dart';
 
-/// Demo activity only. Other preferences and financial features remain transient.
+/// Atomic local demo activity and planning metadata; never provider credentials.
 class DemoWorkspace {
   DemoWorkspace({
     required Iterable<TransactionRecord> ledger,
     Map<String, ReceiptDraft> receipts = const {},
+    Map<String, BudgetPlan> budgets = const {},
+    Iterable<SubscriptionPlan> subscriptions = const [],
   }) : ledger = List.unmodifiable(ledger),
-       receipts = Map.unmodifiable(receipts) {
+       receipts = Map.unmodifiable(receipts),
+       budgets = Map.unmodifiable(budgets),
+       subscriptions = List.unmodifiable(subscriptions) {
+    for (final entry in this.budgets.entries) {
+      final plan = entry.value;
+      final categories = plan.allowances.map((a) => a.category).toSet();
+      if (entry.key != plan.key ||
+          plan.year < 1 ||
+          plan.year > 9999 ||
+          plan.month < 1 ||
+          plan.month > 12 ||
+          plan.monthlyLimit <= 0 ||
+          plan.monthlyLimit > 99999999999 ||
+          plan.allocated > plan.monthlyLimit ||
+          categories.length != plan.allowances.length ||
+          plan.editedCategories.toSet().length !=
+              plan.editedCategories.length ||
+          !categories.containsAll(plan.editedCategories) ||
+          plan.allowances.any(
+            (a) =>
+                a.limit <= 0 ||
+                a.limit > 99999999999 ||
+                [
+                  TransactionCategory.income,
+                  TransactionCategory.transfer,
+                  TransactionCategory.refund,
+                ].contains(a.category),
+          )) {
+        throw const FormatException('Invalid demo budget plan.');
+      }
+    }
+    if (this.subscriptions.map((p) => p.id).toSet().length !=
+        this.subscriptions.length) {
+      throw const FormatException('Duplicate demo subscription ID.');
+    }
     if (this.ledger.any(
           (t) => t.id.isEmpty || t.amount <= 0 || t.amount > 99999999999,
         ) ||
@@ -30,6 +69,8 @@ class DemoWorkspace {
   }
   final List<TransactionRecord> ledger;
   final Map<String, ReceiptDraft> receipts;
+  final Map<String, BudgetPlan> budgets;
+  final List<SubscriptionPlan> subscriptions;
 }
 
 abstract interface class DemoWorkspaceRepository {

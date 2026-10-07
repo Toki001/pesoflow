@@ -1,12 +1,17 @@
 import 'package:drift/drift.dart';
 
+import '../../features/budgets/data/budget_fixture.dart';
+import '../../features/subscriptions/data/subscription_fixture.dart';
 import '../../features/demo_workspace/domain/demo_workspace.dart';
 import '../../features/transactions/data/transaction_fixture.dart';
 import 'demo_database.dart';
 import 'demo_workspace_codec.dart';
 
-DemoWorkspace initialDemoWorkspace() =>
-    DemoWorkspace(ledger: transactionFixture());
+DemoWorkspace initialDemoWorkspace() => DemoWorkspace(
+  ledger: transactionFixture(),
+  budgets: {budgetFixture().key: budgetFixture()},
+  subscriptions: subscriptionFixture(),
+);
 
 class SqliteDemoWorkspaceRepository implements DemoWorkspaceRepository {
   SqliteDemoWorkspaceRepository(this.database);
@@ -16,7 +21,11 @@ class SqliteDemoWorkspaceRepository implements DemoWorkspaceRepository {
     final row = await (database.select(
       database.demoSnapshots,
     )..where((t) => t.id.equals(1))).getSingleOrNull();
-    if (row != null) return DemoWorkspaceCodec.decode(row.payload);
+    if (row != null) {
+      final workspace = DemoWorkspaceCodec.decode(row.payload);
+      if (DemoWorkspaceCodec.needsMigration(row.payload)) await save(workspace);
+      return workspace;
+    }
     final seed = initialDemoWorkspace();
     await save(seed);
     return seed;
