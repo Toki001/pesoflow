@@ -43,3 +43,12 @@ Protected routes, secure authentication and provider consent require separate
 implementation before real financial data is accepted. The disclosure states
 that balances are illustrative, edits reset on restart, and real account
 connections, money movement, camera capture and OCR are unavailable.
+
+
+Settings controls session-only appearance and exposes existing sample-account
+and introduction routes. It collects no personal data, credentials or permission
+and writes nothing to disk or a server. Theme changes and restoring the device
+appearance do not erase or transmit financial demo edits. Formatting is fixed
+to PHP and English (Philippines). No biometric lock, security certification,
+notification delivery, account connection or persistence is implied by these
+controls. Real authentication and protected storage remain later milestones.

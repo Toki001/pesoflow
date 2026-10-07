@@ -68,15 +68,35 @@ class HomeHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: c.soft(c.primary, AppColors.primarySoft),
-            child: Text(
-              'A',
-              style: AppTypography.labelMedium.copyWith(color: c.primary),
+          Semantics(
+            button: true,
+            label: 'Settings',
+            excludeSemantics: true,
+            onTap: () => context.push('/settings'),
+            child: Tooltip(
+              message: 'Settings',
+              child: InkWell(
+                onTap: () => context.push('/settings'),
+                child: SizedBox(
+                  width: 44,
+                  height: 48,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: CircleAvatar(
+                      radius: 16,
+                      backgroundColor: c.soft(c.primary, AppColors.primarySoft),
+                      child: Text(
+                        'A',
+                        style: AppTypography.labelMedium.copyWith(
+                          color: c.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

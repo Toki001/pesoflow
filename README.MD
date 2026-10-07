@@ -42,7 +42,10 @@ Engineering and implementation instructions are defined in:
 The app starts with a three-step introduction and an explicit **Explore demo**
 entry. Skip goes to the demo disclosure; it does not bypass it. Sample data and
 edits are session-only, and no credentials or financial account connections are
-requested. Explicit screen deep links remain available.
+requested. Explicit screen deep links remain available. Tap Home’s avatar to open Settings:
+choose System, Light or Dark appearance for the current session, restore device
+appearance, view sample accounts or revisit the introduction. Appearance changes
+preserve demo edits and navigation.
 
 `mobile/` now contains the Android/iOS Flutter application, shared light/dark
 theme, routing and native Stitch Home, Transactions, Transaction Detail,

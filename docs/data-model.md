@@ -108,3 +108,11 @@ Next/Back stop at their respective boundaries. Previews read existing immutable
 Home fixtures rather than duplicating financial data. Entering or revisiting the
 introduction never resets the demo ledger. No JSON, database, user identity,
 authentication session or consent record is introduced.
+
+
+`Appearance` contains `system`, `light` and `dark`; `settingsProvider` holds the
+selected enum for the active ProviderScope. It defaults to system and can restore
+that default without changing financial providers. The app maps the preference
+to `ThemeMode` at the presentation boundary. It introduces no JSON, disk storage,
+backend contract, identity or authentication state. The Settings introduction
+link resets only `onboardingProvider`; other session data remains untouched.

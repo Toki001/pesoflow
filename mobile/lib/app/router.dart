@@ -12,6 +12,7 @@ import '../features/expense/presentation/add_expense_screen.dart';
 import '../features/subscriptions/presentation/subscriptions_screen.dart';
 import '../features/receipts/presentation/receipt_review_screen.dart';
 import '../features/onboarding/presentation/onboarding_screen.dart';
+import '../features/settings/presentation/settings_screen.dart';
 import 'shell/app_shell.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_typography.dart';
@@ -34,6 +35,7 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
     GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
+    GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
     GoRoute(
       path: '/transactions/:id',
       builder: (_, state) =>

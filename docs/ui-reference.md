@@ -354,3 +354,24 @@ card shape and colors against neighboring references. Header height stays stable
 when Skip disappears. There is no pixel-level Stitch baseline for this new UI;
 its layout and copy are an implementation inference and await product review.
 Existing Stitch-backed screens and their goldens are unchanged.
+
+## Settings (inferred, not a Stitch-approved screen)
+
+No Settings screenshot or HTML exists in the export. The screen reuses Connected
+Accounts' task header, standard neutral cards, 16px gutters and restrained trust
+copy, plus Transaction Detail's grouped rows and existing theme typography.
+Appearance rows offer System/Light/Dark with explicit checked semantics and native
+icon/radio glyphs; the card and all controls adapt to the existing dark palette.
+Settings uses no bottom navigation and keeps its body scrollable.
+
+Home's avatar now opens Settings without changing its visible placement or size;
+the invisible interaction area is 44 × 48px and has an explicit accessible label.
+Settings links to sample accounts and the introduction. Currency/formatting and
+demo limitations are informational. Restore device appearance preserves demo
+edits. No notification, biometric, real connection or persistence control is
+presented as functional.
+
+Two 390 × 1100 light/dark goldens were reviewed against neighboring reference
+patterns for grouping, density, spacing, typography and color. This inferred
+layout awaits product review; there is no pixel-level Settings reference. All
+existing Stitch-backed and onboarding goldens remain unchanged.

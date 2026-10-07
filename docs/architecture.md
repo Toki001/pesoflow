@@ -485,3 +485,47 @@ and the existing backend format/lint/build/health test pass.
 Next: Settings and session preferences using the established design system.
 Real authentication, protected persistence and integrations remain separate
 implementation milestones.
+
+## Settings and session preferences phase
+
+`features/settings` separates a plain `Appearance` enum, a synchronous Riverpod
+notifier and native Settings presentation. System is the session default; Light
+and Dark override device appearance. `PesoFlowApp` maps the selected enum to
+Flutter's `ThemeMode`; its optional fixed theme remains for previews/goldens.
+Changes update the existing themes without replacing the router or ProviderScope,
+so navigation, filters and financial edits remain intact. System continues to
+respond to platform brightness changes. Restore device appearance changes only
+this preference. A fresh session returns to System; no persistence, async loader,
+backend endpoint or new dependency is needed.
+
+`/settings` uses the shared task-screen shell with safe areas, constrained width
+and a scrolling body. Home's existing avatar opens it with a 44 × 48px target
+and an explicit Settings semantic action; its visible size and placement remain
+unchanged. Back restores the previous screen/scroll, and direct-link dismissal
+falls back to Home. Sample accounts pushes the existing Accounts route. View
+introduction resets only onboarding progression before pushing its first step;
+Back returns to Settings and Explore demo replaces the stack with Home.
+
+Settings discloses in-memory sample data and unavailable real connections, fund
+movement, camera and OCR. PHP/English (Philippines) formatting is informational;
+there is no unsupported currency selector. Appearance is the only adjustable
+preference in this milestone. Notifications, authentication and protected
+persistence remain separate features.
+
+Visual review used 390 × 1100 light/dark captures and neighboring Accounts/Detail
+references. It checked card grouping, Inter hierarchy, row height, gutters and
+semantic colors, and replaced internal design terminology with plain copy. The
+new screen has no approved Stitch pixel baseline; its two goldens record an
+inferred layout. All previous screen goldens remain unchanged.
+
+Validation: all 180 Flutter tests pass, including 28 golden comparisons. The
+11 new tests cover fresh-session/default appearance, device brightness changes,
+manual overrides, restoration, unchanged ledger/filter/router state, Home entry,
+Accounts/introduction navigation, three viewport sizes including landscape,
+200% text, safe insets and checked/actionable screen-reader semantics. Formatting
+and static analysis, Android debug and iOS simulator builds, and the existing
+backend format/lint/build/health test pass.
+
+Next: a session-only notification center with deterministic demo alerts,
+read/unread state and links to the existing financial screens. No push delivery
+or background monitoring should be implied before those integrations exist.
