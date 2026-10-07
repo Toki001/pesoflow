@@ -4,10 +4,11 @@ import 'package:drift/drift.dart';
 
 import '../../../core/storage/finance_database.dart';
 import '../../../core/storage/financial_cipher.dart';
+import '../../backups/domain/finance_backup.dart';
 import '../domain/finance_workspace.dart';
 import 'finance_workspace_codec.dart';
 
-class SqliteFinanceRepository implements FinanceRepository {
+class SqliteFinanceRepository implements FinanceRepository, BackupRepository {
   SqliteFinanceRepository(this.database, this.cipher);
   final FinanceDatabase database;
   final FinancialCipher cipher;
@@ -98,6 +99,70 @@ class SqliteFinanceRepository implements FinanceRepository {
   Future<void> deleteReceiptImage(String id) => (database.delete(
     database.encryptedReceipts,
   )..where((t) => t.id.equals(id))).go();
+
+  @override
+  Future<int> backupRevision() async =>
+      (await database.select(database.encryptedWorkspaces).getSingleOrNull())
+          ?.revision ??
+      0;
+
+  @override
+  Future<FinanceBackup> captureBackup(DateTime now) =>
+      database.transaction(() async {
+        final workspace = await load();
+        final images = <String, Uint8List>{};
+        var size = 0;
+        for (final row
+            in await database.select(database.encryptedReceipts).get()) {
+          size += row.payload.length;
+          if (size > 24 * 1024 * 1024) {
+            throw const BackupFailure(
+              'Receipt images exceed the supported backup size.',
+            );
+          }
+          images[row.id] = await cipher.open(
+            row.payload,
+            context: 'receipt:${row.id}',
+          );
+        }
+        return FinanceBackup(workspace, images, now);
+      });
+
+  @override
+  Future<FinanceWorkspace> restoreBackup(
+    FinanceBackup backup, {
+    required int expectedRevision,
+  }) => database.transaction(() async {
+    if (await backupRevision() != expectedRevision) {
+      throw const WorkspaceConflict();
+    }
+    final next = backup.workspace.copyWith(
+      revision: expectedRevision + 1,
+      sync: const SyncMetadata(),
+      preferences: backup.workspace.preferences.copyWith(biometrics: false),
+    );
+    final payload = await cipher.seal(
+      utf8.encode(FinanceWorkspaceCodec.encode(next)),
+      context: 'workspace:1:${next.revision}',
+      createKey: true,
+    );
+    // One SQLite transaction covers both tables. Failure preserves the old
+    // ciphertext; no empty workspace or partially restored images are published.
+    await database
+        .into(database.encryptedWorkspaces)
+        .insertOnConflictUpdate(
+          EncryptedWorkspacesCompanion.insert(
+            id: const Value(1),
+            revision: next.revision,
+            payload: payload,
+          ),
+        );
+    await database.delete(database.encryptedReceipts).go();
+    for (final e in backup.images.entries) {
+      await saveReceiptImage(e.key, e.value);
+    }
+    return next;
+  });
 
   @override
   Future<void> close() => database.close();

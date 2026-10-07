@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/backups/presentation/backup_screen.dart';
+
 import 'package:pesoflow/features/workspace/application/finance_controller.dart';
 import 'package:pesoflow/features/dashboard/presentation/home_screen.dart';
 import 'package:pesoflow/features/budgets/presentation/budgets_screen.dart';
@@ -68,6 +70,10 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
           AccountDetailScreen(id: state.pathParameters['id']!),
     ),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
+    GoRoute(
+      path: '/settings/backup',
+      builder: (_, _) => const BackupSettingsScreen(),
+    ),
     GoRoute(
       path: '/notifications',
       builder: (_, _) => const NotificationsScreen(),

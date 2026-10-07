@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pesoflow/core/identity/new_id.dart';
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/accounts/domain/financial_account.dart';
+import 'package:pesoflow/features/backups/domain/finance_backup.dart';
 import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
 import 'package:pesoflow/features/notifications/domain/evaluate_notices.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
@@ -47,6 +48,7 @@ class FinanceController extends Notifier<FinanceState> {
   Future<void> _commit(
     FinanceWorkspace Function(FinanceWorkspace) edit, {
     bool evaluate = true,
+    Future<FinanceWorkspace> Function(FinanceWorkspace, int)? persist,
   }) {
     final result = _tail.then((_) async {
       if (!ref.mounted) throw StateError('Workspace closed.');
@@ -59,9 +61,11 @@ class FinanceController extends Notifier<FinanceState> {
             notices: evaluateNotices(next, ref.read(clockProvider)()),
           );
         }
-        final saved = await ref
-            .read(financeRepositoryProvider)
-            .save(next, expectedRevision: before.revision);
+        final saved = persist == null
+            ? await ref
+                  .read(financeRepositoryProvider)
+                  .save(next, expectedRevision: before.revision)
+            : await persist(next, before.revision);
         if (ref.mounted) state = FinanceState(saved);
       } catch (_) {
         if (ref.mounted) {
@@ -78,6 +82,21 @@ class FinanceController extends Notifier<FinanceState> {
     _tail = result.then<void>((_) {}, onError: (Object _, StackTrace _) {});
     return result;
   }
+
+  Future<void> restoreBackup(FinanceBackup backup, int expectedRevision) =>
+      _commit(
+        (w) {
+          if (w.revision != expectedRevision) throw const WorkspaceConflict();
+          return backup.workspace.copyWith(revision: w.revision);
+        },
+        evaluate: false,
+        persist: (next, revision) =>
+            (ref.read(financeRepositoryProvider) as BackupRepository)
+                .restoreBackup(
+                  FinanceBackup(next, backup.images, backup.createdAt),
+                  expectedRevision: revision,
+                ),
+      );
 
   Future<void> flush() => _tail;
   void dismissError() =>

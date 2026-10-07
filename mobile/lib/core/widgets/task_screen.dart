@@ -10,6 +10,7 @@ class TaskScreen extends StatelessWidget {
     required this.title,
     required this.child,
     this.actions = const [],
+    this.onClose,
     this.centerTitle = false,
     this.footer,
     this.backIcon = Icons.close,
@@ -18,6 +19,7 @@ class TaskScreen extends StatelessWidget {
     super.key,
   });
   final String title;
+  final VoidCallback? onClose;
   final bool centerTitle;
   final Widget child;
   final List<Widget> actions;
@@ -47,7 +49,9 @@ class TaskScreen extends StatelessWidget {
                       IconButton(
                         tooltip: backTooltip,
                         onPressed: () {
-                          if (context.canPop()) {
+                          if (onClose != null) {
+                            onClose!();
+                          } else if (context.canPop()) {
                             context.pop();
                           } else {
                             context.go(fallbackRoute);

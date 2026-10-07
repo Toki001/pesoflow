@@ -76,6 +76,13 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const Divider(),
                 _SettingsLink(
+                  icon: Icons.backup_outlined,
+                  title: 'Backup & export',
+                  subtitle: 'Save an encrypted backup or restore your records',
+                  onTap: () => context.push('/settings/backup'),
+                ),
+                const Divider(),
+                _SettingsLink(
                   icon: Icons.info_outline,
                   title: 'View introduction',
                   subtitle: 'Review how local tracking works',
@@ -99,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Stored locally with encryption. Cloud backup, bank connections and receipt scanning are not available yet. Keep this app installed to retain your records.',
+                  'Stored locally with encryption. Save a password-protected backup before changing devices or uninstalling. Automatic cloud backup, bank connections and receipt scanning are not available.',
                 ),
               ],
             ),

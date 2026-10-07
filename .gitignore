@@ -44,7 +44,8 @@ Thumbs.db
 *.p12
 *.p8
 
-# Local demo databases and SQLite journal files
+# Local financial databases, portable backups and SQLite journals
+*.pfbackup
 *.sqlite
 *.sqlite-*
 *.db
