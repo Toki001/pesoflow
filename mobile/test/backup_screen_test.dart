@@ -1,12 +1,14 @@
-import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/app/theme/app_theme.dart';
 import 'package:pesoflow/features/backups/application/backup_actions.dart';
 import 'package:pesoflow/features/backups/data/backup_files.dart';
 import 'package:pesoflow/features/backups/domain/finance_backup.dart';
 import 'package:pesoflow/features/backups/presentation/backup_screen.dart';
+import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
 
 import 'fixtures/finance_workspace_fixture.dart';
 
@@ -14,10 +16,16 @@ class Files implements BackupFiles {
   Uint8List? picked = Uint8List.fromList([1]);
   bool saved = true;
   Uint8List? output;
+  Object? pickError, saveError;
   @override
-  Future<Uint8List?> pick() async => picked;
+  Future<Uint8List?> pick() async {
+    if (pickError != null) throw pickError!;
+    return picked;
+  }
+
   @override
   Future<bool> save(String name, Uint8List bytes, {bool csv = false}) async {
+    if (saveError != null) throw saveError!;
     output = bytes;
     return saved;
   }
@@ -29,12 +37,16 @@ void main() {
   late int writes;
   late bool fail;
   late bool restored;
+  late bool conflict;
+  Completer<void>? restoreGate;
   setUp(() {
     files = Files();
     backup = FinanceBackup(financeFixture(), {}, DateTime.utc(2024, 10, 24));
     writes = 0;
     fail = false;
     restored = false;
+    conflict = false;
+    restoreGate = null;
   });
   Future<void> pump(
     WidgetTester tester, {
@@ -66,7 +78,9 @@ void main() {
               open: (_, _) async => backup,
               restore: (_, revision) async {
                 expect(revision, 4);
+                if (conflict) throw const WorkspaceConflict();
                 if (fail) throw StateError('safe test failure');
+                await restoreGate?.future;
                 writes++;
               },
             ),
@@ -170,4 +184,91 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('file provider read/write errors remain safe and retryable', (
+    tester,
+  ) async {
+    await pump(tester);
+    files.pickError = PlatformException(
+      code: 'download_failed',
+      message: 'private-provider-path',
+    );
+    await tap(tester, 'Choose backup file');
+    expect(
+      find.textContaining('previously saved data is intact'),
+      findsOneWidget,
+    );
+    expect(find.textContaining('private-provider-path'), findsNothing);
+    expect(find.text('Unlock and review'), findsNothing);
+    expect(writes, 0);
+    files.pickError = null;
+    await tap(tester, 'Choose backup file');
+    expect(find.text('Unlock and review'), findsOneWidget);
+    for (final field in find.byType(TextField).evaluate().toList()) {
+      await tester.enterText(
+        find.byWidget(field.widget),
+        'test backup password',
+      );
+    }
+    files.saveError = PlatformException(
+      code: 'disk_full',
+      message: 'private-export-path',
+    );
+    await tap(tester, 'Save encrypted backup');
+    expect(find.textContaining('Backup saved.'), findsNothing);
+    expect(find.textContaining('private-export-path'), findsNothing);
+    expect(files.output, isNull);
+    files.saveError = null;
+    await tap(tester, 'Save encrypted backup');
+    expect(find.textContaining('Backup saved.'), findsOneWidget);
+    expect(writes, 0);
+  });
+  testWidgets('background/resume while restoring cannot submit twice', (
+    tester,
+  ) async {
+    await pump(tester);
+    await tap(tester, 'Choose backup file');
+    await tap(tester, 'Unlock and review');
+    restoreGate = Completer<void>();
+    await tap(tester, 'Review replacement');
+    await tap(tester, 'Replace and restore');
+    expect(writes, 0);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    final restoreButton = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Review replacement'),
+    );
+    expect(restoreButton.onPressed, isNull);
+    await tap(tester, 'Review replacement');
+    expect(find.text('Replace and restore'), findsNothing);
+    restoreGate!.complete();
+    await tester.pumpAndSettle();
+    expect(writes, 1);
+    expect(restored, isTrue);
+    expect(tester.takeException(), isNull);
+  });
+  testWidgets('stale preview is discarded and must be opened again', (
+    tester,
+  ) async {
+    await pump(tester);
+    await tap(tester, 'Choose backup file');
+    await tap(tester, 'Unlock and review');
+    conflict = true;
+    await tap(tester, 'Review replacement');
+    await tap(tester, 'Replace and restore');
+    expect(writes, 0);
+    expect(
+      find.textContaining('Your data changed while reviewing'),
+      findsOneWidget,
+    );
+    expect(find.text('Review replacement'), findsNothing);
+    expect(find.text('Unlock and review'), findsNothing);
+    conflict = false;
+    await tap(tester, 'Choose backup file');
+    await tap(tester, 'Unlock and review');
+    await tap(tester, 'Review replacement');
+    await tap(tester, 'Replace and restore');
+    expect(writes, 1);
+  });
 }
