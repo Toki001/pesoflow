@@ -65,11 +65,7 @@ class ReceiptDraft {
     if (account.trim().isEmpty || accountId.trim().isEmpty) {
       return 'Choose a payment source.';
     }
-    if ([
-      TransactionCategory.income,
-      TransactionCategory.transfer,
-      TransactionCategory.refund,
-    ].contains(category)) {
+    if (!isExpenseCategory(category)) {
       return 'Choose an expense category.';
     }
     if (evidence == null && items.isEmpty) {

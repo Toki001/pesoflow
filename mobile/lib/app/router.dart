@@ -1,3 +1,6 @@
+import '../features/receipts/presentation/receipt_review_screen.dart';
+import '../features/receipts/presentation/saved_receipt_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -49,13 +52,11 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
       redirect: (_, _) => '/budgets/subscriptions',
     ),
     GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
+    GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(
-      path: '/receipt',
-      builder: (_, _) => const Scaffold(
-        body: FoundationDestination(
-          title: 'Receipt scanning is not available yet',
-        ),
-      ),
+      path: '/receipts/:id',
+      builder: (_, state) =>
+          SavedReceiptScreen(transactionId: state.pathParameters['id']!),
     ),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(

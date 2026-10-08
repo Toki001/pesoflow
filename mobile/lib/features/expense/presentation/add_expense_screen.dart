@@ -913,7 +913,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                                       style: small,
                                     ),
                                     Text(
-                                      'Receipt scanning is not available yet',
+                                      'Read text on device, then review and save',
                                       style: AppTypography.labelSmall.copyWith(
                                         color: c.mutedInk,
                                       ),

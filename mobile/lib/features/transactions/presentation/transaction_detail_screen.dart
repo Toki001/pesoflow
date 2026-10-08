@@ -240,6 +240,22 @@ class TransactionDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
+          if (ref.watch(workspaceProvider).receipts.containsKey(id)) ...[
+            const SizedBox(height: 16),
+            FinanceCard(
+              child: Material(
+                color: c.surface,
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Icon(Icons.receipt_long_outlined, color: c.primary),
+                  title: const Text('Reviewed receipt'),
+                  subtitle: const Text('View image and extracted details'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push('/receipts/$id'),
+                ),
+              ),
+            ),
+          ],
           if (t.tags.isNotEmpty) ...[
             const SizedBox(height: 16),
             FinanceCard(
@@ -294,8 +310,10 @@ class TransactionDetailScreen extends ConsumerWidget {
                 context: context,
                 builder: (c) => AlertDialog(
                   title: const Text('Delete transaction?'),
-                  content: const Text(
-                    'Balances, budgets and analytics will be recalculated. This cannot be undone.',
+                  content: Text(
+                    t.hasReceipt
+                        ? 'The receipt image and details will also be removed. Balances, budgets and analytics will be recalculated. This cannot be undone.'
+                        : 'Balances, budgets and analytics will be recalculated. This cannot be undone.',
                   ),
                   actions: [
                     TextButton(

@@ -57,7 +57,17 @@ class NativeReceiptImages implements ReceiptImages {
       final dir = await _directory();
       final file = File('${dir.path}/${newId()}.jpg');
       _owned.add(file.path);
-      await file.writeAsBytes(bytes, flush: true);
+      try {
+        await file.writeAsBytes(bytes, flush: true);
+      } catch (_) {
+        _owned.remove(file.path);
+        try {
+          if (await file.exists()) await file.delete();
+        } catch (_) {
+          // Retry any partial staging-file cleanup next session.
+        }
+        rethrow;
+      }
       return ReceiptImage(file.path, bytes);
     } finally {
       try {
@@ -155,7 +165,11 @@ class NativeReceiptImages implements ReceiptImages {
 
   @override
   Future<void> openSettings() async {
-    await openAppSettings();
+    if (!await openAppSettings()) {
+      throw const ReceiptFailure(
+        'Open device Settings and choose PesoFlow to manage Camera access.',
+      );
+    }
   }
 }
 

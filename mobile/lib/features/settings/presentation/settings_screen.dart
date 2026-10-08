@@ -106,7 +106,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Stored locally with encryption. Save a password-protected backup before changing devices or uninstalling. Automatic cloud backup, bank connections and receipt scanning are not available.',
+                  'Stored locally with encryption. Save a password-protected backup before changing devices or uninstalling. Receipt text is read on your device. Automatic cloud backup and bank connections are not available.',
                 ),
               ],
             ),

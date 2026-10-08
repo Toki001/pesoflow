@@ -361,3 +361,19 @@ Apple Silicon iOS 27 simulator. This is a native dependency limitation, not a
 successful simulator runtime check. Android uses permission_handler 12.x to
 remain compatible with the existing SDK 36 toolchain. Review wiring and UI
 verification are the next checkpoint; physical camera checks remain pending.
+
+Receipt milestone 4: `/receipt` now opens real capture/review and persists through
+production commands. Merchant/date/items/independent totals/currency/category and
+account can be corrected; explicit verification is required. Empty/failed OCR can
+be completed manually. Native capture/crop cancellation retains the review; failed
+saves retain image and corrections. A fresh user can create an account without
+losing the review. Transaction Detail reopens the saved receipt; deletion explains
+and removes its image. Test-only fake adapters/generator support five new receipt
+goldens. Stitch structures are preserved; honest confidence/privacy/confirmation
+copy replaces fabricated confidence, auto-crop, tax and rewards claims.
+
+Verification at this checkpoint: all 193 Flutter tests pass (21 current golden
+comparisons), static analysis and formatting pass. Backend formatting, lint,
+build and its health test pass through `scripts/check.sh`. New flow tests include
+budget-notice evaluation, corrections, explicit account choice, concurrent-save
+protection, native cancellation/error handling, save retry and saved-image UI.
