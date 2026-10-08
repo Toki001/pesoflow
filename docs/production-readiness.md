@@ -3,6 +3,9 @@
 This is an implementation tracker, not a release certification. Audit baseline:
 `ed26c56`, 7 October 2026. `CODEX.md` was read completely before this migration.
 
+Current receipt status and limits are documented in [receipt capture and review](receipts.md).
+The checkpoints below include historical states; they are not all current blockers.
+
 ## Original audit (historical baseline)
 
 The repository contains nine approved Stitch screenshot/HTML pairs, two design
@@ -75,6 +78,12 @@ layout primitives, query filters and theme can be preserved and extended.
   reviewed atomic restore and missing-device-key recovery. See [backup and
   recovery](backup.md) for scope, format limits and native file-picker checks.
 
+- Native receipt capture/photo selection, manual crop/rotation and on-device Latin
+  OCR, with editable fields, explicit review, actual account selection and atomic
+  encrypted image/expense persistence. Saved receipts reopen from Transaction
+  Detail, participate in backup/restore and are removed with transaction deletion.
+  See [receipt behavior](receipts.md) and [pending device checks](verification/receipt-device-checklist.md).
+
 ## Completed foundation checkpoints
 
 Checkpoint 1 (`ed18ee7`) added the production account/workspace/preferences/budget models,
@@ -119,7 +128,11 @@ password. There is no recovery service or password reset. SQLite corruption,
 inaccessible secure storage and exhausted disk space can still block a restore;
 the original database is preserved when replacement fails.
 
-Recommended next task: physical Android/iOS resilience verification, including
+Recommended next task: physical Android/iOS receipt/OCR acceptance on a redacted
+Philippine receipt corpus, alongside the pending backup resilience checks. Use the
+[receipt checklist](verification/receipt-device-checklist.md), including offline
+first scan, permission denial, poor-quality photos, background/resume and saved
+receipt reopen. Backup resilience verification includes
 native local/cloud document save and selection, backup transfer to another test
 installation, force-stop/restart, lock/unlock, interrupted restore and low-storage
 failures. Follow the [device checklist](backup.md#verification-and-device-checks).
@@ -134,13 +147,17 @@ distinguish user edits from sample records and show a review before import.
 Separate future tasks remain:
 
 - Physical Android/iOS device verification, including lock/unlock, interruptions,
-  storage exhaustion and platform backup/recovery behavior. The native smoke check
-  below covers iOS Simulator; it does not establish physical-device behavior.
+  storage exhaustion and platform backup/recovery behavior. The earlier manual-
+  finance simulator smoke check below predates the OCR dependency; it does not
+  establish current receipt runtime or physical-device behavior.
 - Day/week/year budget controls (engines exist; approved budget UI remains monthly),
   recurring-suggestion acceptance UI and notification delivery. In-app notice
   evaluation/read status is available; no OS notification delivery is claimed.
-- Camera/OCR/review/image lifecycle. The receipt demo is test-only and the runtime
-  Scan route explicitly states scanning is unavailable.
+- Real-receipt accuracy and native permission/capture acceptance on physical
+  hardware. ML Kit simulator builds are x86_64 and cannot run on the installed
+  Apple Silicon iOS 27 runtime; device arm64 is a separate build target.
+- A versioned streaming backup enhancement for receipt collections that exceed
+  current image/JSON bounds; today export fails explicitly rather than dropping images.
 - Backend persistence/authentication/ownership/sync and authorized providers.
 - Release signing, distribution assets and packaging.
 
@@ -319,9 +336,9 @@ See the [recorded evidence and deterministic physical test procedure](verificati
 The physical-device task remains blocked on hardware; no release-readiness claim
 is made. Recovery still requires a saved portable backup and its password.
 
-## Receipt/OCR audit — 8 October 2026 (implementation in progress)
+## Receipt/OCR audit — 8 October 2026 (historical task baseline)
 
-The runtime `/receipt` route is an unavailable placeholder. The approved native
+At this task baseline, the runtime `/receipt` route was an unavailable placeholder. The approved native
 review prototype exists under test/legacy only. No camera/gallery or OCR package,
 permission configuration, preprocessing or receipt-text parser exists at this
 baseline. ReceiptDraft supports items and per-item confidence, but assumes an
@@ -377,3 +394,59 @@ comparisons), static analysis and formatting pass. Backend formatting, lint,
 build and its health test pass through `scripts/check.sh`. New flow tests include
 budget-notice evaluation, corrections, explicit account choice, concurrent-save
 protection, native cancellation/error handling, save retry and saved-image UI.
+
+
+## Receipt feature completion and final verification — 8 October 2026
+
+The requested receipt capture/OCR/review/save implementation is complete. This is
+an implementation and automated-verification milestone, not physical-device or
+release certification. There is no runtime mock OCR or sample receipt injection.
+The obsolete prototype controller is now test-only. Native UI follows Stitch;
+required review/uncertainty controls extend its sheet without replacing its cards
+or hierarchy. No backend endpoint, provider integration or release package was added.
+
+Verified implementation commits:
+
+- `b987324`: deterministic Philippine parser and independent OCR document model.
+- `46f4035`: persisted extraction evidence, atomic image/expense writes and cleanup.
+- `333f7be`: native camera/photo/crop, preprocessing, ML Kit and platform setup.
+- `e6d0a05`: real review/corrections/account selection/save/reopen and UI goldens.
+- `720a53f`: test-only legacy controller, corrupt-image fallback coverage and a
+  merchant-rule key validation fix. Kind prefixes/Unicode normalization can make
+  the rule key longer than the supported 100-character display name; the old
+  100-character key bound wrongly rejected valid remembered categories. No
+  balance, budget, analytics calculation or database schema rewrite was needed.
+
+Final verification on this code:
+
+| Check | Result |
+| --- | --- |
+| `bash scripts/check.sh` | Formatting clean; Flutter analysis clean; **195 Flutter tests pass**, including **21 current golden comparisons**; backend format/lint/build and 1 health test pass. |
+| `flutter build apk --debug` | Pass, final Android debug APK. |
+| `flutter build ios --debug --no-codesign` | Pass, unsigned arm64 iPhone debug app; built minimum iOS 15.5. No device install claimed. |
+| `flutter build ios --simulator --debug` | Pass, x86_64 simulator artifact; **not runnable on installed Apple Silicon iOS 27** because ML Kit lacks arm64 simulator binaries. |
+| `python3 scripts/check_backup_interruptions.py` | Four host process-kill cases pass: DELETE/WAL journal modes, before/after restore commit; complete data/images reopen. |
+| Visual inspection | New normal/dark/error receipt goldens compared with approved Stitch. Real image preview, field confidence and confirmation replace prototype claims. Small-screen/large-text widget check passes. |
+
+Direct dependencies added: `google_mlkit_text_recognition` 0.17.1, `image_picker`
+1.2.4, `image_cropper` 12.2.1, `image` 4.10.1 and `permission_handler` 12.0.3.
+`path_provider` 2.1.6 is now direct for private staging. Lockfiles include native
+ML Kit/CocoaPods and cropper SwiftPM resolution. Current Flutter warns that ML
+Kit's CocoaPods fallback will need upstream SwiftPM support in a future version.
+
+Remaining blockers/limits: physical Android/iPhone capture, permission, offline
+first-use, background/resume, thermal-receipt quality, low-storage and cross-device
+restore acceptance remain pending because hardware is unavailable. Host/fake-
+adapter tests do not establish recognition accuracy. Parser confidence is
+heuristic; whole printed amounts without decimals, fractional quantities and
+complex receipt layouts may require corrections. There is no automatic perspective
+correction. Unsaved edits are session-only. Existing backup image/JSON limits can
+block export of large receipt collections; no image is silently omitted.
+
+Recommended next production task: run the [receipt device/corpus acceptance
+checklist](verification/receipt-device-checklist.md) alongside the already pending
+backup-device checks when dedicated devices are available. While hardware remains
+unavailable, a separately scoped versioned streaming backup improvement can address
+receipt-collection size limits. See [receipt architecture and privacy](receipts.md)
+for the complete behavior and [backup recovery](backup.md) for the saved-file and
+password requirement.

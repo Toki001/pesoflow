@@ -1,4 +1,10 @@
-# Demo data model
+# Historical demo data model
+
+This document records the earlier prototype. Current financial persistence is
+described in [production readiness](production-readiness.md); current receipt
+models, independent totals and encrypted image associations are described in
+[receipt architecture](receipts.md). Prototype providers and fixtures live only
+under tests. The sample tax and demo-storage descriptions below are historical.
 
 Dashboard, BudgetSnapshot, TransactionRecord and UpcomingBill are immutable
 Freezed models with generated JSON serialization. Money is integer centavos;

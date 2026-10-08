@@ -287,7 +287,7 @@ truthful history/session copy. Compact/200% text deliberately stacks content.
 Older screen goldens and approved Stitch assets remain unchanged.
 
 
-## Receipt Scanner Review implementation
+## Receipt Scanner Review prototype (historical)
 
 The native `/receipt` task route preserves the dark preview/HUD, flash/gallery/
 frame controls, 24px rounded review surface, handle, wrapped review heading,
@@ -529,3 +529,32 @@ recovery uses the same screen with export controls hidden. Replacement requires
 an explicit confirmation dialog; the main approved financial layouts are unchanged.
 Reviewed light/dark regression images are `mobile/test/goldens/backup_light.png`
 and `backup_dark.png`; these extend, rather than replace, the Stitch references.
+
+
+## Production receipt capture/review — 8 October 2026
+
+The native production route now uses the approved receipt screenshot's dark image
+header, 260px frame, rounded 24px sheet, handle, review heading/status, merchant/date
+card, item rows, totals, category/payment cards and save/retake/discard hierarchy.
+Actual selected/cropped image bytes replace the synthetic preview; tap to zoom.
+There is no WebView or embedded Stitch HTML. Crop and rotation use native controls.
+
+Required factual differences: no fabricated 98% recognition, automatic crop, flash
+state, blanket VAT or loyalty points. Confidence chips and item flags describe
+parser estimates. Missing/ambiguous fields are explicit. Independent editable
+subtotal/tax/discount/total, raw-text disclosure, remember-category option and
+verification checkbox extend the sheet vertically; the established cards and
+visual order stay intact. The camera owns its flash controls. The account picker
+shows actual accounts and can create one while retaining the current review.
+
+Five 427 × 1900 production goldens cover normal, uncertain, missing-item, OCR-error
+and dark states; their image is generated strictly in test infrastructure. Normal
+and dark/error rendering were compared with the approved Stitch screenshot. The
+extra vertical space captures required review controls. Small-screen/large-text
+checks verify scrollability. Historical Stitch assets and prototype goldens remain
+unchanged; only the two current Add Expense subtitle goldens reflect enabled OCR.
+Transaction Detail links to the saved receipt image and reviewed fields.
+
+See [receipt behavior](receipts.md) for confidence limits and native platform
+verification boundaries. Camera/file dialogs and real thermal-paper recognition
+still require physical-device acceptance.

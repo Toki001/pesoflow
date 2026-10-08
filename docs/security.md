@@ -52,17 +52,35 @@ save destination, which can include a third-party cloud document provider. No
 PesoFlow server receives exported data. File size/decrypted size/image bounds and
 fixed algorithm/version checks constrain untrusted import work.
 
+## Receipt capture and OCR
+
+ML Kit reads Latin text on the device; PesoFlow does not upload receipt images or
+OCR text. Native camera/photo and crop plugins use private temporary files. The
+app normalizes images in a worker isolate, strips image metadata and saves the
+reviewed image only as encrypted bytes in Drift. Receipt text, confidence and
+corrections share the encrypted workspace. No receipt-content logging is added.
+
+The image must temporarily exist in plaintext in app-private cache for native OCR.
+Prepared files are cleaned after replacement/discard/successful save, with stale
+staging cleanup on the next scan after restart. Plugin/OS caches may survive a
+crash; no forensic-erasure guarantee is made. Unsaved review edits are session-only.
+A single database transaction commits the expense, metadata and encrypted image;
+transaction deletion removes the associated image atomically. Backups include
+required image references, validate them before restore, and remain subject to
+[existing size limits](backup.md). See [receipt architecture and
+limitations](receipts.md) and the [device acceptance checklist](verification/receipt-device-checklist.md).
+
 ## Deferred services
 
 The NestJS API still exposes liveness only. Helmet and validation are configured;
 production authentication, ownership checks, TLS deployment, server persistence,
 rate limits and audit controls are not implemented. Provider connections/consent,
-external financial data, cloud sync, camera/OCR and OS notification delivery remain
+external financial data, cloud sync and OS notification delivery remain
 unavailable. Local in-app notices do not represent provider monitoring or delivery
 receipts. Introduction completion is a navigation preference, not authorization.
 
 Environment files, signing keys, database files and build output stay out of
 source control. Commit lockfiles and review dependency changes. The backup feature
-adds file_picker for native document dialogs; it does not add broad-storage,
-camera or photo access requests in application code. Native permission behavior
-still needs physical-device verification.
+uses file_picker for native document dialogs. Receipt capture requests Camera only
+on user action and uses the system photo picker without broad-storage access.
+Native permission behavior still needs physical-device verification.

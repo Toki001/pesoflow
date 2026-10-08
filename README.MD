@@ -13,12 +13,19 @@ Account history is preserved by archiving used accounts. Appearance, introductio
 completion, manual subscription plans and in-app notice read status also persist.
 
 Balances are manually tracked, not bank-reported. No backend account or credentials
-are required. Receipt scanning, external providers, backend authentication, cloud
-sync and release distribution are not implemented. Settings → Backup & export
+are required. External providers, backend authentication, cloud sync and release
+distribution are not implemented. Settings → Backup & export
 can save a password-encrypted portable backup, restore it after review, or export
 a readable transaction CSV. Keep the backup and its password safely outside the
 app; see [backup and recovery](docs/backup.md). Old `pesoflow_demo` databases are preserved but
 are never imported automatically into real finances.
+
+Receipt scanning uses on-device ML Kit OCR with camera/photo input and manual
+crop/rotation. Review the merchant, date, items, total and payment account before
+saving; the expense and encrypted receipt persist together. See
+[receipt behavior and platform limits](docs/receipts.md). Real-device camera/OCR
+acceptance remains pending; ML Kit's x86_64 simulator artifact cannot run on the
+installed Apple Silicon iOS 27 simulator.
 
 ## Run and verify
 

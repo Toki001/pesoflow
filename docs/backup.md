@@ -77,8 +77,10 @@ Crypto uses the existing [cryptography package](https://pub.dev/documentation/cr
 in a worker isolate. Native file selection/save uses
 [file_picker](https://pub.dev/documentation/file_picker/latest/file_picker/FilePicker-class.html).
 The adapter bounds streamed reads as well as reported file size. File extensions
-are not trusted. No plaintext backup or receipt-image temporary file is created
-by PesoFlow; the native file provider/plugin may retain encrypted file copies.
+are not trusted. Backup/restore creates no plaintext backup or receipt-image
+temporary file; the native file provider/plugin may retain encrypted file copies.
+Receipt capture separately uses private plaintext staging for native OCR, as
+described in [receipt storage](receipts.md#persistence-privacy-and-backup).
 Plaintext exists in app memory while exporting/reviewing; memory zeroization is
 not guaranteed by Dart. CSV is deliberately plaintext, including any native
 file-provider staging copies.
@@ -113,3 +115,20 @@ and an exact Android/iOS test sequence are recorded in the
 process-interruption runner is `python3 scripts/check_backup_interruptions.py`;
 it targets only isolated temporary test databases and processes. Passing it does
 not replace native file-dialog, device lock or cloud-provider testing.
+
+
+## Captured receipts
+
+Confirmed OCR expenses include the reviewed receipt fields, original OCR text,
+parser confidence/version and encrypted image. Portable backup carries both
+metadata and image bytes; a missing required image reference rejects the snapshot
+before replacement. Restore remains one transaction under the destination key.
+An undecodable image has a safe display fallback; authentication failures never
+silently replace valid financial data. Receipt-aware backups should be restored
+with the current app: older versions may reject the optional evidence fields.
+
+Deleting a receipt transaction removes its local image, but cannot alter previously
+exported backups. The existing 24 MiB aggregate image and 32 MiB JSON limits can
+be reached by a receipt collection; oversized export fails rather than omitting
+images. Streaming/versioned backup growth is a future enhancement. CSV remains
+available for financial records independent of these image limits.
