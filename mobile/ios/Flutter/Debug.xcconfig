@@ -1,1 +1,5 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
 #include "Generated.xcconfig"
+
+// ML Kit ships x86_64 simulator binaries; arm64 is device-only.
+EXCLUDED_ARCHS[sdk=iphonesimulator*]=arm64

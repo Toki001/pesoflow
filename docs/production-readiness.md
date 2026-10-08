@@ -350,3 +350,14 @@ references. Full Flutter validation passes: analysis clean, 172 tests including
 all 16 existing goldens. New tests cover failed image-write rollback, retry,
 balance/budget/analytics updates, categorization, duplicate submission, file-backed
 restart, encrypted backup round trip and image deletion. Native capture/UI pending.
+
+Receipt milestone 3: native camera/photo acquisition, permission recovery,
+private staging, orientation/size normalization, manual crop/rotation and the
+Google ML Kit Latin OCR adapter are implemented. Five adapter/preprocessing tests
+pass. Android debug APK and iOS simulator debug builds pass. iOS now requires
+15.5 and CocoaPods alongside SwiftPM. ML Kit's simulator libraries support
+x86_64 only: the simulator artifact builds, but cannot run on the installed
+Apple Silicon iOS 27 simulator. This is a native dependency limitation, not a
+successful simulator runtime check. Android uses permission_handler 12.x to
+remain compatible with the existing SDK 36 toolchain. Review wiring and UI
+verification are the next checkpoint; physical camera checks remain pending.
