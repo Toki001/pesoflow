@@ -98,7 +98,9 @@ class FinanceWorkspace {
         throw const FormatException('Invalid receipt association.');
       }
     }
-    if (merchantRules.keys.any((k) => k.trim().isEmpty || k.length > 100)) {
+    // Keys include a kind prefix and Unicode normalization of a 100-character
+    // merchant; they can legitimately exceed the display-name length.
+    if (merchantRules.keys.any((k) => k.trim().isEmpty || k.length > 256)) {
       throw const FormatException('Invalid categorization rule.');
     }
   }

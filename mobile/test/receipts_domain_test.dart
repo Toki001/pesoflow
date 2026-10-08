@@ -3,7 +3,9 @@ import 'fixtures/features/accounts/data/ledger_account_fixture.dart';
 import 'support/fixture_container.dart';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
+
+import 'legacy/features/receipts/application/receipts_provider.dart';
+
 import 'package:pesoflow/features/dashboard/application/dashboard_provider.dart';
 
 import 'fixtures/features/receipts/data/receipt_fixture.dart';

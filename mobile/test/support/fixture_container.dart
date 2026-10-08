@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/workspace/application/finance_controller.dart';
-import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
+
+import '../legacy/features/receipts/application/receipts_provider.dart';
 
 import '../fixtures/finance_workspace_fixture.dart';
 import '../fixtures/features/receipts/data/receipt_fixture.dart';

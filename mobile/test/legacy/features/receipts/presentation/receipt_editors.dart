@@ -6,7 +6,9 @@ import 'package:pesoflow/features/accounts/domain/ledger_account.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
-import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
+
+import '../application/receipts_provider.dart';
+
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 
 Future<bool> confirmReceiptAction(

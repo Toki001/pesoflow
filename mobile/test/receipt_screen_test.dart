@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:pesoflow/features/receipts/presentation/widgets/receipt_preview.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,6 +78,29 @@ Future<void> waitForScan(ProviderContainer c) async {
 }
 
 void main() {
+  testWidgets('undecodable saved receipt image shows a safe fallback', (
+    tester,
+  ) async {
+    await tester.runAsync(() async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: receiptImage(Uint8List.fromList([1, 2, 3]))),
+        ),
+      );
+      for (
+        var i = 0;
+        i < 30 &&
+            find.text('Receipt image cannot be displayed.').evaluate().isEmpty;
+        i++
+      ) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        await tester.pump();
+      }
+      expect(find.text('Receipt image cannot be displayed.'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  });
+
   for (final variant in [
     'normal',
     'uncertain',

@@ -30,7 +30,8 @@ class ReceiptItem {
   bool get needsReview => !reviewed && (confidence == null || confidence! < 90);
 }
 
-/// A local review, not evidence of live OCR, provider payment or earned rewards.
+/// A reviewable local expense. Captured receipts carry extraction evidence;
+/// legacy item-only records remain readable. Saving never initiates a payment.
 class ReceiptDraft {
   ReceiptDraft({
     required this.id,

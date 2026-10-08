@@ -7,7 +7,9 @@ import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/formatting/money_formatter.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
 import 'package:pesoflow/core/widgets/status_badge.dart';
-import 'package:pesoflow/features/receipts/application/receipts_provider.dart';
+
+import '../application/receipts_provider.dart';
+
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 
 import 'receipt_editors.dart';

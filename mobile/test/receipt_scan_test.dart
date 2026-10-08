@@ -86,6 +86,22 @@ void main() {
     expect(images.released, contains(images.next!.path));
   });
   test(
+    'remembered categories accept the full supported merchant name length',
+    () async {
+      await scan.acquire(ReceiptImageSource.photos);
+      scan.setMerchant('A' * 100);
+      scan.setCategory(TransactionCategory.food);
+      scan.setAccount(const LedgerAccount(id: 'cash', label: 'Cash'));
+      scan.rememberCategory(true);
+      scan.confirm(true);
+      expect(await scan.save(), isNotNull);
+      expect(
+        (await repo.load()).merchantRules['expense:${'a' * 100}'],
+        TransactionCategory.food,
+      );
+    },
+  );
+  test(
     'receipt crossing a budget threshold persists one condition notice',
     () async {
       ocr.text = 'Jollibee\nOctober 24, 2024 12:30 PM\nTOTAL 9000.00';
