@@ -194,6 +194,7 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
         discount: parsed.discount,
         currency: parsed.currency,
         paymentMethod: parsed.paymentMethod,
+        parserVersion: ReceiptParser.version,
         confidence: parsed.confidence,
         warnings: parsed.warnings,
       ),

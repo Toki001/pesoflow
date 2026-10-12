@@ -399,12 +399,15 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         ),
         const SizedBox(height: 12),
         ExpansionTile(
+          // Keep expansion state separate from the receipt scroll offset.
+          key: const PageStorageKey('receipt-original-text-expansion'),
           tilePadding: EdgeInsets.zero,
           title: const Text('Original extracted text'),
           children: [
             Padding(
               padding: const EdgeInsets.all(12),
               child: SelectableText(
+                key: const PageStorageKey('receipt-original-text-selection'),
                 evidence.rawText.isEmpty
                     ? 'No text was recognized. Enter details from the image.'
                     : evidence.rawText,

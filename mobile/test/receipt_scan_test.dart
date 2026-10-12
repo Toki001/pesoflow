@@ -8,6 +8,7 @@ import 'package:pesoflow/features/accounts/domain/ledger_account.dart';
 import 'package:pesoflow/features/receipts/application/receipt_scan_controller.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_image.dart';
+import 'package:pesoflow/features/receipts/domain/receipt_parser.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 import 'package:pesoflow/features/workspace/application/finance_controller.dart';
 import 'package:pesoflow/features/workspace/data/sqlite_finance_repository.dart';
@@ -81,6 +82,7 @@ void main() {
     expect(d.occurredAt.hour, 19);
     expect(d.items.last.quantity, 2);
     expect(d.evidence!.rawText, receiptText);
+    expect(d.evidence!.parserVersion, ReceiptParser.version);
     expect(await repo.loadReceiptImage(d.id), images.next!.bytes);
     expect(await scan.save(), id);
     expect(images.released, contains(images.next!.path));

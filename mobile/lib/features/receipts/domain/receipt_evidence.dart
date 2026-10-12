@@ -22,7 +22,7 @@ class ReceiptEvidence {
     if (imageId.isEmpty ||
         imageId.length > 200 ||
         rawText.length > 200000 ||
-        parserVersion != 1 ||
+        (parserVersion < 1 || parserVersion > 2) ||
         !['PHP', 'UNKNOWN'].contains(currency) ||
         [
           total,

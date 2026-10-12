@@ -78,6 +78,25 @@ Future<void> waitForScan(ProviderContainer c) async {
 }
 
 void main() {
+  testWidgets(
+    'scrolled receipt review can expand original text after corrections',
+    (tester) async {
+      size(tester, const Size(390, 844));
+      final ocr = FakeReceiptOcr()
+        ..text = 'TEST STORE\nTest product 480.00\nTOTAL 480.00';
+      final c = await screen(tester, FakeReceiptImages(), ocr);
+      final scan = c.read(receiptScanProvider.notifier);
+      await tester.runAsync(() => scan.acquire(ReceiptImageSource.photos));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Original extracted text'));
+      await tester.pumpAndSettle();
+      scan.setDate(DateTime(2024, 10, 24, 12, 15));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await tapVisible(tester, find.text('Original extracted text'));
+      expect(find.text(ocr.text), findsOneWidget);
+    },
+  );
   testWidgets('undecodable saved receipt image shows a safe fallback', (
     tester,
   ) async {

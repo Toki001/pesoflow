@@ -105,3 +105,40 @@ were flagged missing. Recognition execution is not proof of parsing accuracy.
 Next: confirm/correct the paper receipt and verify durable receipt save, then
 finish permission and release-mode checks. Low storage, cross-device restore,
 iPhone and broad receipt-corpus accuracy remain separate acceptance gaps.
+
+
+## Receipt defect fixes and saved-image checkpoint
+
+A real owner-provided paper receipt reached native Latin OCR review. The owner
+verified the missing total and ambiguous printed date: PHP 480, August 4, 2026
+at 12:15 PM. The item was corrected to 15 units at PHP 32 and Healthcare.
+At the owner's request, a Maya E-wallet test account was created with zero
+opening balance from the review; the corrections remained intact.
+
+Two repository defects were identified and fixed:
+
+- `eM-PAY` electronic tender was mistaken for an item. Parser version 2 excludes
+  electronic-tender/PayMaya rows from items, recognizes PayMaya as Maya and still
+  refuses to use an unlabeled tender as the expense total. Sanitized regressions
+  contain no real receipt image, identifiers or medical product details. Version 1
+  evidence remains readable; new scans record version 2 explicitly.
+- Receipt scrolling, expansion state and the selectable original text inherited
+  one PageStorage identifier. A physical debug screen showed a double-to-bool
+  cast error; a widget regression reproduced the inverse bool-to-double collision
+  when opening the extracted text. Dedicated expansion/selection keys fix both
+  without layout changes. Hot reload recovered the active review with corrections
+  retained; no hot restart was used to recover the unsaved draft.
+
+Explicit confirmation saved the receipt expense and image. Transaction Detail
+showed the verified August date, Healthcare and Maya; reopening Saved receipt
+showed its captured image and corrected quantity/unit price. Maya showed PHP -480,
+aggregate tracked balance PHP 5,195. October spending remains PHP 325 and net
+flow +PHP 675, correctly excluding the August expense. A subsequent process
+restart restored these values. The private receipt image/raw text is not committed.
+
+Post-fix formatting and analysis pass. All **198 Flutter tests**, including
+**21 golden comparisons**, pass. Release APK and App Bundle builds pass again.
+One test invocation was blocked by a missing host `flutter_tester` artifact;
+`flutter precache --force --universal` repaired the SDK cache and the suite then
+ran successfully. This was a host toolchain issue, not a failed app assertion.
+Camera-denial and final release install/recognizer checks are next.

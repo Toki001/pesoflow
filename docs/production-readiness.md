@@ -487,3 +487,15 @@ records, edited budget, notice and explicitly selected light appearance;
 background/resume passes. Native Latin OCR execution has reached receipt review,
 but extraction correction/save and permission acceptance remain in progress.
 See the device record for exact values and limits; this is not release readiness.
+
+
+Physical receipt follow-up: owner-verified corrections now save a real image and
+expense through the production commands on Android and reopen after process
+restart. Two hardware-discovered receipt defects were fixed: electronic tender
+misclassified as an item, and colliding scroll/expansion/selectable-text storage
+keys causing a receipt render cast error. Parser version 2 preserves version 1
+evidence readability; no database or financial engine rewrite. Formatting,
+analysis, all 198 Flutter tests (21 goldens), release APK and App Bundle pass.
+Extraction of the original paper receipt required manual total/date/item
+corrections; successful OCR execution is not a claim of extraction accuracy.
+Final release-mode/denied-permission checks remain in progress.

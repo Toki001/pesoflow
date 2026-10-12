@@ -1,9 +1,56 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/features/receipts/domain/ocr_document.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_parser.dart';
+import 'package:pesoflow/features/receipts/domain/receipt_evidence.dart';
 
 ParsedReceipt parse(String text) => ReceiptParser.parse(OcrDocument(text, []));
 void main() {
+  test('electronic tender is not an item or a fallback expense total', () {
+    final r = parse('''TEST STORE
+15 x Test product 480.00
+TOTAL 480.00
+AMOUNT TENDERED
+eM-PAY 480.00
+PAYMAYA QR REF. NO: 123
+AMOUNT 480.00''');
+    expect(r.items.single.name, 'Test product');
+    expect(r.items.single.quantity, 15);
+    expect(r.items.single.unitPrice, 3200);
+    expect(r.total, 48000);
+    expect(r.paymentMethod, 'MAYA');
+    for (final label in ['eM-PAY', 'EM PAY', 'EMPAY', 'PAYMAYA']) {
+      final tenderOnly = parse('TEST STORE\n$label 480.00');
+      expect(tenderOnly.items, isEmpty);
+      expect(tenderOnly.total, isNull);
+    }
+  });
+  test(
+    'receipt evidence retains old parser versions and rejects future ones',
+    () {
+      for (final version in [1, ReceiptParser.version]) {
+        final evidence = ReceiptEvidence(
+          imageId: 'test-image',
+          rawText: '',
+          createdAt: DateTime(2026),
+          total: 48000,
+          parserVersion: version,
+        );
+        final restored = ReceiptEvidence.fromJson(evidence.toJson());
+        expect(restored.parserVersion, version);
+        expect(restored.copyWith(confirmed: true).parserVersion, version);
+      }
+      expect(
+        () => ReceiptEvidence(
+          imageId: 'test-image',
+          rawText: '',
+          createdAt: DateTime(2026),
+          total: 48000,
+          parserVersion: 3,
+        ),
+        throwsFormatException,
+      );
+    },
+  );
   test(
     'Philippine receipt separates amount due from VAT, discount and tender',
     () {

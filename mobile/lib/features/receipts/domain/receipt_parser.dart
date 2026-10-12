@@ -28,12 +28,12 @@ class ParsedReceipt {
 /// Philippine receipt heuristics, not calibrated OCR accuracy. Never chooses
 /// cash/change or the largest number as an unlabeled expense total.
 abstract final class ReceiptParser {
-  static const version = 1;
+  static const version = 2;
   static final _money = RegExp(
     r'(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\d)',
   );
   static final _notItem = RegExp(
-    r'\b(TOTAL|SUBTOTAL|SUB TOTAL|VAT|VATABLE|EXEMPT|ZERO.?RATED|TAX|DISCOUNT|CHANGE|CASH|TENDERED|GCASH|MAYA|CARD|BALANCE|AMOUNT|TIN|TERMINAL|INVOICE|RECEIPT|DATE|TIME)\b',
+    r'\b(TOTAL|SUBTOTAL|SUB TOTAL|VAT|VATABLE|EXEMPT|ZERO.?RATED|TAX|DISCOUNT|CHANGE|CASH|TENDERED|GCASH|MAYA|PAYMAYA|EM[-\s]?PAY|CARD|BALANCE|AMOUNT|TIN|TERMINAL|INVOICE|RECEIPT|DATE|TIME)\b',
     caseSensitive: false,
   );
   static int _amount(String s) {
@@ -76,7 +76,8 @@ abstract final class ReceiptParser {
         currency = 'UNKNOWN';
       }
       for (final method in ['GCASH', 'MAYA', 'CARD', 'CASH']) {
-        if (RegExp('\\b$method\\b').hasMatch(upper)) {
+        final label = method == 'MAYA' ? '(?:PAY)?MAYA' : method;
+        if (RegExp('\\b$label\\b').hasMatch(upper)) {
           payment ??= method;
           break;
         }
