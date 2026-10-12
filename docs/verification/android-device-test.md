@@ -15,8 +15,9 @@ The installed entry point is `lib/main.dart`: `FinanceBootstrap` initializes
 Source inspection found no runtime financial fixture injection or demo controls.
 Physical save/restart checks below exercise native secure storage and the
 encrypted repository together; they do not independently inspect ciphertext. No previous `com.pesoflow.pesoflow` installation was present when checked.
-No phone data has been cleared, no app has been uninstalled and no financial
-records have been injected.
+During this initial finance/receipt verification no phone/app data was cleared,
+no app was uninstalled and no financial records were injected. The subsequent
+authorized PesoFlow-only backup/reset/restore test is recorded separately below.
 
 Before installation, formatting was clean (186 files), Flutter analysis passed,
 and all 195 tests passed, including 21 current golden comparisons. The debug APK
@@ -199,3 +200,17 @@ through each capture/save stage and isolated low-storage behavior. No private
 receipt photo/raw text/payment identifier was committed. Recommended next task:
 complete backup/file-dialog and cross-device recovery acceptance using dedicated
 devices, a saved backup and its password; expand the receipt accuracy corpus.
+
+
+## Subsequent physical backup recovery
+
+The [dedicated backup/restore report](backup-restore-device-test.md) records the
+next scoped task on this same release/device. After authenticating an externally
+saved backup, the user-authorized `pm clear com.pesoflow.pesoflow` reset removed
+only PesoFlow data. The verified empty installation restored accounts, finances,
+budgets, preferences and the real receipt image from Android DocumentsUI. Wrong
+password, corrupted-copy and invalid-file failures preserved newer records; a
+PHP 1 post-restore expense updated projections and survived restart before full
+replacement returned Home to PHP 5,195. This supersedes the local backup-dialog
+and clean-install recovery gaps above; cross-device/iPhone and isolated physical
+low-storage acceptance remain pending. No camera/OCR retest was required.

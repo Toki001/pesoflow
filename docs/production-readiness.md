@@ -537,3 +537,41 @@ Recommended next task: dedicated-device backup/file-dialog and cross-device rest
 acceptance, including interruption and isolated low-storage checks. Recovery needs
 a saved backup and its password. Expand consented/redacted receipt-corpus coverage
 before relying on extracted fields without review.
+
+
+## Physical Android backup recovery — 12 October 2026
+
+The single-device local backup/reset/restore acceptance task passed on the
+production release installed on Redmi 14C (`NBDEXCJNL7JR9DIJ`, Android 16,
+`0.1.0+1`). An owner-password-encrypted external backup was created, selected again
+and authenticated with correct preview/image counts before the user-authorized
+`pm clear com.pesoflow.pesoflow`. The cleared installation showed production empty
+states; native DocumentsUI selection and confirmed restore recovered three
+accounts, four financial records, one budget, preferences and the real receipt
+image. Home returned to PHP 5,195. Restart and background/resume passed.
+
+A PHP 1 post-restore expense saved durably, updated balance/budget/analytics and
+survived restart. Wrong password, modified ciphertext and invalid-file attempts
+left those newer records intact. Save/selection/replacement cancellation passed.
+The same password subsequently unlocked the original file. Confirmed replacement
+removed the temporary expense; repeated restore/restart retained the original
+state without duplicates. Final CSV records matched all original transaction
+columns and identities exactly; the valid external backup remained unchanged.
+Only this run's invalid/corrupted test documents and plaintext verification CSVs
+were cleaned up. The original encrypted Downloads backup remains with the owner.
+
+No application-code/dependency/architecture change was needed. Validation passes:
+186 formatted files unchanged, analysis clean, 198 Flutter tests including 21
+golden comparisons, backend format/lint/build and one health test, four isolated
+host restore-interruption cases, release APK and App Bundle. Existing debug
+signing is unchanged; this is not store readiness. See
+[the dedicated physical backup report](verification/backup-restore-device-test.md)
+for the audit, exact results and rollback/security boundaries.
+
+Remaining acceptance gaps: second-device Android/iPhone restore, cloud providers,
+safely controlled physical low storage, phone lock/recents removal, exact physical
+restore interruption boundaries and populated plan restoration. No external
+credential is needed for the completed local flow. Recommended next: cross-device
+round trip with a second dedicated device and the saved backup/password, then
+provider/storage/interruption tests. Ordinary camera denial, Settings recovery
+and broader receipt accuracy remain the earlier task's separate gaps.

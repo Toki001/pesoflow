@@ -1,9 +1,13 @@
-# Backup resilience verification — 8 October 2026
+# Backup resilience verification — historical host baseline, 8 October 2026
 
 Test implementation: `df6a41c`; application behavior remains the checkpoint 5
 backup implementation (`a608c86`).
 
-Physical-device verification is **blocked by unavailable hardware**, not passed.
+At this historical checkpoint, physical-device verification was **blocked by
+unavailable hardware**, not passed. Physical Android results from 12 October 2026
+are now recorded in [the backup/restore device report](backup-restore-device-test.md).
+That report supersedes Android availability and completed local-device checks;
+iPhone, cross-device, cloud-provider and physical low-storage checks remain pending.
 Read-only discovery found no Android device (`adb devices -l`) and no physical iOS
 device (`xcrun devicectl list devices`); Flutter reported only macOS and Chrome.
 The owner confirmed physical devices cannot be connected at this time. Simulator
@@ -75,8 +79,9 @@ On the source device, complete onboarding and create records dated today:
 Expected: two accounts, three transactions, Test cash PHP 974.75, Test wallet
 PHP 200.00, aggregate balance PHP 1,174.75, income PHP 500.00, expense PHP 325.25,
 net flow PHP 174.75, overall remaining budget PHP 1,674.75 and food remaining
-PHP 174.75. Transfers must not inflate income or expense. Receipt capture remains
-unavailable; image rollback/preservation is covered by the host repository tests.
+PHP 174.75. Transfers must not inflate income or expense. Receipt capture was unavailable at this historical baseline; the current app
+supports it. Include a consented/redacted saved receipt when repeating this
+procedure to check physical image portability.
 
 ### File dialogs and portable restore
 

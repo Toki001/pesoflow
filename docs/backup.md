@@ -132,3 +132,14 @@ exported backups. The existing 24 MiB aggregate image and 32 MiB JSON limits can
 be reached by a receipt collection; oversized export fails rather than omitting
 images. Streaming/versioned backup growth is a future enhancement. CSV remains
 available for financial records independent of these image limits.
+
+
+## Physical Android recovery evidence
+
+On 12 October 2026 the production release on Redmi 14C saved and authenticated an
+external encrypted backup before a user-authorized app-only reset. Clean-state
+restore recovered finances and the saved receipt image; post-restore writes,
+restart, cancellation and wrong-password/corrupt/invalid-file rejection were
+exercised. See [the exact device report](verification/backup-restore-device-test.md).
+This is one Android device, not cross-device, iPhone, cloud-provider or physical
+low-storage acceptance. Keep the external backup and its password separately.
