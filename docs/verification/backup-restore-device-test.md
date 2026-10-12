@@ -90,9 +90,10 @@ No app data has been cleared at this checkpoint.
 | Android restore picker and valid-file selection | PASS |
 | Envelope metadata / encrypted payload | PASS; AES-GCM authentication and financial/image-reference validation passed |
 | Empty/mismatched password validation | PASS on phone; no file created |
-| Clean-state reset and restore | NOT TESTED yet |
-| Accounts/transactions/budgets/receipts/images/analytics/preferences restored | NOT TESTED yet |
-| Restart/background after restore / continued writes | NOT TESTED yet |
+| Clean-state reset and restore | PASS; app-only `pm clear`, verified empty state, authenticated external restore |
+| Accounts/transactions/budgets/receipts/images/analytics/preferences restored | PASS for the recorded populated state; plans were empty |
+| Restart/background after restore | PASS; scoped force-stop/cold launch and Home-key resume |
+| Continued writes | NOT TESTED yet |
 | Wrong password / corrupted copy / invalid file | NOT TESTED yet |
 | Save/selection/replacement cancellation | NOT TESTED yet |
 | Restore over existing data / repeated restore | NOT TESTED yet |
@@ -127,3 +128,30 @@ picker, enter the password, review counts and confirm replacement after backing
 up any destination data. Compare all finances, receipt metadata/images and
 preferences; force-stop/relaunch and verify again. Repeat the reverse direction.
 Only the actually exercised source/destination pairing can be marked PASS.
+
+
+## Clean-state recovery milestone
+
+After successful preflight, external size and SHA-256 were checked again and
+matched the protected host copy. The exact reset command was targeted ADB
+`pm clear com.pesoflow.pesoflow`; Android returned Success. No uninstall,
+factory reset, other-package reset or unrelated file deletion occurred. The same
+installed release launched its introduction; after completing it, Home showed
+PHP 0, 0 accounts, 0 transactions, no budgets and 0 notices. The external backup
+remained 1,587,055 bytes. This proves original local finances were removed.
+
+The freshly initialized installation selected the external file again through
+Android DocumentsUI, entered the password on the phone, authenticated its preview
+and confirmed the explicit replacement dialog. Home restored PHP 5,195, three
+accounts, October PHP 325 spending/PHP 1,000 income/+PHP 675 net flow, the
+PHP 400 food budget with PHP 325 spent, and two unread notices. October
+Transactions showed expense/income and a neutral PHP 500 transfer. August showed
+the separate PHP 480 receipt. Transaction Detail → Saved receipt displayed the
+actual restored image and reviewed fields; it does not rely on the deleted
+original capture/staging path. Analytics returned PHP 325 October expense.
+
+Home-key background/resume and app-scoped force-stop/cold relaunch passed with
+the same Home financial values, budget and notices. The backup did not need an
+old app-private URI cache or the original installation's secure-storage key.
+Separate recents dismissal remains pending. Empty plan state is observed, not
+proof of restoring a populated recurring-plan collection on hardware.
