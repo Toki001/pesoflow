@@ -450,3 +450,28 @@ unavailable, a separately scoped versioned streaming backup improvement can addr
 receipt-collection size limits. See [receipt architecture and privacy](receipts.md)
 for the complete behavior and [backup recovery](backup.md) for the saved-file and
 password requirement.
+
+## Physical Android deployment checkpoint — 12 October 2026
+
+A physical Redmi 14C (`2409BRN2CA`, Android 16/API 36, ARM64) is now connected
+and authorized as `NBDEXCJNL7JR9DIJ`. This supersedes the earlier hardware
+availability limitation for Android; iPhone acceptance remains pending.
+Source inspection confirms the production encrypted local runtime remains active
+without demo injection. Actual device initialization has not yet been verified:
+Xiaomi rejected the debug and release installation attempts with
+`INSTALL_FAILED_USER_RESTRICTED`, including after the owner reported enabling
+Install via USB. Normal installation approval/manual installation is pending.
+No application or unrelated phone data was cleared.
+
+A repository-caused release R8 failure was fixed with eight narrowly scoped
+warnings for optional ML Kit script recognizers; PesoFlow uses the bundled Latin
+recognizer. R8 stays enabled and no optional models were added. Debug APK, release
+APK and release App Bundle builds pass. Formatting, analysis and all 195 Flutter
+tests (21 current goldens) pass after the fix. Existing debug signing remains;
+build success does not establish store readiness or physical OCR behavior.
+
+See [the physical Android verification record](verification/android-device-test.md)
+for the explicit pending hardware checks. Next: complete the phone's normal
+installation approval, then test real account/transaction/budget/analytics,
+restart, permissions and receipt flows through the production UI. Automated
+verification must not be reported as physical-device acceptance.
