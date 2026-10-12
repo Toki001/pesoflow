@@ -1,9 +1,13 @@
 # Receipt device acceptance checklist
 
-Status: **pending physical Android and iPhone hardware**. The owner cannot connect
-test devices. Automated development can finish; do not label the following as
-passed or treat it as release sign-off. ML Kit's x86_64 simulator limitation also
-prevents running this build on the installed Apple Silicon iOS 27 simulator.
+Status: **partially verified on physical Android; iPhone and the wider matrix
+remain pending**. On 12 October 2026 the connected Redmi 14C passed camera capture,
+optimized-release Latin OCR, corrected expense/image save and restart/reopen.
+Permanently disabled camera recovery was exercised with targeted ADB permission
+state; ordinary dialog denial and Settings destination remain inconclusive.
+See [device evidence and exact gaps](android-device-test.md). Items below are an
+acceptance checklist, not blanket PASS claims. ML Kit's x86_64 simulator limitation
+also prevents running this build on the installed Apple Silicon iOS 27 simulator.
 
 Use dedicated test installations and synthetic/redacted receipts. Save an encrypted
 backup and its password before any destructive restore/deletion test. Never log or

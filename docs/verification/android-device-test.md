@@ -1,6 +1,8 @@
 # Physical Android verification — 12 October 2026
 
-This is an in-progress hardware verification record, not release certification.
+This records completed physical Android checks and remaining acceptance gaps,
+not release certification. The final installed build includes the release registrar
+fix described below; the final checkpoint supersedes earlier pending checks.
 The connected device is a physical Xiaomi Redmi 14C, model `2409BRN2CA`, running
 Android 16 (API 36), ARM64, with a 720 × 1640 display. Flutter and ADB identify it
 as `NBDEXCJNL7JR9DIJ`; ADB reports `device`, not `unauthorized` or an emulator.
@@ -34,7 +36,8 @@ Enabling another script requires its native dependency first.
 After the fix, `flutter build apk` passed (100.0 MB) and
 `flutter build appbundle` passed (81.0 MB). Release builds still use the existing
 debug signing configuration; these artifacts are not Play Store release packages.
-Physical release-mode Latin OCR is still unverified.
+Physical release-mode Latin OCR subsequently passed after the additional
+registrar fix described in the final checkpoint below.
 
 ## Installation history and resolution
 
@@ -57,19 +60,19 @@ was bypassed.
 | Check | Result |
 | --- | --- |
 | Physical device discovery / ADB authorization | PASS |
-| Install / launch | PASS: debug production entry point on the physical Redmi |
+| Install / launch | PASS: debug and optimized release production builds on the physical Redmi |
 | Empty finances / encrypted repository / secure storage | PASS: empty Home, durable UI saves and process restart; no independent ciphertext inspection |
 | Manual account / expense / income / transfer / balances | PASS: exact values below; full account CRUD not tested |
-| Budgets / analytics | PASS: category creation/edit, threshold warning, actual expense breakdown; budget deletion pending |
+| Budgets / analytics | PASS: category creation/edit/delete/recreate, threshold warning and actual expense breakdown |
 | Process restart / persistence | PASS: scoped force-stop and cold relaunch; records and appearance remain. Separate recents dismissal not tested |
 | Background/resume / screen lock | PASS: Home key then bring task forward; screen lock not tested |
 | UI / keyboard / back navigation / light and dark themes | PASS for inspected portrait screens, numeric decimal keyboard, scrolling, keyboard dismissal and route back; broader cases pending |
-| Receipt OCR / camera / denial / save | Local Latin ML Kit execution observed on hardware; camera capture confirmation, denial and save checks pending |
+| Receipt OCR / camera / denial / save | PASS: owner-assisted camera capture, Latin OCR, corrected save and saved-image reopen in release; permanently disabled recovery tested via ADB, ordinary dialog denial not independently verified |
 | OS notifications | NOT IMPLEMENTED; in-app budget notices are separate |
 | Biometric unlock | NOT IMPLEMENTED; phone enrollment unchanged |
 | Low storage | NOT TESTED; phone storage will not be artificially filled |
 | Large-list / OCR performance | NOT TESTED on hardware |
-| Debug APK / release APK / release App Bundle | PASS build checks only |
+| Debug APK / release APK / release App Bundle | PASS builds; release also installed and exercised, not store signing |
 
 ## Financial workflow evidence
 
@@ -102,9 +105,9 @@ The camera-stage log selected the bundled local Latin ML Kit model and loaded
 its native OCR pipeline. Recognition output appeared in review; total/date
 were flagged missing. Recognition execution is not proof of parsing accuracy.
 
-Next: confirm/correct the paper receipt and verify durable receipt save, then
-finish permission and release-mode checks. Low storage, cross-device restore,
-iPhone and broad receipt-corpus accuracy remain separate acceptance gaps.
+Later checkpoints below complete corrected receipt save and release-mode checks.
+Low storage, cross-device restore, iPhone and broad receipt-corpus accuracy remain
+separate acceptance gaps.
 
 
 ## Receipt defect fixes and saved-image checkpoint
@@ -141,4 +144,58 @@ Post-fix formatting and analysis pass. All **198 Flutter tests**, including
 One test invocation was blocked by a missing host `flutter_tester` artifact;
 `flutter precache --force --universal` repaired the SDK cache and the suite then
 ran successfully. This was a host toolchain issue, not a failed app assertion.
-Camera-denial and final release install/recognizer checks are next.
+The final release and permission checkpoint follows.
+
+
+## Final optimized release and permission checkpoint
+
+The first optimized release installed and launched, but camera recognition failed:
+ML Kit component discovery reported missing no-argument constructors for
+`CommonComponentRegistrar`, `VisionCommonRegistrar` and `TextRegistrar`. Their
+manifest-named reflection entry points were removed by R8 full mode. Narrow keep
+rules now retain exactly those three classes, constructors and `getComponents`
+methods. Shrinking remains enabled, no optional script model or dependency was
+added, and no financial engine or database rewrite was required.
+
+The repaired release APK and App Bundle built successfully (100.0 MB / 81.0 MB).
+The APK was installed as an update with app data retained. R8 mapping inspection
+confirmed the registrar entry points remain, and scoped release logs no longer
+show their discovery/constructor failures. Owner-assisted recapture of the same
+paper receipt reached real Latin recognition/review in this optimized release.
+The second capture found PHP 480 but still needed merchant/date/item corrections;
+its item sum mismatch was honestly flagged. This review was discarded, preserving
+exactly one saved receipt expense. Execution passes; extraction accuracy still
+requires manual review and a broader consented/redacted receipt corpus.
+
+After release update and process restart, the original saved expense reopened
+through August Transactions → Transaction Detail → Saved receipt. Visual inspection
+confirmed the actual image and corrected fields, quantity 15 at PHP 32 and total
+PHP 480. Home retained PHP 5,195 across GCash PHP 5,175, Cash PHP 500 and Maya
+PHP -480. October spending PHP 325 and net flow +PHP 675 remained correct.
+The Food & Dining allowance was deleted without losing transactions, then recreated
+at PHP 400: PHP 325 spent, PHP 75 remaining, 81% usage. Two unread in-app notices
+were present after the separate budget lifecycles; OS delivery was not tested or
+implemented. The app was left on light-theme Home with these records retained.
+
+Only PesoFlow's Camera permission was temporarily revoked and marked permanently
+denied via targeted ADB commands. Taking a photo then showed the disabled-camera
+explanation, Settings action and photo alternative without a crash or repeated
+permission prompt. The temporary flag was cleared and the original granted state
+restored and checked. Ordinary “Don't allow” dialog behavior and the Settings
+link's exact destination were not independently verified: owner interaction and
+activity transitions made those observations inconclusive. No phone data was
+cleared and no unrelated app permission, enrollment or storage was modified.
+
+Final `bash scripts/check.sh`: formatting clean (186 files), Flutter analysis
+clean, **198 tests including 21 golden comparisons pass**; backend formatting,
+lint, build and its one health test pass. Final release APK/App Bundle builds pass.
+Signing is still the existing debug configuration, not release packaging.
+
+Remaining hardware gaps: iPhone, cross-device backup/restore and native file
+dialogs, ordinary permission denial/Settings recovery, airplane-mode first scan,
+lock/unlock and recents dismissal, orientation/large-text/accessibility coverage,
+full account CRUD, gallery/cloud-provider formats, large collections, interruptions
+through each capture/save stage and isolated low-storage behavior. No private
+receipt photo/raw text/payment identifier was committed. Recommended next task:
+complete backup/file-dialog and cross-device recovery acceptance using dedicated
+devices, a saved backup and its password; expand the receipt accuracy corpus.

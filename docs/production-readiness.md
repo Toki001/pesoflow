@@ -499,3 +499,41 @@ analysis, all 198 Flutter tests (21 goldens), release APK and App Bundle pass.
 Extraction of the original paper receipt required manual total/date/item
 corrections; successful OCR execution is not a claim of extraction accuracy.
 Final release-mode/denied-permission checks remain in progress.
+
+
+## Final physical Android checkpoint — 12 October 2026
+
+This supersedes the installation, permission and release-OCR pending statements
+in earlier checkpoints for the checks actually completed. The production app now
+runs in optimized release mode on the physical Redmi 14C, retaining UI-created
+accounts, expenses, income, transfer, budgets and appearance through process
+restart and APK update. Category budget deletion/recreation and period-specific
+analytics also pass. Home ends at PHP 5,195; the August PHP 480 receipt expense
+remains excluded from October's PHP 325 spending and +PHP 675 net flow.
+
+Release-only ML Kit discovery failed because R8 removed three manifest-discovered
+registrar constructors. Narrow keep rules retain their reflection entry points;
+shrinking stays enabled and no model/dependency was added. The repaired release
+captured and recognized the owner's receipt, and the previously saved image and
+corrections reopened after restart. Duplicate capture review was discarded.
+Recognition still requires manual merchant/date/item corrections; there is no
+accuracy or confidence-rate claim. Approved UI layouts and the financial engine
+remain intact.
+
+Permanently disabled camera recovery passed with an ADB-induced permission state;
+the original Camera grant was restored. Ordinary denial and the Settings link's
+exact destination were inconclusive. No app/phone data was cleared. OS notifications
+and biometric unlock remain unimplemented. iPhone, airplane-mode first scan,
+native backup dialogs/cross-device restore, isolated low storage, lock/orientation,
+accessibility, large collections and the broader receipt corpus remain unverified.
+
+Final repository checks pass: clean formatting/analysis, **198 Flutter tests with
+21 golden comparisons**, backend format/lint/build and one health test. Final
+release APK and App Bundle build; existing debug signing is unchanged and this
+is not store readiness. See [physical Android results](verification/android-device-test.md)
+for evidence, privacy limits and remaining acceptance cases.
+
+Recommended next task: dedicated-device backup/file-dialog and cross-device restore
+acceptance, including interruption and isolated low-storage checks. Recovery needs
+a saved backup and its password. Expand consented/redacted receipt-corpus coverage
+before relying on extracted fields without review.
