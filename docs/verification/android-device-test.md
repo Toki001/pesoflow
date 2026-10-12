@@ -8,11 +8,11 @@ Flutter doctor reports a healthy Android toolchain and accepted SDK licenses.
 
 ## Runtime and pre-install checks
 
-The installed entry point will be `lib/main.dart`: `FinanceBootstrap` initializes
+The installed entry point is `lib/main.dart`: `FinanceBootstrap` initializes
 `SqliteFinanceRepository`, `FinanceDatabase` and `SecureEncryptionKeyStore`.
 Source inspection found no runtime financial fixture injection or demo controls.
-This source audit does not establish secure-storage or database behavior on the
-phone. No previous `com.pesoflow.pesoflow` installation was present when checked.
+Physical save/restart checks below exercise native secure storage and the
+encrypted repository together; they do not independently inspect ciphertext. No previous `com.pesoflow.pesoflow` installation was present when checked.
 No phone data has been cleared, no app has been uninstalled and no financial
 records have been injected.
 
@@ -36,7 +36,7 @@ After the fix, `flutter build apk` passed (100.0 MB) and
 debug signing configuration; these artifacts are not Play Store release packages.
 Physical release-mode Latin OCR is still unverified.
 
-## Installation blocker
+## Installation history and resolution
 
 `flutter run -d NBDEXCJNL7JR9DIJ --debug` and targeted `adb install -r` attempts
 returned `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`. The owner
@@ -44,7 +44,11 @@ enabled USB debugging, approved ADB authorization and reported enabling Install
 via USB; the latest attempt still returned the same installation rejection.
 This is a Xiaomi installation-policy/confirmation blocker, not a Flutter crash.
 The debug APK was also copied to `Download/PesoFlow-device-test-20261012.apk`
-for installation through the normal Files UI. Owner confirmation is pending.
+for installation through the normal Files UI. After the owner completed the setting/approval steps,
+`flutter run -d NBDEXCJNL7JR9DIJ --debug` installed and launched successfully.
+Home showed zero accounts/balance and no budgets before test records were created.
+The first onboarding screens were not independently observed. A brief initial
+black startup frame resolved; no sustained blank screen or startup error remained.
 No Xiaomi sign-in credentials were requested or entered, and no security policy
 was bypassed.
 
@@ -53,20 +57,51 @@ was bypassed.
 | Check | Result |
 | --- | --- |
 | Physical device discovery / ADB authorization | PASS |
-| Install / launch | BLOCKED by Xiaomi installation rejection; launch not tested |
-| Fresh empty state / encrypted database / secure storage | NOT TESTED on hardware |
-| Manual account / expense / income / transfer / balances | NOT TESTED on hardware |
-| Budgets / analytics | NOT TESTED on hardware |
-| Normal restart / process death / persistence | NOT TESTED on hardware |
-| Background/resume / screen lock | NOT TESTED on hardware |
-| UI / keyboard / back navigation / light and dark themes | NOT TESTED on hardware |
-| Camera / denied permission / receipt OCR and save | NOT TESTED on hardware |
+| Install / launch | PASS: debug production entry point on the physical Redmi |
+| Empty finances / encrypted repository / secure storage | PASS: empty Home, durable UI saves and process restart; no independent ciphertext inspection |
+| Manual account / expense / income / transfer / balances | PASS: exact values below; full account CRUD not tested |
+| Budgets / analytics | PASS: category creation/edit, threshold warning, actual expense breakdown; budget deletion pending |
+| Process restart / persistence | PASS: scoped force-stop and cold relaunch; records and appearance remain. Separate recents dismissal not tested |
+| Background/resume / screen lock | PASS: Home key then bring task forward; screen lock not tested |
+| UI / keyboard / back navigation / light and dark themes | PASS for inspected portrait screens, numeric decimal keyboard, scrolling, keyboard dismissal and route back; broader cases pending |
+| Receipt OCR / camera / denial / save | Local Latin ML Kit execution observed on hardware; camera capture confirmation, denial and save checks pending |
 | OS notifications | NOT IMPLEMENTED; in-app budget notices are separate |
 | Biometric unlock | NOT IMPLEMENTED; phone enrollment unchanged |
 | Low storage | NOT TESTED; phone storage will not be artificially filled |
 | Large-list / OCR performance | NOT TESTED on hardware |
 | Debug APK / release APK / release App Bundle | PASS build checks only |
 
-Next action: complete the normal phone installation approval, then exercise the
-requested financial workflow through the production UI and record actual
-hardware results. Do not infer a hardware pass from automated tests or builds.
+## Financial workflow evidence
+
+All entries were created with the production UI, not an injected fixture runtime:
+
+1. GCash, E-wallet, PHP 5,000 opening balance: account list showed PHP 5,000.
+2. Jollibee, Food & Dining, PHP 325 expense: Transactions spent PHP 325 and
+   Home balance PHP 4,675. A keyboard-added merchant character was corrected
+   through Edit Details; no extra transaction was created.
+3. Device test income, PHP 1,000 into GCash: income PHP 1,000, net flow +PHP 675,
+   tracked total PHP 5,675.
+4. Cash device test, Cash, PHP 0 opening balance; transfer PHP 500 from GCash:
+   GCash PHP 5,175, Cash PHP 500, total PHP 5,675. Spending remained PHP 325.
+5. Food & Dining allowance PHP 1,000: spent PHP 325, remaining PHP 675,
+   displayed 33% (rounded from 32.5%). Edited to PHP 400: remaining PHP 75,
+   displayed 81% (rounded from 81.25%), approaching-limit state and one
+   in-app unread warning. This is not an Android OS notification.
+6. Analytics: expense PHP 325, Food & Dining 100%, Jollibee one record,
+   category target PHP 400. Its trajectory uses actual spending, with no
+   overall target because no overall monthly limit was created.
+7. Light appearance explicitly selected after inspecting dark portrait screens.
+   Background/resume succeeded. `am force-stop com.pesoflow.pesoflow` followed
+   by `am start -W` reported a cold launch (5,345 ms activity launch, not a
+   benchmark of time to financial content). Transactions, the edited category
+   budget, warning and light appearance remained after loading completed.
+
+Scoped app logs inspected through startup, writes, restart and ML Kit execution
+showed no Flutter exceptions, SQLite/secure-storage failures or render overflows.
+The camera-stage log selected the bundled local Latin ML Kit model and loaded
+its native OCR pipeline. Recognition output appeared in review; total/date
+were flagged missing. Recognition execution is not proof of parsing accuracy.
+
+Next: confirm/correct the paper receipt and verify durable receipt save, then
+finish permission and release-mode checks. Low storage, cross-device restore,
+iPhone and broad receipt-corpus accuracy remain separate acceptance gaps.

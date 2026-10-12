@@ -475,3 +475,15 @@ for the explicit pending hardware checks. Next: complete the phone's normal
 installation approval, then test real account/transaction/budget/analytics,
 restart, permissions and receipt flows through the production UI. Automated
 verification must not be reported as physical-device acceptance.
+
+
+Physical Android follow-up: the installation restriction was resolved after the
+owner completed the phone settings/approval steps. The debug production app now
+runs on the Redmi. UI-created GCash/Cash accounts, PHP 325 expense, PHP 1,000
+income, PHP 500 transfer and Food & Dining allowance produce correct balances,
+expense/income totals and category analytics. Editing the allowance to PHP 400
+produces an 81% warning. Scoped process termination/relaunch preserves the
+records, edited budget, notice and explicitly selected light appearance;
+background/resume passes. Native Latin OCR execution has reached receipt review,
+but extraction correction/save and permission acceptance remain in progress.
+See the device record for exact values and limits; this is not release readiness.
