@@ -7,7 +7,6 @@ import 'package:pesoflow/app/theme/app_spacing.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/formatting/date_formatter.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
-import 'package:pesoflow/core/widgets/status_badge.dart';
 import 'package:pesoflow/core/widgets/task_screen.dart';
 
 import 'package:pesoflow/features/notifications/application/notifications_provider.dart';
@@ -28,38 +27,24 @@ class NotificationsScreen extends ConsumerWidget {
       backIcon: Icons.arrow_back,
       backTooltip: 'Back',
       fallbackRoute: '/home',
+      actions: [
+        TextButton(
+          onPressed: !state.hasValue || unread == 0
+              ? null
+              : () async {
+                  try {
+                    await ref.read(noticeReadProvider.notifier).markAllRead();
+                  } catch (_) {}
+                },
+          child: const Text('Mark all read'),
+        ),
+      ],
       child: SingleChildScrollView(
         key: const PageStorageKey('notifications-scroll'),
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            FinanceCard(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatusBadge(
-                    'Financial alerts',
-                    foreground: c.primary,
-                    background: c.soft(c.primary, AppColors.primarySoft),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    'A calm place to catch up',
-                    style: AppTypography.headlineMedium,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
-                  Text(
-                    'Notices reflect your saved budgets and tracked renewals. Read status stays on this device. Push delivery is not enabled.',
-                    style: AppTypography.bodySmall.copyWith(
-                      color: c.secondaryInk,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
             Wrap(
               spacing: AppSpacing.xs,
               runSpacing: AppSpacing.xs,
@@ -80,23 +65,14 @@ class NotificationsScreen extends ConsumerWidget {
                             ? c.primary
                             : c.secondaryInk,
                       ),
-                      child: Text(
-                        option == NoticeFilter.all ? 'All' : 'Unread',
-                      ),
+                      child: Text(switch (option) {
+                        NoticeFilter.all => 'All',
+                        NoticeFilter.budget => 'Budget Alerts',
+                        NoticeFilter.renewal => 'Bill Reminders',
+                        NoticeFilter.unread => 'Unread',
+                      }),
                     ),
                   ),
-                TextButton(
-                  onPressed: !state.hasValue || unread == 0
-                      ? null
-                      : () async {
-                          try {
-                            await ref
-                                .read(noticeReadProvider.notifier)
-                                .markAllRead();
-                          } catch (_) {}
-                        },
-                  child: const Text('Mark all read'),
-                ),
               ],
             ),
             if (state.hasValue) ...[
@@ -139,7 +115,12 @@ class NotificationsScreen extends ConsumerWidget {
               data: (notices) {
                 final visible = notices
                     .where(
-                      (n) => filter == NoticeFilter.all || !read.contains(n.id),
+                      (n) => switch (filter) {
+                        NoticeFilter.all => true,
+                        NoticeFilter.budget => n.kind == NoticeKind.budget,
+                        NoticeFilter.renewal => n.kind == NoticeKind.renewal,
+                        NoticeFilter.unread => !read.contains(n.id),
+                      },
                     )
                     .toList();
                 if (notices.isEmpty) {
@@ -150,8 +131,8 @@ class NotificationsScreen extends ConsumerWidget {
                 }
                 if (visible.isEmpty) {
                   return _InboxMessage(
-                    title: 'You’re all caught up',
-                    message: 'All alerts are marked as read.',
+                    title: 'No alerts in this filter',
+                    message: 'Choose All to see other financial notices.',
                     action: 'View all alerts',
                     onAction: () => ref
                         .read(noticeFilterProvider.notifier)
@@ -213,6 +194,15 @@ class NotificationsScreen extends ConsumerWidget {
               },
             ),
             const SizedBox(height: AppSpacing.lg),
+            TextButton(
+              onPressed: () => context.push('/settings'),
+              child: const Text('Notification Preferences →'),
+            ),
+            Text(
+              'Alerts appear inside PesoFlow. Device push delivery is not enabled.',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+            ),
           ],
         ),
       ),

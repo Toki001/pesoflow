@@ -44,6 +44,8 @@ class TransactionDetailScreen extends ConsumerWidget {
         .firstOrNull;
     return TaskScreen(
       title: 'Transaction Detail',
+      backIcon: Icons.arrow_back,
+      backTooltip: 'Back',
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -60,12 +62,10 @@ class TransactionDetailScreen extends ConsumerWidget {
                           : t.kind == TransactionKind.transfer
                           ? Icons.swap_horiz
                           : Icons.receipt_long_outlined,
-                      foreground: Colors.white,
+                      foreground: c.primary,
                       iconSize: 32,
                       size: 64,
-                      background: t.kind == TransactionKind.expense
-                          ? AppColors.danger
-                          : AppColors.secondary,
+                      background: c.primary.withValues(alpha: .08),
                     ),
                     Positioned(
                       bottom: 0,
@@ -87,15 +87,6 @@ class TransactionDetailScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  MoneyFormatter.php(
-                    t.displayAmount,
-                    signed:
-                        t.kind == TransactionKind.income ||
-                        t.kind == TransactionKind.refund,
-                  ),
-                  style: AppTypography.numericXL,
-                ),
                 const SizedBox(height: 8),
                 Text(
                   t.merchant,
@@ -105,14 +96,20 @@ class TransactionDetailScreen extends ConsumerWidget {
                 const SizedBox(height: 6),
                 Text(categoryLabel(t.category)),
                 const SizedBox(height: 12),
+                Text(
+                  MoneyFormatter.php(
+                    t.displayAmount,
+                    signed:
+                        t.kind == TransactionKind.income ||
+                        t.kind == TransactionKind.refund,
+                  ),
+                  style: AppTypography.numericXL,
+                ),
+                const SizedBox(height: 12),
                 StatusBadge(
                   t.status == TransactionStatus.pending
                       ? 'Pending'
-                      : t.source == TransactionSource.manual
-                      ? 'Completed • Manual entry'
-                      : t.source == TransactionSource.receipt
-                      ? 'Completed • Receipt entry'
-                      : 'Completed • Read-only synced',
+                      : 'Recorded locally',
                   foreground: c.secondaryInk,
                   background: c.mutedSurface,
                   icon: Icons.circle,
@@ -126,7 +123,7 @@ class TransactionDetailScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('PROVENANCE & INFO', style: AppTypography.labelMedium),
+                Text('TRANSACTION INFO', style: AppTypography.labelMedium),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -170,58 +167,65 @@ class TransactionDetailScreen extends ConsumerWidget {
                 _Info('Category', categoryLabel(t.category)),
                 if (t.kind == TransactionKind.transfer)
                   _Info('Transfer to', t.destinationAccount ?? ''),
-                if (allowance != null) ...[
-                  const SizedBox(height: 12),
-                  FinanceCard(
-                    color: c.canvas,
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          spacing: 8,
-                          children: [
-                            Text(
-                              'Monthly Budget Impact',
-                              style: AppTypography.bodySmall,
-                            ),
-                            Text(
-                              t.excludedFromBudget
-                                  ? 'Excluded'
-                                  : '${(allowance.used * 100).round()}% Used',
-                              style: AppTypography.bodySmall.copyWith(
-                                color: allowance.atRisk ? c.warning : c.primary,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        BudgetProgressBar(
-                          label: 'Monthly budget utilization',
-                          value: allowance.used,
+              ],
+            ),
+          ),
+          if (allowance != null) ...[
+            const SizedBox(height: 12),
+            FinanceCard(
+              color: c.canvas,
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    spacing: 8,
+                    children: [
+                      Text(
+                        'Monthly Budget Impact',
+                        style: AppTypography.bodySmall,
+                      ),
+                      Text(
+                        t.excludedFromBudget
+                            ? 'Excluded'
+                            : '${(allowance.used * 100).round()}% Used',
+                        style: AppTypography.bodySmall.copyWith(
                           color: allowance.atRisk ? c.warning : c.primary,
                         ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          alignment: WrapAlignment.spaceBetween,
-                          spacing: 8,
-                          children: [
-                            Text(
-                              '${MoneyFormatter.php(allowance.spent, decimals: false)} / ${MoneyFormatter.php(allowance.limit, decimals: false)} limit',
-                              style: AppTypography.bodySmall,
-                            ),
-                            Text(
-                              '${MoneyFormatter.php(allowance.remaining, decimals: false)} remaining',
-                              style: AppTypography.bodySmall,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  BudgetProgressBar(
+                    label: 'Monthly budget utilization',
+                    value: allowance.used,
+                    color: allowance.atRisk ? c.warning : c.primary,
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    spacing: 8,
+                    children: [
+                      Text(
+                        '${MoneyFormatter.php(allowance.spent, decimals: false)} / ${MoneyFormatter.php(allowance.limit, decimals: false)} limit',
+                        style: AppTypography.bodySmall,
+                      ),
+                      Text(
+                        '${MoneyFormatter.php(allowance.remaining, decimals: false)} remaining',
+                        style: AppTypography.bodySmall,
+                      ),
+                    ],
                   ),
                 ],
-                const SizedBox(height: 16),
+              ),
+            ),
+          ],
+          const SizedBox(height: 16),
+          FinanceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Text('Notes', style: AppTypography.merchant),
                 const SizedBox(height: 8),
                 FinanceCard(

@@ -1,4 +1,5 @@
 import '../features/receipts/presentation/receipt_review_screen.dart';
+import '../features/transactions/domain/transaction.dart';
 import '../features/receipts/presentation/saved_receipt_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -36,7 +37,16 @@ GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
       path: '/subscriptions',
       redirect: (_, _) => '/budgets/subscriptions',
     ),
-    GoRoute(path: '/add', builder: (_, _) => const AddExpenseScreen()),
+    GoRoute(
+      path: '/add',
+      builder: (_, state) => AddExpenseScreen(
+        initialKind: switch (state.uri.queryParameters['kind']) {
+          'income' => TransactionKind.income,
+          'transfer' => TransactionKind.transfer,
+          _ => TransactionKind.expense,
+        },
+      ),
+    ),
     GoRoute(path: '/receipt', builder: (_, _) => const ReceiptReviewScreen()),
     GoRoute(
       path: '/receipts/:id',

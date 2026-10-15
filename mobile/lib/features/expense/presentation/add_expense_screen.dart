@@ -83,7 +83,21 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         ? TransactionCategory.transfer
         : TransactionCategory.food;
     if (accounts.isNotEmpty) accountId = accounts.keys.first;
-    if (accounts.length > 1) destinationId = accounts.keys.elementAt(1);
+    final preferences = ref.read(workspaceProvider).preferences;
+    if (accounts.containsKey(preferences.defaultAccountId)) {
+      accountId = preferences.defaultAccountId;
+    }
+    if (preferences.hiddenCategories.contains(category)) {
+      category = TransactionCategory.values.firstWhere(
+        (v) =>
+            (kind == TransactionKind.income
+                ? isIncomeCategory(v)
+                : isExpenseCategory(v)) &&
+            !preferences.hiddenCategories.contains(v),
+      );
+    }
+    destinationId =
+        accounts.keys.where((id) => id != accountId).firstOrNull ?? '';
     final original = widget.transaction;
     if (original != null) {
       amount.text =
@@ -194,9 +208,16 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
           shrinkWrap: true,
           children: [
             for (final c in TransactionCategory.values.where(
-              (c) => kind == TransactionKind.income
-                  ? isIncomeCategory(c)
-                  : isExpenseCategory(c),
+              (c) =>
+                  (kind == TransactionKind.income
+                      ? isIncomeCategory(c)
+                      : isExpenseCategory(c)) &&
+                  (!ref
+                          .read(workspaceProvider)
+                          .preferences
+                          .hiddenCategories
+                          .contains(c) ||
+                      c == category),
             ))
               ListTile(
                 title: Text(categoryLabel(c)),
@@ -586,7 +607,11 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           spacing: 10,
                           runSpacing: 10,
                           children: [
-                            for (final item in choices)
+                            for (final item in choices.where(
+                              (v) =>
+                                  !w.preferences.hiddenCategories.contains(v) ||
+                                  v == category,
+                            ))
                               SizedBox(
                                 width:
                                     (bounds.maxWidth - (columns - 1) * 10) /

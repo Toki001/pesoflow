@@ -13,7 +13,6 @@ class SettingsController extends Notifier<Appearance> {
             .preferences
             .copyWith(appearance: appearance),
       );
-  Future<void> restoreAppearance() => setAppearance(Appearance.system);
 }
 
 final settingsProvider = NotifierProvider<SettingsController, Appearance>(

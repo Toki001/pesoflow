@@ -1,4 +1,5 @@
 import 'package:pesoflow/features/settings/domain/appearance.dart';
+import 'package:pesoflow/core/platform/app_version.dart';
 
 import 'dart:io';
 
@@ -22,6 +23,7 @@ import 'package:pesoflow/features/workspace/data/sqlite_finance_repository.dart'
 import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
 
 import 'fixtures/finance_workspace_fixture.dart';
+import 'fixtures/stitch_v7_fixture.dart';
 import 'support/finance_fakes.dart';
 
 final clock = DateTime(2024, 10, 24, 12, 35);
@@ -43,6 +45,7 @@ Future<ProviderContainer> pumpApp(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        appVersionProvider.overrideWith((ref) async => '1.0.0 (Build 1)'),
         financeRepositoryProvider.overrideWithValue(repo),
         initialWorkspaceProvider.overrideWithValue(repo.workspace),
         clockProvider.overrideWithValue(() => clock),
@@ -93,6 +96,11 @@ void main() {
     ('analytics', '/analytics', 1600.0),
     ('add', '/add', 1600.0),
     ('detail', '/transactions/jollibee', 1447.0),
+    ('income', '/add?kind=income', 1600.0),
+    ('subscriptions', '/subscriptions', 1400.0),
+    ('notifications', '/notifications', 1000.0),
+    ('settings', '/settings', 1600.0),
+    ('scanner', '/receipt', 844.0),
   ]) {
     for (final theme in [ThemeMode.light, ThemeMode.dark]) {
       testWidgets('$name ${theme.name} production golden', (tester) async {
@@ -100,7 +108,7 @@ void main() {
         await pumpApp(
           tester,
           route: route,
-          workspace: financeFixture(),
+          workspace: stitchV7Fixture(),
           theme: theme,
         );
         expect(tester.takeException(), isNull);
@@ -118,6 +126,12 @@ void main() {
     '/budgets',
     '/analytics',
     '/add',
+    '/add?kind=income',
+    '/settings',
+    '/notifications',
+    '/subscriptions',
+    '/receipt',
+    '/transactions/jollibee',
   ]) {
     testWidgets('$route compact large-text layout', (tester) async {
       viewport(tester, const Size(320, 760));

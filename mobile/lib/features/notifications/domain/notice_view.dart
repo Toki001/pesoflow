@@ -11,7 +11,7 @@ enum NoticeDestination {
 
 enum NoticeKind { budget, renewal, connection, report }
 
-enum NoticeFilter { all, unread }
+enum NoticeFilter { all, budget, renewal, unread }
 
 /// Display projection of a persisted financial notice.
 class NoticeView {

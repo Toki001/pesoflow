@@ -1,11 +1,14 @@
 import '../../../core/serialization/values.dart';
 import 'appearance.dart';
+import '../../transactions/domain/transaction.dart';
 
 const supportedCurrencies = ['PHP', 'USD', 'EUR', 'GBP', 'SGD', 'AUD'];
 const supportedLocales = ['en_PH', 'en_US'];
 
 class LocalPreferences {
   const LocalPreferences({
+    this.defaultAccountId = '',
+    this.hiddenCategories = const [],
     this.currency = 'PHP',
     this.locale = 'en_PH',
     this.appearance = Appearance.system,
@@ -14,11 +17,15 @@ class LocalPreferences {
     this.renewalAlerts = true,
     this.unusualSpendingAlerts = true,
   });
+  final String defaultAccountId;
+  final List<TransactionCategory> hiddenCategories;
   final String currency, locale;
   final Appearance appearance;
   final bool notifications, budgetAlerts, renewalAlerts, unusualSpendingAlerts;
 
   LocalPreferences copyWith({
+    String? defaultAccountId,
+    List<TransactionCategory>? hiddenCategories,
     String? currency,
     String? locale,
     Appearance? appearance,
@@ -27,6 +34,10 @@ class LocalPreferences {
     bool? renewalAlerts,
     bool? unusualSpendingAlerts,
   }) => LocalPreferences(
+    defaultAccountId: defaultAccountId ?? this.defaultAccountId,
+    hiddenCategories: hiddenCategories == null
+        ? this.hiddenCategories
+        : List.unmodifiable(hiddenCategories),
     currency: currency ?? this.currency,
     locale: locale ?? this.locale,
     appearance: appearance ?? this.appearance,
@@ -44,6 +55,8 @@ class LocalPreferences {
   }
 
   Json toJson() => {
+    'defaultAccountId': defaultAccountId,
+    'hiddenCategories': hiddenCategories.map((c) => c.name).toList(),
     'currency': currency,
     'locale': locale,
     'appearance': appearance.name,
@@ -53,6 +66,12 @@ class LocalPreferences {
     'unusualSpendingAlerts': unusualSpendingAlerts,
   };
   factory LocalPreferences.fromJson(Json json) => LocalPreferences(
+    defaultAccountId: json['defaultAccountId'] as String? ?? '',
+    hiddenCategories: List.unmodifiable(
+      (json['hiddenCategories'] as List? ?? []).map(
+        (v) => TransactionCategory.values.byName(v as String),
+      ),
+    ),
     currency: jsonString(json, 'currency'),
     locale: jsonString(json, 'locale'),
     appearance: Appearance.values.byName(json['appearance'] as String),

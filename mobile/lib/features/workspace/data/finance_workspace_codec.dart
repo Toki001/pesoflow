@@ -78,6 +78,7 @@ abstract final class FinanceWorkspaceCodec {
   }
 
   static Json receiptToJson(ReceiptDraft d) => {
+    'note': d.note,
     'id': d.id,
     'merchant': d.merchant,
     'account': d.account,
@@ -100,6 +101,7 @@ abstract final class FinanceWorkspaceCodec {
     ],
   };
   static ReceiptDraft receiptFromJson(Json d) => ReceiptDraft(
+    note: d['note'] as String? ?? '',
     id: jsonString(d, 'id'),
     merchant: jsonString(d, 'merchant', max: 100),
     account: jsonString(d, 'account'),

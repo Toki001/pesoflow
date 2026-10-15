@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/identity/new_id.dart';
 import '../../../core/time/clock.dart';
 import '../../accounts/domain/ledger_account.dart';
+import '../../accounts/domain/financial_account.dart';
 import '../../transactions/domain/categorization.dart';
 import '../../transactions/domain/transaction.dart';
 import '../../workspace/application/finance_controller.dart';
@@ -173,10 +174,20 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
   ReceiptDraft _draft(ParsedReceipt parsed) {
     final id = newId();
     final now = ref.read(clockProvider)();
+    final workspace = ref.read(workspaceProvider);
+    final defaultAccount = workspace.accounts
+        .where(
+          (a) =>
+              a.id == workspace.preferences.defaultAccountId &&
+              !a.archived &&
+              a.source == BalanceSource.manual,
+        )
+        .firstOrNull;
     return ReceiptDraft(
       id: id,
       merchant: parsed.merchant,
-      accountId: '',
+      accountId: defaultAccount?.id ?? '',
+      account: defaultAccount?.name ?? '',
       occurredAt: parsed.date ?? now,
       items: parsed.items,
       category: categorize(
@@ -227,6 +238,11 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
         ),
       ),
     );
+  }
+
+  void setNote(String value) {
+    final d = state.draft;
+    if (d != null) setDraft(d.copyWith(note: value));
   }
 
   void setDate(DateTime value) {

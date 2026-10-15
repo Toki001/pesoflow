@@ -12,5 +12,17 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    guard let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "PesoFlowAppInfo") else { return }
+    let channel = FlutterMethodChannel(name: "com.pesoflow/app_info", binaryMessenger: registrar.messenger())
+    channel.setMethodCallHandler { call, result in
+      guard call.method == "version" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      result([
+        "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "",
+        "build": Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""
+      ])
+    }
   }
 }

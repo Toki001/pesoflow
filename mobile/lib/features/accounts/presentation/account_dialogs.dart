@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pesoflow/features/accounts/domain/account_view.dart';
+import 'package:pesoflow/features/accounts/domain/financial_account.dart';
 import 'package:pesoflow/features/accounts/presentation/manual_account_editor.dart';
 
 Future<void> showAccountCatalog(BuildContext context) =>
     showManualAccountEditor(context);
 Future<bool> confirmAccountRemoval(
   BuildContext context,
-  AccountView account,
+  FinancialAccount account,
 ) async =>
     await showDialog<bool>(
       context: context,
@@ -28,22 +28,3 @@ Future<bool> confirmAccountRemoval(
       ),
     ) ??
     false;
-Future<bool> showConnectionUnavailable(
-  BuildContext context,
-  AccountView account,
-) async {
-  await showDialog<void>(
-    context: context,
-    builder: (c) => AlertDialog(
-      title: const Text('Connections are not configured'),
-      content: const Text('Use a manual account to track your finances.'),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(c),
-          child: const Text('Close'),
-        ),
-      ],
-    ),
-  );
-  return false;
-}

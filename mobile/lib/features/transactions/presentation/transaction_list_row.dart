@@ -33,20 +33,8 @@ class TransactionListRow extends StatelessWidget {
       TransactionCategory.subscriptions => Icons.smart_display_outlined,
       _ => Icons.receipt_long_outlined,
     };
-    final foreground = switch (t.category) {
-      TransactionCategory.food => c.danger,
-      TransactionCategory.coffee => c.warning,
-      TransactionCategory.income => c.positive,
-      TransactionCategory.refund => c.secondary,
-      _ => c.secondaryInk,
-    };
-    final background = c.soft(foreground, switch (t.category) {
-      TransactionCategory.food => AppColors.dangerSoft,
-      TransactionCategory.coffee => AppColors.warningSoft,
-      TransactionCategory.income => AppColors.positiveSoft,
-      TransactionCategory.refund => AppColors.secondarySoft,
-      _ => AppColors.surfaceMuted,
-    });
+    final foreground = c.primary;
+    final background = c.primary.withValues(alpha: .08);
     final (
       badge,
       badgeColor,
@@ -82,7 +70,7 @@ class TransactionListRow extends StatelessWidget {
             t.kind == TransactionKind.income ||
             t.kind == TransactionKind.refund,
       ),
-      style: AppTypography.numericMedium.copyWith(
+      style: AppTypography.merchant.copyWith(
         color:
             t.status == TransactionStatus.pending ||
                 t.kind == TransactionKind.transfer

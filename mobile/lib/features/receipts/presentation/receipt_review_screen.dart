@@ -6,6 +6,8 @@ import '../../../app/theme/app_colors.dart';
 import '../../../app/theme/app_typography.dart';
 import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/finance_card.dart';
+import '../../../core/widgets/task_screen.dart';
+import 'widgets/receipt_scanner.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../application/receipt_scan_controller.dart';
 import '../domain/receipt_draft.dart';
@@ -110,160 +112,120 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) close();
       },
-      child: ColoredBox(
-        color: AppColors.darkSurface,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 512),
-            child: Scaffold(
-              backgroundColor: AppColors.darkSurface,
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  key: const PageStorageKey('receipt-scroll'),
-                  child: Column(
-                    children: [
-                      ReceiptPreview(
-                        bytes: state.image?.bytes,
-                        busy: locked,
-                        onClose: close,
-                        onCamera: locked
-                            ? null
-                            : () => replace(
-                                () => controller.acquire(
-                                  ReceiptImageSource.camera,
-                                ),
-                              ),
-                        onGallery: locked
-                            ? null
-                            : () => replace(
-                                () => controller.acquire(
-                                  ReceiptImageSource.photos,
-                                ),
-                              ),
-                        onCrop: locked || state.image == null
-                            ? null
-                            : () => replace(controller.crop),
-                      ),
-                      Transform.translate(
-                        offset: const Offset(0, -16),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                          decoration: BoxDecoration(
-                            color: c.surface,
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(24),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Center(
-                                child: Container(
-                                  width: 48,
-                                  height: 6,
-                                  decoration: BoxDecoration(
-                                    color: c.border,
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              if (state.progress != null) ...[
-                                Semantics(
-                                  liveRegion: true,
-                                  child: Text(
-                                    state.progress!,
-                                    style: AppTypography.headlineSmall,
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                const LinearProgressIndicator(),
-                                const SizedBox(height: 20),
-                              ],
-                              if (state.error != null) ...[
-                                FinanceCard(
-                                  color: c.soft(
-                                    c.warning,
-                                    AppColors.warningSoft,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Semantics(
-                                        liveRegion: true,
-                                        child: Text(state.error!.message),
-                                      ),
-                                      if (state.error!.settings)
-                                        TextButton(
-                                          onPressed: controller.openSettings,
-                                          child: const Text(
-                                            'Open device Settings',
-                                          ),
-                                        ),
-                                      if (state.image != null)
-                                        TextButton(
-                                          onPressed: locked
-                                              ? null
-                                              : () => replace(controller.retry),
-                                          child: const Text(
-                                            'Retry text recognition',
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                              if (state.draft == null && !locked) ...[
-                                Text(
-                                  'Scan a receipt',
-                                  style: AppTypography.headlineMedium,
-                                ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Take a clear photo or select a receipt image. Text is read on your device. You review every expense before saving.',
-                                ),
-                                const SizedBox(height: 20),
-                                FilledButton.icon(
-                                  onPressed: () => controller.acquire(
-                                    ReceiptImageSource.camera,
-                                  ),
-                                  icon: const Icon(Icons.camera_alt_outlined),
-                                  label: const Text('Take receipt photo'),
-                                ),
-                                const SizedBox(height: 8),
-                                OutlinedButton.icon(
-                                  onPressed: () => controller.acquire(
-                                    ReceiptImageSource.photos,
-                                  ),
-                                  icon: const Icon(
-                                    Icons.photo_library_outlined,
-                                  ),
-                                  label: const Text('Choose receipt photo'),
-                                ),
-                              ],
-                              if (state.draft != null)
-                                AbsorbPointer(
-                                  absorbing: locked,
-                                  child: Material(
-                                    color: c.surface,
-                                    child: content(state),
-                                  ),
-                                ),
-                            ],
-                          ),
+      child: state.draft == null
+          ? ReceiptScanner(
+              onClose: locked ? null : close,
+              onCamera: locked
+                  ? null
+                  : () => controller.acquire(ReceiptImageSource.camera),
+              onGallery: locked
+                  ? null
+                  : () => controller.acquire(ReceiptImageSource.photos),
+              status: scanStatus(state),
+            )
+          : TaskScreen(
+              title: 'Review Receipt',
+              backIcon: Icons.arrow_back,
+              backTooltip: 'Close receipt',
+              onClose: close,
+              actions: [
+                TextButton(
+                  onPressed: locked
+                      ? null
+                      : () => replace(
+                          () => controller.acquire(ReceiptImageSource.camera),
                         ),
+                  child: const Text('Retake'),
+                ),
+              ],
+              child: SingleChildScrollView(
+                key: const PageStorageKey('receipt-scroll'),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FinanceCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          if (state.image != null)
+                            InkWell(
+                              onTap: () =>
+                                  showReceiptImage(context, state.image!.bytes),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  height: 160,
+                                  color: c.mutedSurface,
+                                  child: receiptImage(state.image!.bytes),
+                                ),
+                              ),
+                            ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Tap to inspect full receipt',
+                            style: AppTypography.bodySmall,
+                          ),
+                          TextButton.icon(
+                            onPressed: locked
+                                ? null
+                                : () => replace(controller.crop),
+                            icon: const Icon(Icons.crop_rotate, size: 18),
+                            label: const Text('Adjust frame & rotate'),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 16),
+                    scanStatus(state),
+                    AbsorbPointer(absorbing: locked, child: content(state)),
+                  ],
                 ),
               ),
             ),
+    );
+  }
+
+  Widget scanStatus(ReceiptScanState state) {
+    final controller = ref.read(receiptScanProvider.notifier);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (state.progress != null) ...[
+          const LinearProgressIndicator(),
+          const SizedBox(height: 12),
+          Text(
+            state.progress!,
+            style: TextStyle(
+              color: state.draft == null ? Colors.white : context.colors.ink,
+            ),
           ),
-        ),
-      ),
+          const SizedBox(height: 16),
+        ],
+        if (state.error != null) ...[
+          FinanceCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Semantics(liveRegion: true, child: Text(state.error!.message)),
+                if (state.error!.settings)
+                  TextButton(
+                    onPressed: controller.openSettings,
+                    child: const Text('Open device Settings'),
+                  ),
+                if (state.image != null)
+                  TextButton(
+                    onPressed: state.busy
+                        ? null
+                        : () => replace(controller.retry),
+                    child: const Text('Retry text recognition'),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+        ],
+      ],
     );
   }
 
@@ -275,36 +237,47 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                'Review Extracted Receipt',
-                style: AppTypography.headlineMedium.copyWith(
-                  fontSize: 24,
-                  height: 28 / 24,
-                ),
+        FinanceCard(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'TOTAL AMOUNT',
+                style: AppTypography.labelMedium.copyWith(color: c.mutedInk),
               ),
-            ),
-            const SizedBox(width: 12),
-            SizedBox(
-              width: 120,
-              child: StatusBadge(
-                evidence.confirmed ? 'Reviewed' : 'Ready to review',
-                foreground: c.positive,
-                background: c.soft(c.positive, AppColors.positiveSoft),
-                icon: Icons.check_circle_outline,
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      evidence.currency == 'PHP'
+                          ? MoneyFormatter.php(draft.total)
+                          : 'Verify currency',
+                      textAlign: TextAlign.center,
+                      style: AppTypography.numericXL,
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Edit total amount',
+                    onPressed: () => editReceiptTotals(context, evidence),
+                    icon: const Icon(Icons.edit_outlined),
+                  ),
+                ],
               ),
-            ),
-          ],
+              Text(
+                evidence.confirmed
+                    ? 'Reviewed against receipt'
+                    : 'Verify against printed receipt',
+                textAlign: TextAlign.center,
+                style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 4),
-        Text(
-          'On-device extraction · verify against your receipt',
-          style: AppTypography.bodyMedium.copyWith(color: c.mutedInk),
-        ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 16),
+        Text('Review Extracted Receipt', style: AppTypography.headlineSmall),
+        const SizedBox(height: 12),
         ReceiptMerchantCard(
           draft: draft,
           onMerchant: () async {
@@ -312,6 +285,18 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
             if (value != null && mounted) controller.setMerchant(value);
           },
           onDate: () => date(draft),
+        ),
+        const SizedBox(height: 16),
+        ReceiptAssignments(
+          draft: draft,
+          onCategory: () async {
+            final value = await chooseReceiptCategory(context);
+            if (value != null && mounted) controller.setCategory(value);
+          },
+          onAccount: () async {
+            final value = await chooseReceiptAccount(context);
+            if (value != null && mounted) controller.setAccount(value);
+          },
         ),
         const SizedBox(height: 12),
         Wrap(
@@ -386,16 +371,20 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
           onEdit: () => editReceiptTotals(context, evidence),
         ),
         const SizedBox(height: 20),
-        ReceiptAssignments(
-          draft: draft,
-          onCategory: () async {
-            final value = await chooseReceiptCategory(context);
-            if (value != null && mounted) controller.setCategory(value);
-          },
-          onAccount: () async {
-            final value = await chooseReceiptAccount(context);
-            if (value != null && mounted) controller.setAccount(value);
-          },
+        const SizedBox(height: 12),
+        FinanceCard(
+          child: TextFormField(
+            key: ValueKey('receipt-note-${draft.id}'),
+            initialValue: draft.note,
+            onChanged: controller.setNote,
+            maxLength: 2000,
+            minLines: 2,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              labelText: 'Notes & Description',
+              hintText: 'Optional note',
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         ExpansionTile(

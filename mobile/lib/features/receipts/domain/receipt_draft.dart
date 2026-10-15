@@ -41,6 +41,7 @@ class ReceiptDraft {
     required Iterable<ReceiptItem> items,
     this.category = TransactionCategory.groceries,
     this.account = '',
+    this.note = '',
     this.savedTransactionId,
     this.evidence,
   }) : items = List.unmodifiable(items) {
@@ -48,7 +49,7 @@ class ReceiptDraft {
       throw ArgumentError('Duplicate receipt item ID.');
     }
   }
-  final String id, merchant, account;
+  final String id, merchant, account, note;
   final String accountId;
   final DateTime occurredAt;
   final List<ReceiptItem> items;
@@ -60,6 +61,7 @@ class ReceiptDraft {
   int get includedVat => evidence?.tax ?? 0;
   List<ReceiptItem> get uncertain => items.where((i) => i.needsReview).toList();
   String? get validationError {
+    if (note.length > 2000) return 'Keep notes within 2,000 characters.';
     if (merchant.trim().isEmpty || merchant.length > 100) {
       return 'Enter a valid merchant name.';
     }
@@ -90,6 +92,7 @@ class ReceiptDraft {
 
   ReceiptDraft copyWith({
     String? merchant,
+    String? note,
     DateTime? occurredAt,
     List<ReceiptItem>? items,
     TransactionCategory? category,
@@ -99,6 +102,7 @@ class ReceiptDraft {
     ReceiptEvidence? evidence,
   }) => ReceiptDraft(
     id: id,
+    note: note ?? this.note,
     merchant: merchant ?? this.merchant,
     occurredAt: occurredAt ?? this.occurredAt,
     items: items ?? this.items,
@@ -123,7 +127,7 @@ class ReceiptDraft {
       accountId: accountId,
       source: TransactionSource.receipt,
       hasReceipt: true,
-      note: 'Reviewed receipt.',
+      note: note.isEmpty ? 'Reviewed receipt.' : note.trim(),
     );
   }
 }

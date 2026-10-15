@@ -1,4 +1,9 @@
 import 'package:pesoflow/core/time/clock.dart';
+import 'package:go_router/go_router.dart';
+
+import '../application/accounts_provider.dart';
+import 'account_dialogs.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
@@ -85,6 +90,28 @@ class AccountDetailScreen extends ConsumerWidget {
             onPressed: () => showManualAccountEditor(context, account: a),
             icon: const Icon(Icons.edit_outlined),
             label: const Text('Edit Account'),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (!await confirmAccountRemoval(context, a) || !context.mounted) {
+                return;
+              }
+              try {
+                await ref.read(accountsProvider.notifier).disconnect(a.id);
+                if (context.mounted) context.go('/accounts');
+              } catch (_) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'Could not update account. Please try again.',
+                      ),
+                    ),
+                  );
+                }
+              }
+            },
+            child: Text(a.archived ? 'Restore account' : 'Remove account'),
           ),
           const SizedBox(height: 24),
           Text('Account activity', style: AppTypography.headlineSmall),

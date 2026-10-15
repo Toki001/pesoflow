@@ -38,8 +38,8 @@ Saved external documents are outside this task and must not be touched.
 - [x] Inspect/import authoritative references and inventory existing implementation.
 - [x] Remove obsolete features and prove old financial data remains readable.
 - [x] Consolidate tokens/components and implement Home/navigation.
-- [ ] Implement transaction, account, budget/analytics and subscription designs.
-- [ ] Implement scanner/review, notifications and Settings designs.
+- [x] Implement transaction, account, budget/analytics and subscription designs.
+- [x] Implement scanner/review, notifications and Settings designs.
 - [ ] Review all 13 goldens, run full checks and native builds.
 - [ ] Attempt non-destructive physical upgrade only if device is connected.
 
@@ -67,3 +67,19 @@ account icons instead of unavailable licensed logos, actual financial totals,
 explicit date/filter controls and real budget projections. Remaining detail,
 subscription, receipt, notification and settings work and full final visual/build
 checks are still pending. No physical device changes have been made.
+
+## Secondary-screen checkpoint
+
+Transaction Detail, recurring subscriptions/bills, Notifications, Settings and
+separate scanner/review layouts now use v7 structure. Settings persists visible
+categories/default payment account and supported alert preferences. Installed
+version comes from native Android package/iOS bundle metadata. Receipt notes
+persist with reviewed expenses; confirmation and atomic image writes are retained.
+Account Detail retains edit/removal/archive/re-enable commands. Dead account
+connection UI and unused Dio transport/dependency were removed.
+
+Full Flutter suite: **206 passing tests**, including 29 golden comparisons
+(12 screens × light/dark plus 5 receipt-review states). Analyzer is clean.
+An intermediate release APK built successfully; final APK/AAB and iOS checks are
+being run after cleanup. ADB discovery returned no attached devices on 16 October;
+physical v7 upgrade/restart is **NOT TESTED**, with no device data changed.

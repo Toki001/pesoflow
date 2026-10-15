@@ -40,6 +40,6 @@ List<AccountView> accountFixture() => List.unmodifiable([
     kind: AccountKind.bank,
     balance: 1220000,
     balanceAsOf: demoClock.subtract(const Duration(days: 2)),
-    status: AccountConnectionStatus.needsReauthentication,
+    archived: true,
   ),
 ]);
