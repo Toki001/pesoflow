@@ -1,0 +1,274 @@
+<!DOCTYPE html><html class="h-full bg-inverse-surface" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PesoFlow - Receipt Scanner</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#e2e8f8",
+            "outline-variant": "#c3c6d7",
+            "inverse-surface": "#2a313d",
+            "on-tertiary-container": "#c7ffca",
+            "primary-fixed": "#dbe1ff",
+            "inverse-primary": "#b4c5ff",
+            "primary-container": "#2563eb",
+            "secondary-fixed-dim": "#c0c6db",
+            "on-error-container": "#93000a",
+            "error-container": "#ffdad6",
+            "on-secondary": "#ffffff",
+            "tertiary": "#006329",
+            "surface-container-highest": "#dce2f3",
+            "tertiary-container": "#007f36",
+            "on-surface-variant": "#434655",
+            "on-surface": "#151c27",
+            "surface-tint": "#0053db",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed": "#141b2b",
+            "on-secondary-container": "#5c6274",
+            "on-tertiary": "#ffffff",
+            "surface": "#f9f9ff",
+            "on-background": "#151c27",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-error": "#ffffff",
+            "error": "#ba1a1a",
+            "background": "#f9f9ff",
+            "surface-container-low": "#f0f3ff",
+            "secondary-container": "#d9dff5",
+            "on-primary-fixed": "#00174b",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#005320",
+            "inverse-on-surface": "#ebf1ff",
+            "surface-dim": "#d3daea",
+            "surface-bright": "#f9f9ff",
+            "secondary-fixed": "#dce2f7",
+            "surface-container": "#e7eefe",
+            "secondary": "#575e70",
+            "on-tertiary-fixed": "#002109",
+            "surface-variant": "#dce2f3",
+            "tertiary-fixed-dim": "#62df7d",
+            "primary": "#004ac6",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-primary-container": "#eeefff",
+            "on-secondary-fixed-variant": "#404758",
+            "tertiary-fixed": "#7ffc97",
+            "outline": "#737686"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-desktop": "2rem",
+            "space-xl": "1.5rem",
+            "gutter": "1.25rem",
+            "space-xs": "0.25rem",
+            "margin": "1.25rem",
+            "gutter-tablet": "1.5rem",
+            "space-md": "1rem",
+            "margin-tablet": "2rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.25rem"
+          },
+          "fontFamily": {
+            "currency-display": ["Inter"],
+            "body-md": ["Inter"],
+            "label-xs": ["Inter"],
+            "headline-xl": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "label-sm": ["Inter"],
+            "currency-card": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"]
+          },
+          "fontSize": {
+            "currency-display": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-xs": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "currency-card": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Subtle scanning pulse for document bounds */
+    @keyframes edgePulse {
+      0%, 100% { opacity: 0.85; stroke-dashoffset: 0; }
+      50% { opacity: 1; stroke-dashoffset: 8; }
+    }
+    .edge-detected {
+      animation: edgePulse 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="h-full bg-inverse-surface text-inverse-on-surface antialiased overflow-hidden flex flex-col justify-between select-none">
+<!-- REALISTIC CAMERA PREVIEW FEED BACKGROUND -->
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="w-full h-full bg-cover bg-center opacity-45 scale-105 filter contrast-125" data-alt="A top-down realistic camera viewfinder photograph of a clean grocery paper receipt placed on a dark slate graphite tabletop desk. Soft diffuse ambient office lighting casts gentle realistic shadows. The paper has subtle natural folds, sharp printed line items in Philippine peso, and clean borders. Minimalist aesthetic, disciplined calm fintech feel, neutral charcoal background tones." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-T6MUGTqEb6hMRunAV-81ifwqxarWmF2Ii1rkPYQENxZrgc51JbzGCMdNKauwzq7Ata7_JY7EhObN5PJktC6jTzHB1eKT4HrCOpu8Sypm2tqe7tPy1L3MacZLRT62CM86RA4Owr7rpD8JxYainuhDk2KNhKHC9Lu1RGPhcAUHF0O-y3l1G5rjAy-Y933MqYLN1xQxqmROEwxkVAGGIlFmvhfz3FgfQVJ6V9DASVLqOpIjmGkU0e9uIg')">
+</div>
+<!-- Low-contrast lens darkening overlay -->
+<div class="absolute inset-0 bg-gradient-to-b from-inverse-surface/90 via-transparent to-inverse-surface/95"></div>
+</div>
+<!-- TOP APP UTILITY BAR -->
+<header class="relative z-30 w-full px-space-lg pt-4 pb-3 flex items-center justify-between">
+<!-- Cancel Action -->
+<button aria-label="Cancel scanning" class="w-10 h-10 rounded-full bg-inverse-surface/60 backdrop-blur-md flex items-center justify-center text-inverse-on-surface active:opacity-80 transition-opacity duration-150" type="button">
+<span class="material-symbols-outlined text-inverse-on-surface" data-icon="close">close</span>
+</button>
+<!-- Center Toggle: Flash Settings -->
+<button aria-label="Toggle flash" class="h-9 px-space-md rounded-full bg-inverse-surface/70 backdrop-blur-md flex items-center gap-space-xs text-inverse-on-surface hover:bg-inverse-surface/90 transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary-container" data-icon="flash_auto">flash_auto</span>
+<span class="font-label-sm text-label-sm font-medium tracking-tight">Flash: Auto</span>
+</button>
+<!-- Gallery / Photo Picker -->
+<button aria-label="Choose from gallery" class="h-10 px-space-md rounded-full bg-inverse-surface/60 backdrop-blur-md flex items-center gap-space-xs text-inverse-on-surface active:opacity-80 transition-opacity duration-150" type="button">
+<span class="material-symbols-outlined text-inverse-on-surface text-[20px]" data-icon="photo_library">photo_library</span>
+<span class="font-label-sm text-label-sm font-medium hidden sm:inline">Gallery</span>
+</button>
+</header>
+<!-- CENTER VIEWFINDER & OCR DETECTOR CANVAS -->
+<main class="relative z-20 flex-1 w-full max-w-lg mx-auto px-space-lg flex flex-col items-center justify-center">
+<!-- Optical Viewfinder Frame with Crosshairs -->
+<div class="relative w-full aspect-[3/4.2] max-h-[58vh] flex items-center justify-center">
+<!-- High-contrast Framing Bounding Box Outer Guidance -->
+<div class="absolute inset-0 rounded-xl pointer-events-none"></div>
+<!-- Corner Crosshair Guides -->
+<!-- Top Left -->
+
+<!-- Top Right -->
+
+<!-- Bottom Left -->
+
+<!-- Bottom Right -->
+
+<!-- Real-time SVG Edge Detection Alignment Contour -->
+<svg class="absolute inset-4 w-[calc(100%-2rem)] h-[calc(100%-2rem)] pointer-events-none z-10" preserveAspectRatio="none" viewBox="0 0 100 100">
+<!-- Detected quadrilateral contour for receipt -->
+<polygon class="edge-detected" fill="rgba(37, 99, 235, 0.08)" points="10,6 90,8 86,93 12,91" stroke="#2563eb" stroke-dasharray="2, 1.5" stroke-width="0.85"></polygon>
+<!-- Detected corner vertex nodes -->
+<circle cx="10" cy="6" fill="#2563eb" r="1.8" stroke="#ffffff" stroke-width="0.5" class=""></circle>
+<circle cx="90" cy="8" fill="#2563eb" r="1.8" stroke="#ffffff" stroke-width="0.5" class=""></circle>
+<circle cx="86" cy="93" fill="#2563eb" r="1.8" stroke="#ffffff" stroke-width="0.5" class=""></circle>
+<circle cx="12" cy="91" fill="#2563eb" r="1.8" stroke="#ffffff" stroke-width="0.5" class=""></circle>
+</svg>
+<!-- OCR Parsing Detection Badges Floating Inside Frame -->
+<div class="absolute top-6 left-6 z-20 flex items-center gap-space-xs bg-inverse-surface/85 backdrop-blur-md px-2.5 py-1 rounded-md"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-ping"></span>
+<span class="font-label-xs text-label-xs text-primary-fixed-dim font-semibold tracking-wider">EDGE LOCKED</span></div>
+<div class="absolute top-6 right-6 z-20 flex items-center gap-space-xs bg-inverse-surface/85 backdrop-blur-md px-2.5 py-1 rounded-md">
+<span class="font-label-xs text-label-xs text-secondary-fixed-dim">₱ PHILIPPINE PESO</span>
+</div>
+<!-- Central Alignment Guidance Prompt -->
+<div class="text-center px- space-md py-space-sm bg-inverse-surface/75 backdrop-blur-md rounded-lg pointer-events-none shadow-sm">
+<p class="font-label-md text-label-md font-semibold text-inverse-on-surface">Align receipt within frame</p>
+<p class="font-body-sm text-body-sm text-secondary-fixed-dim flex items-center justify-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-tertiary-fixed" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="">Hold steady · Auto-detecting edges</span>
+</p>
+</div>
+<!-- Subtle Viewfinder Center Reticle -->
+<div class="absolute w-4 h-4 pointer-events-none opacity-40">
+<div class="absolute inset-x-0 top-1/2 h-[1px] bg-white"></div>
+<div class="absolute inset-y-0 left-1/2 w-[1px] bg-white"></div>
+</div>
+</div>
+</main>
+<!-- BOTTOM CONTROL & SHUTTER CONSOLE -->
+<footer class="relative z-30 w-full bg-inverse-surface/95 backdrop-blur-xl pt-3 pb-8 px-space-lg flex flex-col items-center">
+<!-- Mode Selector Pill -->
+<nav aria-label="Capture Mode" class="flex items-center p-1 rounded-full bg-on-secondary-fixed/50 mb-5">
+<button class="px-4 py-1.5 rounded-full bg-surface-container-lowest text-on-surface font-label-sm text-label-sm font-semibold shadow-sm transition-all duration-150" type="button">
+        Single Receipt
+      </button>
+<button class="px-4 py-1.5 rounded-full text-secondary-fixed-dim hover:text-inverse-on-surface font-label-sm text-label-sm font-medium transition-colors duration-150" type="button">
+        Multi-page
+      </button>
+</nav>
+<!-- Main Shutter Action Cluster -->
+<div class="w-full max-w-sm flex items-center justify-between px-space-md mb-4">
+<!-- Last Captured Thumbnail Preview -->
+<div class="flex flex-col items-center">
+<div class="relative w-12 h-12 rounded-xl overflow-hidden bg-on-secondary-fixed cursor-pointer active:scale-95 transition-transform duration-150">
+<img class="w-full h-full object-cover" data-alt="Small thumbnail preview of a scanned grocery store receipt on thermal paper showing clear black print and transaction total, captured in clean crisp light for personal financial ledger documentation." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZqhYQpx-BId_XpUV8VVohNZXgtyobw0DEa1C6WMVBZerL-7h-EBnvuWL0K8GfSaQ72ytGdBavBFG7McYxx7fG3HTJAdTRPrS0XmpntuMWSLHyh4Z8yaH-NF2O2ZQ3OQ5B00b4MeM9PYgIwP_YZbZfqT6NG0jTZoGUrZRPlpDXi9fOAr3moyvWC44gOV08gN47K4Q_166P-t8NhZab8IvJS89B76ukpwZ-jKUDguyyyk-S6JApJhZ4uQ">
+<!-- Page Count Badge -->
+<span class="absolute bottom-0 right-0 bg-primary-container text-on-primary-container font-label-xs text-[10px] font-bold px-1 rounded-tl">1</span>
+</div>
+<span class="font-label-xs text-[11px] text-secondary-fixed-dim mt-1">Recent</span>
+</div>
+<!-- Circular Primary Shutter Trigger -->
+<div class="relative flex items-center justify-center">
+<!-- Outer Concentric Guidance Ring -->
+<div class="w-20 h-20 rounded-full flex items-center justify-center">
+<!-- Main Shutter Button -->
+<button aria-label="Capture receipt" class="w-[68px] h-[68px] rounded-full bg-surface-container-lowest hover:bg-surface-container-low active:scale-90 transition-transform duration-150 shadow-md flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-primary-container" type="button">
+<!-- Inner tactile ring -->
+<div class="w-[58px] h-[58px] rounded-full flex items-center justify-center">
+<span class="w-3 h-3 rounded-full bg-primary-container/20"></span>
+</div>
+</button>
+</div>
+</div>
+<!-- Torch / Manual Retake Alignment Tool -->
+<div class="flex flex-col items-center">
+<button aria-label="Toggle Torch" class="w-12 h-12 rounded-xl bg-on-secondary-fixed/60 flex items-center justify-center text-secondary-fixed-dim hover:text-inverse-on-surface active:scale-95 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="highlight">highlight</span>
+</button>
+<span class="font-label-xs text-[11px] text-secondary-fixed-dim mt-1">Torch</span>
+</div>
+</div>
+<!-- Helpful OCR Hint Tip -->
+<div class="flex items-center justify-center gap-1.5 text-center px-4 max-w-xs">
+<span class="material-symbols-outlined text-[16px] text-primary-container shrink-0" data-icon="check_circle">check_circle</span>
+<p class="font-body-sm text-[12px] text-secondary-fixed-dim leading-tight">
+        Clear text, total amount, and date ensure accurate OCR parsing
+      </p>
+</div>
+</footer>
+
+
+
+
+</body></html>

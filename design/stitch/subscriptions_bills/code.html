@@ -1,0 +1,382 @@
+<!DOCTYPE html><html class="h-full bg-surface" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Subscriptions &amp; Bills - PesoFlow</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#004ac6",
+            "secondary": "#575e70",
+            "on-tertiary-container": "#c7ffca",
+            "secondary-container": "#d9dff5",
+            "surface-variant": "#dce2f3",
+            "surface-dim": "#d3daea",
+            "on-secondary-fixed-variant": "#404758",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#006329",
+            "primary-container": "#2563eb",
+            "surface-container-low": "#f0f3ff",
+            "on-tertiary-fixed-variant": "#005320",
+            "surface-container-high": "#e2e8f8",
+            "outline": "#737686",
+            "surface-bright": "#f9f9ff",
+            "on-surface-variant": "#434655",
+            "inverse-surface": "#2a313d",
+            "surface-container": "#e7eefe",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#dce2f3",
+            "on-secondary-container": "#5c6274",
+            "secondary-fixed": "#dce2f7",
+            "primary-fixed-dim": "#b4c5ff",
+            "on-tertiary-fixed": "#002109",
+            "tertiary-fixed-dim": "#62df7d",
+            "on-secondary-fixed": "#141b2b",
+            "on-surface": "#151c27",
+            "secondary-fixed-dim": "#c0c6db",
+            "surface": "#f9f9ff",
+            "on-primary": "#ffffff",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-primary": "#b4c5ff",
+            "primary-fixed": "#dbe1ff",
+            "tertiary-fixed": "#7ffc97",
+            "error": "#ba1a1a",
+            "tertiary-container": "#007f36",
+            "on-background": "#151c27",
+            "on-tertiary": "#ffffff",
+            "inverse-on-surface": "#ebf1ff",
+            "surface-tint": "#0053db",
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#003ea8",
+            "outline-variant": "#c3c6d7",
+            "on-primary-fixed": "#00174b",
+            "on-primary-container": "#eeefff",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "1.5rem",
+            "gutter": "1.25rem",
+            "space-lg": "1.25rem",
+            "margin-tablet": "2rem",
+            "gutter-tablet": "1.5rem",
+            "margin-desktop": "3rem",
+            "space-sm": "0.5rem",
+            "gutter-desktop": "2rem",
+            "margin": "1.25rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-md": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "currency-display": ["Inter"],
+            "body-md": ["Inter"],
+            "currency-card": ["Inter"],
+            "label-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "body-lg": ["Inter"],
+            "label-xs": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-sm": ["Inter"]
+          },
+          "fontSize": {
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "currency-display": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "currency-card": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "500" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "letterSpacing": "0.005em", "fontWeight": "400" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-xs": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card-shadow {
+      box-shadow: 0 1px 3px 0 rgba(17, 24, 39, 0.04), 0 1px 2px -1px rgba(17, 24, 39, 0.02);
+    }
+    .feature-shadow {
+      box-shadow: 0 4px 6px -1px rgba(17, 24, 39, 0.05), 0 2px 4px -2px rgba(17, 24, 39, 0.03);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-full bg-[#F7F8FA] text-on-surface antialiased flex flex-col items-center">
+<!-- Mobile Viewport Shell (Max Width 440px for precise mobile ergonomics) -->
+<div class="w-full max-w-md min-h-screen bg-[#F7F8FA] flex flex-col relative pb-28">
+<!-- Secondary Top Navigation Bar (Calm ledger header) -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest/95 backdrop-blur-sm px-gutter h-14 flex items-center justify-between shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface hover:bg-surface-container-low transition-colors duration-150 active:opacity-80" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md text-on-surface tracking-tight">Subscriptions &amp; Bills</h1>
+</div>
+<button class="inline-flex items-center gap-1 bg-surface-container-low hover:bg-surface-container text-primary font-label-sm text-label-sm px-3 py-1.5 rounded-xl transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span class="">Add</span>
+</button>
+</header>
+<!-- Main Content Canvas (20px horizontal padding) -->
+<main class="flex-1 px-gutter pt-space-lg space-y-space-xl">
+<!-- 1. Total Monthly Commitment Card -->
+<section class="bg-surface-container-lowest rounded-[20px] p-space-lg feature-shadow">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="text-label-xs font-label-xs text-secondary tracking-wider">TOTAL MONTHLY COMMITMENTS</span>
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-low text-primary">
+<span class="material-symbols-outlined text-[15px]" data-icon="event_repeat">event_repeat</span>
+</span>
+</div>
+<div class="mt-1 flex items-baseline gap-1.5">
+<span class="text-[30px] font-bold text-on-surface tracking-tight leading-9">₱2,840.00</span>
+<span class="text-body-sm font-body-sm text-secondary">/ mo</span>
+</div>
+<div class="mt-space-md pt-space-md flex items-center justify-between">
+<div class="flex items-center gap-2">
+
+<span class="text-body-sm font-body-sm text-on-surface">Next 7 Days Due: <strong class="font-semibold text-on-surface">₱788.00</strong></span>
+</div>
+<span class="text-label-xs font-label-xs bg-surface-container-low text-secondary px-2 py-0.5 rounded-full">2 recurring</span>
+</div>
+</section>
+<!-- 2. Upcoming Bills (Next 7 Days) Section -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Upcoming Bills</h2>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-label-xs font-label-xs bg-surface-container-low text-secondary font-medium">Next 7 Days</span>
+</div>
+<div class="space-y-2.5">
+<!-- Card: Netflix Standard -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md card-shadow flex items-center justify-between transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="movie">movie</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Netflix Standard</p>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="text-label-xs font-label-xs font-semibold text-secondary">Due Oct 27 (in 3 days)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-body-sm font-body-sm text-secondary">BDO •••• 4821</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<p class="text-body-md font-bold text-on-surface">-₱549.00</p>
+<p class="text-label-xs font-label-xs text-secondary">/ month</p>
+</div>
+</div>
+<!-- Card: Spotify Premium -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-md card-shadow flex items-center justify-between transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="music_note">music_note</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Spotify Premium</p>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="text-label-xs font-label-xs text-secondary font-medium">Due Oct 30 (in 6 days)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-body-sm font-body-sm text-secondary">GCash Personal</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<p class="text-body-md font-bold text-on-surface">-₱239.00</p>
+<p class="text-label-xs font-label-xs text-secondary">/ month</p>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Active Subscriptions & Utilities Section -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Active Subscriptions &amp; Utilities</h2>
+<span class="text-label-sm font-label-sm text-secondary">4 active</span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl card-shadow overflow-hidden">
+<!-- Item: Meralco Electric -->
+<div class="p-space-md flex items-center justify-between hover:bg-surface-container-low/40 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="bolt">bolt</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Meralco Electric</p>
+<p class="text-body-sm font-body-sm text-secondary">Monthly · Due Nov 15</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-on-surface">~₱3,800.00</p>
+<span class="text-label-xs font-label-xs text-secondary">Estimated</span>
+</div>
+</div>
+<!-- Item: Manila Water -->
+<div class="p-space-md flex items-center justify-between hover:bg-surface-container-low/40 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="water_drop">water_drop</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Manila Water</p>
+<p class="text-body-sm font-body-sm text-secondary">Monthly · Due Nov 18</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-on-surface">-₱650.00</p>
+<span class="text-label-xs font-label-xs text-secondary">Scheduled</span>
+</div>
+</div>
+<!-- Item: iCloud+ 200GB -->
+<div class="p-space-md flex items-center justify-between hover:bg-surface-container-low/40 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="cloud">cloud</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">iCloud+ 200GB</p>
+<p class="text-body-sm font-body-sm text-secondary">Auto-renews Nov 5</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-on-surface">-₱149.00</p>
+<span class="text-label-xs font-label-xs text-secondary">/ mo</span>
+</div>
+</div>
+<!-- Item: Google One -->
+<div class="p-space-md flex items-center justify-between hover:bg-surface-container-low/40 transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="storage">storage</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Google One</p>
+<p class="text-body-sm font-body-sm text-secondary">Auto-renews Nov 12</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-body-md font-bold text-on-surface">-₱89.00</p>
+<span class="text-label-xs font-label-xs text-secondary">/ mo</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. Annual & Quarterly Commitments Section -->
+<section class="space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Annual &amp; Long-Term Commitments</h2>
+<span class="text-label-xs font-label-xs text-secondary bg-surface-container px-2 py-0.5 rounded-full">Amortized</span>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-space-md card-shadow flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]" data-icon="palette">palette</span>
+</div>
+<div>
+<p class="text-body-md font-headline-sm text-on-surface">Canva Pro Annual</p>
+<p class="text-body-sm font-body-sm text-secondary">Renews Feb 2025</p>
+<p class="text-label-xs font-label-xs text-primary font-medium mt-0.5">~₱207.50 / mo equivalent</p>
+</div>
+</div>
+<div class="text-right shrink-0">
+<p class="text-body-md font-bold text-on-surface">-₱2,490.00</p>
+<p class="text-label-xs font-label-xs text-secondary">/ year</p>
+</div>
+</div>
+</section>
+<!-- 5. Renewal Protection Informational Card -->
+<section class="rounded-2xl p-4 bg-[#F3F4F6] flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-primary shrink-0 shadow-sm mt-0.5">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span>
+</div>
+<div class="space-y-1">
+<h3 class="text-body-md font-semibold text-on-surface">Renewal Protection Active</h3>
+<p class="text-body-sm font-body-sm text-secondary leading-relaxed">
+            Track renewal dates and avoid surprise charges. PesoFlow alerts you 48 hours before auto-debits execute.
+          </p>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Docked full-width bottom shell adhering to Shared Components JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-around h-16 px-space-md bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
+<!-- Destination: Home -->
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant gap-space-xs hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</button>
+<!-- Destination: Transactions -->
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant gap-space-xs hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="receipt_long">receipt_long</span>
+<span class="text-label-sm font-label-sm">Transactions</span>
+</button>
+<!-- Destination: Add -->
+<button class="flex flex-col items-center justify-center -mt-3 active:scale-95 transition-transform duration-150" type="button">
+<div class="w-11 h-11 rounded-full bg-primary-container text-white flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[24px]" data-icon="add">add</span>
+</div>
+<span class="text-label-sm font-label-sm text-outline dark:text-outline-variant mt-0.5">Add</span>
+</button>
+<!-- Destination: Analytics -->
+<button class="flex flex-col items-center justify-center text-outline dark:text-outline-variant gap-space-xs hover:text-primary dark:hover:text-inverse-primary transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="insights">insights</span>
+<span class="text-label-sm font-label-sm">Analytics</span>
+</button>
+<!-- Destination: Budgets (Active semantic tab for recurring commitments / planned financial ledger) -->
+<button class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary gap-space-xs active:scale-95 transition-transform duration-150" type="button">
+<span class="material-symbols-outlined text-[22px]" data-icon="account_balance_wallet" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="text-label-sm font-label-sm font-semibold">Budgets</span>
+</button>
+</nav>
+</div>
+
+
+
+
+
+
+</body></html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html><html class="h-full" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>PesoFlow - All Accounts &amp; Wallets</title>
+<!-- Inter Google Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-tint": "#0053db",
+            "surface-bright": "#f9f9ff",
+            "on-surface": "#151c27",
+            "on-tertiary-fixed": "#360f00",
+            "tertiary-fixed": "#ffdbcd",
+            "on-tertiary-fixed-variant": "#7d2d00",
+            "primary-fixed-dim": "#b4c5ff",
+            "outline-variant": "#c3c6d7",
+            "secondary-container": "#d9dff5",
+            "surface-container-high": "#e2e8f8",
+            "on-primary-fixed": "#00174b",
+            "surface-variant": "#dce2f3",
+            "background": "#f9f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#dce2f3",
+            "surface": "#f9f9ff",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#141b2b",
+            "surface-container": "#e7eefe",
+            "on-background": "#151c27",
+            "on-primary-fixed-variant": "#003ea8",
+            "inverse-surface": "#2a313d",
+            "on-secondary-container": "#5c6274",
+            "on-error-container": "#93000a",
+            "primary-container": "#2563eb",
+            "tertiary-container": "#bc4800",
+            "inverse-primary": "#b4c5ff",
+            "tertiary": "#943700",
+            "on-primary-container": "#eeefff",
+            "on-tertiary": "#ffffff",
+            "secondary": "#575e70",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "inverse-on-surface": "#ebf1ff",
+            "surface-container-low": "#f0f3ff",
+            "on-secondary-fixed-variant": "#404758",
+            "error": "#ba1a1a",
+            "primary-fixed": "#dbe1ff",
+            "outline": "#737686",
+            "error-container": "#ffdad6",
+            "on-tertiary-container": "#ffede6",
+            "on-surface-variant": "#434655",
+            "primary": "#004ac6",
+            "secondary-fixed": "#dce2f7",
+            "tertiary-fixed-dim": "#ffb596",
+            "surface-dim": "#d3daea",
+            "secondary-fixed-dim": "#c0c6db"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-desktop": "1.5rem",
+            "space-lg": "1.25rem",
+            "margin": "1rem",
+            "gutter": "1rem",
+            "margin-desktop": "2rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "display-lg-mobile": ["Inter"],
+            "label-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "body-md": ["Inter"],
+            "currency-card": ["Inter"],
+            "headline-lg": ["Inter"],
+            "currency-display": ["Inter"],
+            "label-sm": ["Inter"],
+            "currency-row": ["Inter"],
+            "body-lg": ["Inter"],
+            "display-lg": ["Inter"]
+          },
+          "fontSize": {
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["13px", { "lineHeight": "18px", "fontWeight": "500" }],
+            "headline-md": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "currency-card": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "currency-display": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+            "currency-row": ["15px", { "lineHeight": "20px", "fontWeight": "600" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-full font-body-md text-body-md flex flex-col justify-between selection:bg-primary selection:text-on-primary">
+<!-- Mobile Outer Shell Container (Capped for precision mobile-first UX) -->
+<div class="relative w-full max-w-md mx-auto min-h-screen bg-surface flex flex-col pb-24 shadow-sm border-x">
+<!-- Secondary Top App Bar (56px) with clean boundary -->
+<header class="sticky top-0 z-40 bg-surface-container-lowest/95 backdrop-blur-md border-b flex items-center justify-between h-14 px-margin transition-colors">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface tracking-tight">All Accounts</h1>
+</div>
+</div>
+<!-- Secondary Add Account Action -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-primary font-label-md text-label-md border active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span class="">Add Account</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin pt-space-md space-y-space-lg">
+<!-- Subheader / Visibility Controller Bar -->
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="font-label-md text-label-md">Transactions-based ledger</span>
+<span class="material-symbols-outlined text-[15px] cursor-help text-outline" title="Actual balances may reflect cleared entries only">info</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-secondary" id="visibilityLabel">Show balance</span>
+<button aria-checked="true" class="w-9 h-5 bg-primary-container rounded-full relative transition-colors duration-200 focus:outline-none" id="toggleBalanceBtn" role="switch" type="button">
+<span class="block w-3.5 h-3.5 bg-white rounded-full shadow-sm transform translate-x-4 transition-transform duration-200" id="switchKnob"></span>
+</button>
+</div>
+</div>
+<!-- Overview Metric Cards (Bento-styled segregated balance readout) -->
+<section aria-label="Account Balances Overview" class="grid grid-cols-2 gap-space-sm">
+<!-- Liquid Tracked Balance -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between">
+<div class="flex items-center justify-between text-secondary mb-1">
+<span class="font-label-sm text-label-sm tracking-wide text-on-surface-variant">Tracked Balance</span>
+<span class="material-symbols-outlined text-[16px] text-outline">account_balance</span>
+</div>
+<div class="mt-1">
+<p class="font-currency-card text-currency-card text-on-surface tabular-nums tracking-tight balance-display" data-value="₱84,250.00">₱84,250.00</p>
+<span class="inline-block mt-1 font-label-sm text-[10px] text-primary bg-primary-fixed/40 px-1.5 py-0.5 rounded font-medium">6 Liquid Sources</span>
+</div>
+</div>
+<!-- Segregated Available Credit -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] flex flex-col justify-between">
+<div class="flex items-center justify-between text-secondary mb-1">
+<span class="font-label-sm text-label-sm tracking-wide text-on-surface-variant">Available Credit</span>
+<span class="material-symbols-outlined text-[16px] text-outline">credit_card</span>
+</div>
+<div class="mt-1">
+<p class="font-currency-card text-currency-card text-on-surface tabular-nums tracking-tight balance-display" data-value="₱65,000.00">₱65,000.00</p>
+<span class="inline-block mt-1 font-label-sm text-[10px] text-secondary bg-surface-container px-1.5 py-0.5 rounded font-medium">Segregated Outflow</span>
+</div>
+</div>
+</section>
+<!-- Category 1: Bank Accounts -->
+<section aria-labelledby="heading-bank-accounts" class="space-y-space-sm"><div class="flex items-center justify-between px-1"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-primary-fixed/40 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[18px]">account_balance</span></div><h2 class="font-headline-md text-headline-md font-semibold text-on-surface tracking-tight" id="heading-bank-accounts">Bank Accounts</h2></div><span class="font-label-sm text-label-sm px-2.5 py-0.5 bg-surface-container-high rounded-full text-secondary font-medium">3 active</span></div><div class="space-y-2.5"><div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors duration-150 group cursor-pointer flex items-center justify-between"><div class="flex items-center gap-3.5"><div class="w-11 h-11 rounded-xl bg-primary flex items-center justify-center font-bold text-on-primary tracking-wider text-xs shadow-sm">BDO</div><div><p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">BDO Network Bank</p><div class="flex items-center gap-2 mt-0.5"><span class="font-label-sm text-label-sm text-secondary">Savings •••• 4821</span></div></div></div><div class="text-right flex items-center gap-2.5"><div><span class="font-currency-row text-currency-row text-on-surface font-semibold tabular-nums balance-display" data-value="₱32,450.00">₱32,450.00</span></div><span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span></div></div><div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors duration-150 group cursor-pointer flex items-center justify-between"><div class="flex items-center gap-3.5"><div class="w-11 h-11 rounded-xl bg-error flex items-center justify-center font-bold text-on-error tracking-wider text-xs shadow-sm">BPI</div><div><p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">BPI Express Online</p><div class="flex items-center gap-2 mt-0.5"><span class="font-label-sm text-label-sm text-secondary">Savings •••• 9012</span></div></div></div><div class="text-right flex items-center gap-2.5"><div><span class="font-currency-row text-currency-row text-on-surface font-semibold tabular-nums balance-display" data-value="₱24,150.00">₱24,150.00</span></div><span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span></div></div><div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors duration-150 group cursor-pointer flex items-center justify-between"><div class="flex items-center gap-3.5"><div class="w-11 h-11 rounded-xl bg-secondary-container flex items-center justify-center font-bold text-on-secondary-fixed tracking-wider text-xs shadow-sm">TYME</div><div><p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">GoTyme Bank</p><div class="flex items-center gap-2 mt-0.5"><span class="font-label-sm text-label-sm text-secondary">Deposit •••• 3341</span></div></div></div><div class="text-right flex items-center gap-2.5"><div><span class="font-currency-row text-currency-row text-on-surface font-semibold tabular-nums balance-display" data-value="₱15,200.00">₱15,200.00</span></div><span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span></div></div></div></section>
+<!-- Category 2: E-Wallets -->
+<section aria-labelledby="heading-ewallets" class="space-y-space-sm"><div class="flex items-center justify-between px-1"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-lg bg-primary-fixed/40 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[18px]">account_balance_wallet</span></div><h2 class="font-headline-md text-headline-md font-semibold text-on-surface tracking-tight" id="heading-ewallets">E-Wallets</h2></div><span class="font-label-sm text-label-sm px-2.5 py-0.5 bg-surface-container-high rounded-full text-secondary font-medium">2 wallets</span></div><div class="space-y-2.5"><div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors duration-150 group cursor-pointer flex items-center justify-between"><div class="flex items-center gap-3.5"><div class="w-11 h-11 rounded-xl bg-primary-container flex items-center justify-center font-bold text-on-primary tracking-wider text-xs shadow-sm">GC</div><div><p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">GCash Personal</p><div class="flex items-center gap-2 mt-0.5"><span class="font-label-sm text-label-sm text-secondary">0917••••221</span><span class="inline-flex items-center gap-0.5 font-label-sm text-[10px] text-primary bg-primary-fixed/40 px-1.5 py-0.5 rounded font-medium"><span class="material-symbols-outlined text-[11px] fill">verified</span>Verified</span></div></div></div><div class="text-right flex items-center gap-2.5"><div><span class="font-currency-row text-currency-row text-on-surface font-semibold tabular-nums balance-display" data-value="₱11,450.00">₱11,450.00</span><p class="font-label-sm text-[10px] text-secondary">Available</p></div><span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span></div></div><div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors duration-150 group cursor-pointer flex items-center justify-between"><div class="flex items-center gap-3.5"><div class="w-11 h-11 rounded-xl bg-on-surface flex items-center justify-center font-bold text-surface-bright tracking-wider text-[11px] shadow-sm">MAYA</div><div><p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">Maya Personal</p><div class="flex items-center gap-2 mt-0.5"><span class="font-label-sm text-label-sm text-secondary">0918••••883</span><span class="inline-flex items-center font-label-sm text-[10px] text-secondary bg-surface-container px-1.5 py-0.5 rounded font-medium">Active</span></div></div></div><div class="text-right flex items-center gap-2.5"><div><span class="font-currency-row text-currency-row text-on-surface font-semibold tabular-nums balance-display" data-value="₱1,000.00">₱1,000.00</span><p class="font-label-sm text-[10px] text-secondary">Available</p></div><span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span></div></div></div></section>
+<!-- Category 3: Payment Cards (Tracked Limits) -->
+<section aria-labelledby="heading-payment-cards" class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">credit_card</span>
+<h2 class="font-headline-md text-headline-md text-on-surface" id="heading-payment-cards">Payment Cards (Tracked Limits)</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary">2 cards</span>
+</div>
+<div class="space-y-3">
+<!-- BDO Platinum Mastercard Tasteful Card Representation -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition-all group">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<!-- Authentic Mastercard Interlocking Circles Symbol -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-low border flex items-center justify-center">
+<div class="relative flex items-center justify-center w-6 h-4">
+<span class="w-3.5 h-3.5 rounded-full bg-error inline-block opacity-90"></span>
+<span class="w-3.5 h-3.5 rounded-full bg-tertiary-container inline-block -ml-1.5 opacity-90"></span>
+</div>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">BDO Platinum Mastercard</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Masked card •••• 4821</p>
+</div>
+</div>
+<!-- Available Limit Indicator -->
+<div class="text-right">
+<span class="block font-label-sm text-label-sm text-secondary">Available Limit</span>
+<span class="font-currency-row text-currency-row text-on-surface tabular-nums balance-display" data-value="₱65,000.00">₱65,000.00</span>
+</div>
+</div>
+<!-- Card Limit Progress bar -->
+<div class="mt-3 pt-3 border-t flex items-center justify-between">
+<div class="w-2/3">
+<div class="flex justify-between text-[11px] text-secondary font-label-sm mb-1">
+<span class="">Used: ₱35,000.00</span>
+<span class="">Limit: ₱100k</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<div class="pl-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 bg-primary-fixed/40 text-primary font-medium rounded">Active Cycle</span>
+</div>
+</div>
+</div>
+<!-- GoTyme Visa Debit Card -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] transition-all group flex items-center justify-between">
+<div class="flex items-center gap-3">
+<!-- Authentic Visa Wordmark representation -->
+<div class="w-10 h-10 rounded-lg bg-surface-container-low border flex items-center justify-center">
+<span class="font-display-lg text-[13px] font-bold italic tracking-tighter text-primary">VISA</span>
+</div>
+<div>
+<h3 class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">GoTyme Visa Debit Card</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Linked to GoTyme Deposit</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm px-2 py-1 rounded bg-surface-container text-on-surface-variant font-medium">Debit Mode</span>
+<span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Category 4: Cash & Offline Holdings -->
+<section aria-labelledby="heading-cash" class="space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">payments</span>
+<h2 class="font-headline-md text-headline-md text-on-surface" id="heading-cash">Cash &amp; Offline Holdings</h2>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 bg-surface-container rounded-full text-secondary">Manual</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-low border flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">wallet</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-semibold text-on-surface group-hover:text-primary transition-colors">Physical Cash Wallet</p>
+<p class="font-label-sm text-label-sm text-secondary mt-0.5">Manual on-hand cash log</p>
+</div>
+</div>
+<div class="text-right flex items-center gap-2">
+<div>
+<span class="font-currency-row text-currency-row text-on-surface tabular-nums balance-display" data-value="₱3,500.00">₱3,500.00</span>
+</div>
+<span class="material-symbols-outlined text-[18px] text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Trust Notice (Grounded & Functional ledger commitment) -->
+<aside aria-label="Security Notice" class="p-3.5 bg-surface-container-low rounded-xl flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5 flex-shrink-0">verified_user</span>
+<p class="font-label-md text-label-md text-on-surface-variant leading-relaxed">
+<strong class="font-semibold text-on-surface">Read-only expense tracking.</strong> PesoFlow never accesses banking credentials or transfers funds.
+        </p>
+</aside>
+</main>
+<!-- Bottom Navigation Bar (Shared Component strictly mapped to JSON & Guidelines) -->
+<nav aria-label="Global Navigation" class="fixed bottom-0 left-0 w-full z-50 flex items-center justify-around h-16 px-margin pb-safe max-w-md mx-auto bg-surface-container-lowest shadow-sm border-t">
+<!-- Home Tab -->
+<a class="flex flex-col items-center justify-center text-secondary gap-space-xs hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Transactions Tab -->
+<a class="flex flex-col items-center justify-center text-secondary gap-space-xs hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">receipt_long</span>
+<span class="font-label-sm text-label-sm">Transactions</span>
+</a>
+<!-- Add Expense Tab (Single Central Trigger) -->
+<a aria-label="Add transaction" class="flex flex-col items-center justify-center text-primary font-bold gap-space-xs hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<div class="w-10 h-10 -mt-3 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[24px]">add</span>
+</div>
+<span class="font-label-sm text-label-sm -mt-1 text-primary">Add</span>
+</a>
+<!-- Analytics Tab -->
+<a class="flex flex-col items-center justify-center text-secondary gap-space-xs hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px]">analytics</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+<!-- Budgets Tab (Active context for Accounts & Wallets balance control) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-primary font-bold gap-space-xs hover:text-primary transition-colors duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[22px] fill">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm font-semibold">Budgets</span>
+</a>
+</nav>
+</div>
+<!-- Interactive Scripts (Toggle Balance Privacy) -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const toggleBtn = document.getElementById('toggleBalanceBtn');
+      const knob = document.getElementById('switchKnob');
+      const label = document.getElementById('visibilityLabel');
+      const balances = document.querySelectorAll('.balance-display');
+      
+      let isVisible = true;
+
+      toggleBtn.addEventListener('click', () => {
+        isVisible = !isVisible;
+        toggleBtn.setAttribute('aria-checked', isVisible.toString());
+
+        if (isVisible) {
+          knob.classList.remove('translate-x-0.5');
+          knob.classList.add('translate-x-4');
+          toggleBtn.classList.remove('bg-outline-variant');
+          toggleBtn.classList.add('bg-primary-container');
+          label.textContent = 'Show balance';
+          
+          balances.forEach(el => {
+            el.textContent = el.getAttribute('data-value');
+          });
+        } else {
+          knob.classList.remove('translate-x-4');
+          knob.classList.add('translate-x-0.5');
+          toggleBtn.classList.remove('bg-primary-container');
+          toggleBtn.classList.add('bg-outline-variant');
+          label.textContent = 'Hide balance';
+
+          balances.forEach(el => {
+            el.textContent = '••••••';
+          });
+        }
+      });
+    });
+  </script>
+
+
+
+
+
+
+
+
+</body></html>

@@ -1,18 +1,18 @@
 ---
 name: Calm Financial Intelligence
 colors:
-  surface: '#FFFFFF'
-  surface-dim: '#d2d9f4'
-  surface-bright: '#faf8ff'
+  surface: '#f9f9ff'
+  surface-dim: '#d3daea'
+  surface-bright: '#f9f9ff'
   surface-container-lowest: '#ffffff'
-  surface-container-low: '#f2f3ff'
-  surface-container: '#eaedff'
-  surface-container-high: '#e2e7ff'
-  surface-container-highest: '#dae2fd'
-  on-surface: '#131b2e'
+  surface-container-low: '#f0f3ff'
+  surface-container: '#e7eefe'
+  surface-container-high: '#e2e8f8'
+  surface-container-highest: '#dce2f3'
+  on-surface: '#151c27'
   on-surface-variant: '#434655'
-  inverse-surface: '#283044'
-  inverse-on-surface: '#eef0ff'
+  inverse-surface: '#2a313d'
+  inverse-on-surface: '#ebf1ff'
   outline: '#737686'
   outline-variant: '#c3c6d7'
   surface-tint: '#0053db'
@@ -21,14 +21,14 @@ colors:
   primary-container: '#2563eb'
   on-primary-container: '#eeefff'
   inverse-primary: '#b4c5ff'
-  secondary: '#006a63'
+  secondary: '#575e70'
   on-secondary: '#ffffff'
-  secondary-container: '#99efe5'
-  on-secondary-container: '#006f67'
-  tertiary: '#6a1edb'
+  secondary-container: '#d9dff5'
+  on-secondary-container: '#5c6274'
+  tertiary: '#006329'
   on-tertiary: '#ffffff'
-  tertiary-container: '#8343f4'
-  on-tertiary-container: '#f7edff'
+  tertiary-container: '#007f36'
+  on-tertiary-container: '#c7ffca'
   error: '#ba1a1a'
   on-error: '#ffffff'
   error-container: '#ffdad6'
@@ -37,112 +37,95 @@ colors:
   primary-fixed-dim: '#b4c5ff'
   on-primary-fixed: '#00174b'
   on-primary-fixed-variant: '#003ea8'
-  secondary-fixed: '#9cf2e8'
-  secondary-fixed-dim: '#80d5cb'
-  on-secondary-fixed: '#00201d'
-  on-secondary-fixed-variant: '#00504a'
-  tertiary-fixed: '#eaddff'
-  tertiary-fixed-dim: '#d2bbff'
-  on-tertiary-fixed: '#25005a'
-  on-tertiary-fixed-variant: '#5a00c6'
-  background: '#faf8ff'
-  on-background: '#131b2e'
-  surface-variant: '#dae2fd'
-  primary-strong: '#1D4ED8'
-  primary-soft: '#DBEAFE'
-  secondary-soft: '#CCFBF1'
-  accent-soft: '#EDE9FE'
-  positive: '#16A34A'
-  positive-soft: '#DCFCE7'
-  warning: '#D97706'
-  warning-soft: '#FEF3C7'
-  danger: '#DC2626'
-  danger-soft: '#FEE2E2'
-  ink-secondary: '#475569'
-  ink-muted: '#64748B'
-  surface-subtle: '#F8FAFC'
-  surface-muted: '#F1F5F9'
-  border: '#E2E8F0'
-  border-strong: '#CBD5E1'
-  dark-surface: '#0B1220'
-  dark-surface-subtle: '#111827'
-  dark-surface-muted: '#1E293B'
-  dark-ink: '#F8FAFC'
-  dark-ink-secondary: '#CBD5E1'
-  dark-ink-muted: '#94A3B8'
-  dark-border: '#334155'
+  secondary-fixed: '#dce2f7'
+  secondary-fixed-dim: '#c0c6db'
+  on-secondary-fixed: '#141b2b'
+  on-secondary-fixed-variant: '#404758'
+  tertiary-fixed: '#7ffc97'
+  tertiary-fixed-dim: '#62df7d'
+  on-tertiary-fixed: '#002109'
+  on-tertiary-fixed-variant: '#005320'
+  background: '#f9f9ff'
+  on-background: '#151c27'
+  surface-variant: '#dce2f3'
 typography:
-  display:
+  headline-xl:
     fontFamily: Inter
-    fontSize: 34px
+    fontSize: 32px
     fontWeight: '700'
-    lineHeight: 38px
-    letterSpacing: -0.03em
+    lineHeight: 40px
+    letterSpacing: -0.02em
+  headline-xl-mobile:
+    fontFamily: Inter
+    fontSize: 26px
+    fontWeight: '700'
+    lineHeight: 34px
+    letterSpacing: -0.02em
   headline-lg:
     fontFamily: Inter
-    fontSize: 28px
-    fontWeight: '700'
+    fontSize: 24px
+    fontWeight: '600'
     lineHeight: 32px
-    letterSpacing: -0.025em
+    letterSpacing: -0.015em
   headline-md:
     fontFamily: Inter
-    fontSize: 22px
-    fontWeight: '700'
-    lineHeight: 26px
-    letterSpacing: -0.02em
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+    letterSpacing: -0.01em
   headline-sm:
     fontFamily: Inter
     fontSize: 18px
-    fontWeight: '650'
-    lineHeight: 22px
-    letterSpacing: -0.01em
-  numeric-xl:
+    fontWeight: '600'
+    lineHeight: 26px
+    letterSpacing: -0.005em
+  currency-display:
     fontFamily: Inter
-    fontSize: 32px
-    fontWeight: '750'
-    lineHeight: 32px
-    letterSpacing: -0.035em
-  numeric-lg:
-    fontFamily: Inter
-    fontSize: 24px
+    fontSize: 28px
     fontWeight: '700'
-    lineHeight: 24px
-    letterSpacing: -0.025em
-  numeric-md:
-    fontFamily: Inter
-    fontSize: 18px
-    fontWeight: '700'
-    lineHeight: 18px
+    lineHeight: 36px
     letterSpacing: -0.02em
+  currency-card:
+    fontFamily: Inter
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+    letterSpacing: -0.01em
   body-lg:
     fontFamily: Inter
     fontSize: 16px
-    fontWeight: '450'
+    fontWeight: '400'
     lineHeight: 24px
     letterSpacing: 0em
   body-md:
     fontFamily: Inter
     fontSize: 14px
-    fontWeight: '450'
+    fontWeight: '400'
     lineHeight: 20px
     letterSpacing: 0em
   body-sm:
     fontFamily: Inter
-    fontSize: 12px
-    fontWeight: '450'
-    lineHeight: 17px
-    letterSpacing: 0em
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 18px
+    letterSpacing: 0.005em
   label-md:
     fontFamily: Inter
-    fontSize: 12px
-    fontWeight: '600'
-    lineHeight: 14px
-    letterSpacing: 0.01em
+    fontSize: 14px
+    fontWeight: '500'
+    lineHeight: 20px
+    letterSpacing: 0em
   label-sm:
+    fontFamily: Inter
+    fontSize: 12px
+    fontWeight: '500'
+    lineHeight: 16px
+    letterSpacing: 0.01em
+  label-xs:
     fontFamily: Inter
     fontSize: 11px
     fontWeight: '600'
-    lineHeight: 13px
+    lineHeight: 14px
     letterSpacing: 0.02em
 rounded:
   sm: 0.25rem
@@ -152,121 +135,126 @@ rounded:
   xl: 1.5rem
   full: 9999px
 spacing:
-  gutter: 1rem
-  gutter-sm: 0.75rem
-  margin: 1rem
-  margin-lg: 1.25rem
+  gutter: 1.25rem
+  gutter-tablet: 1.5rem
+  gutter-desktop: 2rem
+  margin: 1.25rem
+  margin-tablet: 2rem
+  margin-desktop: 3rem
   space-xs: 0.25rem
   space-sm: 0.5rem
-  space-md: 0.75rem
-  space-lg: 1rem
+  space-md: 1rem
+  space-lg: 1.25rem
   space-xl: 1.5rem
-  space-2xl: 2rem
-  space-3xl: 2.5rem
-  space-4xl: 3rem
 ---
 
 ## Brand & Style
 
-The design system is engineered around **Calm Financial Intelligence**—a synthesis of contemporary fintech, premium productivity tooling, and editorial clarity. The product serves individuals seeking control over their financial reality without shame, judgment, or algorithmic anxiety. 
+The design system establishes a focused, calm, and human-crafted financial workspace engineered specifically for personal expense tracking, ledger discipline, and budgeting intelligence. Unlike transactional consumer banks or aggressive retail lending apps that bombard users with promotional loan carousels, cashback marketing cards, and speculative crypto widgets, this design system embodies high-clarity utility.
 
-The emotional goal is straightforward: *"I understand my money now."*
-
-### Visual Movement & Aesthetic Position
-- **Movement:** Modern Corporate with High-Clarity Editorial Minimalist influences. It deliberately rejects the noisy visual paradigms of Web3 trading terminals, gamified micro-investing apps, neon glassmorphism, and cramped desktop SaaS dashboards adapted to mobile.
-- **Tone:** Unflappable, objective, supportive, and precise. Visual hierarchy is established via typographic weight and whitespace rather than aggressive decorative fills.
-- **Physical Feel:** Tactile, quiet, and deliberate. Structural components use soft geometry (10–18px radiuses), crisp hairline borders, and muted ambient drop-shadows that provide gentle surface lifting without theatrical depth.
-- **Ergonomics:** True mobile-first single-column orientation built strictly for one-handed thumb interaction within standard safe areas.
+The aesthetic philosophy merges **Modern Fintech Functionalism** with **Calm Tactile Minimalism**. Every screen prioritizes cognitive ease:
+- The interface acts as a quiet, trustworthy paper ledger brought into the digital age, stripping away marketing friction to let daily cashflow numbers speak with clarity.
+- Visual hierarchy is immediate: high-contrast dark slate ink against pristine white card surfaces, underpinned by an ultra-soft neutral ground that eliminates eye fatigue.
+- Primary engagement is intentional and precise—anchoring exclusively around a focused utility blue for transactional logging, categorical filtering, and budget tracking.
+- The emotional tone evokes control, serenity, and financial agency.
 
 ## Colors
 
-The color system delivers high cognitive legibility and emotional equilibrium. Tinting and semantic fills are strictly localized to badges, progress indicators, and icons; screens must never employ vast flood-fills of red, green, or bright primary blue.
+The color palette is purposefully disciplined, rejecting decorative rainbow gradients and saturated marketing accents in favor of functional financial utility.
 
-### Color Roles & Guidelines
-- **Primary (`#2563EB`)**: The central action anchor. Applied exclusively to primary interactive touchpoints, main calls to action, active navigation states, selected segmented filters, and links.
-- **Secondary (`#0F766E`)**: Represents financial stability, accumulated balance health, and structural momentum. Used in budget progress metrics and stable telemetry.
-- **Tertiary (`#7C3AED`)**: An intelligent productivity accent used sparingly for smart insights, automated receipt categorization highlights, and machine-learning suggestions.
-- **Neutral (`#0F172A`)**: The primary ink token for core typography, ensuring maximum contrast and legibility over light surfaces.
-- **Semantics**:
-  - `positive` (`#16A34A`) & `positive-soft` (`#DCFCE7`): Positive balance cash flow, income confirmations, and under-budget states.
-  - `warning` (`#D97706`) & `warning-soft` (`#FEF3C7`): Approaching limits, pending verification, and advisory pacing notices.
-  - `danger` (`#DC2626`) & `danger-soft` (`#FEE2E2`): Exceeded budget limits, critical sync failures, and irreversible destructive actions.
-- **Accessibility & Contrast**: Never communicate financial status purely through color. Every colored state must be accompanied by explicit text labels, directional glyphs (`↑`/`↓`), or percentage calculations.
-- **Dark Mode Strategy**: Built on deep obsidian navy (`dark-surface`: `#0B1220`) rather than pitch black (`#000000`) to prevent harsh eye strain, utilizing tiered midnight containers (`#111827`, `#1E293B`) and slate borders (`#334155`).
+### Palette Architecture
+- **Primary Interactive (`#2563EB`)**: Refined utility blue reserved strictly for actionable items—primary submit buttons, expense logging triggers, active tab indicators, and date-range highlights.
+- **Secondary / Ink Base (`#111827`)**: Deep slate ink delivering maximum typographic legibility for primary currency balances, account names, and structural headings.
+- **Tertiary / Inflow Positive (`#16A34A`)**: A balanced, restrained emerald used exclusively for incoming cashflow, income logs, and positive budget variance.
+- **Neutral Core (`#6B7280`)**: Neutral slate used for metadata, timestamps, category tags, and secondary row descriptions.
+
+### Surface, Border, and Feedback Tones
+- **Canvas Ground**: `#F7F8FA` — A soft, warm-neutral off-white that separates cleanly from foreground card modules without harsh glare.
+- **Surface Elevation**: `#FFFFFF` — Pure crisp white reserved for functional containers, ledger cards, transaction lists, and bottom sheets.
+- **Border & Hairline**: `#E5E7EB` — Crisp 1px structural outlines framing all cards, table rows, and input surfaces.
+- **Muted Supporting Text**: `#9CA3AF` — For placeholders, disabled counters, and subtle ledger hints.
+- **Pacing Alert (`#D97706`)**: Warm amber for budget thresholds approaching limits (e.g., 85%+ category spending).
+- **Critical / Overspending (`#DC2626`)**: Direct crimson for negative balances, over-budget line items, and transaction deletion confirmation.
 
 ## Typography
 
-The type system is powered entirely by **Inter**, selected for its neutral mechanical geometry, robust tracking tabular figures, and supreme legibility across dense financial representations.
+The typography uses Inter across all levels to optimize micro-legibility and structural numeric clarity.
 
-### Hierarchy & Numerical Rules
-- **PHP Currency Display**: All monetary amounts must feature locale-compliant formatting (`₱30,650.00` or condensed `₱30,650`). Currencies employ tabular lining figures (`font-variant-numeric: tabular-nums`) to ensure vertical alignment within transaction feeds and budget sheets.
-- **Visual Weight**: Numeric levels (`numeric-xl`, `numeric-lg`, `numeric-md`) are deliberately weighted heavier (700–750) than descriptive supporting labels (450–600). Financial numbers are the visual anchors of the interface; a user must comprehend the primary monetary figure in under 2 seconds.
-- **Composition Restraint**: Restrict each distinct module or list item to a maximum of two font weights. Never deploy display serif faces or thin weights (`<400`) for monetary values.
+### Numeric & Currency Formatting Rules
+- All numeric ledger values, account balances, and table cells must enforce tabular figures using CSS `font-variant-numeric: tabular-nums` or `font-feature-settings: "tnum" 1`. This aligns Philippine Peso currency amounts (`₱ 12,450.00`) cleanly across columnar layouts.
+- Currency symbols (`₱`) share the font weight and color of their numeric figures but must not scale beyond standard headline thresholds. Huge promotional font scales are strictly prohibited; balances emphasize confident, compact authority over marketing dramatization.
+
+### Hierarchy & Legibility
+- Section headers rely on `headline-md` and `headline-sm` with slight negative tracking (`-0.01em`) to maintain sharp editorial composure.
+- Secondary descriptions, transaction timestamps, and account types utilize `body-md` and `body-sm` rendered in `#6B7280`.
+- Category badges, table metadata, and status indicators strictly employ `label-sm` or `label-xs` with uppercase tracking (`0.02em`) for immediate scannability.
 
 ## Layout & Spacing
 
-Layout and spatial distribution follow a strict **8pt geometric scale** (with a single 4pt half-step for micro-alignment). 
+The design system implements a column-based fluid grid anchored to a strict **4px/8px incremental base unit**.
 
-### Layout Model
-- **Grid Structure**: 4-column fluid mobile grid with 16px (`1rem`) outer canvas margins and 16px gutters on viewports under 400px wide. For larger mobile screens (400px to 480px), canvas margins expand to 20px (`margin-lg`).
-- **One-Handed Ergonomic Reach**: Critical actions and navigation targets reside strictly in the lower two-thirds of the viewport ("Thumb Zone"). Secondary filters and navigational titles anchor the upper third.
-- **Whitespace Density**: Favor structural breathing space over micro-card partitioning. Group related metrics into cohesive container surfaces rather than fracturing the screen into isolated boxes.
+### Rhythm & Breakpoints
+- **Mobile (`< 640px`)**: Single-column layout with fixed `1.25rem` (20px) horizontal page margins. Inter-card vertical gap is set to `1rem` (16px), with a standard `1.5rem` (24px) vertical section rhythm separating major modules (e.g., Summary Cards to Transaction History).
+- **Tablet (`640px - 1024px`)**: 6-column grid with `1.5rem` (24px) gutters and margins. Expense metrics form a 2-up responsive row, while category charts sit alongside monthly budgets.
+- **Desktop (`> 1024px`)**: 12-column grid constrained to a maximum content container of `1200px`, using `2rem` (32px) gutters and `3rem` (48px) canvas margins. The ledger pane occupies 8 columns, while receipt previews, categorical drilldowns, and month-to-month analytics lock into a 4-column sticky sidebar.
+
+### Component Internal Density
+- Cards maintain `1.25rem` (20px) internal padding on desktop and tablet, flexing to `1rem` (16px) on compact mobile viewports.
+- List items within transactional ledgers maintain a consistent `0.75rem` (12px) vertical cell padding to preserve dense, information-rich scanning without feeling congested.
 
 ## Elevation & Depth
 
-Visual hierarchy uses physical-tactile proximity: crisp structural hairline borders combined with soft ambient light scattering. The interface avoids dramatic theatrical drops or heavy blur physics.
+Visual hierarchy is communicated through **tonal stacking, subtle low-contrast outlines, and whisper-soft ambient diffusion** rather than heavy drop shadows.
 
-### Tiers of Depth
-- **Level 0 (Flat / Canvas Ground)**: `#F8FAFC` (`surface-subtle`) in light mode; `#0B1220` in dark mode. No elevation.
-- **Level 1 (Subtle Cards & Containers)**: Default cards, list items, and summaries sitting on `#FFFFFF`.
-  - *Border*: 1px solid `#E2E8F0`
-  - *Shadow*: `0 1px 2px 0 rgba(15, 23, 42, 0.04)`
-- **Level 2 (Interactive Floating / Hero Cards)**: Active balance containers and interactive selection groups.
-  - *Border*: 1px solid `#CBD5E1`
-  - *Shadow*: `0 4px 16px 0 rgba(15, 23, 42, 0.06)`
-- **Level 3 (Elevated Drawers & Bottom Sheets)**: Overlays, contextual action panels, and category selectors.
-  - *Shadow*: `0 10px 30px 0 rgba(15, 23, 42, 0.10)`
-- **Level 4 (Modals & Alerts)**: Critical system confirmations and verification flows.
-  - *Shadow*: `0 20px 50px 0 rgba(15, 23, 42, 0.18)`
+### Elevation Levels
+- **Layer 0 (Canvas Base)**: `#F7F8FA` — Background canvas providing a restful foundational plane.
+- **Layer 1 (Card & Content Containers)**: `#FFFFFF` surface bordered by a crisp `1px solid #E5E7EB` stroke. Shadow is restrained to an ambient blur: `box-shadow: 0 1px 3px 0 rgba(17, 24, 39, 0.04), 0 1px 2px -1px rgba(17, 24, 39, 0.02)`.
+- **Layer 2 (Feature & Highlight Modules)**: For prime summary cards (e.g., Total Monthly Spend, Active Budget Progress), the card maintains a `#FFFFFF` fill with an elevated ambient diffusion: `box-shadow: 0 4px 6px -1px rgba(17, 24, 39, 0.05), 0 2px 4px -2px rgba(17, 24, 39, 0.03)` with a `1px solid #E5E7EB` perimeter.
+- **Layer 3 (Overlays, Modals, & Bottom Sheets)**: Expense logging dialogs, category selection pickers, and receipt OCR camera drawers rise with `box-shadow: 0 20px 25px -5px rgba(17, 24, 39, 0.08), 0 8px 10px -6px rgba(17, 24, 39, 0.04)`, framed with `#E5E7EB` borders.
+- **Layer 4 (Tooltips & Micro-popovers)**: Solid `#111827` dark slate popups with crisp white text, cast with zero colored aura.
+
+No neon highlights, multi-colored glow effects, or translucent frosted blurs are permitted on core data surfaces.
 
 ## Shapes
 
-The design system applies a disciplined, functional curvature scale to provide warmth while retaining mathematical rigor.
+The shape system balances modern mobile softness with the crisp precision demanded by corporate financial software.
 
-### Radius Scale Implementation
-- **6px (`xs`)**: Micro badges, notification dots, nested inner progress track caps.
-- **10px (`sm`)**: Form inputs, text buttons, segmented tab switches, and dropdown menus.
-- **14px (`md`)**: Standard transaction lists, budget rows, and secondary component containers.
-- **18px (`lg`)**: Primary hero cards, insight containers, and dashboard balance blocks.
-- **24px (`xl`)**: Bottom sheets, modal wrappers, and primary feature hero headers.
-- **Full (`999px`)**: Status chips, transaction icon backdrops, and active category tags only. Avoid using pill forms for full-width structural cards.
+### Geometric Rules
+- **Standard Cards**: Governed by `rounded-lg` (16px radius), creating approachable yet neatly structured container blocks.
+- **Feature & Hero Cards**: Governed by `rounded-xl` (20px radius) for prominent account summaries and cashflow overviews.
+- **Interactive Controls (Buttons & Text Fields)**: Uses an exact radius between 10px and 12px (specifying standard `rounded-md` / 10px on mobile and 12px on desktop) to ensure interactive elements feel distinctly clickable without turning into playful pill shapes.
+- **Badges, Status Chips, & Toggle Switches**: Pill-shaped (`rounded-full` / 9999px) for atomic, compact metadata labeling.
+- **Modal Windows & Bottom Sheets**: Top corners are curved at 20px to 24px (`rounded-t-2xl`) for natural thumb-driven drag dismissals on mobile devices.
 
 ## Components
 
 ### Buttons
-- **Primary**: Solid `#2563EB` background with `#FFFFFF` text. Minimum touch height of 48px (52px on core mobile submit states), 12px horizontal padding, 10–14px radius (`sm`/`md`). Tap transitions resolve within 150ms (`ease-out`).
-- **Secondary**: Light tonal surface (`#F1F5F9`) or 1px border (`#E2E8F0`) with `#0F172A` text.
-- **Destructive**: Reserved for irrecoverable actions (e.g., disconnecting an account or removing a transaction record). Inset background `#FEE2E2` with `#DC2626` text, or outline variant.
+- **Primary Button**: Solid `#2563EB` fill, `#FFFFFF` text, 10–12px radius, font weight 600. Active state shifts to `#1D4ED8`. Strictly used for primary logging flows ("Add Expense", "Save Budget", "Confirm Entry").
+- **Secondary / Outline Button**: `#FFFFFF` fill with a `1px solid #E5E7EB` border, text `#111827`, font weight 500. Hover state shifts background to `#F9FAFB`. Used for "Export CSV", "Filter", or "Cancel".
+- **Ghost Button**: Transparent fill, text `#6B7280`, hover background `#F3F4F6`. Used for auxiliary toolbar actions and secondary pagination.
 
-### Input Fields & Monetary Keying
-- **Default Input**: 48px height, 10px corner radius, 1px border (`#E2E8F0`), background `#FFFFFF`. Active focus state receives a 1px `#2563EB` border with a 3px outer `#DBEAFE` halo.
-- **Monetary Amount Input**: Hero-level entry field. The currency sign (`₱`) is anchored at `24px` while the editable numeric string renders in `numeric-xl` (`32px` weight 750). Sub-labels explicitly detail source account and balance limits.
+### Expense Logging Inputs & Form Fields
+- **Amount Input Field**: Large tabular input featuring a fixed prefix `₱` in `#6B7280` followed by bold numeric entry in `#111827`. Background is `#FFFFFF` with a crisp `1px solid #E5E7EB` border and 12px radius. Focused state applies a sharp `2px` ring in `#2563EB` with zero external glow.
+- **Standard Text Fields & Dropdowns**: 44px minimum tap target height, 10px radius, `#FFFFFF` background, `#111827` value text, and `#9CA3AF` placeholders. Clear visual labels sit above input fields in `label-sm` (`#374151`).
 
-### Transaction Rows
-- Compact 64px row structure.
-- **Left**: 40px rounded icon container (`radius-full`) with categorical glyph.
-- **Center**: Primary merchant name in `body-md` (weight 600) with secondary category, account origin, and timestamp in `body-sm` (`#64748B`).
-- **Right**: Tabular numerical amount. Outflows: `-₱XX.XX` (`#0F172A`); Inflows: `+₱XX.XX` (`#16A34A`). 
-- **Transfers**: Neutral tone `₱XX.XX` accompanied by a distinct horizontal transition icon (`BDO → GCash`) to prevent transfer activity from reading as an operational expense.
+### Transaction Rows & List Views
+- **Layout**: Clean horizontal arrangement with category icon container (40x40px, 10px rounded corner, `#F3F4F6` background), transaction title in `body-md` bold (`#111827`), timestamp and account tag in `body-sm` (`#6B7280`).
+- **Right-Aligned Cashflow**: Tabular monetary figures. Expenses render in deep ink `#111827` (or negative marker `-₱450.00`). Inflows/income render strictly in `#16A34A` (`+₱25,000.00`).
+- **Dividers**: 1px hair-line border `#F3F4F6` between items; no heavy card packaging per single transaction item.
 
-### Budget Meters & Progress Tracks
-- Horizontal linear track (6–8px height), background `#F1F5F9` with rounded caps.
-- Fill uses `#2563EB` under standard bounds, shifts to `#D97706` when reaching 80–99%, and `#DC2626` when at or above 100%. 
-- Accompanied by descriptive text labels indicating current spending versus limit (`₱6,900 / ₱8,000`) and explicit remaining balance calculations.
+### Budget Progress Bar
+- **Track**: 6px height, pill-rounded, neutral background `#E5E7EB`.
+- **Indicator Fill**: Normal pacing under 80% renders in `#2563EB`; pacing between 80%–99% shifts to warning amber `#D97706`; over-budget (100%+) shifts to alert crimson `#DC2626`.
 
-### Financial Connection & Insight Cards
-- **Connection Card**: Displays institution logo/badge, masked account number, connection vitality status pill (e.g., "Active · Synced 5m ago"), and non-custodial read-only disclosures.
-- **Insight Card**: Editorial design with `#EDE9FE` accent accents, 18px radius, plain-English comparative narratives (e.g., *"You spent 18% more on Food than last month"*), avoiding aggressive alerts.
+### Chips & Filter Tabs
+- **Segmented Time Filters (Weekly / Monthly / Yearly)**: Compact container in `#F3F4F6` with 8px radius containing sliding or active chips in `#FFFFFF` with `box-shadow: 0 1px 2px rgba(0,0,0,0.05)`, text `#111827`, and inactive text `#6B7280`.
+- **Category Filter Chips**: 32px height, 1px solid `#E5E7EB`, text `label-sm` (`#4B5563`). When active: `#111827` fill with `#FFFFFF` text.
 
-### Bottom Navigation
-- Fixed 5-destination bar (Home, Transactions, Add, Analytics, Budgets) with 64px container height + device bottom safe-inset. Active tab uses `#2563EB` with an ambient micro-indicator; inactive icons use `#64748B`.
+### Account Overview Cards (Read-Only)
+- Pristine white card containers framed with 16px radius and 1px `#E5E7EB` borders.
+- Institution icon, masked identifier (`•••• 4166`), and balance shown in tabular numbers.
+- Strictly read-only: displays available balance and credit utilization without transfer, deposit, or wire-action buttons.
+
+### Receipt Scanner Drawer
+- Clean modal bottom sheet with camera frame view-finder bordered by clean 1px targeting guides.
+- Post-scan breakdown card immediately parses merchant, date, VAT/tax, and line items into editable fields before user confirmation.
