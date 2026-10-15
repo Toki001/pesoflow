@@ -3,10 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:pesoflow/app/theme/app_colors.dart';
-import 'package:pesoflow/features/notifications/presentation/widgets/notification_button.dart';
+import 'package:pesoflow/core/widgets/main_app_bar.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
-import 'package:pesoflow/core/widgets/status_badge.dart';
 
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
@@ -122,128 +121,23 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
       bottom: false,
       child: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: c.surface,
-              border: Border(bottom: BorderSide(color: c.border)),
-            ),
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: Column(
+          const MainAppBar('Budgets'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 16,
-                      backgroundColor: c.soft(c.primary, AppColors.primarySoft),
-                      child: Text(
-                        'PF',
-                        style: AppTypography.labelSmall.copyWith(
-                          color: c.primary,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'PesoFlow',
-                        style: AppTypography.headlineSmall,
-                      ),
-                    ),
-                    const NotificationButton(),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4, bottom: 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Semantics(
-                          button: true,
-                          label: 'Choose budget month',
-                          child: InkWell(
-                            onTap: pickPeriod,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Wrap(
-                                  spacing: 6,
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Budgets',
-                                      style: AppTypography.headlineLarge,
-                                    ),
-                                    StatusBadge(
-                                      period.year ==
-                                                  ref
-                                                      .read(clockProvider)()
-                                                      .year &&
-                                              period.month ==
-                                                  ref
-                                                      .read(clockProvider)()
-                                                      .month
-                                          ? 'Active'
-                                          : period.isBefore(
-                                              DateTime(
-                                                ref.read(clockProvider)().year,
-                                                ref.read(clockProvider)().month,
-                                              ),
-                                            )
-                                          ? 'Past'
-                                          : 'Upcoming',
-                                      foreground: c.primary,
-                                      background: c.soft(
-                                        c.primary,
-                                        AppColors.primarySoft,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 4),
-                                Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  spacing: 4,
-                                  children: [
-                                    Text(
-                                      '${DateFormat('MMMM yyyy').format(period)} ⌄',
-                                      style: AppTypography.labelMedium.copyWith(
-                                        color: c.mutedInk,
-                                      ),
-                                    ),
-                                    Text(
-                                      '•  ${plan?.daysLeft(ref.watch(clockProvider)()) ?? 0} days left',
-                                      style: AppTypography.bodySmall.copyWith(
-                                        color: c.mutedInk,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      FilledButton.icon(
-                        onPressed: plan == null
-                            ? null
-                            : () => showBudgetEditor(
-                                context,
-                                plan,
-                                creating: true,
-                              ),
-                        style: FilledButton.styleFrom(
-                          backgroundColor: c.primary,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          foregroundColor: c.isDark
-                              ? AppColors.darkSurface
-                              : Colors.white,
-                        ),
-                        icon: const Icon(Icons.add, size: 18),
-                        label: const Text('New'),
-                      ),
-                    ],
+                Expanded(
+                  child: TextButton(
+                    onPressed: pickPeriod,
+                    child: Text('${DateFormat('MMMM yyyy').format(period)} ⌄'),
                   ),
+                ),
+                TextButton.icon(
+                  onPressed: plan == null
+                      ? null
+                      : () => showBudgetEditor(context, plan, creating: true),
+                  icon: const Icon(Icons.add, size: 18),
+                  label: const Text('New'),
                 ),
               ],
             ),

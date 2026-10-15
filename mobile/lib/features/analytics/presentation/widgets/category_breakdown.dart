@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../../app/theme/app_colors.dart';
@@ -9,14 +11,7 @@ import '../../domain/analytics_report.dart';
 import 'analytics_controls.dart';
 
 Color categoryColor(AnalyticsCategory category, FinancePalette c) =>
-    switch (category) {
-      AnalyticsCategory.food => c.isDark ? c.primary : AppColors.primary,
-      AnalyticsCategory.shopping => c.secondary,
-      AnalyticsCategory.transport => c.warning,
-      AnalyticsCategory.bills => c.accent,
-      AnalyticsCategory.subscriptions => c.mutedInk,
-      AnalyticsCategory.other => c.strongBorder,
-    };
+    Color.lerp(c.primary, c.border, category.index / 7)!;
 
 class CategoryBreakdown extends StatelessWidget {
   const CategoryBreakdown(
@@ -37,7 +32,7 @@ class CategoryBreakdown extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AnalyticsHeading(
-            'Category Breakdown',
+            'Category Allocation',
             trailing: AnalyticsSegments<bool>(
               options: const {false: 'Amount', true: '%'},
               selected: percentage,
@@ -45,36 +40,48 @@ class CategoryBreakdown extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Semantics(
-            label:
-                'Category proportions. ${report.categories.map((a) => '${analyticsCategoryName(a.category)} ${a.share(report.totalExpense).toStringAsFixed(1)} percent').join(', ')}',
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(99),
-              child: SizedBox(
-                height: 12,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (report.positiveCategoryTotal == 0)
-                      Expanded(child: ColoredBox(color: c.mutedSurface))
-                    else
-                      for (final item in report.categories)
-                        if (item.amount > 0)
-                          Expanded(
-                            flex: item.amount,
-                            child: ColoredBox(
-                              color: categoryColor(item.category, c),
-                            ),
-                          ),
-                  ],
-                ),
+          Center(
+            child: SizedBox(
+              width: 180,
+              height: 180,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: _CategoryRing(report.categories, c),
+                    ),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'SPEND',
+                        style: AppTypography.labelSmall.copyWith(
+                          color: c.mutedInk,
+                        ),
+                      ),
+                      Text(
+                        MoneyFormatter.php(
+                          report.positiveCategoryTotal,
+                          decimals: false,
+                        ),
+                        style: AppTypography.numericMedium,
+                      ),
+                      Text(
+                        '${report.categories.where((a) => a.amount > 0).length} categories',
+                        style: AppTypography.bodySmall,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
           const SizedBox(height: 16),
           if (report.categories.any((item) => item.amount < 0)) ...[
             Text(
-              'Net category totals include refunds. The bar shows positive category spending.',
+              'Net category totals include refunds. The ring shows positive category spending.',
               style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
             ),
             const SizedBox(height: 12),
@@ -113,13 +120,6 @@ class _CategoryRow extends StatelessWidget {
       AnalyticsCategory.bills => Icons.receipt_long_outlined,
       AnalyticsCategory.subscriptions => Icons.subscriptions_outlined,
       AnalyticsCategory.other => Icons.more_horiz,
-    };
-    final soft = switch (item.category) {
-      AnalyticsCategory.food => AppColors.primarySoft,
-      AnalyticsCategory.shopping => AppColors.secondarySoft,
-      AnalyticsCategory.transport => AppColors.warningSoft,
-      AnalyticsCategory.bills => AppColors.accentSoft,
-      _ => AppColors.surfaceMuted,
     };
     final share = '${item.share(total).toStringAsFixed(1)}%';
     final trend = item.referenceTrend;
@@ -198,7 +198,7 @@ class _CategoryRow extends StatelessWidget {
               foreground: item.category == AnalyticsCategory.other
                   ? c.mutedInk
                   : foreground,
-              background: c.soft(foreground, soft),
+              background: c.primary.withValues(alpha: .08),
               size: 36,
               iconSize: 18,
             ),
@@ -243,4 +243,35 @@ class _CategoryRow extends StatelessWidget {
       },
     );
   }
+}
+
+class _CategoryRing extends CustomPainter {
+  _CategoryRing(this.categories, this.colors);
+  final List<AnalyticsCategoryTotal> categories;
+  final FinancePalette colors;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = (Offset.zero & size).deflate(24);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 16
+      ..color = colors.mutedSurface;
+    canvas.drawOval(rect, paint);
+    final total = categories.fold<int>(
+      0,
+      (sum, c) => sum + (c.amount > 0 ? c.amount : 0),
+    );
+    if (total == 0) return;
+    var start = -math.pi / 2;
+    for (final category in categories.where((c) => c.amount > 0)) {
+      final sweep = 2 * math.pi * category.amount / total;
+      paint.color = categoryColor(category.category, colors);
+      canvas.drawArc(rect, start, sweep, false, paint);
+      start += sweep;
+    }
+  }
+
+  @override
+  bool shouldRepaint(_CategoryRing old) =>
+      old.categories != categories || old.colors != colors;
 }

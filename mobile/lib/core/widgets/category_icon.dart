@@ -9,7 +9,7 @@ class CategoryIcon extends StatelessWidget {
     required this.background,
     this.size = 40,
     this.iconSize,
-    this.round = true,
+    this.round = false,
     super.key,
   });
   final IconData icon;

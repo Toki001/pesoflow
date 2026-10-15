@@ -12,6 +12,7 @@ class TaskScreen extends StatelessWidget {
     this.actions = const [],
     this.onClose,
     this.centerTitle = false,
+    this.titleWidget,
     this.footer,
     this.backIcon = Icons.close,
     this.backTooltip = 'Close',
@@ -19,6 +20,7 @@ class TaskScreen extends StatelessWidget {
     super.key,
   });
   final String title;
+  final Widget? titleWidget;
   final VoidCallback? onClose;
   final bool centerTitle;
   final Widget child;
@@ -60,13 +62,15 @@ class TaskScreen extends StatelessWidget {
                         icon: Icon(backIcon),
                       ),
                       Expanded(
-                        child: Text(
-                          title,
-                          textAlign: centerTitle
-                              ? TextAlign.center
-                              : TextAlign.start,
-                          style: AppTypography.headlineSmall,
-                        ),
+                        child:
+                            titleWidget ??
+                            Text(
+                              title,
+                              textAlign: centerTitle
+                                  ? TextAlign.center
+                                  : TextAlign.start,
+                              style: AppTypography.headlineSmall,
+                            ),
                       ),
                       ...actions,
                     ],

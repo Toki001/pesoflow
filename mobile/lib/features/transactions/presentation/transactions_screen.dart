@@ -1,3 +1,7 @@
+import 'package:pesoflow/core/widgets/main_app_bar.dart';
+
+import 'export_transactions.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -123,44 +127,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
       bottom: false,
       child: Column(
         children: [
-          Container(
-            color: c.surface,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Transactions',
-                    style: AppTypography.headlineMedium,
-                  ),
-                ),
-                IconButton(
-                  tooltip: 'Filter date range',
-                  onPressed: pickMonth,
-                  icon: const Icon(Icons.calendar_month_outlined),
-                ),
-                IconButton(
-                  tooltip: 'Export options',
-                  onPressed: () => showDialog<void>(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Transaction export'),
-                      content: const Text(
-                        'File export is not available yet. Your transactions are saved on this device.',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Close'),
-                        ),
-                      ],
-                    ),
-                  ),
-                  icon: const Icon(Icons.ios_share_outlined),
-                ),
-              ],
-            ),
-          ),
+          const MainAppBar('Transactions'),
           Expanded(
             child: ref
                 .watch(transactionsProvider)
@@ -237,50 +204,62 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                   ),
                                 ],
                               ),
-                              Divider(color: c.border),
                               const SizedBox(height: 8),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Net Cash Flow',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: c.mutedInk,
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  MoneyFormatter.php(
+                                    income - spent,
+                                    signed: true,
+                                  ),
+                                  style: AppTypography.numericXL,
+                                ),
+                              ),
+                              const SizedBox(height: 16),
                               Row(
+                                spacing: 12,
                                 children: [
-                                  for (final (label, amount, color, signed) in [
-                                    ('Spent', spent, c.ink, false),
-                                    ('Income', income, c.positive, false),
-                                    (
-                                      'Net Flow',
-                                      income - spent,
-                                      c.primary,
-                                      true,
-                                    ),
+                                  for (final (label, amount, color) in [
+                                    ('Inflow', income, c.positive),
+                                    ('Outflow', -spent, c.ink),
                                   ])
                                     Expanded(
                                       child: Container(
+                                        padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          border: label == 'Net Flow'
-                                              ? null
-                                              : Border(
-                                                  right: BorderSide(
-                                                    color: c.border,
-                                                  ),
-                                                ),
+                                          color: c.primary.withValues(
+                                            alpha: .06,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
                                         ),
                                         child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               label,
-                                              style: AppTypography.labelSmall
+                                              style: AppTypography.bodySmall
                                                   .copyWith(color: c.mutedInk),
                                             ),
                                             const SizedBox(height: 4),
-                                            FittedBox(
-                                              child: Text(
-                                                MoneyFormatter.php(
-                                                  amount,
-                                                  decimals: false,
-                                                  signed: signed,
-                                                ),
-                                                style: AppTypography
-                                                    .numericMedium
-                                                    .copyWith(color: color),
+                                            Text(
+                                              MoneyFormatter.php(
+                                                amount,
+                                                signed: true,
                                               ),
+                                              style: AppTypography.merchant
+                                                  .copyWith(color: color),
                                             ),
                                           ],
                                         ),
@@ -349,7 +328,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                       query.accountId,
                                       ref.watch(ledgerProvider),
                                     ) ??
-                                    'Accounts (GCash, BDO, Maya)',
+                                    'Accounts',
                                 selected: query.accountId != null,
                                 onTap: () => chooseFilter(account: true),
                               ),
@@ -413,9 +392,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                     color: c.secondaryInk,
                                   ),
                                 ),
-                                if (entry.key.day >= 23)
+                                if (entry.value.isNotEmpty)
                                   Text(
-                                    'Total: ${MoneyFormatter.php(entry.value.fold(0, (sum, t) => sum + t.cashFlowImpact), signed: true)}',
+                                    '${entry.value.length} records',
                                     style: AppTypography.labelSmall.copyWith(
                                       color: c.mutedInk,
                                     ),
@@ -438,6 +417,21 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           ),
                           const SizedBox(height: 20),
                         ],
+                        FinanceCard(
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(
+                              Icons.description_outlined,
+                              color: c.primary,
+                            ),
+                            title: const Text('Transaction report'),
+                            subtitle: const Text(
+                              'Export all saved records as CSV',
+                            ),
+                            onTap: () => exportTransactions(context, ref),
+                            trailing: const Icon(Icons.file_download_outlined),
+                          ),
+                        ),
                       ],
                     );
                   },

@@ -31,7 +31,10 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
       opening,
       institution,
       lastDigits,
-      notes;
+      notes,
+      creditLimit,
+      cardDigits;
+  String cardNetwork = '';
   late AccountType type;
   bool saving = false;
   String? error;
@@ -50,12 +53,27 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
       text: account?.maskedIdentifier.replaceAll(RegExp(r'[^0-9]'), '') ?? '',
     );
     notes = TextEditingController(text: account?.notes ?? '');
+    creditLimit = TextEditingController(
+      text: account?.creditLimit == null
+          ? ''
+          : (account!.creditLimit! / 100).toStringAsFixed(2),
+    );
+    cardDigits = TextEditingController(text: account?.cardLastFour ?? '');
+    cardNetwork = account?.cardNetwork ?? '';
     type = account?.type ?? AccountType.cash;
   }
 
   @override
   void dispose() {
-    for (final c in [name, opening, institution, lastDigits, notes]) {
+    for (final c in [
+      name,
+      opening,
+      institution,
+      lastDigits,
+      notes,
+      creditLimit,
+      cardDigits,
+    ]) {
       c.dispose();
     }
     super.dispose();
@@ -82,6 +100,11 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
             ? ''
             : '•••• ${lastDigits.text.trim()}',
         archived: existing?.archived ?? false,
+        creditLimit: type == AccountType.credit && creditLimit.text.isNotEmpty
+            ? parseStartingBalance(creditLimit.text)
+            : null,
+        cardNetwork: cardNetwork,
+        cardLastFour: cardDigits.text,
       );
       await ref.read(financeControllerProvider.notifier).saveAccount(account);
       if (mounted) Navigator.pop(context);
@@ -217,6 +240,62 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
                         ? 'Enter only the last four digits.'
                         : null,
                   ),
+                  const SizedBox(height: 16),
+                  if (type == AccountType.credit)
+                    TextFormField(
+                      controller: creditLimit,
+                      decoration: const InputDecoration(
+                        labelText: 'Credit limit (optional)',
+                        helperText: 'Tracked separately from cash balances.',
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (v) =>
+                          v!.isNotEmpty &&
+                              (parseStartingBalance(v) == null ||
+                                  parseStartingBalance(v)! < 0)
+                          ? 'Enter a non-negative limit.'
+                          : null,
+                    ),
+                  if (type == AccountType.bank ||
+                      type == AccountType.savings ||
+                      type == AccountType.credit) ...[
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      initialValue: cardNetwork,
+                      decoration: const InputDecoration(
+                        labelText: 'Card network (optional)',
+                      ),
+                      items: [
+                        for (final network in [
+                          '',
+                          'Visa',
+                          'Mastercard',
+                          'Other',
+                        ])
+                          DropdownMenuItem(
+                            value: network,
+                            child: Text(network.isEmpty ? 'No card' : network),
+                          ),
+                      ],
+                      onChanged: (v) => setState(() => cardNetwork = v ?? ''),
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: cardDigits,
+                      maxLength: 4,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: 'Card last four digits (optional)',
+                        helperText: 'Debit cards use this account balance; no separate balance.',
+                      ),
+                      validator: (v) =>
+                          v!.isNotEmpty && !RegExp(r'^\d{4}$').hasMatch(v)
+                          ? 'Enter four digits only.'
+                          : null,
+                    ),
+                  ],
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: notes,

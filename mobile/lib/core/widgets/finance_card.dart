@@ -8,7 +8,7 @@ import '../../app/theme/app_spacing.dart';
 class FinanceCard extends StatelessWidget {
   const FinanceCard({
     required this.child,
-    this.padding = const EdgeInsets.all(AppSpacing.sm),
+    this.padding = const EdgeInsets.all(AppSpacing.md),
     this.hero = false,
     this.radius = AppRadius.homeCard,
     this.color,
@@ -36,6 +36,6 @@ class FinanceCard extends StatelessWidget {
           ? null
           : (hero ? AppShadows.card : AppShadows.subtle),
     ),
-    child: child,
+    child: Material(type: MaterialType.transparency, child: child),
   );
 }

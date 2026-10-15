@@ -14,6 +14,9 @@ class FinancialAccount {
     required this.startingBalance,
     required this.currency,
     required this.createdAt,
+    this.creditLimit,
+    this.cardNetwork = '',
+    this.cardLastFour = '',
     this.institution = '',
     this.maskedIdentifier = '',
     this.notes = '',
@@ -23,7 +26,14 @@ class FinancialAccount {
     this.reportedBalance,
     this.reportedAt,
   }) {
-    if (id.trim().isEmpty ||
+    if ((creditLimit != null &&
+            (type != AccountType.credit ||
+                creditLimit! < 0 ||
+                creditLimit! > maxMoney)) ||
+        !['', 'Visa', 'Mastercard', 'Other'].contains(cardNetwork) ||
+        (cardLastFour.isNotEmpty &&
+            !RegExp(r'^\d{4}$').hasMatch(cardLastFour)) ||
+        id.trim().isEmpty ||
         name.trim().isEmpty ||
         name.length > 80 ||
         startingBalance.abs() > maxMoney ||
@@ -50,6 +60,8 @@ class FinancialAccount {
   final String id, name, currency, institution, maskedIdentifier, notes;
   final AccountType type;
   final int startingBalance;
+  final int? creditLimit;
+  final String cardNetwork, cardLastFour;
   final DateTime createdAt;
   final bool archived;
   final BalanceSource source;
@@ -58,6 +70,9 @@ class FinancialAccount {
   final DateTime? reportedAt;
 
   FinancialAccount copyWith({
+    int? creditLimit,
+    String? cardNetwork,
+    String? cardLastFour,
     String? name,
     AccountType? type,
     int? startingBalance,
@@ -68,6 +83,11 @@ class FinancialAccount {
   }) => FinancialAccount(
     id: id,
     name: name ?? this.name,
+    creditLimit: (type ?? this.type) == AccountType.credit
+        ? creditLimit ?? this.creditLimit
+        : null,
+    cardNetwork: cardNetwork ?? this.cardNetwork,
+    cardLastFour: cardLastFour ?? this.cardLastFour,
     type: type ?? this.type,
     startingBalance: startingBalance ?? this.startingBalance,
     currency: currency,
@@ -83,6 +103,9 @@ class FinancialAccount {
   );
 
   Json toJson() => {
+    'creditLimit': creditLimit,
+    'cardNetwork': cardNetwork,
+    'cardLastFour': cardLastFour,
     'id': id,
     'name': name,
     'type': type.name,
@@ -100,6 +123,11 @@ class FinancialAccount {
   };
 
   factory FinancialAccount.fromJson(Json json) => FinancialAccount(
+    creditLimit: json['creditLimit'] == null
+        ? null
+        : jsonInt(json, 'creditLimit', min: 0),
+    cardNetwork: json['cardNetwork'] as String? ?? '',
+    cardLastFour: json['cardLastFour'] as String? ?? '',
     id: jsonString(json, 'id'),
     name: jsonString(json, 'name', max: 80),
     type: AccountType.values.byName(json['type'] as String),

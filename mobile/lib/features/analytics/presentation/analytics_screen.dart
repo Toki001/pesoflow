@@ -1,10 +1,13 @@
 import 'package:pesoflow/core/time/clock.dart';
+
+import 'widgets/payment_sources.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import 'package:pesoflow/app/theme/app_colors.dart';
-import 'package:pesoflow/features/notifications/presentation/widgets/notification_button.dart';
+import 'package:pesoflow/core/widgets/main_app_bar.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/formatting/money_formatter.dart';
 import 'package:pesoflow/core/widgets/category_icon.dart';
@@ -114,85 +117,22 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       bottom: false,
       child: Column(
         children: [
-          Container(
+          const MainAppBar('Analytics'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: periodControl,
+          ),
+          Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: c.surface,
-              border: Border(bottom: BorderSide(color: c.border)),
-            ),
-            child: Column(
+            child: Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 16,
-                        backgroundColor: c.soft(
-                          c.primary,
-                          AppColors.primarySoft,
-                        ),
-                        child: Text(
-                          'PF',
-                          style: AppTypography.labelSmall.copyWith(
-                            color: c.primary,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Analytics',
-                          style: AppTypography.headlineSmall,
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: 'Share Analytics',
-                        onPressed: state.value == null
-                            ? null
-                            : () => preview(state.value!),
-                        icon: Icon(
-                          Icons.ios_share,
-                          size: 20,
-                          color: c.mutedInk,
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: 'Calendar History',
-                        onPressed: pickDate,
-                        icon: Icon(
-                          Icons.calendar_month_outlined,
-                          size: 20,
-                          color: c.mutedInk,
-                        ),
-                      ),
-                      NotificationButton(color: c.mutedInk),
-                    ],
-                  ),
-                ),
-                Divider(height: 1, color: c.border),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: LayoutBuilder(
-                    builder: (context, bounds) =>
-                        bounds.maxWidth < 350 ||
-                            MediaQuery.textScalerOf(context).scale(14) > 19
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              dateControl,
-                              const SizedBox(height: 8),
-                              periodControl,
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              Flexible(flex: 4, child: dateControl),
-                              const SizedBox(width: 12),
-                              Flexible(flex: 6, child: periodControl),
-                            ],
-                          ),
-                  ),
+                Expanded(child: dateControl),
+                IconButton(
+                  tooltip: 'Analytics summary',
+                  onPressed: state.value == null
+                      ? null
+                      : () => preview(state.value!),
+                  icon: const Icon(Icons.summarize_outlined),
                 ),
               ],
             ),
@@ -300,6 +240,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           const SizedBox(height: 16),
                           TopMerchants(report),
                           const SizedBox(height: 16),
+                          PaymentSources(selection),
+                          const SizedBox(height: 16),
                           Text(
                             'Based on your saved, posted transactions up to today.',
                             style: AppTypography.bodySmall.copyWith(
@@ -339,7 +281,7 @@ class _Intelligence extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CategoryIcon(
-            Icons.auto_awesome_outlined,
+            Icons.insights_outlined,
             foreground: c.accent,
             background: c.surface,
             size: 36,
@@ -370,7 +312,7 @@ class _Intelligence extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Financial Intelligence',
+                      'Period comparison',
                       style: AppTypography.labelSmall.copyWith(
                         color: c.mutedInk,
                       ),

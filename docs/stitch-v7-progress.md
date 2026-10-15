@@ -36,8 +36,8 @@ Saved external documents are outside this task and must not be touched.
 ## Milestones
 
 - [x] Inspect/import authoritative references and inventory existing implementation.
-- [ ] Remove obsolete features and prove old financial data remains readable.
-- [ ] Consolidate tokens/components and implement Home/navigation.
+- [x] Remove obsolete features and prove old financial data remains readable.
+- [x] Consolidate tokens/components and implement Home/navigation.
 - [ ] Implement transaction, account, budget/analytics and subscription designs.
 - [ ] Implement scanner/review, notifications and Settings designs.
 - [ ] Review all 13 goldens, run full checks and native builds.
@@ -51,3 +51,19 @@ optional identity/sync fields from an encrypted file without rewriting ciphertex
 then saves normally and checks records/image bytes. First-run now routes directly
 to Home. Previous Home goldens require replacement because the identity greeting
 was removed; v7 visual verification remains pending. No device mutation performed.
+
+## Main-screen checkpoint — 16 October
+
+Native v7 hierarchy now covers Home, Transactions, Expense/Income/Transfer,
+grouped Accounts, Budgets and Analytics. Shared app bars/cards/inputs/blue tokens
+replace older styling. Category allocation uses a real-data ring; payment-source
+totals share posted/as-of/refund semantics. CSV export is independently reachable
+from Transactions. Credit limit and card metadata are optional JSON fields;
+limits never enter cash balances and older encrypted records remain readable.
+
+Reviewed captures against the approved Home, Expense, Transactions, Accounts,
+Budgets and Analytics references. Differences retained for product truth: manual
+account icons instead of unavailable licensed logos, actual financial totals,
+explicit date/filter controls and real budget projections. Remaining detail,
+subscription, receipt, notification and settings work and full final visual/build
+checks are still pending. No physical device changes have been made.

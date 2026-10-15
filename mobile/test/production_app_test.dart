@@ -176,7 +176,7 @@ void main() {
       if (merchant.isNotEmpty) await tester.enterText(fields.at(1), merchant);
       FocusManager.instance.primaryFocus?.unfocus();
       await tester.pumpAndSettle();
-      await tester.tap(find.textContaining('Save $mode —'));
+      await tester.tap(find.text('Save $mode'));
       await tester.pumpAndSettle();
       expect(repo.workspace.ledger, hasLength(1));
       expect(repo.workspace.ledger.single.kind.name, mode.toLowerCase());

@@ -54,19 +54,7 @@ class ExpenseHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LayoutBuilder(
-            builder: (context, bounds) =>
-                bounds.maxWidth < 300 ||
-                    MediaQuery.textScalerOf(context).scale(14) > 19
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [title, const SizedBox(height: 8), badge],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [title, badge],
-                  ),
-          ),
+          title,
           const SizedBox(height: 8),
           Text.rich(
             TextSpan(
@@ -84,6 +72,8 @@ class ExpenseHero extends StatelessWidget {
             ),
             key: const ValueKey('analytics-total'),
           ),
+          const SizedBox(height: 12),
+          badge,
           const SizedBox(height: 12),
           Divider(height: 1, color: c.border),
           const SizedBox(height: 12),

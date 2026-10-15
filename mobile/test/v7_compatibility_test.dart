@@ -30,6 +30,12 @@ void main() {
         'biometrics': false,
         'syncAlerts': true,
       });
+      for (final account in old['accounts'] as List) {
+        (account as Map)
+          ..remove('creditLimit')
+          ..remove('cardNetwork')
+          ..remove('cardLastFour');
+      }
       old['sync'] = {
         'ownerId': null,
         'serverRevision': 0,
@@ -59,7 +65,10 @@ void main() {
       repository = SqliteFinanceRepository(database, cipher);
       final loaded = await repository.load();
       expect(loaded.ledger, financeFixture().ledger);
-      expect(loaded.accounts.map((a) => a.toJson()), old['accounts']);
+      expect(
+        loaded.accounts.map((a) => a.toJson()),
+        financeFixture().accounts.map((a) => a.toJson()),
+      );
       expect(loaded.budgets.map((b) => b.toJson()), old['budgets']);
       expect(
         (await database.select(database.encryptedWorkspaces).getSingle())

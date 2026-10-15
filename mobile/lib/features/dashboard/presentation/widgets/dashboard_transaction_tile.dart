@@ -18,7 +18,7 @@ class DashboardTransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final (icon, color, soft) = switch (transaction.category) {
+    final (icon, _, _) = switch (transaction.category) {
       TransactionCategory.food => (
         Icons.fastfood_outlined,
         c.danger,
@@ -55,8 +55,8 @@ class DashboardTransactionTile extends StatelessWidget {
               transaction.kind == TransactionKind.income ||
               transaction.kind == TransactionKind.refund,
           icon: icon,
-          iconColor: color,
-          iconBackground: soft,
+          iconColor: c.primary,
+          iconBackground: c.primary.withValues(alpha: .08),
         ),
       ),
     );

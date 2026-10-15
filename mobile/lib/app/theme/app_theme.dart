@@ -21,6 +21,9 @@ abstract final class AppTheme {
           ).copyWith(
             primary: c.primary,
             secondary: c.secondary,
+            secondaryContainer: c.primary.withValues(alpha: .10),
+            onSecondaryContainer: c.primary,
+            surfaceTint: Colors.transparent,
             surface: c.surface,
             onSurface: c.ink,
             error: c.danger,
@@ -38,6 +41,26 @@ abstract final class AppTheme {
         labelMedium: AppTypography.labelMedium,
         labelSmall: AppTypography.labelSmall,
       ).apply(bodyColor: c.ink, displayColor: c.ink),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: c.canvas,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: 14,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: c.border),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: c.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: c.primary, width: 1.5),
+        ),
+      ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: c.surface,
         shape: const RoundedRectangleBorder(

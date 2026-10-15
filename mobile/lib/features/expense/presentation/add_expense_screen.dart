@@ -10,7 +10,7 @@ import 'package:pesoflow/features/accounts/domain/financial_account.dart';
 import 'package:pesoflow/features/accounts/presentation/manual_account_editor.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/formatting/money_formatter.dart';
-import 'package:pesoflow/core/widgets/budget_progress_bar.dart';
+import 'package:pesoflow/core/widgets/financial_account_row.dart';
 import 'package:pesoflow/core/widgets/category_icon.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
 import 'package:pesoflow/core/widgets/task_screen.dart';
@@ -23,7 +23,12 @@ import 'package:pesoflow/features/transactions/domain/transaction_query.dart';
 import 'package:pesoflow/features/transactions/domain/manual_transaction_draft.dart';
 
 class AddExpenseScreen extends ConsumerStatefulWidget {
-  const AddExpenseScreen({this.transaction, super.key});
+  const AddExpenseScreen({
+    this.transaction,
+    this.initialKind = TransactionKind.expense,
+    super.key,
+  });
+  final TransactionKind initialKind;
   final TransactionRecord? transaction;
   @override
   ConsumerState<AddExpenseScreen> createState() => _AddExpenseScreenState();
@@ -61,14 +66,6 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     };
   }
 
-  static const categories = [
-    (TransactionCategory.food, Icons.restaurant),
-    (TransactionCategory.groceries, Icons.shopping_basket_outlined),
-    (TransactionCategory.transport, Icons.directions_car_outlined),
-    (TransactionCategory.shopping, Icons.shopping_bag_outlined),
-    (TransactionCategory.bills, Icons.receipt_long_outlined),
-    (TransactionCategory.subscriptions, Icons.subscriptions_outlined),
-  ];
   String get typeLabel => switch (kind) {
     TransactionKind.expense => 'Expense',
     TransactionKind.income => 'Income',
@@ -79,6 +76,12 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
   void initState() {
     super.initState();
     date = ref.read(clockProvider)();
+    kind = widget.initialKind;
+    category = kind == TransactionKind.income
+        ? TransactionCategory.income
+        : kind == TransactionKind.transfer
+        ? TransactionCategory.transfer
+        : TransactionCategory.food;
     if (accounts.isNotEmpty) accountId = accounts.keys.first;
     if (accounts.length > 1) destinationId = accounts.keys.elementAt(1);
     final original = widget.transaction;
@@ -289,83 +292,159 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     }
   }
 
-  InputDecoration field(String hint, {IconData? icon}) => InputDecoration(
-    hintText: hint,
-    prefixIcon: icon == null ? null : Icon(icon, size: 20),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: context.colors.border),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: context.colors.border),
-    ),
-  );
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
+    final w = ref.watch(workspaceProvider);
     final value = parsePhpAmount(amount.text) ?? 0;
-    final large = MediaQuery.textScalerOf(context).scale(14) > 19;
-    final label = AppTypography.labelMedium;
-    final small = AppTypography.bodySmall;
-    ref.watch(workspaceProvider);
-    ref.watch(ledgerProvider);
-    ref.watch(budgetPlansProvider);
-    final plan = ref
-        .read(budgetPlansProvider.notifier)
-        .viewFor(date.year, date.month);
-    final matches = plan.allowances.where((a) => a.category == category);
-    final budget = matches.isEmpty
-        ? (0, 0)
-        : (matches.first.spent, matches.first.limit);
-    final spent = budget.$1;
-    Widget title(String text) => Text(text, style: label);
-    Widget quickButton(
-      String text,
-      VoidCallback onTap, {
-      bool selected = false,
-    }) => OutlinedButton(
-      onPressed: onTap,
-      style: OutlinedButton.styleFrom(
-        backgroundColor: selected
-            ? c.soft(c.primary, AppColors.primarySoft)
-            : c.mutedSurface,
-        foregroundColor: selected ? c.primary : c.ink,
-        minimumSize: const Size(48, 48),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        textStyle: small,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-      child: Text(text),
+    final choices = kind == TransactionKind.income
+        ? TransactionCategory.values.where(isIncomeCategory).toList()
+        : [
+            TransactionCategory.food,
+            TransactionCategory.transport,
+            TransactionCategory.groceries,
+            TransactionCategory.bills,
+            TransactionCategory.shopping,
+            TransactionCategory.entertainment,
+          ];
+    final plan = ref.watch(budgetPlansProvider);
+    final view = plan.isNotEmpty
+        ? ref.read(budgetPlansProvider.notifier).viewFor(date.year, date.month)
+        : null;
+    final budget = view?.allowances
+        .where((a) => a.category == category)
+        .firstOrNull;
+    Widget heading(String text) => Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 10),
+      child: Text(text, style: AppTypography.headlineSmall),
     );
-    return TaskScreen(
-      title: '${widget.transaction == null ? 'Add' : 'Edit'} $typeLabel',
-      centerTitle: true,
-      actions: [TextButton(onPressed: reset, child: const Text('Reset'))],
-      footer: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: c.surface,
-          border: Border(top: BorderSide(color: c.border)),
+    Widget fieldLabel(String text) => Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: AppTypography.bodySmall.copyWith(color: c.secondaryInk),
+      ),
+    );
+    Widget accountPicker(bool receiving) {
+      final id = receiving ? destinationId : accountId;
+      final a = w.accounts.where((a) => a.id == id).firstOrNull;
+      return FinanceCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (a != null)
+              FinancialAccountRow(
+                account: a,
+                balance: accounts[id]?.$2 ?? 0,
+                onTap: () => switchAccount(receiving: receiving),
+              )
+            else
+              TextButton(
+                onPressed: () => switchAccount(receiving: receiving),
+                child: const Text('Choose account'),
+              ),
+            TextButton(
+              onPressed: () => switchAccount(receiving: receiving),
+              child: Text(receiving ? 'Change destination' : 'Change account'),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 8,
+                children: [
+                  for (final entry in accounts.entries)
+                    ChoiceChip(
+                      label: Text(entry.value.$1),
+                      selected: id == entry.key,
+                      onSelected: (_) => setState(() {
+                        if (receiving) {
+                          destinationId = entry.key;
+                        } else {
+                          accountId = entry.key;
+                        }
+                      }),
+                    ),
+                ],
+              ),
+            ),
+          ],
         ),
+      );
+    }
+
+    return TaskScreen(
+      title: widget.transaction == null
+          ? 'Record Transaction'
+          : 'Edit $typeLabel',
+      centerTitle: true,
+      titleWidget: widget.transaction == null
+          ? Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: c.mutedSurface,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  for (final type in [
+                    TransactionKind.expense,
+                    TransactionKind.income,
+                    TransactionKind.transfer,
+                  ])
+                    Expanded(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          backgroundColor: type == kind
+                              ? c.surface
+                              : Colors.transparent,
+                          foregroundColor: type == kind
+                              ? c.primary
+                              : c.secondaryInk,
+                        ),
+                        onPressed: widget.transaction != null || saving
+                            ? null
+                            : () => setState(() {
+                                kind = type;
+                                category = type == TransactionKind.income
+                                    ? TransactionCategory.income
+                                    : type == TransactionKind.transfer
+                                    ? TransactionCategory.transfer
+                                    : TransactionCategory.food;
+                              }),
+                        child: Text(
+                          type.name[0].toUpperCase() + type.name.substring(1),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            )
+          : null,
+      actions: [
+        IconButton(
+          tooltip: 'Scan receipt',
+          onPressed: saving ? null : () => context.push('/receipt'),
+          icon: const Icon(Icons.receipt_long_outlined),
+        ),
+      ],
+      footer: Container(
+        color: c.surface,
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: SizedBox(
           width: double.infinity,
-          child: FilledButton(
-            onPressed: saving ? null : save,
-            style: FilledButton.styleFrom(
-              textStyle: AppTypography.headlineSmall,
-            ),
-            child: Text(
-              'Save $typeLabel — ${MoneyFormatter.php(value)}',
-              textAlign: TextAlign.center,
+          child: FilledButton.icon(
+            onPressed: saving || accounts.isEmpty ? null : save,
+            icon: const Icon(Icons.check),
+            label: Text(
+              saving ? 'Saving…' : 'Save $typeLabel',
+              style: AppTypography.headlineSmall,
             ),
           ),
         ),
       ),
       child: accounts.isEmpty
           ? Center(
-              child: Padding(
+              child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -399,546 +478,267 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: c.mutedSurface,
-                      border: Border.all(color: c.border),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        for (final (type, text) in [
-                          (TransactionKind.expense, 'Expense'),
-                          (TransactionKind.income, 'Income'),
-                          (TransactionKind.transfer, 'Transfer'),
-                        ])
-                          Expanded(
-                            child: Semantics(
-                              selected: kind == type,
-                              button: true,
-                              child: TextButton(
-                                onPressed: () => setState(() {
-                                  kind = type;
-                                  category = type == TransactionKind.income
-                                      ? TransactionCategory.salary
-                                      : TransactionCategory.food;
-                                }),
-                                style: TextButton.styleFrom(
-                                  backgroundColor: kind == type
-                                      ? c.surface
-                                      : Colors.transparent,
-                                  foregroundColor: kind == type
-                                      ? c.ink
-                                      : c.mutedInk,
-                                ),
-                                child: Text(text),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
                   FinanceCard(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
-                        Text(
-                          'PHILIPPINE PESO (PHP)',
-                          style: AppTypography.labelSmall.copyWith(
-                            color: c.mutedInk,
-                            letterSpacing: .7,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('₱', style: AppTypography.headlineLarge),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: SizedBox(
-                                width: 200,
-                                child: TextFormField(
-                                  key: const ValueKey('amount-input'),
-                                  controller: amount,
-                                  focusNode: amountFocus,
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                        decimal: true,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                  style: AppTypography.display,
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  decoration: const InputDecoration(
-                                    border: InputBorder.none,
-                                    errorMaxLines: 3,
-                                  ),
-                                  validator: (text) =>
-                                      parsePhpAmount(text ?? '') == null
-                                      ? 'Enter a positive PHP amount with up to 2 decimals.'
-                                      : null,
-                                  onChanged: (_) => setState(() {}),
-                                ),
+                            Expanded(
+                              child: Text(
+                                kind == TransactionKind.expense
+                                    ? 'Amount spent'
+                                    : kind == TransactionKind.income
+                                    ? 'Income amount'
+                                    : 'Transfer amount',
+                                style: AppTypography.bodySmall,
+                              ),
+                            ),
+                            Text(
+                              w.preferences.currency,
+                              style: AppTypography.labelSmall.copyWith(
+                                color: c.primary,
                               ),
                             ),
                           ],
                         ),
-                        Text(
-                          'Enter transaction value',
-                          style: small.copyWith(color: c.mutedInk),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          key: const ValueKey('amount-input'),
+                          controller: amount,
+                          focusNode: amountFocus,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          textAlign: TextAlign.center,
+                          style: AppTypography.numericXL,
+                          decoration: const InputDecoration(
+                            prefixText: '₱',
+                            hintText: '0.00',
+                            filled: false,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            border: InputBorder.none,
+                          ),
+                          validator: (v) => parsePhpAmount(v ?? '') == null
+                              ? 'Enter a positive amount'
+                              : null,
+                          onChanged: (_) => setState(() {}),
                         ),
                         const SizedBox(height: 16),
-                        Divider(color: c.border),
-                        const SizedBox(height: 12),
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          alignment: WrapAlignment.center,
                           children: [
-                            for (final (text, delta) in [
-                              ('+₱50', 5000),
-                              ('+₱100', 10000),
-                              ('+₱500', 50000),
-                            ])
-                              quickButton(text, () => increment(delta)),
-                            quickButton(
-                              'Exact',
-                              () => amountFocus.requestFocus(),
-                            ),
+                            for (final pesos
+                                in kind == TransactionKind.income
+                                    ? [1000, 5000, 10000, 50000]
+                                    : [50, 100, 500, 1000])
+                              TextButton(
+                                style: TextButton.styleFrom(
+                                  backgroundColor: c.primary.withValues(
+                                    alpha: .06,
+                                  ),
+                                  foregroundColor: c.ink,
+                                ),
+                                onPressed: () => increment(pesos * 100),
+                                child: Text(
+                                  '+${MoneyFormatter.php(pesos * 100, decimals: false)}',
+                                ),
+                              ),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   if (kind != TransactionKind.transfer) ...[
-                    FinanceCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          title(
+                    Row(
+                      children: [
+                        Expanded(
+                          child: heading(
                             kind == TransactionKind.income
-                                ? 'Payer / Source'
+                                ? 'Income category'
+                                : 'Category',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: moreCategories,
+                          child: const Text('More ›'),
+                        ),
+                      ],
+                    ),
+                    if (budget != null && kind == TransactionKind.expense)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Text(
+                          'Budget: ${MoneyFormatter.php(budget.remaining)} left',
+                          style: AppTypography.bodySmall,
+                        ),
+                      ),
+                    LayoutBuilder(
+                      builder: (context, bounds) {
+                        final columns =
+                            MediaQuery.textScalerOf(context).scale(14) > 19
+                            ? 2
+                            : 3;
+                        return Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
+                            for (final item in choices)
+                              SizedBox(
+                                width:
+                                    (bounds.maxWidth - (columns - 1) * 10) /
+                                    columns,
+                                child: Semantics(
+                                  selected: category == item,
+                                  button: true,
+                                  child: InkWell(
+                                    onTap: () =>
+                                        setState(() => category = item),
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: FinanceCard(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 14,
+                                      ),
+                                      borderColor: category == item
+                                          ? c.primary
+                                          : c.surface,
+                                      child: Column(
+                                        children: [
+                                          CategoryIcon(
+                                            categoryIcon(item),
+                                            foreground: c.primary,
+                                            background: c.primary.withValues(
+                                              alpha: .08,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            categoryLabel(item),
+                                            textAlign: TextAlign.center,
+                                            style: AppTypography.bodySmall
+                                                .copyWith(
+                                                  color: category == item
+                                                      ? c.primary
+                                                      : c.ink,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  heading(
+                    kind == TransactionKind.income
+                        ? 'Destination account'
+                        : kind == TransactionKind.transfer
+                        ? 'From account'
+                        : 'Paid from',
+                  ),
+                  accountPicker(false),
+                  const SizedBox(height: 16),
+                  if (kind == TransactionKind.transfer) ...[
+                    heading('To account'),
+                    accountPicker(true),
+                    const SizedBox(height: 16),
+                  ],
+                  heading('Details'),
+                  FinanceCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (kind != TransactionKind.transfer) ...[
+                          fieldLabel(
+                            kind == TransactionKind.income
+                                ? 'Income Source / Client'
                                 : 'Merchant / Payee',
                           ),
-                          const SizedBox(height: 12),
                           TextFormField(
                             key: const ValueKey('merchant-input'),
                             controller: merchant,
                             maxLength: 100,
-                            style: AppTypography.bodyMedium,
-                            decoration: field(
-                              'e.g. Jollibee, Grab, SM Store',
-                              icon: Icons.storefront_outlined,
-                            ).copyWith(counterText: ''),
-                            validator: (text) =>
-                                text == null || text.trim().isEmpty
-                                ? 'Enter a merchant or payer.'
+                            decoration: const InputDecoration(
+                              hintText: 'Name',
+                              prefixIcon: Icon(Icons.storefront_outlined),
+                              counterText: '',
+                            ),
+                            validator: (v) => (v ?? '').trim().isEmpty
+                                ? 'Enter a name'
                                 : null,
                           ),
-                          const SizedBox(height: 12),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Recent:',
-                                  style: small.copyWith(color: c.mutedInk),
-                                ),
-                                const SizedBox(width: 8),
-                                for (final name
-                                    in ref
-                                        .watch(ledgerProvider)
-                                        .where((t) => t.kind == kind)
-                                        .map((t) => t.merchant)
-                                        .toSet()
-                                        .take(4))
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 6),
-                                    child: quickButton(
-                                      name,
-                                      () =>
-                                          setState(() => merchant.text = name),
-                                      selected: merchant.text == name,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
+                          const SizedBox(height: 16),
                         ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                  if (kind == TransactionKind.income)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
-                      child: OutlinedButton(
-                        onPressed: moreCategories,
-                        child: Text(categoryLabel(category)),
-                      ),
-                    ),
-                  if (kind == TransactionKind.expense) ...[
-                    FinanceCard(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(child: title('Category')),
-                              TextButton(
-                                onPressed: moreCategories,
-                                child: const Text('More categories ›'),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 8),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final columns = large ? 2 : 3;
-                              return Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: [
-                                  for (final (item, icon) in categories)
-                                    SizedBox(
-                                      width:
-                                          (constraints.maxWidth -
-                                              (columns - 1) * 8) /
-                                          columns,
-                                      child: Semantics(
-                                        selected: category == item,
-                                        button: true,
-                                        child: Material(
-                                          color: category == item
-                                              ? c
-                                                    .soft(
-                                                      c.primary,
-                                                      AppColors.primarySoft,
-                                                    )
-                                                    .withValues(alpha: .3)
-                                              : c.surface,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            side: BorderSide(
-                                              color: category == item
-                                                  ? c.primary
-                                                  : c.border,
-                                              width: category == item ? 2 : 1,
-                                            ),
-                                          ),
-                                          child: InkWell(
-                                            borderRadius: BorderRadius.circular(
-                                              12,
-                                            ),
-                                            onTap: () =>
-                                                setState(() => category = item),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 6,
-                                                    vertical: 10,
-                                                  ),
-                                              child: Column(
-                                                children: [
-                                                  CategoryIcon(
-                                                    icon,
-                                                    foreground: category == item
-                                                        ? c.warning
-                                                        : c.secondaryInk,
-                                                    background: category == item
-                                                        ? c.soft(
-                                                            c.warning,
-                                                            AppColors
-                                                                .warningSoft,
-                                                          )
-                                                        : c.mutedSurface,
-                                                  ),
-                                                  const SizedBox(height: 6),
-                                                  Text(
-                                                    item ==
-                                                            TransactionCategory
-                                                                .bills
-                                                        ? 'Bills'
-                                                        : categoryLabel(item),
-                                                    textAlign: TextAlign.center,
-                                                    style: AppTypography
-                                                        .labelSmall
-                                                        .copyWith(
-                                                          color:
-                                                              category == item
-                                                              ? c.primary
-                                                              : c.ink,
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 12),
-                          if (budget.$2 > 0)
-                            FinanceCard(
-                              color: c.canvas,
-                              padding: const EdgeInsets.all(12),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Wrap(
-                                    alignment: WrapAlignment.spaceBetween,
-                                    spacing: 8,
-                                    runSpacing: 4,
-                                    children: [
-                                      Text(
-                                        '${categoryLabel(category)} monthly budget',
-                                        style: small,
-                                      ),
-                                      Text(
-                                        '${MoneyFormatter.php(spent, decimals: false)} / ${MoneyFormatter.php(budget.$2, decimals: false)}',
-                                        style: small.copyWith(
-                                          color: c.secondaryInk,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 8),
-                                  BudgetProgressBar(
-                                    value: spent / budget.$2,
-                                    color: spent * 100 >= budget.$2 * 80
-                                        ? c.warning
-                                        : c.secondary,
-                                    label: '${categoryLabel(category)} budget',
-                                    height: 8,
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Wrap(
-                                    alignment: WrapAlignment.spaceBetween,
-                                    spacing: 8,
-                                    children: [
-                                      Text(
-                                        '${spent * 100 ~/ budget.$2}% used this cycle',
-                                        style: AppTypography.labelSmall
-                                            .copyWith(color: c.mutedInk),
-                                      ),
-                                      Text(
-                                        '${MoneyFormatter.php(budget.$2 - spent, decimals: false)} left',
-                                        style: AppTypography.labelSmall,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                  FinanceCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: title(
-                                kind == TransactionKind.income
-                                    ? 'Received Into'
-                                    : 'Paid From',
-                              ),
-                            ),
-                            Text(
-                              'Manually tracked',
-                              style: AppTypography.labelSmall.copyWith(
-                                color: c.positive,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        FinanceCard(
-                          color: c
-                              .soft(c.primary, AppColors.primarySoft)
-                              .withValues(alpha: .1),
-                          borderColor: c.primary.withValues(alpha: .4),
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundColor: AppColors.stitchPrimary,
-                                foregroundColor: Colors.white,
-                                child: Text(
-                                  account.substring(0, 1),
-                                  style: AppTypography.headlineSmall,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      account,
-                                      style: AppTypography.merchant,
-                                    ),
-                                    Text(
-                                      'Balance: ${MoneyFormatter.php((accounts[accountId]?.$2 ?? 0))} available',
-                                      style: small.copyWith(color: c.mutedInk),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: switchAccount,
-                                child: const Text('Switch'),
-                              ),
-                            ],
+                        fieldLabel('Date & Time'),
+                        OutlinedButton.icon(
+                          onPressed: pickDate,
+                          icon: const Icon(Icons.calendar_today_outlined),
+                          label: Text(
+                            DateFormat('MMM d, yyyy · h:mm a').format(date),
                           ),
                         ),
-                        const SizedBox(height: 12),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (final entry in accounts.entries.where(
-                                (entry) => entry.key != accountId,
-                              ))
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: quickButton(
-                                    '${entry.value.$1} (${MoneyFormatter.php(entry.value.$2, decimals: false)})',
-                                    () => setState(() => accountId = entry.key),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if (kind == TransactionKind.transfer) ...[
-                          const SizedBox(height: 12),
-                          title('To Account'),
-                          const SizedBox(height: 8),
-                          OutlinedButton.icon(
-                            onPressed: () => switchAccount(receiving: true),
-                            icon: const Icon(Icons.swap_horiz),
-                            label: Text(destination),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  FinanceCard(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CategoryIcon(
-                              Icons.calendar_today_outlined,
-                              foreground: c.secondaryInk,
-                              background: c.mutedSurface,
-                              size: 36,
-                              round: false,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Transaction Date',
-                                    style: small.copyWith(color: c.mutedInk),
-                                  ),
-                                  Text(
-                                    '${DateUtils.isSameDay(date, ref.read(clockProvider)()) ? 'Today, ' : ''}${DateFormat('MMM d, yyyy · h:mm a').format(date)}',
-                                    style: AppTypography.bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: pickDate,
-                              child: const Text('Change'),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        Divider(color: c.border),
                         const SizedBox(height: 16),
-                        title('Note & Tags'),
-                        const SizedBox(height: 8),
+                        fieldLabel('Notes & Tags'),
                         TextFormField(
                           key: const ValueKey('note-input'),
                           controller: note,
-                          maxLength: 500,
-                          style: AppTypography.bodyMedium,
-                          decoration: field(
-                            'Add a note (e.g. Lunch with team, #Lunch)',
-                          ).copyWith(counterText: ''),
-                        ),
-                        const SizedBox(height: 16),
-                        title('Receipt'),
-                        const SizedBox(height: 8),
-                        FinanceCard(
-                          color: c.canvas,
-                          padding: const EdgeInsets.all(12),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.receipt_long_outlined,
-                                color: c.secondaryInk,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Scan or upload receipt',
-                                      style: small,
-                                    ),
-                                    Text(
-                                      'Read text on device, then review and save',
-                                      style: AppTypography.labelSmall.copyWith(
-                                        color: c.mutedInk,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              OutlinedButton.icon(
-                                onPressed: () => context.push('/receipt'),
-                                icon: const Icon(
-                                  Icons.photo_camera_outlined,
-                                  size: 16,
-                                ),
-                                label: const Text('Scan'),
-                              ),
-                            ],
+                          maxLength: 2000,
+                          minLines: 2,
+                          maxLines: 4,
+                          decoration: const InputDecoration(
+                            hintText: 'Add a note',
+                            counterText: '',
                           ),
                         ),
+                        if (kind == TransactionKind.expense &&
+                            widget.transaction == null) ...[
+                          const SizedBox(height: 16),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            leading: Icon(
+                              Icons.add_photo_alternate_outlined,
+                              color: c.primary,
+                            ),
+                            title: const Text('Scan a receipt'),
+                            subtitle: const Text(
+                              'Review a photo and save its expense',
+                            ),
+                            trailing: const Icon(Icons.chevron_right),
+                            onTap: () => context.push('/receipt'),
+                          ),
+                        ],
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+                  if (kind == TransactionKind.transfer)
+                    const Text(
+                      'Records movement between your tracked accounts. This does not send money or count as income or spending.',
+                    ),
+                  if (value > 0) const SizedBox(height: 8),
                 ],
               ),
             ),
     );
   }
 }
+
+IconData categoryIcon(TransactionCategory category) => switch (category) {
+  TransactionCategory.food => Icons.restaurant,
+  TransactionCategory.transport => Icons.directions_car_outlined,
+  TransactionCategory.groceries => Icons.shopping_cart_outlined,
+  TransactionCategory.bills => Icons.bolt,
+  TransactionCategory.shopping => Icons.shopping_bag_outlined,
+  TransactionCategory.entertainment => Icons.sports_esports_outlined,
+  TransactionCategory.income => Icons.work_outline,
+  _ => Icons.category_outlined,
+};

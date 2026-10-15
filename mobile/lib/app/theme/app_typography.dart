@@ -18,8 +18,8 @@ abstract final class AppTypography {
   static final display = _style(34, 38, 700, tracking: -1.02);
   static final headlineLarge = _style(28, 32, 700, tracking: -.7);
   static final headlineMedium = _style(22, 26, 700, tracking: -.44);
-  static final headlineSmall = _style(18, 22, 650, tracking: -.18);
-  static final numericXL = _style(32, 32, 750, tracking: -1.12, numeric: true);
+  static final headlineSmall = _style(18, 24, 600, tracking: -.18);
+  static final numericXL = _style(30, 36, 700, tracking: -.6, numeric: true);
   static final numericLarge = _style(24, 24, 700, tracking: -.6, numeric: true);
   static final numericMedium = _style(
     18,
