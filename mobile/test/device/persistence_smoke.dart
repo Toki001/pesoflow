@@ -29,8 +29,7 @@ Future<void> main() async {
       initial.ledger.isNotEmpty ||
       initial.budgets.isNotEmpty ||
       initial.subscriptions.isNotEmpty ||
-      initial.receipts.isNotEmpty ||
-      initial.preferences.onboardingCompleted) {
+      initial.receipts.isNotEmpty) {
     await repository.close();
     throw StateError(
       'Refusing to seed a nonempty workspace. Nothing was changed.',
@@ -77,10 +76,7 @@ Future<void> main() async {
     ),
   );
   await commands.savePreferences(
-    initial.preferences.copyWith(
-      onboardingCompleted: true,
-      appearance: Appearance.dark,
-    ),
+    initial.preferences.copyWith(appearance: Appearance.dark),
   );
   await commands.flush();
   container.dispose();

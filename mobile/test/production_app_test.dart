@@ -15,7 +15,7 @@ import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/accounts/domain/financial_account.dart';
 import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
 import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
-import 'package:pesoflow/features/settings/domain/user_preferences.dart';
+import 'package:pesoflow/features/settings/domain/local_preferences.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 import 'package:pesoflow/features/workspace/application/finance_controller.dart';
 import 'package:pesoflow/features/workspace/data/sqlite_finance_repository.dart';
@@ -145,24 +145,17 @@ void main() {
     },
   );
   testWidgets(
-    'fresh bootstrap completes onboarding and persists entry preference',
+    'fresh bootstrap opens Home without registration or introduction',
     (tester) async {
       final repo = FakeFinanceRepository();
       await tester.pumpWidget(FinanceBootstrap(repository: repo));
       await repo.load();
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Skip'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Get started'));
-      await tester.pumpAndSettle();
-      expect(repo.workspace.preferences.onboardingCompleted, isTrue);
-      expect(find.text('Your financial overview'), findsOneWidget);
-      await tester.pumpWidget(const SizedBox());
-      await tester.pumpWidget(FinanceBootstrap(repository: repo));
-      await repo.load();
-      await tester.pumpAndSettle();
+      expect(find.text('PesoFlow'), findsOneWidget);
+      expect(repo.workspace.accounts, isEmpty);
+      expect(repo.workspace.ledger, isEmpty);
       expect(find.widgetWithText(FilledButton, 'Get started'), findsNothing);
-      expect(find.text('Your financial overview'), findsOneWidget);
+      expect(find.text('Login'), findsNothing);
     },
   );
   for (final (mode, merchant, amount) in [
@@ -270,10 +263,7 @@ void main() {
                 startDate: DateTime(2024, 10),
               ),
             ],
-            preferences: const UserPreferences(
-              onboardingCompleted: true,
-              appearance: Appearance.dark,
-            ),
+            preferences: const LocalPreferences(appearance: Appearance.dark),
           ),
           expectedRevision: 0,
         );

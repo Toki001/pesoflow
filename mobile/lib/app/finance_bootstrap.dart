@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/backups/domain/finance_backup.dart';
-import '../features/backups/application/backup_actions.dart';
-import '../features/backups/data/backup_files.dart';
-import '../features/backups/presentation/backup_screen.dart';
 import '../features/workspace/application/finance_controller.dart';
 import '../features/workspace/domain/finance_workspace.dart';
 import 'app.dart';
@@ -66,44 +62,6 @@ class _FinanceBootstrapState extends State<FinanceBootstrap> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
-                      if (snapshot.hasError &&
-                          widget.repository is BackupRepository)
-                        OutlinedButton(
-                          onPressed: () async {
-                            final repository =
-                                widget.repository as BackupRepository;
-                            final restored = await Navigator.of(context)
-                                .push<bool>(
-                                  MaterialPageRoute(
-                                    builder: (c) => BackupScreen(
-                                      recovery: true,
-                                      actions: BackupActions(
-                                        files: NativeBackupFiles(),
-                                        transactions: widget.repository.load,
-                                        capture: () => repository.captureBackup(
-                                          DateTime.now(),
-                                        ),
-                                        revision: repository.backupRevision,
-                                        restore: (backup, revision) async {
-                                          await repository.restoreBackup(
-                                            backup,
-                                            expectedRevision: revision,
-                                          );
-                                        },
-                                      ),
-                                      onRestored: () => Navigator.pop(c, true),
-                                    ),
-                                  ),
-                                );
-                            if (restored == true && mounted) {
-                              setState(() {
-                                loading = widget.repository.load();
-                              });
-                            }
-                          },
-                          child: const Text('Recover from backup'),
-                        ),
-
                       if (snapshot.hasError)
                         FilledButton(
                           onPressed: () => setState(() {

@@ -44,3 +44,10 @@ Saved external documents are outside this task and must not be touched.
 - [ ] Attempt non-destructive physical upgrade only if device is connected.
 
 No v7 UI/build/device completion is claimed at this checkpoint.
+
+Removal checkpoint: analyzer clean; 22 focused encrypted-repository, financial
+command, receipt and pre-v7 compatibility tests pass. The upgrade test opens old
+optional identity/sync fields from an encrypted file without rewriting ciphertext,
+then saves normally and checks records/image bytes. First-run now routes directly
+to Home. Previous Home goldens require replacement because the identity greeting
+was removed; v7 visual verification remains pending. No device mutation performed.

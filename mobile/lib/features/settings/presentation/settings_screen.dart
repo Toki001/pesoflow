@@ -8,7 +8,6 @@ import 'package:pesoflow/app/theme/app_typography.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
 import 'package:pesoflow/core/widgets/task_screen.dart';
 import 'package:pesoflow/features/workspace/application/finance_controller.dart';
-import 'package:pesoflow/features/onboarding/application/onboarding_provider.dart';
 import 'package:pesoflow/features/settings/application/settings_provider.dart';
 import 'package:pesoflow/features/settings/domain/appearance.dart';
 
@@ -74,23 +73,6 @@ class SettingsScreen extends ConsumerWidget {
                   subtitle: 'Manage your manually tracked accounts',
                   onTap: () => context.push('/accounts'),
                 ),
-                const Divider(),
-                _SettingsLink(
-                  icon: Icons.backup_outlined,
-                  title: 'Backup & export',
-                  subtitle: 'Save an encrypted backup or restore your records',
-                  onTap: () => context.push('/settings/backup'),
-                ),
-                const Divider(),
-                _SettingsLink(
-                  icon: Icons.info_outline,
-                  title: 'View introduction',
-                  subtitle: 'Review how local tracking works',
-                  onTap: () {
-                    ref.invalidate(onboardingProvider);
-                    context.push('/onboarding');
-                  },
-                ),
               ],
             ),
           ),
@@ -106,7 +88,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 const Text(
-                  'Stored locally with encryption. Save a password-protected backup before changing devices or uninstalling. Receipt text is read on your device. Automatic cloud backup and bank connections are not available.',
+                  'Stored locally with encryption. Receipt text is read on your device. ',
                 ),
               ],
             ),

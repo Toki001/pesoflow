@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../features/backups/presentation/backup_screen.dart';
-
-import 'package:pesoflow/features/workspace/application/finance_controller.dart';
 import 'package:pesoflow/features/dashboard/presentation/home_screen.dart';
 import 'package:pesoflow/features/budgets/presentation/budgets_screen.dart';
 import 'package:pesoflow/features/analytics/presentation/analytics_screen.dart';
@@ -18,7 +15,6 @@ import 'package:pesoflow/features/transactions/presentation/transaction_detail_s
 import 'package:pesoflow/features/expense/presentation/add_expense_screen.dart';
 import 'package:pesoflow/features/subscriptions/presentation/subscriptions_screen.dart';
 
-import 'package:pesoflow/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:pesoflow/features/settings/presentation/settings_screen.dart';
 import 'package:pesoflow/features/notifications/presentation/notifications_screen.dart';
 
@@ -27,26 +23,15 @@ import 'package:pesoflow/app/theme/app_spacing.dart';
 import 'package:pesoflow/app/theme/app_typography.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
-  // Read once at startup: completing the introduction must not recreate navigation.
-  final completed = ref
-      .read(initialWorkspaceProvider)
-      .preferences
-      .onboardingCompleted;
-  final router = createRouter(
-    initialLocation: completed ? '/home' : '/onboarding',
-  );
+  final router = createRouter();
   ref.onDispose(router.dispose);
   return router;
 });
 
-GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
+GoRouter createRouter({String initialLocation = '/home'}) => GoRouter(
   initialLocation: initialLocation,
   routes: [
-    GoRoute(
-      path: '/',
-      redirect: (_, _) => initialLocation == '/home' ? '/home' : '/onboarding',
-    ),
-    GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingScreen()),
+    GoRoute(path: '/', redirect: (_, _) => '/home'),
     GoRoute(
       path: '/subscriptions',
       redirect: (_, _) => '/budgets/subscriptions',
@@ -60,21 +45,11 @@ GoRouter createRouter({String initialLocation = '/onboarding'}) => GoRouter(
     ),
     GoRoute(path: '/accounts', builder: (_, _) => const AccountsScreen()),
     GoRoute(
-      path: '/connections',
-      builder: (_, state) => const Scaffold(
-        body: FoundationDestination(title: 'Connections are not configured'),
-      ),
-    ),
-    GoRoute(
       path: '/accounts/:id',
       builder: (_, state) =>
           AccountDetailScreen(id: state.pathParameters['id']!),
     ),
     GoRoute(path: '/settings', builder: (_, _) => const SettingsScreen()),
-    GoRoute(
-      path: '/settings/backup',
-      builder: (_, _) => const BackupSettingsScreen(),
-    ),
     GoRoute(
       path: '/notifications',
       builder: (_, _) => const NotificationsScreen(),

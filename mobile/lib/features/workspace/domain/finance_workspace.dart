@@ -3,7 +3,7 @@ import '../../accounts/domain/financial_account.dart';
 import '../../budgets/domain/spending_budget.dart';
 import '../../notifications/domain/financial_notice.dart';
 import '../../receipts/domain/receipt_draft.dart';
-import '../../settings/domain/user_preferences.dart';
+import '../../settings/domain/local_preferences.dart';
 import '../../subscriptions/domain/subscription_plan.dart';
 import '../../transactions/domain/transaction.dart';
 
@@ -20,8 +20,7 @@ class FinanceWorkspace {
     Set<String> noticeReadIds = const {},
     Map<String, TransactionCategory> merchantRules = const {},
     Set<String> dismissedRecurringKeys = const {},
-    this.preferences = const UserPreferences(),
-    this.sync = const SyncMetadata(),
+    this.preferences = const LocalPreferences(),
   }) : accounts = List.unmodifiable(accounts),
        ledger = List.unmodifiable(ledger),
        budgets = List.unmodifiable(budgets),
@@ -42,8 +41,7 @@ class FinanceWorkspace {
   final List<FinancialNotice> notices;
   final Set<String> noticeReadIds, dismissedRecurringKeys;
   final Map<String, TransactionCategory> merchantRules;
-  final UserPreferences preferences;
-  final SyncMetadata sync;
+  final LocalPreferences preferences;
 
   void validate() {
     preferences.validate();
@@ -116,8 +114,7 @@ class FinanceWorkspace {
     Set<String>? noticeReadIds,
     Map<String, TransactionCategory>? merchantRules,
     Set<String>? dismissedRecurringKeys,
-    UserPreferences? preferences,
-    SyncMetadata? sync,
+    LocalPreferences? preferences,
   }) => FinanceWorkspace(
     revision: revision ?? this.revision,
     accounts: accounts ?? this.accounts,
@@ -131,34 +128,6 @@ class FinanceWorkspace {
     dismissedRecurringKeys:
         dismissedRecurringKeys ?? this.dismissedRecurringKeys,
     preferences: preferences ?? this.preferences,
-    sync: sync ?? this.sync,
-  );
-}
-
-/// Revisions are scoped to the authenticated owner; no tokens enter the database.
-class SyncMetadata {
-  const SyncMetadata({
-    this.ownerId,
-    this.serverRevision = 0,
-    this.lastSyncedAt,
-    this.localRevisionAtSync = 0,
-  });
-  final String? ownerId;
-  final int serverRevision, localRevisionAtSync;
-  final DateTime? lastSyncedAt;
-  Json toJson() => {
-    'ownerId': ownerId,
-    'serverRevision': serverRevision,
-    'localRevisionAtSync': localRevisionAtSync,
-    'lastSyncedAt': lastSyncedAt?.toIso8601String(),
-  };
-  factory SyncMetadata.fromJson(Json json) => SyncMetadata(
-    ownerId: json['ownerId'] as String?,
-    serverRevision: jsonInt(json, 'serverRevision', min: 0),
-    localRevisionAtSync: jsonInt(json, 'localRevisionAtSync', min: 0),
-    lastSyncedAt: json['lastSyncedAt'] == null
-        ? null
-        : jsonDate(json, 'lastSyncedAt'),
   );
 }
 

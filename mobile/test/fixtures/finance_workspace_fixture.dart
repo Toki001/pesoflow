@@ -1,7 +1,7 @@
 import 'package:pesoflow/features/accounts/domain/financial_account.dart';
 import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
 import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
-import 'package:pesoflow/features/settings/domain/user_preferences.dart';
+import 'package:pesoflow/features/settings/domain/local_preferences.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
 
@@ -51,5 +51,5 @@ FinanceWorkspace financeFixture() => FinanceWorkspace(
       category: TransactionCategory.food,
     ),
   ],
-  preferences: const UserPreferences(onboardingCompleted: true, name: 'Alex'),
+  preferences: const LocalPreferences(),
 );

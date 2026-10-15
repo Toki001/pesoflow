@@ -9,8 +9,6 @@ import 'package:pesoflow/core/storage/financial_cipher.dart';
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_evidence.dart';
-import 'package:pesoflow/features/backups/domain/finance_backup.dart';
-import 'package:pesoflow/features/backups/data/backup_codec.dart';
 import 'package:pesoflow/features/dashboard/application/dashboard_provider.dart';
 import 'package:pesoflow/features/analytics/application/analytics_provider.dart';
 import 'package:pesoflow/features/budgets/application/budgets_provider.dart';
@@ -56,7 +54,7 @@ void main() {
       json,
     );
   });
-  test('receipt image, expense and metadata commit atomically and survive reopen/backup/delete', () async {
+  test('receipt image, expense and metadata commit atomically and survive reopen/delete', () async {
     final dir = await Directory.systemTemp.createTemp('pf-receipt-');
     final file = File('${dir.path}/test.sqlite');
     final keys = MemoryEncryptionKeys();
@@ -130,32 +128,11 @@ void main() {
       repo = SqliteFinanceRepository(db, FinancialCipher(keys));
       expect(FinanceWorkspaceCodec.encode(await repo.load()), durable);
       expect(await repo.loadReceiptImage('real-image'), bytes);
-      final snapshot = await repo.captureBackup(DateTime.utc(2026, 10, 8));
-      expect(
-        () => FinanceBackup(snapshot.workspace, {}, snapshot.createdAt),
-        throwsA(isA<BackupFailure>()),
-      );
-      final encrypted = await BackupCodec.seal(
-        snapshot,
-        'test-only receipt password',
-      );
-      final reopened = await BackupCodec.open(
-        encrypted,
-        'test-only receipt password',
-      );
-      expect(
-        reopened.workspace.receipts[id]!.evidence!.rawText,
-        captured().evidence!.rawText,
-      );
-      expect(reopened.images['real-image'], bytes);
-      final restored = await repo.restoreBackup(
-        reopened,
-        expectedRevision: (await repo.load()).revision,
-      );
+      final reopened = await repo.load();
       c = ProviderContainer(
         overrides: [
           financeRepositoryProvider.overrideWithValue(repo),
-          initialWorkspaceProvider.overrideWithValue(restored),
+          initialWorkspaceProvider.overrideWithValue(reopened),
         ],
       );
       await c.read(financeControllerProvider.notifier).deleteTransaction(id);

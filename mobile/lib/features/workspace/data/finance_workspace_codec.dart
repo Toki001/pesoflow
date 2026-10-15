@@ -6,7 +6,7 @@ import '../../budgets/domain/spending_budget.dart';
 import '../../notifications/domain/financial_notice.dart';
 import '../../receipts/domain/receipt_draft.dart';
 import '../../receipts/domain/receipt_evidence.dart';
-import '../../settings/domain/user_preferences.dart';
+import '../../settings/domain/local_preferences.dart';
 import '../../subscriptions/data/subscription_plans_codec.dart';
 import '../../transactions/domain/transaction.dart';
 import '../domain/finance_workspace.dart';
@@ -36,7 +36,6 @@ abstract final class FinanceWorkspaceCodec {
     },
     'dismissedRecurringKeys': w.dismissedRecurringKeys.toList()..sort(),
     'preferences': w.preferences.toJson(),
-    'sync': w.sync.toJson(),
   };
   static FinanceWorkspace decode(String payload) =>
       fromJson(jsonDecode(payload) as Json);
@@ -74,8 +73,7 @@ abstract final class FinanceWorkspaceCodec {
       dismissedRecurringKeys: (json['dismissedRecurringKeys'] as List)
           .cast<String>()
           .toSet(),
-      preferences: UserPreferences.fromJson(json['preferences'] as Json),
-      sync: SyncMetadata.fromJson(json['sync'] as Json),
+      preferences: LocalPreferences.fromJson(json['preferences'] as Json),
     );
   }
 

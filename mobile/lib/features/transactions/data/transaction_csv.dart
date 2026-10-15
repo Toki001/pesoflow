@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import '../../workspace/domain/finance_workspace.dart';
 
-/// Readable transaction export, not a restorable backup. Integer centavos remain
+/// Readable transaction export. Integer centavos remain
 /// explicit; quoting protects delimiters and apostrophes neutralize formulas.
 Uint8List transactionCsv(FinanceWorkspace w) {
   String text(String value) {

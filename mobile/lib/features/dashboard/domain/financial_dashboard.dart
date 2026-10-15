@@ -44,7 +44,7 @@ Dashboard financialDashboard(FinanceWorkspace workspace, DateTime now) {
           .toList()
         ..sort((a, b) => a.nextRenewal.compareTo(b.nextRenewal));
   return Dashboard(
-    name: workspace.preferences.name,
+    name: '',
     asOf: now,
     balance: balance,
     monthChange: report.netFlow,

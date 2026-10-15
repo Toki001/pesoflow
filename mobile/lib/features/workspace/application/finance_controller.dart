@@ -6,12 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pesoflow/core/identity/new_id.dart';
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:pesoflow/features/accounts/domain/financial_account.dart';
-import 'package:pesoflow/features/backups/domain/finance_backup.dart';
 import 'package:pesoflow/features/budgets/domain/spending_budget.dart';
 import 'package:pesoflow/features/notifications/domain/evaluate_notices.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_draft.dart';
 import 'package:pesoflow/features/receipts/domain/receipt_image_repository.dart';
-import 'package:pesoflow/features/settings/domain/user_preferences.dart';
+import 'package:pesoflow/features/settings/domain/local_preferences.dart';
 import 'package:pesoflow/features/subscriptions/domain/subscription_plan.dart';
 import 'package:pesoflow/features/transactions/domain/categorization.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
@@ -84,21 +83,6 @@ class FinanceController extends Notifier<FinanceState> {
     _tail = result.then<void>((_) {}, onError: (Object _, StackTrace _) {});
     return result;
   }
-
-  Future<void> restoreBackup(FinanceBackup backup, int expectedRevision) =>
-      _commit(
-        (w) {
-          if (w.revision != expectedRevision) throw const WorkspaceConflict();
-          return backup.workspace.copyWith(revision: w.revision);
-        },
-        evaluate: false,
-        persist: (next, revision) =>
-            (ref.read(financeRepositoryProvider) as BackupRepository)
-                .restoreBackup(
-                  FinanceBackup(next, backup.images, backup.createdAt),
-                  expectedRevision: revision,
-                ),
-      );
 
   Future<void> flush() => _tail;
   void dismissError() =>
@@ -329,10 +313,10 @@ class FinanceController extends Notifier<FinanceState> {
     (w) =>
         w.copyWith(dismissedRecurringKeys: {...w.dismissedRecurringKeys, key}),
   );
-  Future<void> savePreferences(UserPreferences prefs) => _commit((w) {
+  Future<void> savePreferences(LocalPreferences prefs) => _commit((w) {
     if (w.accounts.isNotEmpty && prefs.currency != w.preferences.currency) {
       throw ArgumentError(
-        'Currency cannot change while accounts exist. Export and clear financial data before changing currency.',
+        'Currency cannot change while accounts exist. Existing amounts cannot be converted by changing a preference.',
       );
     }
     return w.copyWith(preferences: prefs);
@@ -355,11 +339,7 @@ class FinanceController extends Notifier<FinanceState> {
   );
   Future<void> evaluateConditions() => _commit((w) => w);
   Future<void> clearFinancialData() => _commit(
-    (w) => FinanceWorkspace(
-      revision: w.revision,
-      preferences: w.preferences,
-      sync: w.sync,
-    ),
+    (w) => FinanceWorkspace(revision: w.revision, preferences: w.preferences),
     evaluate: false,
   );
 }

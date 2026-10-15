@@ -45,7 +45,7 @@ void main() {
       expect(w.subscriptions, isEmpty);
       expect(w.receipts, isEmpty);
       expect(w.notices, isEmpty);
-      expect(w.preferences.onboardingCompleted, isFalse);
+      expect(w.preferences.currency, 'PHP');
       expect(w.preferences.currency, 'PHP');
       expect(keys.creations, 1);
       await repository.load();
