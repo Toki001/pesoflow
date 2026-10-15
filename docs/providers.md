@@ -1,53 +1,17 @@
-# Provider boundary
+# Financial institutions and manual tracking
 
-No GCash, Maya, bank or Open Finance integrations exist in this foundation.
-Provider names on Home are frozen display fixtures. There are no credentials,
-connection sessions, account lookups, scraping, transfer capabilities or sync
-requests. `Demo · Active` qualifies the reference's simulated sync status.
+PesoFlow is a local-first expense tracker. GCash, Maya/PayMaya, GoTyme, MariBank,
+BDO, BPI and other institution names are user-entered labels on manually tracked
+financial accounts. They do not establish provider connections or verification.
 
-Stitch connection-screen claims are design reference copy, not verified API
-availability or compliance claims. Future adapters require legitimate provider
-documentation and authorization; they must remain isolated from domain logic.
+Users can create cash, e-wallet, bank, savings and credit accounts, edit opening
+balances/details, record expenses/income/internal transfers and inspect history.
+Card network/final-four metadata is optional and must reflect the actual card.
+Debit cards do not create duplicate underlying balances; available credit is
+shown separately from cash. Neutral icons are used where licensed logos are absent.
 
-Connected Accounts now exposes a native demo list at `/accounts`. Four masked
-profiles reproduce the approved design; BPI has a sample expired state. Active
-sample balances sum to ₱34,500. No amount is fetched from a financial provider.
-`DemoAccountsRepository` loads local fixtures and performs a no-network check.
-Sync All retains balances/as-of times, and errors retain the cached list.
-
-Settings, confirmed removal and restoring an existing sample are session-only.
-Real linking/reconnection is explicitly unavailable; the catalog requires no
-credentials and does not imply provider authorization. UnionBank/RCBC names in
-the design's institution panel are illustrative, not verified integrations.
-Trust copy does not claim encryption, certification, Open Finance authorization,
-regulatory compliance or automated provider support. No bank/wallet website is
-scraped, and no remote connection is created or revoked.
-
-
-Link Account's catalog now opens a native demo access review for each unlisted
-profile. An explicit unchecked acknowledgment is required before adding fixed
-sample data. This is not legal consent, provider authentication or an authorization
-redirect. No scopes, tokens, credentials, remote grants or revocations exist.
-Stale profiles retain their status and reported timestamp after restoration.
-
-
-Ledger account IDs are internal demo references, not provider-issued account
-numbers, tokens or consent grants. Checking, Savings, Debit and Credit Card at
-BDO have separate identities; institution/label equality never associates a
-transaction with a profile. Removing/restoring a sample profile preserves ledger
-IDs and history. Some fixture payment sources have no connected profile and
-remain illustrative ledger sources only.
-
-
-Native local storage now retains demo transactions and reviewed receipt details.
-The Drift/SQLite repository never contacts a bank/wallet, changes a reported
-balance, stores credentials or grants consent. Sample account membership and
-connection acknowledgments remain transient. Local reset restores activity
-fixtures and clears saved receipt snapshots; it revokes no real connection.
-
-
-Budget plans and subscription tracking also survive restart locally. Subscription
-payment-source names remain tracking labels; saved renewal dates, pausing/removing
-tracking and resetting plans never contact a provider, create charges or cancel
-services. Reset activity preserves plans; reset plans preserves recorded activity.
-Startup recovery explicitly confirms replacing all saved demo data.
+No financial provider SDK, OAuth consent flow, bank credential collection,
+Open Finance adapter, scraping, payment initiation, bank sync or reconnect action
+is implemented. Historical provider observation fields remain readable for data
+compatibility; local entries cannot manufacture a provider-reported balance.
+The optional NestJS health endpoint is independent of mobile startup.

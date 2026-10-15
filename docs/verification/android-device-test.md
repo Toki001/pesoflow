@@ -17,7 +17,7 @@ Physical save/restart checks below exercise native secure storage and the
 encrypted repository together; they do not independently inspect ciphertext. No previous `com.pesoflow.pesoflow` installation was present when checked.
 During this initial finance/receipt verification no phone/app data was cleared,
 no app was uninstalled and no financial records were injected. The subsequent
-authorized PesoFlow-only backup/reset/restore test is recorded separately below.
+authorized pre-v7 recovery exercise is summarized as a historical checkpoint below.
 
 Before installation, formatting was clean (186 files), Flutter analysis passed,
 and all 195 tests passed, including 21 current golden comparisons. The debug APK
@@ -107,7 +107,7 @@ its native OCR pipeline. Recognition output appeared in review; total/date
 were flagged missing. Recognition execution is not proof of parsing accuracy.
 
 Later checkpoints below complete corrected receipt save and release-mode checks.
-Low storage, cross-device restore, iPhone and broad receipt-corpus accuracy remain
+Low storage, iPhone and broad receipt-corpus accuracy remain
 separate acceptance gaps.
 
 
@@ -192,25 +192,25 @@ clean, **198 tests including 21 golden comparisons pass**; backend formatting,
 lint, build and its one health test pass. Final release APK/App Bundle builds pass.
 Signing is still the existing debug configuration, not release packaging.
 
-Remaining hardware gaps: iPhone, cross-device backup/restore and native file
+Remaining hardware gaps: iPhone and native file
 dialogs, ordinary permission denial/Settings recovery, airplane-mode first scan,
 lock/unlock and recents dismissal, orientation/large-text/accessibility coverage,
 full account CRUD, gallery/cloud-provider formats, large collections, interruptions
 through each capture/save stage and isolated low-storage behavior. No private
 receipt photo/raw text/payment identifier was committed. Recommended next task:
-complete backup/file-dialog and cross-device recovery acceptance using dedicated
-devices, a saved backup and its password; expand the receipt accuracy corpus.
+verify the current v7 UI by an in-place upgrade on dedicated devices; expand the
+receipt accuracy corpus. Removed recovery features are no longer acceptance tasks.
 
 
-## Subsequent physical backup recovery
+## Subsequent historical checkpoint and v7 status
 
-The [dedicated backup/restore report](backup-restore-device-test.md) records the
-next scoped task on this same release/device. After authenticating an externally
-saved backup, the user-authorized `pm clear com.pesoflow.pesoflow` reset removed
-only PesoFlow data. The verified empty installation restored accounts, finances,
-budgets, preferences and the real receipt image from Android DocumentsUI. Wrong
-password, corrupted-copy and invalid-file failures preserved newer records; a
-PHP 1 post-restore expense updated projections and survived restart before full
-replacement returned Home to PHP 5,195. This supersedes the local backup-dialog
-and clean-install recovery gaps above; cross-device/iPhone and isolated physical
-low-storage acceptance remain pending. No camera/OCR retest was required.
+A later, separately authorized pre-v7 recovery exercise returned this device to
+PHP 5,195 with three accounts, four transactions, one budget and the saved receipt.
+That removed feature's dedicated report is retained only in Git history. It is
+not an instruction or authorization to reset this installation again.
+
+On 16 October 2026 ADB discovery for the v7 migration returned no attached devices.
+No v7 installation, upgrade, hardware camera check or process restart was performed.
+Existing app data and external documents were not touched. The next device task
+must upgrade in place and verify the existing records; never uninstall or clear
+application data to work around installation/signing errors.

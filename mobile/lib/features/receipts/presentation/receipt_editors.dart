@@ -258,20 +258,28 @@ Future<TransactionCategory?> chooseReceiptCategory(BuildContext context) =>
     showModalBottomSheet<TransactionCategory>(
       context: context,
       showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Choose category', style: AppTypography.headlineSmall),
-              for (final c in TransactionCategory.values.where(
-                isExpenseCategory,
-              ))
-                ListTile(
-                  title: Text(categoryLabel(c)),
-                  onTap: () => Navigator.pop(context, c),
-                ),
-            ],
+      builder: (context) => Consumer(
+        builder: (context, ref, _) => SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Choose category', style: AppTypography.headlineSmall),
+                for (final c in TransactionCategory.values.where(
+                  (c) =>
+                      isExpenseCategory(c) &&
+                      !ref
+                          .watch(workspaceProvider)
+                          .preferences
+                          .hiddenCategories
+                          .contains(c),
+                ))
+                  ListTile(
+                    title: Text(categoryLabel(c)),
+                    onTap: () => Navigator.pop(context, c),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

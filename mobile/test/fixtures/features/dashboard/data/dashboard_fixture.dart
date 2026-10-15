@@ -1,9 +1,7 @@
 import 'package:pesoflow/features/dashboard/domain/dashboard.dart';
-import 'package:pesoflow/features/dashboard/domain/dashboard_repository.dart';
 
 /// Stitch's October 2024 snapshot, deliberately independent of the device clock.
 Dashboard homeFixture() => Dashboard(
-  name: 'Alex',
   asOf: DateTime(2024, 10, 24, 12, 34),
   balance: 3065000,
   monthChange: 243000,
@@ -85,9 +83,3 @@ Dashboard homeFixture() => Dashboard(
     ),
   ],
 );
-
-class FixtureDashboardRepository implements DashboardRepository {
-  const FixtureDashboardRepository();
-  @override
-  Future<Dashboard?> load() async => homeFixture();
-}

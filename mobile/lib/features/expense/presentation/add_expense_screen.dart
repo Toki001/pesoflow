@@ -147,6 +147,18 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       lastDate: DateTime(2030, 12, 31),
     );
     if (selected == null || !mounted) return;
+    setState(
+      () => date = DateTime(
+        selected.year,
+        selected.month,
+        selected.day,
+        date.hour,
+        date.minute,
+      ),
+    );
+  }
+
+  Future<void> pickTime() async {
     final time = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(date),
@@ -154,9 +166,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     if (time != null && mounted) {
       setState(
         () => date = DateTime(
-          selected.year,
-          selected.month,
-          selected.day,
+          date.year,
+          date.month,
+          date.day,
           time.hour,
           time.minute,
         ),
@@ -703,13 +715,23 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           ),
                           const SizedBox(height: 16),
                         ],
-                        fieldLabel('Date & Time'),
-                        OutlinedButton.icon(
-                          onPressed: pickDate,
-                          icon: const Icon(Icons.calendar_today_outlined),
-                          label: Text(
-                            DateFormat('MMM d, yyyy · h:mm a').format(date),
-                          ),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: pickDate,
+                              icon: const Icon(Icons.calendar_today_outlined),
+                              label: Text(
+                                DateFormat('MMM d, yyyy').format(date),
+                              ),
+                            ),
+                            OutlinedButton.icon(
+                              onPressed: pickTime,
+                              icon: const Icon(Icons.schedule_outlined),
+                              label: Text(DateFormat('h:mm a').format(date)),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 16),
                         fieldLabel('Notes & Tags'),

@@ -1,4 +1,4 @@
-# API foundation
+# Optional API foundation
 
 `GET /v1/health` returns HTTP 200:
 
@@ -6,7 +6,8 @@
 { "status": "ok", "service": "pesoflow-api" }
 ```
 
-This is process liveness only. It checks no database or financial institution.
-All financial endpoints are unimplemented and return 404. The Flutter demo
-does not call this API. Authentication, authorization and persistence must be
-implemented before exposing any user or financial data.
+This checks process liveness, not a database or financial institution. Other
+financial endpoints return 404. The Flutter app uses encrypted local repositories
+and never requires this server. No login, profile, provider, financial persistence
+or synchronization modules are implemented in the backend. Helmet and validation
+remain in the minimal NestJS foundation; do not expose financial data through it.

@@ -136,24 +136,51 @@ class SettingsScreen extends ConsumerWidget {
       String title,
       String value, {
       VoidCallback? onTap,
-    }) => ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      leading: CategoryIcon(
-        icon,
-        foreground: c.primary,
-        background: c.primary.withValues(alpha: .08),
-      ),
-      title: Text(title, style: AppTypography.bodyMedium),
-      subtitle: value.isEmpty
-          ? null
-          : Text(
+    }) => InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+        child: LayoutBuilder(
+          builder: (context, bounds) {
+            final stacked =
+                MediaQuery.textScalerOf(context).scale(14) > 19 ||
+                bounds.maxWidth < 290;
+            final label = Text(title, style: AppTypography.bodyMedium);
+            final detail = Text(
               value,
               style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
-            ),
-      trailing: onTap == null
-          ? null
-          : const Icon(Icons.chevron_right, size: 20),
-      onTap: onTap,
+              textAlign: stacked ? TextAlign.start : TextAlign.end,
+            );
+            return Row(
+              children: [
+                CategoryIcon(
+                  icon,
+                  foreground: c.primary,
+                  background: c.primary.withValues(alpha: .08),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  flex: 3,
+                  child: stacked
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [label, const SizedBox(height: 6), detail],
+                        )
+                      : label,
+                ),
+                if (!stacked) ...[
+                  const SizedBox(width: 8),
+                  Expanded(flex: 2, child: detail),
+                ],
+                if (onTap != null) ...[
+                  const SizedBox(width: 8),
+                  const Icon(Icons.chevron_right, size: 18),
+                ],
+              ],
+            );
+          },
+        ),
+      ),
     );
     return TaskScreen(
       title: 'Settings',

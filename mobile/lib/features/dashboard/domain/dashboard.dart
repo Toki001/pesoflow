@@ -9,7 +9,6 @@ part 'dashboard.g.dart';
 @freezed
 abstract class Dashboard with _$Dashboard {
   const factory Dashboard({
-    required String name,
     required DateTime asOf,
     required int balance,
     required int monthChange,

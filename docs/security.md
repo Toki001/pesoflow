@@ -13,7 +13,7 @@ SQLite persistence, with fresh nonces and record-bound associated data. Drift
 stores ciphertext; the key lives in platform secure storage (device-bound iOS
 Keychain). Android platform app-data backup is disabled. The app exposes no raw
 bank credentials or account numbers; manual accounts keep optional masked labels.
-Inter/icons are bundled; Dio is reserved and unused. Payloads, passwords, keys
+Inter/icons are bundled; the unused network transport has been removed. Payloads, passwords, keys
 and tokens are not logged.
 
 Startup fails closed when ciphertext cannot be opened. It never replaces damaged
@@ -28,29 +28,17 @@ locking is not implemented. No forensic-erasure guarantee is made for SQLite,
 file-provider caches or OS copies. Physical-device interruption, secure-storage
 and lock/unlock checks remain required before release.
 
-## User-controlled backups
+## Export and data retention
 
-Settings can save a password-encrypted portable backup independently of the device
-key, or export an explicitly disclosed plaintext transaction CSV. See
-[backup format, recovery and limits](backup.md). PBKDF2-HMAC-SHA256 (600,000
-iterations, random 16-byte salt) and AES-256-GCM protect the portable payload.
-Passwords are never persisted and cannot be recovered. Sync ownership, device
-keys and biometric enrollment are never transferred. Strong passwords remain
-necessary because anyone holding a backup can attempt offline password guesses.
+Backup/Restore and their password-based portable cryptography have been removed.
+Encrypted local storage and device-bound keys remain. Saved external documents
+are untouched by the migration. The app has no cloud recovery service or automatic
+reset when data/key access fails. Removing app data can make records unrecoverable.
 
-Restore decrypts/validates before preview and explicit replacement confirmation.
-A reviewed revision prevents stale replacement; workspace and image changes
-commit atomically under the destination key. Wrong passwords, tampering, malformed
-records, save cancellation and failed transactions do not replace committed data.
-Missing-key recovery requires a previously saved backup and confirmation. There
-is no automatic destructive reset and no cloud recovery service.
-
-Backup plaintext/receipt bytes remain in app memory; Dart cannot promise memory
-zeroization. Native pickers/providers may retain encrypted backup copies. CSV and
-its possible staging files are readable without a password. Users select the
-save destination, which can include a third-party cloud document provider. No
-PesoFlow server receives exported data. File size/decrypted size/image bounds and
-fixed algorithm/version checks constrain untrusted import work.
+Transactions can export a readable CSV after disclosure through a native save
+dialog. CSV and possible file-provider staging copies are not encrypted by
+PesoFlow. The user chooses the destination; no PesoFlow server receives the data.
+Quoting and formula-prefix neutralization constrain spreadsheet interpretation.
 
 ## Receipt capture and OCR
 
@@ -65,22 +53,16 @@ Prepared files are cleaned after replacement/discard/successful save, with stale
 staging cleanup on the next scan after restart. Plugin/OS caches may survive a
 crash; no forensic-erasure guarantee is made. Unsaved review edits are session-only.
 A single database transaction commits the expense, metadata and encrypted image;
-transaction deletion removes the associated image atomically. Backups include
-required image references, validate them before restore, and remain subject to
-[existing size limits](backup.md). See [receipt architecture and
+transaction deletion removes the associated image atomically. See [receipt architecture and
 limitations](receipts.md) and the [device acceptance checklist](verification/receipt-device-checklist.md).
 
 ## Deferred services
 
-The NestJS API still exposes liveness only. Helmet and validation are configured;
-production authentication, ownership checks, TLS deployment, server persistence,
-rate limits and audit controls are not implemented. Provider connections/consent,
-external financial data, cloud sync and OS notification delivery remain
-unavailable. Local in-app notices do not represent provider monitoring or delivery
-receipts. Introduction completion is a navigation preference, not authorization.
+The optional NestJS API exposes liveness only; it receives no financial data.
+Provider connections, external financial data, cloud sync and OS notification
+delivery are unavailable. Local in-app notices do not represent provider monitoring.
 
 Environment files, signing keys, database files and build output stay out of
-source control. Commit lockfiles and review dependency changes. The backup feature
-uses file_picker for native document dialogs. Receipt capture requests Camera only
-on user action and uses the system photo picker without broad-storage access.
-Native permission behavior still needs physical-device verification.
+source control. Native CSV export retains file_picker. Receipt capture requests
+Camera only on user action and uses the system photo picker without broad-storage
+access. Physical permission/runtime acceptance is documented separately.

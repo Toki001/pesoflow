@@ -1,6 +1,6 @@
-# Stitch v7 implementation — 15 October 2026
+# Stitch v7 implementation — 16 October 2026
 
-Status: in progress. Source baseline `694ba26`.
+Status: native integration and automated verification complete; physical v7 acceptance pending. Source baseline `694ba26`.
 
 ## Authority and inventory
 
@@ -40,10 +40,10 @@ Saved external documents are outside this task and must not be touched.
 - [x] Consolidate tokens/components and implement Home/navigation.
 - [x] Implement transaction, account, budget/analytics and subscription designs.
 - [x] Implement scanner/review, notifications and Settings designs.
-- [ ] Review all 13 goldens, run full checks and native builds.
-- [ ] Attempt non-destructive physical upgrade only if device is connected.
+- [x] Review all 13 screen captures, run full checks and native builds.
+- [x] Check attached devices: none connected; physical upgrade NOT TESTED.
 
-No v7 UI/build/device completion is claimed at this checkpoint.
+The following checkpoints record intermediate results; final results are below.
 
 Removal checkpoint: analyzer clean; 22 focused encrypted-repository, financial
 command, receipt and pre-v7 compatibility tests pass. The upgrade test opens old
@@ -80,6 +80,34 @@ connection UI and unused Dio transport/dependency were removed.
 
 Full Flutter suite: **206 passing tests**, including 29 golden comparisons
 (12 screens × light/dark plus 5 receipt-review states). Analyzer is clean.
-An intermediate release APK built successfully; final APK/AAB and iOS checks are
-being run after cleanup. ADB discovery returned no attached devices on 16 October;
+An intermediate release APK built successfully; final APK/AAB and iOS checks were
+pending at this checkpoint. ADB discovery returned no attached devices on 16 October;
 physical v7 upgrade/restart is **NOT TESTED**, with no device data changed.
+
+## Final verification and cleanup — 16 October
+
+- Formatting: 162 files, zero changes; Flutter analysis clean.
+- Full suite: 219 tests pass, including 29 golden comparisons, 12 landscape checks,
+  compact/200% text and keyboard layouts. Receipt notes and old optional fields
+  round-trip through encrypted storage. Native version lookup has a channel test.
+- Android final APK: PASS, 99.8 MB; AAB: PASS, 80.7 MB (development signing).
+- iOS final unsigned device compile: PASS. Restored one missing ML Kit binary from
+  the matching local CocoaPods cache; dependency versions and app identity unchanged.
+- Retained backend format/lint/build and one localhost health test: PASS.
+- No connected ADB devices; no v7 physical launch/upgrade/restart claim.
+
+Removed unreferenced prototype UI/storage/preferences and retired golden PNGs,
+unused account-detail/dashboard providers/interfaces, reserved Dio transport and
+the Dashboard identity name. Domain tests and two test-only historical financial
+helpers remain. Rewrote stale demo/backup documentation to describe the actual app.
+
+Remaining keyword references were classified: encryption authentication is a
+cryptographic property; receipt scan sessions and ICC profile removal are image
+processing; Restore account re-enables an archived financial account; historical
+provider/source enum fields preserve readable persisted records; legacy database
+names document the no-delete/no-import boundary. None are user login or portable
+recovery implementations. Android platform backup exclusion remains intentional.
+
+Final visual differences and platform limits are recorded in `ui-reference.md`
+and `production-readiness.md`. Next is an in-place Redmi upgrade and dedicated
+physical iPhone acceptance, preserving existing records and receipt images.

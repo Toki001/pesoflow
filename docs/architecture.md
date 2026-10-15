@@ -1,7 +1,7 @@
 # Local-first architecture
 
 PesoFlow opens without login, profiles, a backend or backup/restore. The current
-13-screen visual migration is tracked in [progress](stitch-v7-progress.md).
+13-screen native integration is tracked in [progress](stitch-v7-progress.md).
 
 `main.dart` composes FinanceDatabase, FinancialCipher and SqliteFinanceRepository.
 FinanceBootstrap loads the encrypted workspace before creating Riverpod scope and
@@ -31,3 +31,9 @@ Tests inject clocks, repositories and receipt adapters. Production never loads t
 fixtures. Golden comparisons use bundled Inter and Material icons. Use
 `scripts/check.sh` for format/analyze/test and retained NestJS health checks. The
 backend is an optional standalone liveness service, not a mobile dependency.
+
+Settings stores category visibility and a default account as optional JSON fields.
+A minimal `com.pesoflow/app_info` method channel reads installed Android package
+and iOS bundle version metadata; it introduces no package or identity dependency.
+Credit metadata and receipt notes are additive optional fields, not schema changes.
+The unused Dio transport and obsolete projection/connection UI were removed.

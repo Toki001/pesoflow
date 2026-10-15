@@ -24,6 +24,7 @@ import 'support/finance_fakes.dart';
 ReceiptDraft captured({bool confirmed = true}) => ReceiptDraft(
   id: 'real-image',
   merchant: 'Jollibee',
+  note: 'Reviewed pharmacy purchase',
   accountId: 'cash',
   account: 'Cash',
   occurredAt: DateTime(2024, 10, 24, 11),
@@ -47,6 +48,12 @@ void main() {
     expect(captured().includedVat, 3485);
     expect(captured(confirmed: false).validationError, contains('Verify'));
     final json = FinanceWorkspaceCodec.receiptToJson(captured());
+    expect(
+      captured().toTransaction('note-test').note,
+      'Reviewed pharmacy purchase',
+    );
+    final legacy = Map<String, dynamic>.from(json)..remove('note');
+    expect(FinanceWorkspaceCodec.receiptFromJson(legacy).note, '');
     expect(
       FinanceWorkspaceCodec.receiptToJson(
         FinanceWorkspaceCodec.receiptFromJson(json),

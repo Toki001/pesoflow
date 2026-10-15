@@ -48,6 +48,16 @@ class LocalPreferences {
   );
 
   void validate() {
+    if (defaultAccountId.length > 200 ||
+        hiddenCategories.toSet().length != hiddenCategories.length ||
+        !TransactionCategory.values.any(
+          (c) => isExpenseCategory(c) && !hiddenCategories.contains(c),
+        ) ||
+        !TransactionCategory.values.any(
+          (c) => isIncomeCategory(c) && !hiddenCategories.contains(c),
+        )) {
+      throw const FormatException('Invalid category or account preference.');
+    }
     if (!supportedCurrencies.contains(currency) ||
         !supportedLocales.contains(locale)) {
       throw const FormatException('Unsupported preferences.');

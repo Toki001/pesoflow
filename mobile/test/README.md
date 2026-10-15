@@ -1,60 +1,30 @@
 # Financial and UI verification
 
-Production startup must receive a loaded FinanceWorkspace and FinanceRepository;
-there are no default fixture providers. `support/finance_fakes.dart` supplies
-controlled failures and an in-memory key store only for tests. The restart widget
-test uses the real encrypted Drift repository on a temporary SQLite file, closes
-it and reconstructs FinanceBootstrap and the repository, including persisted theme.
-It does not substitute for a physical-device Keychain/Keystore recovery test.
+Production initializes an encrypted `FinanceWorkspace`/repository before rendering.
+Fixtures and controlled failures live only under `test/fixtures` and `test/support`.
+No runtime sample provider or reset control exists.
 
-`fixtures/` contains deterministic Stitch examples and the explicit workspace used
-by production widget/golden tests. `legacy/` retains prototype codecs, projection
-helpers and receipt UI for reference-only tests; production cannot import them.
-Former demo reset, consent and seeded-startup tests were retired with those flows.
-Financial engine, codec/encryption, account identity, filtering and decimal parsing
-regressions remain, supplemented by production forms and cross-screen projections.
+`production_app_test.dart` covers 12 v7 states in light/dark goldens; the receipt
+suite adds five review states (normal, uncertain, missing items, OCR failure, dark).
+Together these cover all 13 approved screens. Fresh-install/large-text and form
+checks accompany captures. `v7_preferences_test.dart` verifies real persisted
+preferences, default account/category selection, read states, removed routes and
+native installed-version lookup. The version platform adapter is mocked only in
+widget tests; native builds compile the actual implementation.
 
-`production_app_test.dart` compares 14 light/dark baselines covering Home,
-Transactions, Accounts, Budgets, Analytics, Add and Detail, and checks empty starts,
-large-text layouts, onboarding, command forms and restart. Historical golden PNGs
-without the `production_` or `backup_` prefix are prototype references, not current comparisons.
-The screenshots intentionally show exact fixture-ledger totals, not the omitted
-history/aggregate offsets from the original prototype.
+Financial tests cover integer arithmetic, transfers/refunds/pending records,
+account identity, edits/deletion/archiving, budget and analytics projections,
+revision conflicts, failed writes and encrypted file-backed restart. Pre-v7
+compatibility opens old optional JSON fields without rewriting ciphertext and
+retains financial rows/images after a normal write. Receipt tests cover parsing,
+image preparation, cancellation/denial/retry, explicit confirmation, duplicate
+save protection and atomic image/expense persistence/reopen/delete.
 
-Run `flutter test`. Regenerate a reviewed production baseline only with:
-`flutter test test/production_app_test.dart --update-goldens`.
+Two retained prototype helpers under `legacy/` support historical financial domain
+regressions only; obsolete UI, identity/demo storage and old golden PNGs were removed.
+Current golden names are `production_*` and `receipt_production_*`.
 
-`backup_test.dart` covers portable encryption, strict import validation, whole-store
-atomic replacement, new-key recovery, file-backed reopen and projection refresh.
-`backup_screen_test.dart` covers review/confirmation/cancel/failure/retry and two
-light/dark settings goldens. File pickers and UI cryptography are injected for
-widget tests; codec/repository tests use real encryption. Regenerate only reviewed
-backup baselines with `flutter test test/backup_screen_test.dart --update-goldens`.
-Native file-picker and physical-device recovery steps are in `docs/backup.md`.
-
-`backup_resilience_test.dart` constrains temporary SQLite files to produce actual
-`SQLITE_FULL` in DELETE/WAL mode, checks controller state and close/reopen rollback,
-then retries after lifting the ceiling. It also injects unavailable key storage.
-Backup widget checks inject provider errors and lifecycle transitions; they do
-not operate native dialogs or lock physical devices.
-
-From the repository root, run `python3 scripts/check_backup_interruptions.py`
-for four additional POSIX process-kill/reopen cases. The runner explicitly invokes
-`test/device/backup_interrupt_worker.dart`, verifies PID ownership, kills only its
-own isolated worker and checks the data in a fresh process. That worker is not a
-normal `*_test.dart` target and must not run without the runner's temporary marker
-and environment. These cases are separate from the standard Flutter test count.
-See [device evidence and pending steps](../../docs/verification/backup-device-checklist.md).
-
-For native persistence, use a dedicated empty simulator only:
-
-```sh
-flutter run -d <isolated-simulator-id> -t test/device/persistence_smoke.dart --dart-define=PESOFLOW_STORAGE_SMOKE=true
-# Once Home appears, quit with q, then restart using the production target:
-flutter run -d <isolated-simulator-id> -t lib/main.dart
-```
-
-The guarded harness refuses a nonempty workspace. It uses real platform secure
-storage and production commands to persist a PHP 1,000 account, PHP 325.25 expense,
-PHP 5,000 monthly budget and dark appearance. After process termination the normal
-entry point must restore Home with PHP 674.75, the expense and budget, in dark mode.
+Run `flutter test`. Update captures only after reviewing changes against Stitch:
+`flutter test test/production_app_test.dart test/receipt_screen_test.dart --update-goldens`.
+Physical device results remain separate; fake-adapter tests do not validate native
+camera/file dialogs. Never run a seeding harness on an existing installation.

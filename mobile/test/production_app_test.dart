@@ -25,6 +25,9 @@ import 'package:pesoflow/features/workspace/domain/finance_workspace.dart';
 import 'fixtures/finance_workspace_fixture.dart';
 import 'fixtures/stitch_v7_fixture.dart';
 import 'support/finance_fakes.dart';
+import 'support/receipt_fakes.dart';
+
+import 'package:pesoflow/features/receipts/application/receipt_scan_controller.dart';
 
 final clock = DateTime(2024, 10, 24, 12, 35);
 void viewport(WidgetTester tester, Size size) {
@@ -45,7 +48,9 @@ Future<ProviderContainer> pumpApp(
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
-        appVersionProvider.overrideWith((ref) async => '1.0.0 (Build 1)'),
+        appVersionProvider.overrideWith((ref) async => '0.1.0 (Build 1)'),
+        receiptImagesProvider.overrideWithValue(FakeReceiptImages()),
+        receiptOcrProvider.overrideWithValue(FakeReceiptOcr()),
         financeRepositoryProvider.overrideWithValue(repo),
         initialWorkspaceProvider.overrideWithValue(repo.workspace),
         clockProvider.overrideWithValue(() => clock),
@@ -141,6 +146,39 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+  for (final route in [
+    '/home',
+    '/transactions',
+    '/accounts',
+    '/budgets',
+    '/analytics',
+    '/add',
+    '/add?kind=income',
+    '/settings',
+    '/notifications',
+    '/subscriptions',
+    '/receipt',
+    '/transactions/jollibee',
+  ]) {
+    testWidgets('$route landscape layout', (tester) async {
+      viewport(tester, const Size(844, 390));
+      await pumpApp(tester, route: route, workspace: stitchV7Fixture());
+      expect(tester.takeException(), isNull);
+    });
+  }
+  testWidgets('manual form remains usable above the software keyboard', (
+    tester,
+  ) async {
+    viewport(tester, const Size(390, 844));
+    await pumpApp(tester, route: '/add', workspace: financeFixture());
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.tap(find.byKey(const ValueKey('amount-input')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const ValueKey('amount-input')), '480');
+    expect(find.text('Save Expense'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   testWidgets(
     'category-only budget never displays a fabricated overall limit',
     (tester) async {

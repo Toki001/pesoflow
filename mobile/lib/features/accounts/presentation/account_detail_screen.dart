@@ -93,7 +93,8 @@ class AccountDetailScreen extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () async {
-              if (!await confirmAccountRemoval(context, a) || !context.mounted) {
+              if (!await confirmAccountRemoval(context, a) ||
+                  !context.mounted) {
                 return;
               }
               try {

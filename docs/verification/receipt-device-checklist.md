@@ -9,8 +9,8 @@ See [device evidence and exact gaps](android-device-test.md). Items below are an
 acceptance checklist, not blanket PASS claims. ML Kit's x86_64 simulator limitation
 also prevents running this build on the installed Apple Silicon iOS 27 simulator.
 
-Use dedicated test installations and synthetic/redacted receipts. Save an encrypted
-backup and its password before any destructive restore/deletion test. Never log or
+Use dedicated test installations and synthetic/redacted receipts. Never delete
+existing personal records or clear/uninstall an installation for this testing. Never log or
 commit real receipt photos, raw OCR, loyalty numbers or payment references.
 Record device, OS, app commit, result and redacted defect description for each case.
 
@@ -67,15 +67,9 @@ from parser confidence; do not interpret the heuristic score as an accuracy rate
 - On an isolated low-storage installation, fail capture staging and database/image
   commit. Restore space and retry. Inspect for partial expenses and stale staging;
   never exhaust storage on a personal device to perform this check.
-- Delete a receipt transaction after exporting a backup: image and metadata disappear
-  atomically and projections recalculate. Existing exported backups retain their
-  earlier snapshot; deletion cannot erase external backup copies.
-- Export, transfer Android→iPhone and iPhone→Android, then restore after review.
-  Compare image bytes/metadata, expense and projections; restart the destination.
-  Missing/tampered images or backup data must fail safely without replacing valid
-  financial records. Verify [backup interruption checks](backup-device-checklist.md).
-- Exceed the documented backup image/size limits in a disposable installation:
-  explicit failure, no truncated "successful" backup. CSV remains independent.
+- On a disposable test installation only, explicitly delete a synthetic receipt
+  transaction: image and metadata disappear atomically and projections recalculate.
+  This does not authorize deletion of the existing Redmi's personal/test records.
 
 Release consideration needs this device evidence plus review of recognition
 accuracy on a consented/redacted Philippine receipt corpus. Native build success

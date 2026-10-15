@@ -1,33 +1,22 @@
 # PesoFlow
 
-PesoFlow is a native Flutter personal-finance app based on the approved
-[Stitch UI](design/stitch/). Engineering instructions live in [CODEX.md](CODEX.md).
+PesoFlow is a native, local-first Flutter expense tracker based on the approved
+[13 Stitch v7 screens](design/stitch/). Read [CODEX.md](CODEX.md) before changes.
 
-## Current application
+The app opens Home after initializing encrypted local storage, with no login,
+registration or profile. Fresh finances are empty. Create a manual account,
+record expenses/income/internal transfers, manage budgets and recurring bills,
+and inspect actual account balances and analytics. Appearance, category visibility,
+default payment account and in-app alert preferences persist on the device.
 
-The app opens an encrypted, device-local financial workspace. New installations
-start with an introduction and empty finances. Create a manual account, then add
-expenses, income or transfers. Home, Transactions, Accounts, monthly Budgets and
-Analytics use your saved records; edits and deletions recalculate their totals.
-Account history is preserved by archiving used accounts. Appearance, introduction
-completion, manual subscription plans and in-app notice read status also persist.
+Camera/gallery and on-device Latin ML Kit OCR support receipt review. Correct and
+confirm the extracted fields before saving; expense, metadata and encrypted image
+commit together. Saved images reopen after restart. See [receipt behavior](docs/receipts.md).
 
-Balances are manually tracked, not bank-reported. No backend account or credentials
-are required. External providers, backend authentication, cloud sync and release
-distribution are not implemented. Settings → Backup & export
-can save a password-encrypted portable backup, restore it after review, or export
-a readable transaction CSV. Keep the backup and its password safely outside the
-app; see [backup and recovery](docs/backup.md). Old `pesoflow_demo` databases are preserved but
-are never imported automatically into real finances.
-
-Receipt scanning uses on-device ML Kit OCR with camera/photo input and manual
-crop/rotation. Review the merchant, date, items, total and payment account before
-saving; the expense and encrypted receipt persist together. See
-[receipt behavior and platform limits](docs/receipts.md). Real-device camera/OCR
-acceptance remains pending; ML Kit's x86_64 simulator artifact cannot run on the
-installed Apple Silicon iOS 27 simulator.
-
-## Run and verify
+Backup and Restore have been removed. CSV export is available from Transactions
+as a readable report. There are no bank connections, cloud accounts, payment
+operations or OS notification delivery. Existing financial data is preserved on
+normal updates; no update resets the database or changes its key.
 
 ```sh
 cd mobile
@@ -35,15 +24,14 @@ flutter pub get
 flutter run
 ```
 
-From the repository root, `bash scripts/check.sh` runs mobile and backend checks.
-The backend remains a minimal NestJS health service; run it with
-`cd backend && npm ci && npm run start:dev` when needed.
+`bash scripts/check.sh` runs Flutter formatting/analysis/tests and the retained
+NestJS health-service checks. The backend is optional and is not used by mobile
+startup. Run it with `cd backend && npm ci && npm run start:dev` when needed.
 
-The mobile stack uses Riverpod, GoRouter, Drift, platform secure storage,
-AES-256-GCM, Freezed and json_serializable. Dio is reserved for future API work.
-Test fixtures are confined to `mobile/test/`; production has no sample-data entry
-or reset controls.
+The mobile stack uses Riverpod, GoRouter, Drift, secure storage, AES-256-GCM,
+Freezed/json_serializable and native receipt/file-picker adapters. Deterministic
+fixtures live only in `mobile/test/`. No new runtime demo controls are present.
 
-See [production readiness](docs/production-readiness.md) for verified checkpoints,
-limitations and the next task, and [UI references](docs/ui-reference.md) for the
-approved visual patterns.
+See [production readiness](docs/production-readiness.md) for build/test results,
+physical-device limits and the recommended next task, and
+[UI mapping](docs/ui-reference.md) for design decisions and deliberate differences.

@@ -7,7 +7,6 @@ part of 'dashboard.dart';
 // **************************************************************************
 
 _Dashboard _$DashboardFromJson(Map<String, dynamic> json) => _Dashboard(
-  name: json['name'] as String,
   asOf: DateTime.parse(json['asOf'] as String),
   balance: (json['balance'] as num).toInt(),
   monthChange: (json['monthChange'] as num).toInt(),
@@ -35,7 +34,6 @@ _Dashboard _$DashboardFromJson(Map<String, dynamic> json) => _Dashboard(
 
 Map<String, dynamic> _$DashboardToJson(_Dashboard instance) =>
     <String, dynamic>{
-      'name': instance.name,
       'asOf': instance.asOf.toIso8601String(),
       'balance': instance.balance,
       'monthChange': instance.monthChange,

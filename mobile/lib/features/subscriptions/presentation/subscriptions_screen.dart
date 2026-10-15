@@ -100,13 +100,19 @@ class SubscriptionsScreen extends ConsumerWidget {
                       (
                         'Active Subscriptions & Utilities',
                         ordered.where(
-                          (p) => p.active && p.cycle != BillingCycle.yearly,
+                          (p) =>
+                              p.active &&
+                              p.cycle != BillingCycle.yearly &&
+                              !upcoming.contains(p),
                         ),
                       ),
                       (
                         'Annual & Long-Term Commitments',
                         ordered.where(
-                          (p) => p.active && p.cycle == BillingCycle.yearly,
+                          (p) =>
+                              p.active &&
+                              p.cycle == BillingCycle.yearly &&
+                              !upcoming.contains(p),
                         ),
                       ),
                       ('Paused Tracking', ordered.where((p) => !p.active)),

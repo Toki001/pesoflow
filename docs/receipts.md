@@ -3,7 +3,7 @@
 PesoFlow reads a camera or selected photo on the device, suggests receipt fields,
 and saves an expense only after review. No backend account, network connection,
 external provider or payment initiation is required. The approved
-[Stitch receipt review](../design/stitch/receipt_scanner_review/screen.png) remains
+[Stitch receipt review](../design/stitch/receipt_review/screen.png) remains
 the layout reference. Real receipts replace the former synthetic preview.
 
 ## Native input and OCR
@@ -77,7 +77,7 @@ remember-category choice. A detected CASH/GCASH/MAYA/CARD label is only a hint:
 the user chooses an active manually tracked account. A manual account can be
 created from the picker without losing the receipt review. No payment is sent.
 
-## Persistence, privacy and backup
+## Persistence and privacy
 
 `ReceiptScanController` owns one unsaved review. Progress describes actual stages,
 without invented percentages. Capture cancellation preserves corrections;
@@ -104,29 +104,23 @@ same transaction. Transaction Detail opens the persisted image and metadata;
 missing, unauthenticatable or undecodable images have safe display states.
 
 Images and metadata use the existing authenticated encryption/device key. No raw
-OCR or image logging is added. Portable backups include both and validate required
-image references before restore. Restoring re-encrypts under the destination key
-atomically. Legacy snapshots without evidence remain readable; older app versions
-can reject the new optional evidence fields, so restore with an up-to-date app.
-Do not downgrade a workspace containing scanned receipts to an older app without
-receipt-evidence support.
+OCR or image logging is added. Legacy records without evidence and without the
+optional note field remain readable. Notes save with the reviewed expense.
+Backup/Restore are removed; transaction CSV remains an independent readable report.
 
-Existing backup bounds still apply: 20 MiB per image, 24 MiB combined image bytes,
-32 MiB serialized plaintext and 48 MiB backup file. Base64/metadata/encryption
-size overhead can reach a bound earlier. Oversized backup fails explicitly; it
-never silently omits photos. A large receipt collection needs a future streaming/
-versioned backup enhancement. Transaction CSV remains available independently.
-Recovery requires a saved backup and its password; no recovery service exists.
+The v7 scanner has a dark camera/gallery entry frame; it opens the actual system
+camera rather than simulating a camera feed. Review uses a light/dark secondary
+header, actual image card, total hero, editable assignments/items and confirmation.
+A configured default payment account can preselect an active manual account;
+users still verify it against the receipt's payment hint.
 
 ## Verification
 
 Parser, image preparation, adapter mapping, scan controller, review widgets,
-financial projections, atomic failures, file-backed reopen, deletion and backup
-round-trip tests live under `mobile/test/receipt_*_test.dart`. Only test helpers
+financial projections, atomic failures, file-backed reopen and deletion tests live under `mobile/test/receipt_*_test.dart`. Only test helpers
 supply fake OCR and generated receipt images. Production has no sample loader.
-Five new goldens cover normal, uncertain, missing-item, OCR-error and dark review;
-existing Stitch goldens are retained. Two current Add Expense goldens change only
-because their unavailable-scanning subtitle now describes the enabled flow.
+Five current goldens cover normal, uncertain, missing-item, OCR-error and dark review.
+The production screen tests also cover scanner entry in light and dark modes.
 
 Run `bash scripts/check.sh`, then the Android debug and iOS simulator builds.
 See the [physical-device checklist](verification/receipt-device-checklist.md).
