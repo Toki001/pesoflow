@@ -23,6 +23,14 @@ class NotificationsScreen extends ConsumerWidget {
     final filter = ref.watch(noticeFilterProvider);
     final c = context.colors;
     final unreadOnly = ref.watch(unreadOnlyProvider);
+    bool matches(NoticeView n) =>
+        (!unreadOnly || !read.contains(n.id)) &&
+        switch (filter) {
+          NoticeFilter.all => true,
+          NoticeFilter.budget => n.kind == NoticeKind.budget,
+          NoticeFilter.renewal => n.kind == NoticeKind.renewal,
+          NoticeFilter.unread => !read.contains(n.id),
+        };
     return TaskScreen(
       title: 'Notifications',
       backIcon: Icons.arrow_back,
@@ -80,7 +88,7 @@ class NotificationsScreen extends ConsumerWidget {
               Semantics(
                 liveRegion: true,
                 child: Text(
-                  '$unread unread · ${state.value!.length} alerts',
+                  '${state.value!.where(matches).length} of ${state.value!.length} alerts · $unread unread overall',
                   style: AppTypography.labelMedium.copyWith(color: c.mutedInk),
                 ),
               ),
@@ -113,19 +121,7 @@ class NotificationsScreen extends ConsumerWidget {
                 onAction: () => ref.invalidate(notificationsProvider),
               ),
               data: (notices) {
-                final visible = notices
-                    .where(
-                      (n) =>
-                          (!unreadOnly || !read.contains(n.id)) &&
-                          switch (filter) {
-                            NoticeFilter.all => true,
-                            NoticeFilter.budget => n.kind == NoticeKind.budget,
-                            NoticeFilter.renewal =>
-                              n.kind == NoticeKind.renewal,
-                            NoticeFilter.unread => !read.contains(n.id),
-                          },
-                    )
-                    .toList();
+                final visible = notices.where(matches).toList();
                 if (notices.isEmpty) {
                   return const _InboxMessage(
                     title: 'No alerts',

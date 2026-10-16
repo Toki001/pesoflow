@@ -91,3 +91,14 @@ in either theme. Inputs and selected-category indicators retain their meaningful
 outlines. Subscriptions & Bills is reachable directly from Budgets and Settings.
 The owner's `logo.svg` is the launcher artwork; regenerate native icons on macOS
 with `swift scripts/generate-app-icons.swift`. Screen layouts remain native.
+
+
+## Owner screenshot corrections — 16 October 2026
+
+Notifications uses an alert-type dropdown plus an independent Unread only switch;
+its count distinguishes filtered results from unread notices across the inbox.
+Budgets places New beside Category Budgets, keeps the period on its own row, and
+moves Subscriptions & Bills below the category list. Icons consistently use brand
+blue; financial amounts, warning text and progress bars retain semantic colors.
+Icon-bearing filled actions use pale surfaces to keep blue glyphs legible.
+Receipt review has separate Rotate (left) and Crop (right) controls below the image.
