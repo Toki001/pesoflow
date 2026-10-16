@@ -81,3 +81,13 @@ hierarchy mismatches corrected. Remaining differences include native icon glyphs
 font wrapping, denser validation controls and content-dependent card heights.
 This is not a claim of pixel-identical rendering or physical-device acceptance.
 See [readiness](production-readiness.md) for exact command results and limits.
+
+
+## Owner follow-up — borderless sections and logo
+
+The October 16 direction supersedes generated DESIGN.md prose prescribing card
+outlines: section cards use surfaces and restrained shadows without border lines
+in either theme. Inputs and selected-category indicators retain their meaningful
+outlines. Subscriptions & Bills is reachable directly from Budgets and Settings.
+The owner's `logo.svg` is the launcher artwork; regenerate native icons on macOS
+with `swift scripts/generate-app-icons.swift`. Screen layouts remain native.

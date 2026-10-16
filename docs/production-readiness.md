@@ -78,17 +78,41 @@ are not store-ready signed releases. iOS is unsigned. The retained ML Kit depend
 still lacks the arm64 simulator support needed for this Mac's iOS 27 simulator;
 an unsigned device compile does not establish camera/permission runtime behavior.
 
-## Physical acceptance and next task
+## Android follow-up — 16 October 2026
 
-**V7 physical-device testing: NOT TESTED.** ADB discovery on 16 October returned no
-attached devices. No app was installed/uninstalled, cleared or reseeded. The prior
-12 October Redmi evidence remains historical: PHP 5,195 across three accounts/four
-transactions, one budget and one saved receipt. See the [device report](verification/android-device-test.md).
+The supplied root `logo.svg` now generates Android/iOS launcher icons through
+`scripts/generate-app-icons.swift` (macOS Quick Look/CoreGraphics; no new package).
+Native icons replace the Flutter defaults; iOS images are opaque. Section cards
+are borderless in light/dark themes. Input and selection outlines remain functional.
+Budgets now exposes Subscriptions & Bills directly; Settings retains its entry.
+Home distinguishes archived accounts from a genuinely empty installation.
 
-Next: in-place upgrade on the existing Redmi and a dedicated iPhone runtime check.
-Verify those existing records/images before and after restart, all navigation/forms,
-actual installed version, CSV dialog, camera/gallery/crop and permission recovery.
-Never uninstall or clear data to bypass signing/installation errors. No recovery
-feature is available. Broader real-receipt accuracy, offline first scan, low storage,
-large collections and screen-reader acceptance remain gaps. OS notification delivery,
-external financial providers and release signing are outside this implementation.
+Final follow-up checks: formatting PASS (162 files), analysis PASS, **220 Flutter
+tests PASS**, including 29 updated golden comparisons. Reviewed Home/Budgets and
+subscription captures, including the physical Android subscription screen.
+APK PASS (99.8 MB), AAB PASS (80.8 MB), unsigned iOS device compile PASS.
+Backend code was unchanged; its passing results above are from the prior checkpoint.
+
+**Physical Android: partial acceptance PASS.** The existing Redmi was upgraded
+using `adb install -r`, without uninstall/reset/reseed/key changes. The current
+pre-update dataset differs from the historical October 12 test dataset. Its
+PHP 1,642.50 total (two active accounts), PHP 47.50 October expense, PHP 1,000
+category budget and PHP 799 monthly subscription remained accessible after the
+update; a cold process restart preserved balances and expense details. Archived
+accounts remained visible. No financial records were created/edited/deleted for
+these checks. See [device evidence](verification/android-device-test.md).
+
+Verified navigation includes Home, Accounts, Transactions/detail, Analytics,
+Budgets, Subscriptions/details/Add form, Notifications and Settings/native version.
+Expense/Income/Transfer forms opened; no test writes were made to the current data.
+Native gallery opened and canceled safely. CSV cancellation returned to the app;
+the save-dialog hierarchy was not captured reliably, so full file-save acceptance
+is still pending. Camera/OCR/crop, saved-image reopen, low storage, accessibility
+and comprehensive interrupted-write scenarios were not repeated in this follow-up.
+
+**Physical iPhone: unavailable**, as confirmed by the owner. Keep compile-only
+results separate; an iPhone is not a prerequisite for continuing Android work.
+Next: owner-assisted Android receipt capture/reopen and CSV save acceptance, then
+broader accessibility/low-storage checks on an isolated test installation. Never
+clear this phone or uninstall to work around an installation error. Development
+signing and the ML Kit simulator limitation above remain unchanged.

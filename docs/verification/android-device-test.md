@@ -214,3 +214,46 @@ No v7 installation, upgrade, hardware camera check or process restart was perfor
 Existing app data and external documents were not touched. The next device task
 must upgrade in place and verify the existing records; never uninstall or clear
 application data to work around installation/signing errors.
+
+
+## V7 logo and borderless UI follow-up — 16 October 2026
+
+The same Redmi was authorized and updated in place with `adb install -r`.
+Logo milestone `13f7ca3` supplies launcher icons from the owner's SVG. UI milestone
+`179c8ec` removes section-card borders, adds the direct Budgets → Subscriptions &
+Bills entry, and clarifies Home when all accounts are archived.
+
+The baseline changed between owner sessions. The first pre-update inspection had
+three archived accounts and zero active balance. On the resumed session, before
+installing the borderless update, the production UI showed two active accounts,
+PHP 1,642.50 total and one October expense of PHP 47.50. Use this observed baseline,
+not the historical PHP 5,195 test state. No reset/reseed/uninstall/import or
+financial mutation was performed by this verification session.
+
+After the borderless upgrade and a scoped force-stop/cold launch, Home/Accounts
+retained PHP 1,642.50 (PHP 1,000 and PHP 642.50). Transactions and Analytics retained
+PHP 47.50 expense; transaction detail retained its date/category/note. A PHP 1,000
+category budget and the existing PHP 799 monthly subscription remained accessible.
+Archived accounts were still listed. No private screenshots, raw receipts or
+financial exports were committed.
+
+| Current check | Result |
+| --- | --- |
+| In-place installation and cold launch | PASS; no login or storage error |
+| Current balances/expense after process restart | PASS |
+| Home/Accounts/Transactions/detail/Analytics/Budgets | PASS navigation and displayed real values |
+| Subscriptions shortcut/details/Add form | PASS; existing plan retained; new form canceled |
+| Expense/Income/Transfer forms | PASS opening and mode changes; save not exercised on current records |
+| Settings/native installed version | PASS, 0.1.0 (Build 1) |
+| Notifications | PASS existing three unread notices; read state left unchanged |
+| Borderless cards | PASS visual inspection of physical subscription screen and updated goldens |
+| Native gallery picker/cancel | PASS; no image selected/imported |
+| CSV export/cancel | PASS cancellation message; full save dialog hierarchy inconclusive; no export saved |
+| Camera/OCR/crop and saved-image reopen | NOT REPEATED in this session |
+| Physical iPhone | UNAVAILABLE per owner; unsigned compile only |
+
+Final automated checks: 220 Flutter tests (29 goldens), format and analysis pass.
+APK 99.8 MB and AAB 80.8 MB build successfully; unsigned iOS compile also passes.
+Artifacts retain development signing. Remaining Android acceptance includes an
+owner-assisted fresh receipt capture, image reopen, actual CSV save, low storage,
+large collections and accessibility. Do not reset the current installation.
