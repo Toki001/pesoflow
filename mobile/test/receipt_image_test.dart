@@ -29,6 +29,7 @@ void main() {
       expect((rotated.width, rotated.height), (60, 100));
       final enhanced = img.decodePng(await enhanceReceiptForOcr(bytes))!;
       expect(enhanced.width, 1800);
+      expect(enhanced.numChannels, 1);
       expect(bytes, original);
     },
   );

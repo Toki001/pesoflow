@@ -139,7 +139,9 @@ When total/date/header extraction is incomplete, Latin ML Kit tries a private
 contrast-normalized grayscale derivative with bounded upscaling. If still
 incomplete, a third pass estimates local paper illumination and reduces uneven
 shadows without binary thresholding. Processing runs off the UI isolate and stops
-when the essential fields are found (three native recognitions maximum). The
+when the essential fields are found (three native recognitions maximum).
+Derivatives use a single luminance channel, linear upscaling and fast lossless PNG
+encoding to limit CPU and temporary storage on lower-powered devices. The
 selected whole recognition must improve structured extraction without losing or
 contradicting an already recognized total, date or payment method. Fields from
 different passes are not spliced together. Failed enhancement retains the best

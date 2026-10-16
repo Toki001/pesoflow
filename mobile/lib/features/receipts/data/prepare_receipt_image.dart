@@ -74,6 +74,9 @@ Future<Uint8List> enhanceReceiptForOcr(
   if (decoded == null) {
     throw const ReceiptFailure('The image could not be enhanced.');
   }
+  // Work in one luminance channel before resizing. Linear interpolation avoids
+  // the costly per-pixel cubic allocations on lower-powered Android phones.
+  decoded = image.grayscale(decoded).convert(numChannels: 1);
   final longest = decoded.width > decoded.height
       ? decoded.width
       : decoded.height;
@@ -82,10 +85,9 @@ Future<Uint8List> enhanceReceiptForOcr(
       decoded,
       width: decoded.width >= decoded.height ? 1800 : null,
       height: decoded.height > decoded.width ? 1800 : null,
-      interpolation: image.Interpolation.cubic,
+      interpolation: image.Interpolation.linear,
     );
   }
-  image.grayscale(decoded);
   if (correctShadows) {
     // Estimate the paper illumination at low resolution. A local maximum
     // suppresses narrow ink strokes in that estimate; smoothing avoids seams.
@@ -127,5 +129,6 @@ Future<Uint8List> enhanceReceiptForOcr(
     }
   }
   image.normalize(decoded, min: 0, max: 255);
-  return image.encodePng(decoded);
+  // Temporary lossless input does not need archival PNG compression.
+  return image.encodePng(decoded, level: 1, filter: image.PngFilter.none);
 });
