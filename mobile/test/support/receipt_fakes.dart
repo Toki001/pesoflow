@@ -28,6 +28,7 @@ class FakeReceiptImages implements ReceiptImages {
   ReceiptImage? next = ReceiptImage('/test/receipt.png', receiptPhoto());
   ReceiptImage? recovered;
   ReceiptImage? cropped;
+  ReceiptImage? rotated;
   ReceiptFailure? error;
   final released = <String>[];
   int acquisitions = 0, recoveries = 0, settings = 0;
@@ -46,6 +47,8 @@ class FakeReceiptImages implements ReceiptImages {
 
   @override
   Future<ReceiptImage?> crop(ReceiptImage image) async => cropped;
+  @override
+  Future<ReceiptImage?> rotate(ReceiptImage image) async => rotated;
   @override
   Future<void> release(ReceiptImage image) async {
     released.add(image.path);

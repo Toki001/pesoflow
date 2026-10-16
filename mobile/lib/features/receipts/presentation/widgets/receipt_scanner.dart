@@ -27,7 +27,7 @@ class ReceiptScanner extends StatelessWidget {
                 IconButton(
                   tooltip: 'Close receipt',
                   onPressed: onClose,
-                  icon: const Icon(Icons.close, color: Colors.white),
+                  icon: const Icon(Icons.close, color: AppColors.primary),
                 ),
                 Expanded(
                   child: Text(
@@ -43,7 +43,7 @@ class ReceiptScanner extends StatelessWidget {
                   onPressed: onGallery,
                   icon: const Icon(
                     Icons.photo_library_outlined,
-                    color: Colors.white,
+                    color: AppColors.primary,
                   ),
                 ),
               ],
@@ -62,7 +62,7 @@ class ReceiptScanner extends StatelessWidget {
                   const Icon(
                     Icons.receipt_long_outlined,
                     size: 72,
-                    color: Colors.white54,
+                    color: AppColors.primary,
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -91,14 +91,24 @@ class ReceiptScanner extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppColors.primarySoft,
+                      foregroundColor: AppColors.primary,
+                    ),
                     onPressed: onCamera,
-                    icon: const Icon(Icons.camera_alt_outlined),
+                    icon: const Icon(
+                      Icons.camera_alt_outlined,
+                      color: AppColors.primary,
+                    ),
                     label: const Text('Take receipt photo'),
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
                     onPressed: onGallery,
-                    icon: const Icon(Icons.photo_library_outlined),
+                    icon: const Icon(
+                      Icons.photo_library_outlined,
+                      color: AppColors.primary,
+                    ),
                     label: const Text('Choose receipt photo'),
                   ),
                   const SizedBox(height: 24),

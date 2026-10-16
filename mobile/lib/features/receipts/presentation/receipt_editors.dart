@@ -1,3 +1,4 @@
+import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -322,7 +323,7 @@ Future<LedgerAccount?> chooseReceiptAccount(BuildContext context) =>
                     ),
                   TextButton.icon(
                     onPressed: () => showManualAccountEditor(context),
-                    icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.add, color: AppColors.primary),
                     label: const Text('Create manual account'),
                   ),
                 ],

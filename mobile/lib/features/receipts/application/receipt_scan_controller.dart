@@ -56,6 +56,7 @@ class ReceiptScanState {
 /// only explicit confirmation invokes the existing durable command.
 class ReceiptScanController extends Notifier<ReceiptScanState> {
   ReceiptImage? _image;
+  ReceiptImageSource? _source;
   late ReceiptImages _images;
   bool _recovered = false;
   @override
@@ -104,13 +105,21 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
   }
 
   Future<void> acquire(ReceiptImageSource source) =>
-      _acquire(() => _images.acquire(source));
+      _acquire(() => _images.acquire(source), source: source);
   Future<void> crop() async {
     final image = _image;
     if (image != null) await _acquire(() => _images.crop(image));
   }
 
-  Future<void> _acquire(Future<ReceiptImage?> Function() action) async {
+  Future<void> rotate() async {
+    final image = _image;
+    if (image != null) await _acquire(() => _images.rotate(image));
+  }
+
+  Future<void> _acquire(
+    Future<ReceiptImage?> Function() action, {
+    ReceiptImageSource? source,
+  }) async {
     if (state.busy || state.draft?.savedTransactionId != null) return;
     _publish(progress: 'Processing receipt…');
     try {
@@ -123,6 +132,7 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
         _publish();
         return;
       }
+      if (source != null) _source = source;
       final old = _image;
       _image = image;
       state = ReceiptScanState(image: image, progress: 'Reading text…');
@@ -183,11 +193,42 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
               a.source == BalanceSource.manual,
         )
         .firstOrNull;
+    final paper =
+        _source == ReceiptImageSource.camera ||
+        RegExp(
+          r'\b(SERVICE\s*INVOICE|OFFICIAL\s*RECEIPT|AMOUNT\s+IN\s+WORDS)\b',
+          caseSensitive: false,
+        ).hasMatch(parsed.rawText);
+    final electronic = RegExp(
+      r'\b(GCASH|MAYA|PAYMAYA|ONLINE|E-RECEIPT|DIGITAL|ELECTRONIC|EM[-\s]?PAY)\b',
+      caseSensitive: false,
+    ).hasMatch(parsed.rawText);
+    final suggestCash = parsed.paymentMethod == null && paper && !electronic;
+    final payment = suggestCash ? 'CASH (suggested)' : parsed.paymentMethod;
+    final matching = workspace.accounts
+        .where(
+          (a) =>
+              !a.archived &&
+              a.source == BalanceSource.manual &&
+              (payment?.startsWith('CASH') == true
+                  ? a.type == AccountType.cash
+                  : payment == 'MAYA' || payment == 'GCASH'
+                  ? '${a.name} ${a.institution}'.toUpperCase().contains(
+                      payment!,
+                    )
+                  : false),
+        )
+        .toList();
+    final selected = matching.length == 1
+        ? matching.single
+        : payment == null
+        ? defaultAccount
+        : null;
     return ReceiptDraft(
       id: id,
       merchant: parsed.merchant,
-      accountId: defaultAccount?.id ?? '',
-      account: defaultAccount?.name ?? '',
+      accountId: selected?.id ?? '',
+      account: selected?.name ?? '',
       occurredAt: parsed.date ?? now,
       items: parsed.items,
       category: categorize(
@@ -204,10 +245,13 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
         tax: parsed.tax,
         discount: parsed.discount,
         currency: parsed.currency,
-        paymentMethod: parsed.paymentMethod,
+        paymentMethod: payment,
         parserVersion: ReceiptParser.version,
         confidence: parsed.confidence,
-        warnings: parsed.warnings,
+        warnings: [
+          ...parsed.warnings,
+          if (suggestCash) 'Cash is suggested for this paper receipt because no payment method was found. Verify the payment account.',
+        ],
       ),
     );
   }

@@ -208,7 +208,7 @@ class SpendingTrajectory extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.insights, size: 20, color: c.primary),
+                Icon(Icons.insights, size: 20, color: AppColors.primary),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(

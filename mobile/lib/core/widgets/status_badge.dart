@@ -1,3 +1,4 @@
+import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_radius.dart';
@@ -32,7 +33,7 @@ class StatusBadge extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (icon != null) ...[
-          Icon(icon, size: iconSize, color: foreground),
+          Icon(icon, size: iconSize, color: AppColors.primary),
           const SizedBox(width: 4),
         ],
         Flexible(

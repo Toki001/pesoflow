@@ -152,7 +152,7 @@ class _CategoryRow extends StatelessWidget {
               Icon(
                 trend < 0 ? Icons.trending_down : Icons.trending_up,
                 size: 12,
-                color: trendColor,
+                color: AppColors.primary,
               ),
               Text(
                 '${trend.abs()}%',

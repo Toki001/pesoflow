@@ -174,7 +174,11 @@ class SettingsScreen extends ConsumerWidget {
                 ],
                 if (onTap != null) ...[
                   const SizedBox(width: 8),
-                  const Icon(Icons.chevron_right, size: 18),
+                  const Icon(
+                    Icons.chevron_right,
+                    size: 18,
+                    color: AppColors.primary,
+                  ),
                 ],
               ],
             );

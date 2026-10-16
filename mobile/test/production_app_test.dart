@@ -76,6 +76,9 @@ void main() {
   ) async {
     viewport(tester, const Size(390, 844));
     await pumpApp(tester, route: '/budgets');
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('open-subscriptions')),
+    );
     await tester.tap(find.byKey(const ValueKey('open-subscriptions')));
     await tester.pumpAndSettle();
     expect(find.text('Subscriptions & Bills'), findsOneWidget);

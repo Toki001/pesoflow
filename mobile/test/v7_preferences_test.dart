@@ -126,13 +126,18 @@ void main() {
         route: '/notifications',
         repository: repo,
       );
-      await tester.tap(find.text('Budget Alerts'));
+      await tester.tap(find.text('All alerts'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Budget alerts').last);
       await tester.pumpAndSettle();
       expect(find.text('Netflix Standard renewal'), findsNothing);
       expect(find.text('Food & Dining budget update'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('read-budget-v7')));
       await tester.pumpAndSettle();
       expect(c.read(workspaceProvider).noticeReadIds, contains('budget-v7'));
+      await tester.tap(find.byKey(const ValueKey('notice-unread-filter')));
+      await tester.pumpAndSettle();
+      expect(find.text('No alerts in this filter'), findsOneWidget);
       await tester.tap(find.text('Mark all read'));
       await tester.pumpAndSettle();
       expect(

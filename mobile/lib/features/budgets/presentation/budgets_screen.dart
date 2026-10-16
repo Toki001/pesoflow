@@ -58,7 +58,9 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
             ])
               ListTile(
                 title: Text(label),
-                trailing: sort == value ? const Icon(Icons.check) : null,
+                trailing: sort == value
+                    ? const Icon(Icons.check, color: AppColors.primary)
+                    : null,
                 onTap: () => Navigator.pop(context, value),
               ),
           ],
@@ -117,21 +119,11 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
     final period = ref.watch(budgetPeriodProvider);
     final dismissed = ref.watch(dismissedBudgetSuggestionsProvider);
     final c = context.colors;
-    final plan = state.value;
     return SafeArea(
       bottom: false,
       child: Column(
         children: [
           const MainAppBar('Budgets'),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: TextButton.icon(
-              key: const ValueKey('open-subscriptions'),
-              onPressed: () => context.push('/budgets/subscriptions'),
-              icon: const Icon(Icons.event_repeat_outlined),
-              label: const Text('Subscriptions & Bills'),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
@@ -141,13 +133,6 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                     onPressed: pickPeriod,
                     child: Text('${DateFormat('MMMM yyyy').format(period)} ⌄'),
                   ),
-                ),
-                TextButton.icon(
-                  onPressed: plan == null
-                      ? null
-                      : () => showBudgetEditor(context, plan, creating: true),
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('New'),
                 ),
               ],
             ),
@@ -197,6 +182,38 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                         ),
                         const SizedBox(height: 16),
                       ],
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Category Budgets',
+                                  style: AppTypography.headlineMedium,
+                                ),
+                                const SizedBox(height: 2),
+                                Text(
+                                  '${plan.allowances.length} categorized allowances tracked',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: c.mutedInk,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () =>
+                                showBudgetEditor(context, plan, creating: true),
+                            icon: const Icon(
+                              Icons.add,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
+                            label: const Text('New'),
+                          ),
+                        ],
+                      ),
                       if (plan.allowances.isEmpty)
                         _BudgetMessage(
                           title: 'Create your first budget',
@@ -206,35 +223,18 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                               showBudgetEditor(context, plan, creating: true),
                         )
                       else ...[
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Category Budgets',
-                                    style: AppTypography.headlineMedium,
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    '${plan.allowances.length} categorized allowances tracked',
-                                    style: AppTypography.bodySmall.copyWith(
-                                      color: c.mutedInk,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton.icon(
+                            onPressed: chooseSort,
+                            icon: const Icon(
+                              Icons.sort,
+                              size: 18,
+                              color: AppColors.primary,
                             ),
-                            TextButton.icon(
-                              onPressed: chooseSort,
-                              iconAlignment: IconAlignment.end,
-                              icon: const Icon(Icons.swap_vert, size: 16),
-                              label: const Text('Sort'),
-                            ),
-                          ],
+                            label: const Text('Sort budgets'),
+                          ),
                         ),
-                        const SizedBox(height: 8),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -311,6 +311,24 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                           const SizedBox(height: 12),
                         ],
                       ],
+                      const SizedBox(height: 16),
+                      FinanceCard(
+                        padding: EdgeInsets.zero,
+                        child: ListTile(
+                          key: const ValueKey('open-subscriptions'),
+                          leading: const Icon(
+                            Icons.event_repeat_outlined,
+                            color: AppColors.primary,
+                          ),
+                          title: const Text('Subscriptions & Bills'),
+                          subtitle: const Text('Manage recurring commitments'),
+                          trailing: const Icon(
+                            Icons.chevron_right,
+                            color: AppColors.primary,
+                          ),
+                          onTap: () => context.push('/budgets/subscriptions'),
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       Text(
                         'Monthly limits repeat automatically. Spending comes from your saved transactions.',

@@ -36,7 +36,11 @@ class BudgetHero extends StatelessWidget {
               IconButton(
                 tooltip: 'Edit monthly budget',
                 onPressed: onEdit,
-                icon: const Icon(Icons.edit_outlined, size: 18),
+                icon: const Icon(
+                  Icons.edit_outlined,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),

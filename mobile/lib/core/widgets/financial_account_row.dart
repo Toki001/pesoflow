@@ -72,7 +72,7 @@ class FinancialAccountRow extends StatelessWidget {
                 ),
               ),
             ),
-            const Icon(Icons.chevron_right, size: 18),
+            const Icon(Icons.chevron_right, size: 18, color: AppColors.primary),
           ],
         ),
       ),

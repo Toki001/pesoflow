@@ -47,12 +47,39 @@ void main() {
     c.dispose();
     await repo.close();
   });
+  test(
+    'paper cash fallback is a suggestion and explicit electronic tender wins',
+    () async {
+      ocr.text = 'ACME NETWORK, INC. SERVICEINVOICE\nDate 10-15-26\nTOTAL 799';
+      await scan.acquire(ReceiptImageSource.photos);
+      var draft = c.read(receiptScanProvider).draft!;
+      expect(draft.accountId, 'cash');
+      expect(draft.evidence!.paymentMethod, 'CASH (suggested)');
+      expect(draft.evidence!.confirmed, isFalse);
+      ocr.text += '\nPaid via PAYMAYA';
+      await scan.retry();
+      draft = c.read(receiptScanProvider).draft!;
+      expect(draft.accountId, 'maya');
+      expect(draft.evidence!.paymentMethod, 'MAYA');
+    },
+  );
+  test('ordinary gallery images do not assume cash; rotation resets confirmation and rereads', () async {
+    ocr.text = 'STORE\nTOTAL 25';
+    await scan.acquire(ReceiptImageSource.photos);
+    expect(c.read(receiptScanProvider).draft!.evidence!.paymentMethod, isNull);
+    scan.confirm(true);
+    images.rotated = ReceiptImage('/test/rotated.jpg', images.next!.bytes);
+    await scan.rotate();
+    expect(c.read(receiptScanProvider).image!.path, '/test/rotated.jpg');
+    expect(c.read(receiptScanProvider).draft!.evidence!.confirmed, isFalse);
+    expect(ocr.calls, 2);
+  });
   test('scan, corrections and explicit confirmation persist through production command once', () async {
     await scan.acquire(ReceiptImageSource.camera);
     var d = c.read(receiptScanProvider).draft!;
     expect(d.total, 29000);
     expect(d.category, TransactionCategory.food);
-    expect(d.accountId, isEmpty);
+    expect(d.accountId, 'cash');
     expect(c.read(workspaceProvider).receipts, isEmpty);
     expect(await scan.save(), isNull);
     scan.setMerchant('Corrected shop');

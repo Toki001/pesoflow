@@ -233,7 +233,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
             ))
               ListTile(
                 title: Text(categoryLabel(c)),
-                trailing: c == category ? const Icon(Icons.check) : null,
+                trailing: c == category
+                    ? const Icon(Icons.check, color: AppColors.primary)
+                    : null,
                 onTap: () => Navigator.pop(context, c),
               ),
           ],
@@ -457,7 +459,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         IconButton(
           tooltip: 'Scan receipt',
           onPressed: saving ? null : () => context.push('/receipt'),
-          icon: const Icon(Icons.receipt_long_outlined),
+          icon: const Icon(
+            Icons.receipt_long_outlined,
+            color: AppColors.primary,
+          ),
         ),
       ],
       footer: Container(
@@ -466,8 +471,12 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         child: SizedBox(
           width: double.infinity,
           child: FilledButton.icon(
+            style: FilledButton.styleFrom(
+              backgroundColor: AppColors.primarySoft,
+              foregroundColor: AppColors.primary,
+            ),
             onPressed: saving || accounts.isEmpty ? null : save,
-            icon: const Icon(Icons.check),
+            icon: const Icon(Icons.check, color: AppColors.primary),
             label: Text(
               saving ? 'Saving…' : 'Save $typeLabel',
               style: AppTypography.headlineSmall,
@@ -706,7 +715,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             maxLength: 100,
                             decoration: const InputDecoration(
                               hintText: 'Name',
-                              prefixIcon: Icon(Icons.storefront_outlined),
+                              prefixIcon: Icon(
+                                Icons.storefront_outlined,
+                                color: AppColors.primary,
+                              ),
                               counterText: '',
                             ),
                             validator: (v) => (v ?? '').trim().isEmpty
@@ -721,14 +733,20 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           children: [
                             OutlinedButton.icon(
                               onPressed: pickDate,
-                              icon: const Icon(Icons.calendar_today_outlined),
+                              icon: const Icon(
+                                Icons.calendar_today_outlined,
+                                color: AppColors.primary,
+                              ),
                               label: Text(
                                 DateFormat('MMM d, yyyy').format(date),
                               ),
                             ),
                             OutlinedButton.icon(
                               onPressed: pickTime,
-                              icon: const Icon(Icons.schedule_outlined),
+                              icon: const Icon(
+                                Icons.schedule_outlined,
+                                color: AppColors.primary,
+                              ),
                               label: Text(DateFormat('h:mm a').format(date)),
                             ),
                           ],
@@ -753,13 +771,16 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             contentPadding: EdgeInsets.zero,
                             leading: Icon(
                               Icons.add_photo_alternate_outlined,
-                              color: c.primary,
+                              color: AppColors.primary,
                             ),
                             title: const Text('Scan a receipt'),
                             subtitle: const Text(
                               'Review a photo and save its expense',
                             ),
-                            trailing: const Icon(Icons.chevron_right),
+                            trailing: const Icon(
+                              Icons.chevron_right,
+                              color: AppColors.primary,
+                            ),
                             onTap: () => context.push('/receipt'),
                           ),
                         ],

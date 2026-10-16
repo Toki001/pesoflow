@@ -121,6 +121,8 @@ class _BudgetEditorState extends ConsumerState<_BudgetEditor> {
                 const SizedBox(height: 16),
                 if (widget.creating)
                   DropdownButtonFormField<String>(
+                    iconEnabledColor: AppColors.primary,
+                    iconDisabledColor: AppColors.primary,
                     key: const ValueKey('budget-category'),
                     isExpanded: true,
                     initialValue: category?.name ?? 'monthly',

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
@@ -8,6 +10,28 @@ import 'package:pesoflow/features/receipts/domain/receipt_image.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  test(
+    'rotation swaps dimensions and enhancement leaves source bytes unchanged',
+    () async {
+      final source = img.Image(width: 100, height: 60);
+      img.fill(source, color: img.ColorRgb8(80, 80, 80));
+      img.fillRect(
+        source,
+        x1: 0,
+        y1: 0,
+        x2: 20,
+        y2: 20,
+        color: img.ColorRgb8(200, 200, 200),
+      );
+      final bytes = img.encodeJpg(source);
+      final original = Uint8List.fromList(bytes);
+      final rotated = img.decodeJpg(await rotateReceiptImage(bytes))!;
+      expect((rotated.width, rotated.height), (60, 100));
+      final enhanced = img.decodePng(await enhanceReceiptForOcr(bytes))!;
+      expect(enhanced.width, 1800);
+      expect(bytes, original);
+    },
+  );
   test(
     'preprocessing bakes orientation, strips metadata and bounds dimensions',
     () async {
@@ -96,6 +120,34 @@ void main() {
     expect(line.elements.single.confidence, .92);
     expect(calls, ['vision#startTextRecognizer', 'vision#closeTextRecognizer']);
   });
+  for (final conflict in [false, true]) {
+    test(
+      'enhanced OCR pass preserves evidence and rejects conflicting totals: $conflict',
+      () async {
+        final dir = await Directory.systemTemp.createTemp('receipt-ocr-test-');
+        addTearDown(() => dir.delete(recursive: true));
+        final source = File('${dir.path}/original.jpg');
+        final bytes = img.encodeJpg(img.Image(width: 100, height: 60));
+        await source.writeAsBytes(bytes);
+        var passes = 0;
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          if (call.method.contains('close')) return null;
+          passes++;
+          return {
+            'text': passes == 1
+                ? (conflict ? 'STORE\nTOTAL 25' : 'STORE')
+                : 'STORE\nTOTAL 799\n10-15-26',
+            'blocks': [],
+          };
+        });
+        final doc = await MlKitReceiptOcr().recognize(source.path);
+        expect(passes, 2);
+        expect(doc.text, contains(conflict ? 'TOTAL 25' : 'TOTAL 799'));
+        expect(await source.readAsBytes(), bytes);
+        expect(await dir.list().length, 1); // derivative removed
+      },
+    );
+  }
   test('native OCR failure is sanitized and releases the recognizer', () async {
     var closed = false;
     messenger.setMockMethodCallHandler(channel, (call) async {

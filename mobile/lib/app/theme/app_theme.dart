@@ -70,7 +70,11 @@ abstract final class AppTheme {
         ),
       ),
       dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
-      iconTheme: IconThemeData(color: c.secondaryInk, size: 20),
+      expansionTileTheme: const ExpansionTileThemeData(
+        iconColor: AppColors.primary,
+        collapsedIconColor: AppColors.primary,
+      ),
+      iconTheme: const IconThemeData(color: AppColors.primary, size: 20),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           minimumSize: const Size(48, 48),

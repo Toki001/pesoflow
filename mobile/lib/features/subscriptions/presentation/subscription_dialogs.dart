@@ -141,6 +141,8 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<BillingCycle>(
+                iconEnabledColor: AppColors.primary,
+                iconDisabledColor: AppColors.primary,
                 key: const ValueKey('subscription-cycle'),
                 initialValue: cycle,
                 isExpanded: true,
@@ -158,6 +160,8 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                iconEnabledColor: AppColors.primary,
+                iconDisabledColor: AppColors.primary,
                 initialValue: source,
                 isExpanded: true,
                 decoration: const InputDecoration(
@@ -185,6 +189,8 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
+                iconEnabledColor: AppColors.primary,
+                iconDisabledColor: AppColors.primary,
                 initialValue: category,
                 isExpanded: true,
                 decoration: const InputDecoration(
@@ -224,7 +230,11 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
                   );
                   if (date != null && mounted) setState(() => renewal = date);
                 },
-                icon: const Icon(Icons.calendar_today_outlined, size: 18),
+                icon: const Icon(
+                  Icons.calendar_today_outlined,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
                 label: Text(
                   'Next renewal: ${DateFormat('MMM d, yyyy').format(renewal)}',
                 ),

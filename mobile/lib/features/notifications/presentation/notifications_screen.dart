@@ -22,6 +22,7 @@ class NotificationsScreen extends ConsumerWidget {
     final unread = ref.watch(unreadNoticeCountProvider);
     final filter = ref.watch(noticeFilterProvider);
     final c = context.colors;
+    final unreadOnly = ref.watch(unreadOnlyProvider);
     return TaskScreen(
       title: 'Notifications',
       backIcon: Icons.arrow_back,
@@ -45,35 +46,34 @@ class NotificationsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Wrap(
-              spacing: AppSpacing.xs,
-              runSpacing: AppSpacing.xs,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                for (final option in NoticeFilter.values)
-                  Semantics(
-                    selected: option == filter,
-                    child: OutlinedButton(
-                      onPressed: () => ref
-                          .read(noticeFilterProvider.notifier)
-                          .select(option),
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: option == filter
-                            ? c.soft(c.primary, AppColors.primarySoft)
-                            : c.surface,
-                        foregroundColor: option == filter
-                            ? c.primary
-                            : c.secondaryInk,
-                      ),
-                      child: Text(switch (option) {
-                        NoticeFilter.all => 'All',
-                        NoticeFilter.budget => 'Budget Alerts',
-                        NoticeFilter.renewal => 'Bill Reminders',
-                        NoticeFilter.unread => 'Unread',
-                      }),
-                    ),
-                  ),
+            DropdownButtonFormField<NoticeFilter>(
+              iconEnabledColor: AppColors.primary,
+              iconDisabledColor: AppColors.primary,
+              key: ValueKey('notice-type-$filter'),
+              initialValue: filter,
+              isExpanded: true,
+              decoration: const InputDecoration(labelText: 'Alert type'),
+              items: [
+                for (final (value, label) in [
+                  (NoticeFilter.all, 'All alerts'),
+                  (NoticeFilter.budget, 'Budget alerts'),
+                  (NoticeFilter.renewal, 'Bill reminders'),
+                ])
+                  DropdownMenuItem(value: value, child: Text(label)),
               ],
+              onChanged: (value) {
+                if (value != null) {
+                  ref.read(noticeFilterProvider.notifier).select(value);
+                }
+              },
+            ),
+            SwitchListTile.adaptive(
+              key: const ValueKey('notice-unread-filter'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Unread only'),
+              value: unreadOnly,
+              onChanged: (value) =>
+                  ref.read(unreadOnlyProvider.notifier).select(value),
             ),
             if (state.hasValue) ...[
               const SizedBox(height: AppSpacing.xs),
@@ -115,12 +115,15 @@ class NotificationsScreen extends ConsumerWidget {
               data: (notices) {
                 final visible = notices
                     .where(
-                      (n) => switch (filter) {
-                        NoticeFilter.all => true,
-                        NoticeFilter.budget => n.kind == NoticeKind.budget,
-                        NoticeFilter.renewal => n.kind == NoticeKind.renewal,
-                        NoticeFilter.unread => !read.contains(n.id),
-                      },
+                      (n) =>
+                          (!unreadOnly || !read.contains(n.id)) &&
+                          switch (filter) {
+                            NoticeFilter.all => true,
+                            NoticeFilter.budget => n.kind == NoticeKind.budget,
+                            NoticeFilter.renewal =>
+                              n.kind == NoticeKind.renewal,
+                            NoticeFilter.unread => !read.contains(n.id),
+                          },
                     )
                     .toList();
                 if (notices.isEmpty) {
@@ -132,11 +135,14 @@ class NotificationsScreen extends ConsumerWidget {
                 if (visible.isEmpty) {
                   return _InboxMessage(
                     title: 'No alerts in this filter',
-                    message: 'Choose All to see other financial notices.',
+                    message: 'Change the alert type or turn off Unread only.',
                     action: 'View all alerts',
-                    onAction: () => ref
-                        .read(noticeFilterProvider.notifier)
-                        .select(NoticeFilter.all),
+                    onAction: () {
+                      ref
+                          .read(noticeFilterProvider.notifier)
+                          .select(NoticeFilter.all);
+                      ref.read(unreadOnlyProvider.notifier).select(false);
+                    },
                   );
                 }
                 return Column(

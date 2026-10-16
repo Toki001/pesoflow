@@ -1,4 +1,5 @@
 import 'ocr_document.dart';
+import 'amount_in_words.dart';
 import 'receipt_draft.dart';
 
 class ParsedReceipt {
@@ -28,7 +29,7 @@ class ParsedReceipt {
 /// Philippine receipt heuristics, not calibrated OCR accuracy. Never chooses
 /// cash/change or the largest number as an unlabeled expense total.
 abstract final class ReceiptParser {
-  static const version = 2;
+  static const version = 3;
   static final _money = RegExp(
     r'(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\d)',
   );
@@ -38,7 +39,8 @@ abstract final class ReceiptParser {
   );
   static int _amount(String s) {
     final parts = s.replaceAll(',', '').split('.');
-    return int.parse(parts.first) * 100 + int.parse(parts.last);
+    return int.parse(parts.first) * 100 +
+        (parts.length == 1 ? 0 : int.parse(parts.last));
   }
 
   static ParsedReceipt parse(OcrDocument document) {
@@ -49,7 +51,16 @@ abstract final class ReceiptParser {
     final warnings = <String>[];
     final confidence = <String, int>{'merchant': 0, 'date': 0, 'total': 0};
     String merchant = '';
-    for (final line in lines.take(8)) {
+    for (final original in lines.take(8)) {
+      final line = original
+          .replaceAll(
+            RegExp(
+              r'\b(?:SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b.*$',
+              caseSensitive: false,
+            ),
+            '',
+          )
+          .trim();
       if (line.length <= 100 &&
           RegExp(r'[A-Za-z]{3}').hasMatch(line) &&
           !RegExp(
@@ -75,14 +86,43 @@ abstract final class ReceiptParser {
       if (RegExp(r'\b(USD|EUR|SGD|AUD|GBP)\b|\$|€|£').hasMatch(upper)) {
         currency = 'UNKNOWN';
       }
-      for (final method in ['GCASH', 'MAYA', 'CARD', 'CASH']) {
+      for (final method in [
+        'GCASH',
+        'MAYA',
+        'CARD',
+        'BANK TRANSFER',
+        'CHEQUE',
+        'CASH',
+      ]) {
         final label = method == 'MAYA' ? '(?:PAY)?MAYA' : method;
         if (RegExp('\\b$label\\b').hasMatch(upper)) {
-          payment ??= method;
+          // Blank payment-option lists are not evidence of a selected method.
+          final options = RegExp(r'\b(CASH|CARD|CHECK|CHEQUE|BANK|DEBIT|PMO)\b')
+              .allMatches(upper)
+              .length;
+          if ((method != 'CASH' ||
+                  RegExp(
+                    r'\bCASH\s+(?:PHP\s*)?\d|PAID\s+(?:IN|BY|WITH)\s+CASH|[✓✔xX]\s*CASH',
+                  ).hasMatch(upper)) &&
+              options <= 1 &&
+              !RegExp(r'\[\s*\]|□|☐').hasMatch(upper)) {
+            if (method != 'CASH' || payment == null) payment = method;
+          }
           break;
         }
       }
-      final matches = _money.allMatches(line).toList();
+      var matches = _money.allMatches(line).toList();
+      // Whole-peso handwritten values are valid, but only a labeled total or
+      // a named item can supply one; dates, serials and tender remain excluded.
+      if (matches.isEmpty && !RegExp(r'\d[-/]\d').hasMatch(line)) {
+        final whole = RegExp(
+          r'(?<![\d.,])\d{1,3}(?:,\d{3})*\s*$|(?<![\d.,])\d+\s*$',
+        ).firstMatch(line);
+        if (whole != null &&
+            RegExp(r'[A-Za-z]').hasMatch(line.substring(0, whole.start))) {
+          matches = [whole];
+        }
+      }
       if (matches.isEmpty) continue;
       final amount = _amount(matches.last.group(0)!);
       if (amount > 99999999999) continue;
@@ -159,12 +199,32 @@ abstract final class ReceiptParser {
       );
     }
     candidates.sort((a, b) => b.rank.compareTo(a.rank));
-    final total = candidates.firstOrNull?.amount;
+    var total = candidates.firstOrNull?.amount;
+    if (total == null) {
+      for (var i = 0; i < lines.length; i++) {
+        final label = RegExp(
+          r'\bAMOUNT\s+IN\s+WORDS\s*:?\s*',
+          caseSensitive: false,
+        ).firstMatch(lines[i]);
+        if (label == null) continue;
+        final words = lines[i].substring(label.end).trim();
+        total = receiptAmountInWords(
+          words.isEmpty && i + 1 < lines.length ? lines[i + 1] : words,
+        );
+        if (total != null) {
+          confidence['total'] = 55;
+          warnings.add(
+            'Total suggested from amount in words. Verify against the handwritten amount.',
+          );
+          break;
+        }
+      }
+    }
     if (total == null) {
       warnings.add('Total was not found. Enter the final amount due.');
     } else {
       final ambiguous = candidates.map((c) => c.amount).toSet().length > 1;
-      confidence['total'] = ambiguous ? 55 : 90;
+      if (confidence['total'] == 0) confidence['total'] = ambiguous ? 55 : 90;
       if (ambiguous) {
         warnings.add('Several totals were found. Verify the final amount due.');
       }
@@ -237,8 +297,9 @@ abstract final class ReceiptParser {
     int? y, m, d;
     final iso = RegExp(r'\b(20\d{2})[-/](\d{1,2})[-/](\d{1,2})\b')
         .firstMatch(text);
-    final numeric = RegExp(r'\b(\d{1,2})[/-](\d{1,2})[/-](20\d{2})\b')
-        .firstMatch(text);
+    final numeric = RegExp(
+      r'\b(\d{1,2})\s*[/-]\s*(\d{1,2})\s*[/-]\s*(20\d{2}|\d{2})\b',
+    ).firstMatch(text);
     final named = RegExp(
       r'\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),?\s+(20\d{2})\b',
       caseSensitive: false,
@@ -251,6 +312,12 @@ abstract final class ReceiptParser {
     } else if (numeric != null) {
       final a = int.parse(numeric[1]!), b = int.parse(numeric[2]!);
       y = int.parse(numeric[3]!);
+      if (y < 100) {
+        y += 2000;
+        warnings.add(
+          'Two-digit year interpreted as $y. Verify the receipt date.',
+        );
+      }
       m = a > 12 ? b : a;
       d = a > 12 ? a : b;
       confidence['date'] = a <= 12 && b <= 12 && a != b ? 45 : 85;

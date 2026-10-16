@@ -44,3 +44,13 @@ final noticeFilterProvider =
     NotifierProvider<NoticeFilterController, NoticeFilter>(
       NoticeFilterController.new,
     );
+
+class UnreadOnlyController extends Notifier<bool> {
+  @override
+  bool build() => false;
+  void select(bool value) => state = value;
+}
+
+final unreadOnlyProvider = NotifierProvider<UnreadOnlyController, bool>(
+  UnreadOnlyController.new,
+);

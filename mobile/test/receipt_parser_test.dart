@@ -5,6 +5,38 @@ import 'package:pesoflow/features/receipts/domain/receipt_evidence.dart';
 
 ParsedReceipt parse(String text) => ReceiptParser.parse(OcrDocument(text, []));
 void main() {
+  test('paper invoice strips adjacent document title and accepts whole pesos and short year', () {
+    final r = parse(
+      'ACME NETWORK, INC. SERVICEINVOICE\nDate 10-15-26\nInternet 799\nTOTAL AMOUNT DUE 799',
+    );
+    expect(r.merchant, 'ACME NETWORK, INC.');
+    expect(r.date, DateTime(2026, 10, 15));
+    expect(r.total, 79900);
+    expect(r.items.single.total, 79900);
+    expect(r.warnings.join(), contains('Two-digit year'));
+  });
+  test(
+    'amount in words is a reviewable fallback, never an unlabeled guess',
+    () {
+      final r = parse(
+        'ACME STORE\nAMOUNT IN WORDS Seven hundred ninety-nine pesos only',
+      );
+      expect(r.total, 79900);
+      expect(r.confidence['total'], lessThan(80));
+      expect(parse('Store\nSeven hundred ninety-nine').total, isNull);
+      expect(
+        parse('Store\nAmount in words Seven hundred unreadable').total,
+        isNull,
+      );
+      expect(parse('Store\nCASH 1000\nCHANGE 201').total, isNull);
+      expect(parse('Store\nInvoice No 799').total, isNull);
+    },
+  );
+  test('blank payment options are not a selected payment method', () {
+    expect(parse('Store\nCash [] Check [] Bank Debit').paymentMethod, isNull);
+    expect(parse('Store\nCash\nPaid via PAYMAYA').paymentMethod, 'MAYA');
+  });
+
   test('electronic tender is not an item or a fallback expense total', () {
     final r = parse('''TEST STORE
 15 x Test product 480.00
@@ -27,7 +59,7 @@ AMOUNT 480.00''');
   test(
     'receipt evidence retains old parser versions and rejects future ones',
     () {
-      for (final version in [1, ReceiptParser.version]) {
+      for (final version in [1, 2, ReceiptParser.version]) {
         final evidence = ReceiptEvidence(
           imageId: 'test-image',
           rawText: '',
@@ -45,7 +77,7 @@ AMOUNT 480.00''');
           rawText: '',
           createdAt: DateTime(2026),
           total: 48000,
-          parserVersion: 3,
+          parserVersion: ReceiptParser.version + 1,
         ),
         throwsFormatException,
       );

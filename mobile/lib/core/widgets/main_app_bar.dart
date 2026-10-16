@@ -20,7 +20,7 @@ class MainAppBar extends StatelessWidget {
         IconButton(
           tooltip: 'Settings',
           onPressed: () => context.push('/settings'),
-          icon: const Icon(Icons.settings_outlined),
+          icon: const Icon(Icons.settings_outlined, color: AppColors.primary),
         ),
       ],
     ),

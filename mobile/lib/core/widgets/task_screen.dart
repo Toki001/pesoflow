@@ -59,7 +59,7 @@ class TaskScreen extends StatelessWidget {
                             context.go(fallbackRoute);
                           }
                         },
-                        icon: Icon(backIcon),
+                        icon: Icon(backIcon, color: AppColors.primary),
                       ),
                       Expanded(
                         child:

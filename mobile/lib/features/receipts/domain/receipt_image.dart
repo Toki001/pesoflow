@@ -19,6 +19,7 @@ abstract interface class ReceiptImages {
   Future<ReceiptImage?> acquire(ReceiptImageSource source);
   Future<ReceiptImage?> recover();
   Future<ReceiptImage?> crop(ReceiptImage image);
+  Future<ReceiptImage?> rotate(ReceiptImage image);
   Future<void> release(ReceiptImage image);
   Future<void> openSettings();
 }

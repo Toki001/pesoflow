@@ -62,7 +62,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
       actions: [
         TextButton.icon(
           onPressed: () => showManualAccountEditor(context),
-          icon: const Icon(Icons.add, size: 18),
+          icon: const Icon(Icons.add, size: 18, color: AppColors.primary),
           label: const Text('Add Account'),
         ),
       ],

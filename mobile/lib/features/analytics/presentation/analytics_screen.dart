@@ -109,7 +109,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
         children: [
           Flexible(child: Text(dateLabel, style: AppTypography.labelMedium)),
           const SizedBox(width: 4),
-          Icon(Icons.expand_more, size: 16, color: c.mutedInk),
+          Icon(Icons.expand_more, size: 16, color: AppColors.primary),
         ],
       ),
     );
@@ -132,7 +132,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   onPressed: state.value == null
                       ? null
                       : () => preview(state.value!),
-                  icon: const Icon(Icons.summarize_outlined),
+                  icon: const Icon(
+                    Icons.summarize_outlined,
+                    color: AppColors.primary,
+                  ),
                 ),
               ],
             ),
@@ -192,7 +195,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                             Icon(
                               Icons.analytics_outlined,
                               size: 32,
-                              color: c.mutedInk,
+                              color: AppColors.primary,
                             ),
                             const SizedBox(height: 12),
                             Text(

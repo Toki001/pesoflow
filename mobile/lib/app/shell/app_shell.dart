@@ -99,12 +99,12 @@ class AppBottomNavigation extends StatelessWidget {
                                     width: 44,
                                     height: 44,
                                     decoration: const BoxDecoration(
-                                      color: AppColors.primary,
+                                      color: AppColors.primarySoft,
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(
                                       Icons.add,
-                                      color: AppColors.surface,
+                                      color: AppColors.primary,
                                       size: 26,
                                     ),
                                   ),
@@ -115,7 +115,7 @@ class AppBottomNavigation extends StatelessWidget {
                                       ? Icons.home
                                       : icons[index],
                                   size: 22,
-                                  color: color,
+                                  color: AppColors.primary,
                                 ),
                               const SizedBox(height: 2),
                               Text(

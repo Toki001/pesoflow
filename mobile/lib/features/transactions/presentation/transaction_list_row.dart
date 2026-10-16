@@ -118,7 +118,7 @@ class TransactionListRow extends StatelessWidget {
                       ],
                       if (t.recurring) ...[
                         const SizedBox(width: 6),
-                        Icon(Icons.sync, size: 14, color: c.mutedInk),
+                        Icon(Icons.sync, size: 14, color: AppColors.primary),
                       ],
                     ],
                   ),

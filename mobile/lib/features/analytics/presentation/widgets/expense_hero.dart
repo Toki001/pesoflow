@@ -87,7 +87,7 @@ class ExpenseHero extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.speed, size: 18, color: c.mutedInk),
+                    Icon(Icons.speed, size: 18, color: AppColors.primary),
                     const SizedBox(width: 6),
                     Text(
                       'Daily average:',

@@ -56,3 +56,33 @@ Future<Uint8List> prepareReceiptImage(Uint8List bytes) => Isolate.run(() {
     );
   }
 });
+
+Future<Uint8List> rotateReceiptImage(Uint8List bytes) => Isolate.run(() {
+  final decoded = image.decodeImage(bytes);
+  if (decoded == null) {
+    throw const ReceiptFailure('The image could not be rotated.');
+  }
+  return image.encodeJpg(image.copyRotate(decoded, angle: 90), quality: 95);
+});
+
+/// OCR-only derivative. The original receipt remains the persisted evidence.
+Future<Uint8List> enhanceReceiptForOcr(Uint8List bytes) => Isolate.run(() {
+  var decoded = image.decodeImage(bytes);
+  if (decoded == null) {
+    throw const ReceiptFailure('The image could not be enhanced.');
+  }
+  final longest = decoded.width > decoded.height
+      ? decoded.width
+      : decoded.height;
+  if (longest < 1800) {
+    decoded = image.copyResize(
+      decoded,
+      width: decoded.width >= decoded.height ? 1800 : null,
+      height: decoded.height > decoded.width ? 1800 : null,
+      interpolation: image.Interpolation.cubic,
+    );
+  }
+  image.grayscale(decoded);
+  image.normalize(decoded, min: 0, max: 255);
+  return image.encodePng(decoded);
+});

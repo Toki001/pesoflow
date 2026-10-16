@@ -78,6 +78,9 @@ Budgets, 64px plus safe area. Add is the single global creation action; no dupli
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 
+Icons use the brand blue consistently, including notification, navigation and
+receipt controls. Financial text and progress bars retain semantic colors.
+
 Section cards have no outline borders in either theme. Use surfaces and subtle
 shadows for separation; retain borders on inputs and explicit selection controls.
 Subscriptions & Bills is directly accessible from Budgets and Settings.

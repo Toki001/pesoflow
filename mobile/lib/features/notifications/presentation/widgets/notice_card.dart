@@ -22,16 +22,8 @@ class NoticeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final color = switch (notice.kind) {
-      NoticeKind.budget || NoticeKind.connection => c.warning,
-      NoticeKind.renewal => c.primary,
-      NoticeKind.report => c.accent,
-    };
-    final soft = switch (notice.kind) {
-      NoticeKind.budget || NoticeKind.connection => AppColors.warningSoft,
-      NoticeKind.renewal => AppColors.primarySoft,
-      NoticeKind.report => AppColors.accentSoft,
-    };
+    final color = c.primary;
+    const soft = AppColors.primarySoft;
     final icon = switch (notice.kind) {
       NoticeKind.budget => Icons.account_balance_wallet_outlined,
       NoticeKind.renewal => Icons.event_repeat_outlined,
@@ -50,7 +42,7 @@ class NoticeCard extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: c.soft(color, soft),
-                child: Icon(icon, color: color, size: 18),
+                child: Icon(icon, color: AppColors.primary, size: 18),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(

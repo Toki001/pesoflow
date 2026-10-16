@@ -33,6 +33,9 @@ class NativeReceiptImages implements ReceiptImages {
       // elsewhere in its own cache and is not removed here.
       await for (final file in dir.list()) {
         if (file is File && !_owned.contains(file.path)) await file.delete();
+        if (file is Directory && file.path.split('/').last.startsWith('ocr-')) {
+          await file.delete(recursive: true);
+        }
       }
     }
     return dir;
@@ -150,6 +153,18 @@ class NativeReceiptImages implements ReceiptImages {
       ],
     );
     return file == null ? null : _prepare(file.path);
+  });
+  @override
+  Future<ReceiptImage?> rotate(ReceiptImage receipt) => _safe(() async {
+    final bytes = await rotateReceiptImage(receipt.bytes);
+    final dir = await _directory();
+    final file = File('${dir.path}/${newId()}-rotate.jpg');
+    try {
+      await file.writeAsBytes(bytes, flush: true);
+      return await _prepare(file.path);
+    } finally {
+      if (await file.exists()) await file.delete();
+    }
   });
   @override
   Future<void> release(ReceiptImage image) async {

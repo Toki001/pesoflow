@@ -1,3 +1,4 @@
+import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_radius.dart';
@@ -31,7 +32,7 @@ class CategoryIcon extends StatelessWidget {
     child: Icon(
       icon,
       size: iconSize ?? (size == 40 ? 20 : 18),
-      color: foreground,
+      color: AppColors.primary,
     ),
   );
 }

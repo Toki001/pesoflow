@@ -166,12 +166,34 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                             'Tap to inspect full receipt',
                             style: AppTypography.bodySmall,
                           ),
-                          TextButton.icon(
-                            onPressed: locked
-                                ? null
-                                : () => replace(controller.crop),
-                            icon: const Icon(Icons.crop_rotate, size: 18),
-                            label: const Text('Adjust frame & rotate'),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton.icon(
+                                key: const ValueKey('rotate-receipt'),
+                                onPressed: locked
+                                    ? null
+                                    : () => replace(controller.rotate),
+                                icon: const Icon(
+                                  Icons.rotate_right,
+                                  size: 18,
+                                  color: AppColors.primary,
+                                ),
+                                label: const Text('Rotate'),
+                              ),
+                              TextButton.icon(
+                                key: const ValueKey('crop-receipt'),
+                                onPressed: locked
+                                    ? null
+                                    : () => replace(controller.crop),
+                                icon: const Icon(
+                                  Icons.crop,
+                                  size: 18,
+                                  color: AppColors.primary,
+                                ),
+                                label: const Text('Crop'),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -261,7 +283,10 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                   IconButton(
                     tooltip: 'Edit total amount',
                     onPressed: () => editReceiptTotals(context, evidence),
-                    icon: const Icon(Icons.edit_outlined),
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.primary,
+                    ),
                   ),
                 ],
               ),
@@ -356,7 +381,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
             ),
             TextButton.icon(
               onPressed: () => showReceiptItemEditor(context),
-              icon: const Icon(Icons.add, size: 16),
+              icon: const Icon(Icons.add, size: 16, color: AppColors.primary),
               label: const Text('Add Missing Item'),
             ),
           ],
@@ -423,10 +448,10 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         FilledButton.icon(
           key: const ValueKey('save-receipt'),
           onPressed: state.busy ? null : save,
-          icon: const Icon(Icons.task_alt, size: 20),
+          icon: const Icon(Icons.task_alt, size: 20, color: AppColors.primary),
           style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.surface,
+            backgroundColor: AppColors.primarySoft,
+            foregroundColor: AppColors.primary,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
           label: Text(
@@ -443,7 +468,11 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                 onPressed: () => replace(
                   () => controller.acquire(ReceiptImageSource.camera),
                 ),
-                icon: const Icon(Icons.replay, size: 18),
+                icon: const Icon(
+                  Icons.replay,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
                 label: const Text('Retake Photo'),
               ),
             ),
@@ -451,7 +480,11 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: close,
-                icon: const Icon(Icons.delete_outline, size: 18),
+                icon: const Icon(
+                  Icons.delete_outline,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
                 label: const Text('Discard'),
               ),
             ),

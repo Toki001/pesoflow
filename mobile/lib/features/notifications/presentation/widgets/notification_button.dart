@@ -13,7 +13,11 @@ class NotificationButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final unread = ref.watch(unreadNoticeCountProvider);
-    final icon = Icon(Icons.notifications_none, size: 20, color: color);
+    final icon = Icon(
+      Icons.notifications_none,
+      size: 20,
+      color: AppColors.primary,
+    );
     return IconButton(
       tooltip: 'Notifications',
       onPressed: () => context.push('/notifications'),

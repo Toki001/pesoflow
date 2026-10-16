@@ -59,7 +59,11 @@ class ReceiptMerchantCard extends StatelessWidget {
               IconButton(
                 tooltip: 'Edit merchant name',
                 onPressed: onMerchant,
-                icon: Icon(Icons.edit_outlined, size: 16, color: c.mutedInk),
+                icon: Icon(
+                  Icons.edit_outlined,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),
@@ -81,7 +85,7 @@ class ReceiptMerchantCard extends StatelessWidget {
                         Icon(
                           Icons.calendar_today_outlined,
                           size: 16,
-                          color: c.mutedInk,
+                          color: AppColors.primary,
                         ),
                         const SizedBox(width: 6),
                         Flexible(
@@ -99,7 +103,7 @@ class ReceiptMerchantCard extends StatelessWidget {
                         Icon(
                           Icons.verified_outlined,
                           size: 14,
-                          color: c.positive,
+                          color: AppColors.primary,
                         ),
                         const SizedBox(width: 4),
                         Text(
@@ -359,7 +363,11 @@ class ReceiptTotalsCard extends StatelessWidget {
           if (onEdit != null)
             TextButton.icon(
               onPressed: onEdit,
-              icon: const Icon(Icons.edit_outlined, size: 16),
+              icon: const Icon(
+                Icons.edit_outlined,
+                size: 16,
+                color: AppColors.primary,
+              ),
               label: const Text('Edit totals & currency'),
             ),
           Text(
@@ -432,7 +440,7 @@ class ReceiptAssignments extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(Icons.expand_more, size: 18, color: c.mutedInk),
+                  Icon(Icons.expand_more, size: 18, color: AppColors.primary),
                 ],
               ),
             ],
@@ -455,6 +463,8 @@ class ReceiptAssignments extends StatelessWidget {
           onAccount,
           caption: draft.evidence?.paymentMethod == null
               ? null
+              : draft.evidence!.paymentMethod!.contains('(suggested)')
+              ? 'Cash suggested · verify payment'
               : 'Detected: ${draft.evidence!.paymentMethod}',
         );
         return constraints.maxWidth < 330 ||

@@ -1,3 +1,4 @@
+import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -172,6 +173,8 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
                   ),
                   const SizedBox(height: 16),
                   DropdownButtonFormField<AccountType>(
+                    iconEnabledColor: AppColors.primary,
+                    iconDisabledColor: AppColors.primary,
                     initialValue: type,
                     decoration: const InputDecoration(
                       labelText: 'Account type',
@@ -263,6 +266,8 @@ class _ManualAccountEditorState extends ConsumerState<ManualAccountEditor> {
                       type == AccountType.credit) ...[
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
+                      iconEnabledColor: AppColors.primary,
+                      iconDisabledColor: AppColors.primary,
                       initialValue: cardNetwork,
                       decoration: const InputDecoration(
                         labelText: 'Card network (optional)',
