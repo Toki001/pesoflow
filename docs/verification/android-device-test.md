@@ -257,3 +257,33 @@ APK 99.8 MB and AAB 80.8 MB build successfully; unsigned iOS compile also passes
 Artifacts retain development signing. Remaining Android acceptance includes an
 owner-assisted fresh receipt capture, image reopen, actual CSV save, low storage,
 large collections and accessibility. Do not reset the current installation.
+
+
+## Receipt and filter follow-up — 17 October 2026
+
+Verified milestones `680b4ff` and `992dce7` introduced the screenshot corrections
+and invoice-parser repairs. `343ca51` added shadow-aware local recognition and
+field-consistency protection; `166d924` corrected combined-filter counts.
+
+The authorized Redmi remained available over ADB. Before this update, Home showed
+PHP 1,642.50 across Cash PHP 1,000 and the bank account PHP 642.50, with PHP 47.50
+October spending. The APK containing `343ca51` and the notification-count change
+installed successfully with `adb install -r`; startup opened the existing data.
+No uninstall, data clear, reseed, financial command or encryption change occurred.
+
+The owner's supplied low-resolution paper invoice was selected through the native
+photo picker using the previously staged test copy. Review showed the correct
+company name without the invoice title, zero spurious invoice-number items, and
+Cash with an explicit suggestion/verification label. Separate blue Rotate and Crop
+controls appeared left/right below the preview. Total/date were still not reliably
+recognized and remained flagged for manual entry. No expense was saved; no private
+image, extracted text or screenshot is committed.
+
+Native process diagnostics confirmed three completed local recognition passes.
+The roughly 40-second fallback scan exposed excessive derivative-processing cost.
+Milestone `df10f3e` switches derivatives to one luminance channel, linear upscaling
+and fast lossless PNG encoding. Its format/analysis, 234 tests (29 goldens) and APK
+checks pass. Final in-place installation and timing of this optimized build, native
+Rotate/Crop interaction, test-copy cleanup and final restart verification are
+pending a stable untouched phone screen; concurrent screen transitions prevented
+reliable control targeting. This is not a completed handwriting-accuracy test.

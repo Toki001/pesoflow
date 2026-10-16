@@ -1,4 +1,4 @@
-# Production readiness — 16 October 2026
+# Production readiness — 17 October 2026
 
 PesoFlow is a local-first expense tracker without login, registration, profiles,
 mandatory authentication or Backup/Restore. The 13 approved Stitch v7 screens are
@@ -116,3 +116,50 @@ Next: owner-assisted Android receipt capture/reopen and CSV save acceptance, the
 broader accessibility/low-storage checks on an isolated test installation. Never
 clear this phone or uninstall to work around an installation error. Development
 signing and the ML Kit simulator limitation above remain unchanged.
+
+
+## Receipt recognition and screenshot corrections — 17 October 2026
+
+Notifications combines alert type with an independent unread filter and reports
+matching versus total notices. Budgets keeps the period separate, places New by
+Category Budgets, and exposes Subscriptions & Bills below the category list.
+Icons remain brand blue; financial amounts/progress preserve semantic colors.
+Review offers separate Rotate and Crop actions without changing the approved
+screen hierarchy.
+
+OCR now tries up to three local recognitions: original, grayscale/contrast, and
+paper-shadow correction when essential fields remain missing. Image derivatives
+run off the UI isolate and never replace the saved evidence. A selected pass must
+improve extraction without losing or contradicting an existing total, date or
+payment method. Invoice titles are excluded from merchants, invoice serials are
+excluded from items, and paper layouts tolerate common title OCR errors. Cash is
+explicitly a suggestion when no electronic tender is stated; confirmation remains
+mandatory. No OCR text or private receipt photo is committed or uploaded. No new
+package, financial-engine rewrite, schema change or key change was introduced.
+
+Automated verification: formatting PASS (163 files), analysis PASS, **234 Flutter
+tests PASS**, including 29 golden comparisons. Added tests cover shadow flattening
+with retained ink/source bytes, fallback failures/cleanup, and conflicting
+amount/date/payment protection. Native recognition quality is evaluated separately
+from mocked-adapter tests; this is not a handwriting-accuracy claim.
+
+Release APK (100.0 MB), App Bundle (81.0 MB), and unsigned iOS device compile PASS.
+Android still uses development signing; iOS runtime testing remains unavailable.
+Backend was unchanged and was not rerun at this checkpoint.
+
+Physical Android follow-up confirmed the repaired merchant, no invoice-number
+items, explicit Cash suggestion and separate blue image controls on the owner's
+paper invoice. The handwritten amount/date remained unrecognized. This image is
+720×405; preprocessing cannot guarantee recovery of missing detail. The first
+three-pass build also exposed a roughly 40-second fallback cost. A subsequent
+verified optimization uses one luminance channel, linear upscaling and fast
+lossless PNG encoding. All checks above include that final code.
+
+Final device timing and Rotate/Crop interaction for the optimized APK are pending
+an untouched review screen after concurrent phone navigation made action targeting
+unreliable. The owner has been asked to leave the phone ready. The test copy still
+needs cleanup and the final cold restart must be checked; no saved financial data
+was changed. See [device evidence](verification/android-device-test.md).
+Next: finish those scoped Android checks, then evaluate clearer printed and
+handwritten receipts with owner-confirmed expected fields. Do not claim reliable
+handwriting recognition from this single image.
