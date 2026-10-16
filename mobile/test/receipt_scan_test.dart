@@ -50,7 +50,7 @@ void main() {
   test(
     'paper cash fallback is a suggestion and explicit electronic tender wins',
     () async {
-      ocr.text = 'ACME NETWORK, INC. SERVICEINVOICE\nDate 10-15-26\nTOTAL 799';
+      ocr.text = 'ACME NETWORK, INC.\nSEKVCE NVOICE\nDate 10-15-26\nTOTAL 799';
       await scan.acquire(ReceiptImageSource.photos);
       var draft = c.read(receiptScanProvider).draft!;
       expect(draft.accountId, 'cash');

@@ -141,10 +141,104 @@ void main() {
           };
         });
         final doc = await MlKitReceiptOcr().recognize(source.path);
-        expect(passes, 2);
+        expect(passes, conflict ? 3 : 2);
         expect(doc.text, contains(conflict ? 'TOTAL 25' : 'TOTAL 799'));
         expect(await source.readAsBytes(), bytes);
         expect(await dir.list().length, 1); // derivative removed
+      },
+    );
+  }
+  test(
+    'shadow correction lifts paper shadows while retaining ink and source',
+    () async {
+      final source = img.Image(width: 1800, height: 500);
+      for (final pixel in source) {
+        final light = 60 + (pixel.x * 160 ~/ source.width);
+        pixel.setRgb(light, light, light);
+      }
+      for (final x in [300, 1500]) {
+        img.fillRect(
+          source,
+          x1: x,
+          y1: 200,
+          x2: x + 8,
+          y2: 300,
+          color: img.ColorRgb8(15, 15, 15),
+        );
+      }
+      final bytes = img.encodePng(source);
+      final original = Uint8List.fromList(bytes);
+      final corrected = img.decodePng(
+        await enhanceReceiptForOcr(bytes, correctShadows: true),
+      )!;
+      final leftPaper = corrected.getPixel(300, 100).r;
+      final rightPaper = corrected.getPixel(1500, 100).r;
+      expect((leftPaper - rightPaper).abs(), lessThan(25));
+      expect(leftPaper, greaterThan(200));
+      expect(corrected.getPixel(303, 250).r, lessThan(leftPaper - 150));
+      expect(corrected.getPixel(1503, 250).r, lessThan(rightPaper - 150));
+      expect(bytes, original);
+    },
+  );
+  for (final failsContrast in [false, true]) {
+    test(
+      'shadow retry recovers missing fields and cleans up; contrast failure: $failsContrast',
+      () async {
+        final dir = await Directory.systemTemp.createTemp(
+          'receipt-shadow-test-',
+        );
+        addTearDown(() => dir.delete(recursive: true));
+        final source = File('${dir.path}/original.jpg');
+        await source.writeAsBytes(
+          img.encodeJpg(img.Image(width: 100, height: 60)),
+        );
+        var passes = 0;
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          if (call.method.contains('close')) return null;
+          passes++;
+          if (passes == 2 && failsContrast) {
+            throw PlatformException(code: 'unavailable');
+          }
+          return {
+            'text': passes < 3 ? 'STORE' : 'STORE\nTOTAL 42\n10-15-26',
+            'blocks': [],
+          };
+        });
+        final doc = await MlKitReceiptOcr().recognize(source.path);
+        expect(passes, 3);
+        expect(doc.text, contains('TOTAL 42'));
+        expect(await dir.list().length, 1);
+      },
+    );
+  }
+  for (final originalText in [
+    'STORE\n10-15-26\nPAID VIA MAYA',
+    'STORE\nPAID VIA MAYA',
+  ]) {
+    test(
+      'enhancement cannot replace a recognized date or lose payment: $originalText',
+      () async {
+        final dir = await Directory.systemTemp.createTemp(
+          'receipt-conflict-test-',
+        );
+        addTearDown(() => dir.delete(recursive: true));
+        final source = File('${dir.path}/original.jpg');
+        await source.writeAsBytes(
+          img.encodeJpg(img.Image(width: 100, height: 60)),
+        );
+        var passes = 0;
+        messenger.setMockMethodCallHandler(channel, (call) async {
+          if (call.method.contains('close')) return null;
+          passes++;
+          return {
+            'text': passes == 1 ? originalText : 'STORE\nTOTAL 42\n10-16-26',
+            'blocks': [],
+          };
+        });
+        final doc = await MlKitReceiptOcr().recognize(source.path);
+        expect(passes, 3);
+        expect(doc.text, originalText);
+        expect(await dir.list().length, 1);
       },
     );
   }

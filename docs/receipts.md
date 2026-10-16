@@ -25,8 +25,8 @@ the layout reference. Real receipts replace the former synthetic preview.
   quality 90. Processing runs in an isolate. Inputs returned by the picker are
   bounded at 25 MiB/40 megapixels, with a 20 MiB processed-image ceiling. Native
   pickers may already resize/convert input; these limits apply to their result.
-  Corrupt/unsupported input fails with an actionable message. No aggressive
-  thresholding or contrast filter is applied to faded receipts.
+  Corrupt/unsupported input fails with an actionable message. The saved evidence is never thresholded or contrast-filtered; optional OCR
+  derivatives are processed separately and discarded.
 - [Google ML Kit Text Recognition](https://pub.dev/packages/google_mlkit_text_recognition)
   uses the Latin script recognizer through a `ReceiptOcrService` adapter. The
   Android dependency is the bundled model (`com.google.mlkit:text-recognition`),
@@ -52,8 +52,8 @@ A large unlabeled number is never silently promoted to the expense total.
 OCR price columns are joined using line geometry when available.
 
 Amounts use integer centavos. Supported printed amounts have two decimal places,
-with optional thousands separators and ₱/PHP/P prefixes. Whole-number printed
-amounts, fractional-weight items and complex multiline discounts may require
+with optional thousands separators and ₱/PHP/P prefixes. Labeled whole-peso totals and whole-peso items inside an item table are also
+supported. Fractional-weight items and complex multiline discounts may require
 manual correction. Unit price × whole quantity determines an item's line total;
 the receipt's final total remains independently editable. VAT is recorded only
 when found/entered; a blanket 12% amount is never invented or added again.
@@ -126,3 +126,40 @@ Run `bash scripts/check.sh`, then the Android debug and iOS simulator builds.
 See the [physical-device checklist](verification/receipt-device-checklist.md).
 Automated widget/adapter checks do not measure recognition accuracy on real
 thermal receipts or prove native permissions/file-dialog behavior.
+
+
+## Parser v3 and review controls — 17 October 2026
+
+Review exposes separate left/right Rotate and Crop actions. Rotation changes the
+staged photo by 90 degrees, then reruns OCR; cropping uses the native editor.
+Replacing a reviewed image requires confirmation before dropping unsaved edits.
+The saved image is the reviewed original/crop, never an OCR contrast derivative.
+
+When total/date/header extraction is incomplete, Latin ML Kit tries a private
+contrast-normalized grayscale derivative with bounded upscaling. If still
+incomplete, a third pass estimates local paper illumination and reduces uneven
+shadows without binary thresholding. Processing runs off the UI isolate and stops
+when the essential fields are found (three native recognitions maximum). The
+selected whole recognition must improve structured extraction without losing or
+contradicting an already recognized total, date or payment method. Fields from
+different passes are not spliced together. Failed enhancement retains the best
+readable result. Derivatives are deleted; interrupted staging directories are
+cleaned on a later scan session. Missing pixels and blurry handwriting cannot be
+recovered reliably by contrast processing; manual review remains necessary.
+
+Parser v3 strips adjacent invoice titles, tolerates common title OCR errors,
+prioritizes business-header reading order and normalizes a terminal comma-ING
+company suffix to INC. (still requiring merchant review). Whole-peso totals and
+two-digit numeric years are supported. Whole-peso items require an item-table
+context; invoice/reference numbers are excluded. A strictly recognized, labeled
+English amount-in-words line can suggest a total at low confidence. Missing or
+conflicting fields require manual correction. No largest-number fallback exists.
+Old parser-v1/v2 evidence remains readable without a database migration.
+
+For camera captures or recognizable paper-invoice layouts without explicit
+payment evidence, Cash is suggested and labeled as an assumption. Explicit wallet
+or card/bank tender takes precedence; blank printed payment options are not a
+selection. An unambiguous active matching manual account may be preselected;
+multiple matches require a choice. Generic gallery images do not assume cash.
+The confirmation gate remains mandatory. This is printed-text OCR with limited
+handwriting support, not guaranteed recognition of handwritten invoices.

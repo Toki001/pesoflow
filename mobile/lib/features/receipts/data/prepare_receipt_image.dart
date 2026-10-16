@@ -66,7 +66,10 @@ Future<Uint8List> rotateReceiptImage(Uint8List bytes) => Isolate.run(() {
 });
 
 /// OCR-only derivative. The original receipt remains the persisted evidence.
-Future<Uint8List> enhanceReceiptForOcr(Uint8List bytes) => Isolate.run(() {
+Future<Uint8List> enhanceReceiptForOcr(
+  Uint8List bytes, {
+  bool correctShadows = false,
+}) => Isolate.run(() {
   var decoded = image.decodeImage(bytes);
   if (decoded == null) {
     throw const ReceiptFailure('The image could not be enhanced.');
@@ -83,6 +86,46 @@ Future<Uint8List> enhanceReceiptForOcr(Uint8List bytes) => Isolate.run(() {
     );
   }
   image.grayscale(decoded);
+  if (correctShadows) {
+    // Estimate the paper illumination at low resolution. A local maximum
+    // suppresses narrow ink strokes in that estimate; smoothing avoids seams.
+    // Dividing by the estimate lifts shadows without binarizing faint writing.
+    final thumbnail = image.copyResize(
+      decoded,
+      width: decoded.width >= decoded.height ? 256 : null,
+      height: decoded.height > decoded.width ? 256 : null,
+      interpolation: image.Interpolation.average,
+    );
+    final paper = image.Image.from(thumbnail);
+    for (final pixel in paper) {
+      var brightest = 1;
+      for (var dy = -4; dy <= 4; dy++) {
+        for (var dx = -4; dx <= 4; dx++) {
+          final value = thumbnail
+              .getPixelClamped(pixel.x + dx, pixel.y + dy)
+              .r
+              .toInt();
+          if (value > brightest) brightest = value;
+        }
+      }
+      pixel.setRgb(brightest, brightest, brightest);
+    }
+    image.gaussianBlur(paper, radius: 3);
+    final background = image.copyResize(
+      paper,
+      width: decoded.width,
+      height: decoded.height,
+      interpolation: image.Interpolation.linear,
+    );
+    for (final pixel in decoded) {
+      final illumination = background
+          .getPixel(pixel.x, pixel.y)
+          .r
+          .clamp(1, 255);
+      final value = (pixel.r * 245 / illumination).round().clamp(0, 255);
+      pixel.setRgb(value, value, value);
+    }
+  }
   image.normalize(decoded, min: 0, max: 255);
   return image.encodePng(decoded);
 });

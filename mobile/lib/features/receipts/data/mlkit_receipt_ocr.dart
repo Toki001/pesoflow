@@ -24,51 +24,43 @@ class MlKitReceiptOcr implements ReceiptOcrService {
           'Too much text was found. Crop to one receipt and try again.',
         );
       }
-      final original = _document(result);
-      final parsed = ReceiptParser.parse(original);
-      if (parsed.total != null &&
-          parsed.date != null &&
-          parsed.merchant.isNotEmpty) {
-        return original;
-      }
+      var best = _document(result);
+      var parsed = ReceiptParser.parse(best);
+      if (_complete(parsed)) return best;
       Directory? staging;
       try {
-        // Private OCR derivative; the original remains the saved evidence.
+        // Private OCR derivatives; the original remains the saved evidence.
         staging = await Directory(File(imagePath).parent.path)
             .createTemp('ocr-');
-        final enhanced = File('${staging.path}/contrast.png');
-        await enhanced.writeAsBytes(
-          await enhanceReceiptForOcr(await File(imagePath).readAsBytes()),
-          flush: true,
-        );
-        result = await recognizer.processImage(
-          ml.InputImage.fromFilePath(enhanced.path),
-        );
-        if (result.text.length > 200000) return original;
-        final alternative = _document(result);
-        final candidate = ReceiptParser.parse(alternative);
-        double score(ParsedReceipt r) =>
-            (r.total != null ? 4 : 0) +
-            (r.date != null ? 2 : 0) +
-            (r.merchant.isNotEmpty ? 1 : 0) +
-            RegExp(
-                      r'\b(TOTAL|AMOUNT|WORDS|DATE|INVOICE|CASH)\b',
-                      caseSensitive: false,
-                    )
-                    .allMatches(r.rawText)
-                    .map((m) => m[0]!.toUpperCase())
-                    .toSet()
-                    .length /
-                10;
-        // Do not replace an explicit amount with a contradictory second pass.
-        if (parsed.total != null &&
-            candidate.total != null &&
-            parsed.total != candidate.total) {
-          return original;
+        final bytes = await File(imagePath).readAsBytes();
+        for (final correctShadows in [false, true]) {
+          try {
+            final enhanced = File('${staging.path}/contrast.png');
+            await enhanced.writeAsBytes(
+              await enhanceReceiptForOcr(bytes, correctShadows: correctShadows),
+              flush: true,
+            );
+            result = await recognizer.processImage(
+              ml.InputImage.fromFilePath(enhanced.path),
+            );
+            if (result.text.length > 200000) continue;
+            final alternative = _document(result);
+            final candidate = ReceiptParser.parse(alternative);
+            // Select one whole recognition, never splice contradictory fields
+            // or lose a previously recognized amount/date/payment method.
+            if (_compatible(parsed, candidate) &&
+                _score(candidate) > _score(parsed)) {
+              best = alternative;
+              parsed = candidate;
+            }
+            if (_complete(parsed)) break;
+          } catch (_) {
+            // An optional enhancement failure must not discard readable text.
+          }
         }
-        return score(candidate) > score(parsed) ? alternative : original;
+        return best;
       } catch (_) {
-        return original;
+        return best;
       } finally {
         try {
           await staging?.delete(recursive: true);
@@ -88,6 +80,31 @@ class MlKitReceiptOcr implements ReceiptOcrService {
       }
     }
   }
+
+  bool _complete(ParsedReceipt receipt) =>
+      receipt.total != null &&
+      receipt.date != null &&
+      receipt.merchant.isNotEmpty;
+
+  bool _compatible(ParsedReceipt previous, ParsedReceipt candidate) =>
+      (previous.total == null || previous.total == candidate.total) &&
+      (previous.date == null || previous.date == candidate.date) &&
+      (previous.paymentMethod == null ||
+          previous.paymentMethod == candidate.paymentMethod);
+
+  double _score(ParsedReceipt receipt) =>
+      (receipt.total != null ? 4 : 0) +
+      (receipt.date != null ? 2 : 0) +
+      (receipt.merchant.isNotEmpty ? 1 : 0) +
+      RegExp(
+                r'\b(TOTAL|AMOUNT|WORDS|DATE|INVOICE|CASH)\b',
+                caseSensitive: false,
+              )
+              .allMatches(receipt.rawText)
+              .map((match) => match[0]!.toUpperCase())
+              .toSet()
+              .length /
+          10;
 
   OcrDocument _document(ml.RecognizedText result) {
     return OcrDocument(result.text, [

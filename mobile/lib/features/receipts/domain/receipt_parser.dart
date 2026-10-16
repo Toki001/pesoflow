@@ -31,7 +31,7 @@ class ParsedReceipt {
 abstract final class ReceiptParser {
   static const version = 3;
   static final paperTitle = RegExp(
-    r'\b(?:S[E3][RK]V[I1]CE\s*[I1]?N[VY]O[I1]?CE|SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b',
+    r'\b(?:S[E3][RK]V[I1]?CE\s*[I1]?N[VY]O[I1]?CE|SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b',
     caseSensitive: false,
   );
   static bool isPaperReceipt(String text) =>
