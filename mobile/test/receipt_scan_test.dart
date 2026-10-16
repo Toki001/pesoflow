@@ -48,10 +48,31 @@ void main() {
     await repo.close();
   });
   test(
+    'capture, rotate and crop stage an image without OCR or financial writes',
+    () async {
+      await scan.acquire(ReceiptImageSource.camera);
+      expect(c.read(receiptScanProvider).image, isNotNull);
+      expect(c.read(receiptScanProvider).draft, isNull);
+      expect(ocr.calls, 0);
+      expect(await scan.save(), isNull);
+      images.rotated = ReceiptImage('/test/rotated.jpg', images.next!.bytes);
+      await scan.rotate();
+      images.cropped = ReceiptImage('/test/cropped.jpg', images.next!.bytes);
+      await scan.crop();
+      expect(ocr.calls, 0);
+      expect(c.read(receiptScanProvider).image!.path, '/test/cropped.jpg');
+      expect(c.read(workspaceProvider).receipts, isEmpty);
+      await Future.wait([scan.retry(), scan.retry()]);
+      expect(ocr.calls, 1);
+      expect(c.read(receiptScanProvider).draft!.evidence!.confirmed, isFalse);
+    },
+  );
+  test(
     'paper cash fallback is a suggestion and explicit electronic tender wins',
     () async {
       ocr.text = 'ACME NETWORK, INC.\nSEKVCE NVOICE\nDate 10-15-26\nTOTAL 799';
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       var draft = c.read(receiptScanProvider).draft!;
       expect(draft.accountId, 'cash');
       expect(draft.evidence!.paymentMethod, 'CASH (suggested)');
@@ -66,16 +87,20 @@ void main() {
   test('ordinary gallery images do not assume cash; rotation resets confirmation and rereads', () async {
     ocr.text = 'STORE\nTOTAL 25';
     await scan.acquire(ReceiptImageSource.photos);
+    await scan.retry();
     expect(c.read(receiptScanProvider).draft!.evidence!.paymentMethod, isNull);
     scan.confirm(true);
     images.rotated = ReceiptImage('/test/rotated.jpg', images.next!.bytes);
     await scan.rotate();
+    expect(c.read(receiptScanProvider).draft, isNull);
+    await scan.retry();
     expect(c.read(receiptScanProvider).image!.path, '/test/rotated.jpg');
     expect(c.read(receiptScanProvider).draft!.evidence!.confirmed, isFalse);
     expect(ocr.calls, 2);
   });
   test('scan, corrections and explicit confirmation persist through production command once', () async {
     await scan.acquire(ReceiptImageSource.camera);
+    await scan.retry();
     var d = c.read(receiptScanProvider).draft!;
     expect(d.total, 29000);
     expect(d.category, TransactionCategory.food);
@@ -118,6 +143,7 @@ void main() {
     'remembered categories accept the full supported merchant name length',
     () async {
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       scan.setMerchant('A' * 100);
       scan.setCategory(TransactionCategory.food);
       scan.setAccount(const LedgerAccount(id: 'cash', label: 'Cash'));
@@ -135,6 +161,7 @@ void main() {
     () async {
       ocr.text = 'Jollibee\nOctober 24, 2024 12:30 PM\nTOTAL 9000.00';
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       scan.setAccount(const LedgerAccount(id: 'cash', label: 'Cash'));
       scan.confirm(true);
       expect(await scan.save(), isNotNull);
@@ -156,6 +183,7 @@ void main() {
     'cancel, denied capture and cancelled crop preserve current corrections',
     () async {
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       scan.setMerchant('Corrected merchant');
       final draft = c.read(receiptScanProvider).draft;
       images.next = null;
@@ -172,6 +200,7 @@ void main() {
   test('OCR failure keeps image for manual entry; retry and crop run real abstraction again', () async {
     ocr.error = const ReceiptFailure('Could not read');
     await scan.acquire(ReceiptImageSource.photos);
+    await scan.retry();
     expect(c.read(receiptScanProvider).image, isNotNull);
     expect(c.read(receiptScanProvider).draft!.evidence!.rawText, isEmpty);
     expect(
@@ -183,6 +212,8 @@ void main() {
     expect(c.read(receiptScanProvider).draft!.total, 29000);
     images.cropped = ReceiptImage('/test/cropped.png', images.next!.bytes);
     await scan.crop();
+    expect(c.read(receiptScanProvider).draft, isNull);
+    await scan.retry();
     expect(ocr.calls, 3);
     expect(images.released, contains('/test/receipt.png'));
     expect(c.read(receiptScanProvider).image!.path, '/test/cropped.png');
@@ -192,6 +223,7 @@ void main() {
     () async {
       ocr.text = '';
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       final d = c.read(receiptScanProvider).draft!;
       expect(d.items, isEmpty);
       expect(d.total, 0);
@@ -211,6 +243,7 @@ void main() {
     'storage failure retains review and image; retry commits once',
     () async {
       await scan.acquire(ReceiptImageSource.photos);
+      await scan.retry();
       scan.setAccount(const LedgerAccount(id: 'cash', label: 'Cash'));
       scan.confirm(true);
       await db.customStatement(
@@ -231,6 +264,8 @@ void main() {
     images.recovered = images.next;
     await scan.recover();
     await scan.recover();
+    expect(ocr.calls, 0);
+    await scan.retry();
     expect(images.recoveries, 1);
     expect(c.read(receiptScanProvider).draft!.total, 29000);
     c.invalidate(receiptScanProvider);

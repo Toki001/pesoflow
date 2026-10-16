@@ -68,7 +68,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         await confirmReceiptAction(
           context,
           'Read receipt again?',
-          'A successful new scan will replace your unsaved corrections. Cancelling capture keeps this review.',
+          'Changing the image replaces unsaved corrections. You can adjust it before scanning again. Cancelling keeps this review.',
           'Continue',
         );
     dialogOpen = false;
@@ -112,7 +112,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (!didPop) close();
       },
-      child: state.draft == null
+      child: state.image == null
           ? ReceiptScanner(
               onClose: locked ? null : close,
               onCamera: locked
@@ -124,7 +124,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
               status: scanStatus(state),
             )
           : TaskScreen(
-              title: 'Review Receipt',
+              title: state.draft == null ? 'Prepare Receipt' : 'Review Receipt',
               backIcon: Icons.arrow_back,
               backTooltip: 'Close receipt',
               onClose: close,
@@ -155,7 +155,11 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: Container(
-                                  height: 160,
+                                  height: state.draft == null
+                                      ? (MediaQuery.sizeOf(context).height *
+                                                .42)
+                                            .clamp(200.0, 420.0)
+                                      : 160,
                                   color: c.mutedSurface,
                                   child: receiptImage(state.image!.bytes),
                                 ),
@@ -200,7 +204,31 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                     ),
                     const SizedBox(height: 16),
                     scanStatus(state),
-                    AbsorbPointer(absorbing: locked, child: content(state)),
+                    if (state.draft == null) ...[
+                      Text(
+                        'Adjust before scanning',
+                        style: AppTypography.headlineSmall,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Rotate the writing upright and crop out the background. Keep the merchant, date and full amount table in the image.',
+                      ),
+                      const SizedBox(height: 20),
+                      FilledButton(
+                        key: const ValueKey('scan-prepared-receipt'),
+                        onPressed: locked ? null : controller.retry,
+                        child: const Text('Scan receipt'),
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: locked
+                            ? null
+                            : () =>
+                                  controller.acquire(ReceiptImageSource.photos),
+                        child: const Text('Choose another photo'),
+                      ),
+                    ] else
+                      AbsorbPointer(absorbing: locked, child: content(state)),
                   ],
                 ),
               ),
@@ -219,7 +247,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
           Text(
             state.progress!,
             style: TextStyle(
-              color: state.draft == null ? Colors.white : context.colors.ink,
+              color: state.image == null ? Colors.white : context.colors.ink,
             ),
           ),
           const SizedBox(height: 16),

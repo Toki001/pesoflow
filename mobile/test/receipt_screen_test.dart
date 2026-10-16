@@ -78,6 +78,58 @@ Future<void> waitForScan(ProviderContainer c) async {
 }
 
 void main() {
+  for (final dark in [false, true]) {
+    testWidgets(
+      'pre-scan preview permits image edits and explicit scan; dark: $dark',
+      (tester) async {
+        size(tester, const Size(390, 844));
+        final images = FakeReceiptImages();
+        final ocr = FakeReceiptOcr();
+        final c = await screen(
+          tester,
+          images,
+          ocr,
+          theme: dark ? ThemeMode.dark : ThemeMode.light,
+        );
+        await tester.runAsync(
+          () => c
+              .read(receiptScanProvider.notifier)
+              .acquire(ReceiptImageSource.photos),
+        );
+        await tester.runAsync(
+          () => precacheImage(
+            MemoryImage(images.next!.bytes),
+            tester.element(find.byType(PesoFlowApp)),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('Prepare Receipt'), findsOneWidget);
+        expect(ocr.calls, 0);
+        await expectLater(
+          find.byKey(const ValueKey('receipt-golden')),
+          matchesGoldenFile(
+            'goldens/receipt_prepare_${dark ? 'dark' : 'light'}.png',
+          ),
+        );
+        images.rotated = ReceiptImage('/test/rotated.jpg', images.next!.bytes);
+        await tapVisible(tester, find.byKey(const ValueKey('rotate-receipt')));
+        await tapVisible(tester, find.byKey(const ValueKey('crop-receipt')));
+        expect(ocr.calls, 0);
+        expect(c.read(receiptScanProvider).image!.path, '/test/rotated.jpg');
+        await tester.ensureVisible(
+          find.byKey(const ValueKey('scan-prepared-receipt')),
+        );
+        await tester.runAsync(() async {
+          await tester.tap(find.byKey(const ValueKey('scan-prepared-receipt')));
+          await waitForScan(c);
+        });
+        await tester.pumpAndSettle();
+        expect(ocr.calls, 1);
+        expect(find.text('Review Receipt'), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
   testWidgets(
     'scrolled receipt review can expand original text after corrections',
     (tester) async {
@@ -86,7 +138,10 @@ void main() {
         ..text = 'TEST STORE\nTest product 480.00\nTOTAL 480.00';
       final c = await screen(tester, FakeReceiptImages(), ocr);
       final scan = c.read(receiptScanProvider.notifier);
-      await tester.runAsync(() => scan.acquire(ReceiptImageSource.photos));
+      await tester.runAsync(() async {
+        await scan.acquire(ReceiptImageSource.photos);
+        await scan.retry();
+      });
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.text('Original extracted text'));
       await tester.pumpAndSettle();
@@ -155,6 +210,7 @@ void main() {
             .read(receiptScanProvider.notifier)
             .acquire(ReceiptImageSource.photos),
       );
+      await tester.runAsync(() => c.read(receiptScanProvider.notifier).retry());
       await tester.runAsync(
         () => precacheImage(
           MemoryImage(images.next!.bytes),
@@ -195,6 +251,12 @@ void main() {
           workspace: initial,
         );
         await tester.tap(find.text('Choose receipt photo'));
+        await waitForScan(c);
+        await tester.pumpAndSettle();
+        await tester.ensureVisible(
+          find.byKey(const ValueKey('scan-prepared-receipt')),
+        );
+        await tester.tap(find.byKey(const ValueKey('scan-prepared-receipt')));
         await waitForScan(c);
         await tester.pumpAndSettle();
         expect(find.text('Review Extracted Receipt'), findsOneWidget);
@@ -282,6 +344,7 @@ void main() {
           .read(receiptScanProvider.notifier)
           .acquire(ReceiptImageSource.photos),
     );
+    await tester.runAsync(() => c.read(receiptScanProvider.notifier).retry());
     await tester.pumpAndSettle();
     final receiptId = c.read(receiptScanProvider).draft!.id;
     await tapVisible(tester, find.byKey(const ValueKey('receipt-paid-with')));
@@ -309,6 +372,7 @@ void main() {
             .read(receiptScanProvider.notifier)
             .acquire(ReceiptImageSource.photos),
       );
+      await tester.runAsync(() => c.read(receiptScanProvider.notifier).retry());
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.byKey(const ValueKey('save-receipt')));
       await tester.pumpAndSettle();

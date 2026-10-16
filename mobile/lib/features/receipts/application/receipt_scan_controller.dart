@@ -135,9 +135,9 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
       if (source != null) _source = source;
       final old = _image;
       _image = image;
-      state = ReceiptScanState(image: image, progress: 'Reading text…');
+      state = ReceiptScanState(image: image);
       if (old != null && old.path != image.path) await _images.release(old);
-      await _recognize();
+      // Capture and edits stop at preview. Only the Scan receipt action runs OCR.
     } catch (error) {
       _publish(
         error: error is ReceiptFailure
