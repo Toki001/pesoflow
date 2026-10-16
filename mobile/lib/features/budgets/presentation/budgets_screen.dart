@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:pesoflow/core/widgets/main_app_bar.dart';
@@ -122,6 +123,15 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
       child: Column(
         children: [
           const MainAppBar('Budgets'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextButton.icon(
+              key: const ValueKey('open-subscriptions'),
+              onPressed: () => context.push('/budgets/subscriptions'),
+              icon: const Icon(Icons.event_repeat_outlined),
+              label: const Text('Subscriptions & Bills'),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(

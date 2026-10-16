@@ -78,6 +78,10 @@ Budgets, 64px plus safe area. Add is the single global creation action; no dupli
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 
+Section cards have no outline borders in either theme. Use surfaces and subtle
+shadows for separation; retain borders on inputs and explicit selection controls.
+Subscriptions & Bills is directly accessible from Budgets and Settings.
+
 Share app bars, cards, amounts, rows, account/category selectors, inputs, buttons,
 filters, sheets, dialogs and loading/empty/error states. Avoid giant build methods
 and premature abstractions. Use responsive scrollable layouts, SafeArea,

@@ -23,7 +23,6 @@ class BudgetReallocationCard extends StatelessWidget {
     final c = context.colors;
     return FinanceCard(
       color: c.insight,
-      borderColor: c.accentBorder,
       radius: AppRadius.budgetHero,
       padding: const EdgeInsets.all(16),
       child: Row(

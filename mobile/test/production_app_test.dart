@@ -71,6 +71,21 @@ Future<ProviderContainer> pumpApp(
 }
 
 void main() {
+  testWidgets('Budgets opens recurring commitments and the creation form', (
+    tester,
+  ) async {
+    viewport(tester, const Size(390, 844));
+    await pumpApp(tester, route: '/budgets');
+    await tester.tap(find.byKey(const ValueKey('open-subscriptions')));
+    await tester.pumpAndSettle();
+    expect(find.text('Subscriptions & Bills'), findsOneWidget);
+    expect(find.text('No subscriptions tracked'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('add-subscription')));
+    await tester.pumpAndSettle();
+    expect(find.text('Add subscription'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   for (final route in [
     '/home',
     '/transactions',

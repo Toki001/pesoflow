@@ -27,11 +27,8 @@ class FinanceCard extends StatelessWidget {
     decoration: BoxDecoration(
       color: color ?? context.colors.surface,
       borderRadius: BorderRadius.circular(radius),
-      border: Border.all(
-        color:
-            borderColor ??
-            (hero ? context.colors.strongBorder : context.colors.border),
-      ),
+      // Section cards are borderless; explicit borders identify selections only.
+      border: borderColor == null ? null : Border.all(color: borderColor!),
       boxShadow: context.colors.isDark
           ? null
           : (hero ? AppShadows.card : AppShadows.subtle),

@@ -83,8 +83,10 @@ class HomeContent extends ConsumerWidget {
                   onAction: () => context.push('/accounts'),
                 ),
                 if (accounts.isEmpty) ...[
-                  const Text(
-                    'No accounts yet. Create a manually tracked account to begin.',
+                  Text(
+                    w.accounts.isEmpty
+                        ? 'No accounts yet. Create a manually tracked account to begin.'
+                        : 'All accounts are archived. Open All Accounts to view or re-enable them.',
                   ),
                   TextButton(
                     onPressed: () => showManualAccountEditor(context),
