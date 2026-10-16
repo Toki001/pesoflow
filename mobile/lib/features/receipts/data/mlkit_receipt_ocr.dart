@@ -47,10 +47,19 @@ class MlKitReceiptOcr implements ReceiptOcrService {
         if (result.text.length > 200000) return original;
         final alternative = _document(result);
         final candidate = ReceiptParser.parse(alternative);
-        int score(ParsedReceipt r) =>
+        double score(ParsedReceipt r) =>
             (r.total != null ? 4 : 0) +
             (r.date != null ? 2 : 0) +
-            (r.merchant.isNotEmpty ? 1 : 0);
+            (r.merchant.isNotEmpty ? 1 : 0) +
+            RegExp(
+                      r'\b(TOTAL|AMOUNT|WORDS|DATE|INVOICE|CASH)\b',
+                      caseSensitive: false,
+                    )
+                    .allMatches(r.rawText)
+                    .map((m) => m[0]!.toUpperCase())
+                    .toSet()
+                    .length /
+                10;
         // Do not replace an explicit amount with a contradictory second pass.
         if (parsed.total != null &&
             candidate.total != null &&

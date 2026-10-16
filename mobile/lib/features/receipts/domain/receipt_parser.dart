@@ -30,6 +30,14 @@ class ParsedReceipt {
 /// cash/change or the largest number as an unlabeled expense total.
 abstract final class ReceiptParser {
   static const version = 3;
+  static final paperTitle = RegExp(
+    r'\b(?:S[E3][RK]V[I1]CE\s*[I1]?N[VY]O[I1]?CE|SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b',
+    caseSensitive: false,
+  );
+  static bool isPaperReceipt(String text) =>
+      paperTitle.hasMatch(text) ||
+      RegExp(r'AMOUNT\s+IN\s+WORDS', caseSensitive: false).hasMatch(text);
+
   static final _money = RegExp(
     r'(?<![\d.,])(?:\d{1,3}(?:,\d{3})+|\d+)\.\d{2}(?!\d)',
   );
@@ -51,16 +59,17 @@ abstract final class ReceiptParser {
     final warnings = <String>[];
     final confidence = <String, int>{'merchant': 0, 'date': 0, 'total': 0};
     String merchant = '';
-    for (final original in lines.take(8)) {
-      final line = original
-          .replaceAll(
-            RegExp(
-              r'\b(?:SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b.*$',
-              caseSensitive: false,
-            ),
-            '',
-          )
-          .trim();
+    // Block reading order preserves the business header; row geometry can put
+    // the separate top-right invoice title ahead of the actual merchant.
+    for (final original in document.text.split(RegExp(r'[\r\n]+')).take(12)) {
+      final label = paperTitle.firstMatch(original);
+      final line =
+          (label == null ? original : original.substring(0, label.start))
+              .trim()
+              .replaceFirst(
+                RegExp(r',\s*ING\.?$', caseSensitive: false),
+                ', INC.',
+              );
       if (line.length <= 100 &&
           RegExp(r'[A-Za-z]{3}').hasMatch(line) &&
           !RegExp(
@@ -81,8 +90,19 @@ abstract final class ReceiptParser {
     String? payment;
     String currency = 'PHP';
     final items = <ReceiptItem>[];
+    var itemTable = false;
     for (final line in lines) {
       final upper = line.toUpperCase();
+      if (RegExp(
+        r'\b(PARTICULARS|DESCRIPTION|ITEMS?)\b.*\b(AMOUNT|PRICE|QTY)\b|^PARTICULARS$',
+      ).hasMatch(upper)) {
+        itemTable = true;
+      }
+      if (RegExp(r'\b(TOTAL|AMOUNT IN WORDS|FORM OF PAYMENT)\b')
+          .hasMatch(upper)) {
+        itemTable = false;
+      }
+
       if (RegExp(r'\b(USD|EUR|SGD|AUD|GBP)\b|\$|€|£').hasMatch(upper)) {
         currency = 'UNKNOWN';
       }
@@ -159,6 +179,13 @@ abstract final class ReceiptParser {
         continue;
       }
       if (_notItem.hasMatch(line) || amount <= 0) continue;
+      if (RegExp(
+        r'^\s*(?:N[O0Eº°]?|SERIAL|REF(?:ERENCE)?)\.?\s*[:#]?\s*\d',
+        caseSensitive: false,
+      ).hasMatch(line)) {
+        continue;
+      }
+      if (!_money.hasMatch(line) && !itemTable) continue;
       var name = line
           .substring(0, matches.first.start)
           .replaceAll(RegExp(r'(?:PHP|₱|\bP)\s*$', caseSensitive: false), '')

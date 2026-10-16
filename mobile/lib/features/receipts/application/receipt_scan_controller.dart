@@ -195,10 +195,7 @@ class ReceiptScanController extends Notifier<ReceiptScanState> {
         .firstOrNull;
     final paper =
         _source == ReceiptImageSource.camera ||
-        RegExp(
-          r'\b(SERVICE\s*INVOICE|OFFICIAL\s*RECEIPT|AMOUNT\s+IN\s+WORDS)\b',
-          caseSensitive: false,
-        ).hasMatch(parsed.rawText);
+        ReceiptParser.isPaperReceipt(parsed.rawText);
     final electronic = RegExp(
       r'\b(GCASH|MAYA|PAYMAYA|ONLINE|E-RECEIPT|DIGITAL|ELECTRONIC|EM[-\s]?PAY)\b',
       caseSensitive: false,

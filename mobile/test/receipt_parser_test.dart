@@ -7,7 +7,7 @@ ParsedReceipt parse(String text) => ReceiptParser.parse(OcrDocument(text, []));
 void main() {
   test('paper invoice strips adjacent document title and accepts whole pesos and short year', () {
     final r = parse(
-      'ACME NETWORK, INC. SERVICEINVOICE\nDate 10-15-26\nInternet 799\nTOTAL AMOUNT DUE 799',
+      'ACME NETWORK, INC. SERVICEINVOICE\nDate 10-15-26\nPARTICULARS AMOUNT\nInternet 799\nTOTAL AMOUNT DUE 799',
     );
     expect(r.merchant, 'ACME NETWORK, INC.');
     expect(r.date, DateTime(2026, 10, 15));
@@ -37,6 +37,25 @@ void main() {
     expect(parse('Store\nCash\nPaid via PAYMAYA').paymentMethod, 'MAYA');
   });
 
+  test(
+    'invoice title geometry cannot replace merchant; serial is never an item',
+    () {
+      final r = ReceiptParser.parse(
+        OcrDocument('ACME NETWORK, ING\nSEKVICE NVOCE\nNe 029671', [
+          OcrBlock([
+            OcrLine('SEKVICE NVOCE', box: const OcrBox(300, 0, 100, 12)),
+            OcrLine('ACME NETWORK, ING', box: const OcrBox(0, 8, 200, 12)),
+            OcrLine('Ne 029671', box: const OcrBox(300, 25, 100, 12)),
+          ]),
+        ]),
+      );
+      expect(r.merchant, 'ACME NETWORK, INC.');
+      expect(r.items, isEmpty);
+      expect(r.total, isNull);
+      expect(ReceiptParser.isPaperReceipt(r.rawText), isTrue);
+      expect(parse('Store\nReference 123456\nInvoice 02026').items, isEmpty);
+    },
+  );
   test('electronic tender is not an item or a fallback expense total', () {
     final r = parse('''TEST STORE
 15 x Test product 480.00
