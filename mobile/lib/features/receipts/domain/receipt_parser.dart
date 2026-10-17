@@ -1,4 +1,5 @@
 import 'ocr_document.dart';
+import 'invoice_layout.dart';
 import 'amount_in_words.dart';
 import 'receipt_draft.dart';
 
@@ -29,7 +30,7 @@ class ParsedReceipt {
 /// Philippine receipt heuristics, not calibrated OCR accuracy. Never chooses
 /// cash/change or the largest number as an unlabeled expense total.
 abstract final class ReceiptParser {
-  static const version = 3;
+  static const version = 4;
   static final paperTitle = RegExp(
     r'\b(?:S[E3][RK]V[I1]?CE\s*[I1]?N[VY]O[I1]?CE|SERVICE\s*INVOICE|SALES\s*INVOICE|OFFICIAL\s*RECEIPT)\b',
     caseSensitive: false,
@@ -225,6 +226,29 @@ abstract final class ReceiptParser {
         ),
       );
     }
+    final layout = InvoiceLayout(document);
+    final tableEntries = layout.amountEntries;
+    if (tableEntries.isNotEmpty) {
+      final parsedItems = List<ReceiptItem>.of(items);
+      items.clear();
+      for (final entry in tableEntries) {
+        final existing = parsedItems
+            .where(
+              (item) => item.name == entry.name && item.total == entry.amount,
+            )
+            .firstOrNull;
+        items.add(
+          existing ??
+              ReceiptItem(
+                id: 'table-${items.length}',
+                name: entry.name,
+                quantity: 1,
+                unitPrice: entry.amount,
+                confidence: 55,
+              ),
+        );
+      }
+    }
     candidates.sort((a, b) => b.rank.compareTo(a.rank));
     var total = candidates.firstOrNull?.amount;
     if (total == null) {
@@ -247,6 +271,18 @@ abstract final class ReceiptParser {
         }
       }
     }
+    if (total == null &&
+        tableEntries.length == 1 &&
+        items.length == 1 &&
+        subtotal == null &&
+        tax == null &&
+        discount == null) {
+      total = tableEntries.single.amount;
+      confidence['total'] = 45;
+      warnings.add(
+        'Total suggested from one Amount-column entry. Verify the final amount, taxes and discounts against the receipt.',
+      );
+    }
     if (total == null) {
       warnings.add('Total was not found. Enter the final amount due.');
     } else {
@@ -256,7 +292,12 @@ abstract final class ReceiptParser {
         warnings.add('Several totals were found. Verify the final amount due.');
       }
     }
-    final date = _date(lines.join('\n'), confidence, warnings);
+    final labeledDate = layout.labeledDate;
+    final date = _date(
+      labeledDate ?? (layout.hasFormDate ? '' : lines.join('\n')),
+      confidence,
+      warnings,
+    );
     if (items.isEmpty) {
       warnings.add(
         'No item rows were recognized. You can save the verified total without items.',

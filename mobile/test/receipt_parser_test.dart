@@ -78,7 +78,7 @@ AMOUNT 480.00''');
   test(
     'receipt evidence retains old parser versions and rejects future ones',
     () {
-      for (final version in [1, 2, ReceiptParser.version]) {
+      for (final version in [1, 2, 3, ReceiptParser.version]) {
         final evidence = ReceiptEvidence(
           imageId: 'test-image',
           rawText: '',
