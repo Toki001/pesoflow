@@ -116,6 +116,37 @@ void main() {
     expect(result.total, 42500);
     expect(result.date, DateTime(2025, 11, 18));
   });
+  test(
+    'form date retains its time and ignores separately tokenized printer dates',
+    () {
+      final original = invoice();
+      final lines = [
+        for (final line in original.blocks.single.lines)
+          line.text == '11-18-25'
+              ? cell('11-18-25 14:30', 240, 64, 160, 18)
+              : line,
+        cell('Date', 180, 310, 35),
+        cell('Issued 01-01-20', 240, 310, 120),
+      ];
+      expect(
+        ReceiptParser.parse(
+          OcrDocument(lines.map((l) => l.text).join('\n'), [OcrBlock(lines)]),
+        ).date,
+        DateTime(2025, 11, 18, 14, 30),
+      );
+      final missing = lines
+          .where((line) => line.text != '11-18-25 14:30')
+          .toList();
+      expect(
+        ReceiptParser.parse(
+          OcrDocument(missing.map((l) => l.text).join('\n'), [
+            OcrBlock(missing),
+          ]),
+        ).date,
+        isNull,
+      );
+    },
+  );
   test('invalid labeled date is flagged instead of taking printer date', () {
     final original = invoice();
     final lines = [

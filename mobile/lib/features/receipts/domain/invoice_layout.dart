@@ -54,11 +54,13 @@ class InvoiceLayout {
                       caseSensitive: false,
                     ).hasMatch(cell.text) &&
                     cell.box!.top > box.top &&
+                    cell.box!.top - box.top <= box.height * 4 &&
                     (cell.box!.left - box.left).abs() < box.height * 4,
               )
               .map((cell) => cell.box!.top)
               .toList()
             ..sort();
+      if (hasFormDate && nextRows.isEmpty) continue;
       final row =
           cells
               .where(
@@ -69,10 +71,13 @@ class InvoiceLayout {
               )
               .toList()
             ..sort((a, b) => a.box!.left.compareTo(b.box!.left));
-      for (final match in dateValue.allMatches(
-        row.map((c) => c.text).join(' '),
-      )) {
-        matches.add(match[0]!);
+      final rowText = row.map((c) => c.text).join(' ');
+      for (final match in dateValue.allMatches(rowText)) {
+        final time = RegExp(
+          r'^\s*(\d{1,2}:\d{2}(?::\d{2})?\s*(?:AM|PM)?)\b',
+          caseSensitive: false,
+        ).firstMatch(rowText.substring(match.end));
+        matches.add('${match[0]}${time == null ? '' : ' ${time[1]}'}');
       }
     }
     return matches.length == 1 ? matches.single : null;
