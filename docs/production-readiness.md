@@ -1,4 +1,4 @@
-# Production readiness — 18 October 2026
+# Production readiness — 19 October 2026
 
 PesoFlow is a local-first expense tracker without login, registration, profiles,
 mandatory authentication or Backup/Restore. The 13 approved Stitch v7 screens are
@@ -247,3 +247,26 @@ PHP 147.50 October spending. Next OCR work should evaluate handwriting recogniti
 and field-focused recognition against varied consented examples, with false-date
 and false-total checks retained; another generic contrast pass is not established
 as a solution by this result.
+
+## Isolated receipt-field experiments — 18–19 October 2026
+
+The owner supplied crops identifying the Amount cell and transaction Date field.
+Both were tested on the Redmi, followed by matching crops from the authorized
+4080×3072 gallery original. The tiny date attachment received blank padding only
+to satisfy the existing minimum input height; no digits were modified. Across
+four scans, the selected extracted text contained no usable handwritten amount
+or transaction date. The full-resolution crops also failed this acceptance check.
+
+This is a failure of the current end-to-end recognition pipeline on these samples,
+not proof that every internal ML Kit pass returned identical text: individual
+pass outputs were not collected. Automatic field-region recognition is therefore
+not added based on these experiments. Next: evaluate per-pass results and a
+handwriting-capable recognizer locally on varied consented samples, preserving
+review gates and rejecting conflicting or fabricated values.
+
+All test reviews were discarded; four identified temporary gallery files and
+local crop-test copies were removed. The original gallery receipt remains, and
+Home retained PHP 1,542.50 total and PHP 147.50 October spending. No application
+code, dependencies or financial records changed in this checkpoint. The prior
+252-test/build results remain the latest code verification; these experiments
+are physical recognition checks, not additional passing unit tests.

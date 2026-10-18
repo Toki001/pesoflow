@@ -392,3 +392,44 @@ PHP 1,542.50 total (Cash PHP 900.00, bank PHP 642.50), PHP 147.50 October spendi
 and three unread alerts before the test, after the in-place update/cold launch
 and at the end. No gallery originals, saved receipt evidence or financial records
 were changed. No private photos, extracted text or screen captures are committed.
+
+
+## Isolated amount/date regions — 18–19 October 2026
+
+The owner supplied two small field crops and identified the target amount/date
+locations. Temporary copies were selected through the native gallery; no expected
+value was entered into the app. The date attachment was only 31 pixels high, so
+blank padding expanded its test copy to 64 pixels without synthesizing ink or
+changing its scale. Two further crops retained pixels directly from the owner's
+authorized 4080×3072 original photo. Every selected preview was visually checked.
+
+| Input | Size | Time to review | Selected OCR output |
+| --- | --- | --- | --- |
+| Supplied amount crop | 212×111 | 9.7 s | Printed-label fragments; no amount digits |
+| Supplied date crop, padded | 260×64 | 6.0 s | Text fragment; no usable date |
+| Original-resolution amount region | 755×522 | 12.5 s | Amount-label fragment; no amount digits |
+| Original-resolution date region | 1306×261 | 6.3 s | Date/Received From labels and other text; no usable date |
+
+Times are single observations including UI polling, not benchmarks. The Original
+extracted text section was inspected rather than treating missing parsed totals
+as proof that no digits were recognized. These results describe the pipeline's
+selected output only; individual enhancement-pass output was not instrumented.
+An isolated field is not a complete receipt, so unrelated missing merchant/items
+are not assessed as full-receipt regressions. No automatic regional-scan feature
+was introduced and no application code or dependency changed.
+
+An approval-service usage limit interrupted cleanup on 18 October. On continuation
+19 October, the final date review still contained no recognized date. It was
+discarded, and each of the four test copies was matched by MediaStore identity
+and exact filename before removal. Both MediaStore and filesystem checks confirm
+they are gone; the original gallery receipt remains. Local crop copies were also
+removed. No receipt photo, raw text or screen capture is committed.
+
+Home retained PHP 1,542.50 total (Cash PHP 900.00, bank PHP 642.50), PHP 147.50
+October spending and three unread alerts. No financial save was issued. The
+latest code verification remains 252 tests/31 goldens and successful builds from
+the previous checkpoint; it was not redundantly rerun for documentation-only work.
+
+Acceptance of automatic handwritten fields remains OPEN. Next investigation must
+separate pass-selection behavior from recognizer accuracy and evaluate alternate
+handwriting recognition locally before changing the production pipeline.
