@@ -102,3 +102,19 @@ moves Subscriptions & Bills below the category list. Icons consistently use bran
 blue; financial amounts, warning text and progress bars retain semantic colors.
 Icon-bearing filled actions use pale surfaces to keep blue glyphs legible.
 Receipt review has separate Rotate (left) and Crop (right) controls below the image.
+
+
+## Receipt preparation — 17 October 2026
+
+Per the owner's request, camera/gallery input opens Prepare Receipt before OCR.
+It reuses the focused receipt header, borderless image card, zoomable photo and
+blue Rotate/Crop controls, with a larger preview and explicit Scan receipt action.
+Successful later image edits return to this step; the approved extraction review
+layout follows only after scanning. No speculative edge-detection controls or
+fake confidence states were introduced. Light/dark preview goldens are reviewed.
+
+The 18 October follow-up keeps this hierarchy and adds immediate scan status,
+accessible live announcements and reduced-motion handling. Native Android crop
+uses the brand-blue toolbar/frame/active controls. Narrow portrait and landscape
+preparation/review are checked at 200% text without changing the approved palette
+or introducing decorative motion.

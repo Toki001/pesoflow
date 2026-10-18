@@ -1,4 +1,4 @@
-# Production readiness — 17 October 2026
+# Production readiness — 18 October 2026
 
 PesoFlow is a local-first expense tracker without login, registration, profiles,
 mandatory authentication or Backup/Restore. The 13 approved Stitch v7 screens are
@@ -155,11 +155,68 @@ three-pass build also exposed a roughly 40-second fallback cost. A subsequent
 verified optimization uses one luminance channel, linear upscaling and fast
 lossless PNG encoding. All checks above include that final code.
 
-Final device timing and Rotate/Crop interaction for the optimized APK are pending
-an untouched review screen after concurrent phone navigation made action targeting
-unreliable. The owner has been asked to leave the phone ready. The test copy still
-needs cleanup and the final cold restart must be checked; no saved financial data
-was changed. See [device evidence](verification/android-device-test.md).
-Next: finish those scoped Android checks, then evaluate clearer printed and
-handwritten receipts with owner-confirmed expected fields. Do not claim reliable
-handwriting recognition from this single image.
+At this checkpoint, optimized timing, native editing, test-copy cleanup and the
+final restart were still pending. The 18 October results below supersede that
+pending status. See [device evidence](verification/android-device-test.md).
+
+
+## Pre-scan editing and invoice field layout — 17 October 2026
+
+Milestone `ac5a728` introduces Prepare Receipt: capture/gallery/recovery stops at
+an image preview, Rotate/Crop can run before OCR, and Scan receipt explicitly
+starts recognition. Editing an already reviewed image requires confirmation and
+returns to preparation; cancel preserves the prior image/review. No financial
+record is created during preparation or recognition.
+
+Milestone `2078a8d` adds parser-v4 geometric field associations. Amount-column
+values below the header are matched to table rows; one complete row may suggest a
+low-confidence total only when no explicit total/adjustments exist. Multiple or
+unreadable rows do not generate a guessed total. The Date field above Received
+From takes priority and preserves an adjacent time. Missing/invalid form dates
+cannot fall back to printer registration dates. Evidence versions 1–3 remain readable; schema/key/financial
+commands are unchanged. These rules process recognized digits, not the owner's
+known expected values. Handwriting recognition remains limited by the OCR engine.
+
+Formatting and analysis PASS; **246 tests PASS, including 31 golden comparisons**.
+The release APK builds successfully (100.1 MB). New preview light/dark captures
+were inspected against the existing receipt card/header/control patterns. Backend
+code is unchanged. After reconnection on 17 October, the APK installed in place,
+Prepare Receipt appeared without automatic OCR, rotation changed the photo and
+the native crop editor opened. Crop completion, final recognition timing and
+restart verification were interrupted; the 18 October follow-up resumes these
+checks. No test financial records were saved.
+
+
+## Connected-device completion — 18 October 2026
+
+Milestone `40095ff` adds immediate scan-button status, screen-reader live status,
+reduced-motion progress behavior and brand-blue native Android crop toolbar,
+frame and active controls. Preparation/review tests pass at 200% text in narrow
+portrait and landscape. Existing Stitch layouts and financial commands are retained.
+
+Final checks: formatting PASS (165 files), analysis PASS, **248 tests PASS,
+including 31 golden comparisons**, release APK PASS (100.1 MB), App Bundle PASS
+(81.1 MB), unsigned iOS device compile PASS. The first iOS attempt failed because
+one local MLKitTextRecognitionCommon framework binary was missing. Reinstalling
+that pod at locked version 6.0.0 restored the build without dependency/lockfile
+changes. Backend was unchanged and not rerun. Development signing and physical
+Apple-device/simulator limitations remain.
+
+On the Redmi, an in-place update preserved the initial saved balances. Photo
+selection, rotation and completed native cropping all returned to Prepare Receipt
+without starting OCR. Explicit scanning reached review in approximately 12.4
+seconds (UI-polling upper bound, one edited sample; not a benchmark), versus the
+previous roughly 40-second observation. Merchant cleanup, no serial-number items
+and explicit Cash suggestion were verified. The low-resolution handwritten total
+and date were still unreadable and correctly required correction; this remains
+an OCR accuracy limitation, not a completed handwriting acceptance test.
+
+No financial save was issued during verification. After a multi-hour interruption,
+Home contained a different current balance; that state was preserved rather than
+reverted. A cold restart retained it. Only the identified temporary test-photo
+copy was deleted; original photos and saved receipt evidence were untouched.
+
+Next: assess a consented set of clearer printed and handwritten receipts with
+verified expected fields, measuring accuracy separately from parser tests. Fresh
+camera capture, saved-image reopen and broader low-storage/CSV acceptance remain
+separate checks. See the dated device report for exact scope.

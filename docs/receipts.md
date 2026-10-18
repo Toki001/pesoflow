@@ -131,7 +131,12 @@ thermal receipts or prove native permissions/file-dialog behavior.
 ## Parser v3 and review controls — 17 October 2026
 
 Review exposes separate left/right Rotate and Crop actions. Rotation changes the
-staged photo by 90 degrees, then reruns OCR; cropping uses the native editor.
+staged photo by 90 degrees; cropping uses the native editor. Capture, gallery
+selection, recovered images and successful edits now stop at Prepare Receipt.
+The user can rotate/crop repeatedly before pressing Scan receipt; no recognition
+or financial write runs during preparation. Cancelled image edits preserve the
+existing preview/review. Editing a previously scanned image returns to preparation
+and clears its old extraction/confirmation.
 Replacing a reviewed image requires confirmation before dropping unsaved edits.
 The saved image is the reviewed original/crop, never an OCR contrast derivative.
 
@@ -165,3 +170,44 @@ selection. An unambiguous active matching manual account may be preselected;
 multiple matches require a choice. Generic gallery images do not assume cash.
 The confirmation gate remains mandatory. This is printed-text OCR with limited
 handwriting support, not guaranteed recognition of handwritten invoices.
+
+
+## Invoice layout extraction (parser v4) — 17 October 2026
+
+Recognized word/line rectangles associate the Amount column with descriptions in
+its table, bounded below by the Total row. This handles a numeric value below the
+header even when OCR places it in a separate, slightly offset line. Unit-price,
+serial/reference, tax and tender numbers do not supply that column's value.
+If there is exactly one complete row and no recognized adjustments or explicit
+total, its amount may suggest the total at low confidence, with an explicit warning
+to verify taxes/discounts and the final amount. Multiple rows are not silently
+summed; unreadable/unmatched rows or multiple tables suppress this suggestion.
+An explicit labeled total retains priority. Recognized values remain variable;
+no merchant, amount or date from the owner's private photo is hardcoded.
+
+The date next to the form's Date label, above Received From, takes priority over
+unrelated printer/registration dates; an adjacent transaction time is retained.
+If that form field is missing or invalid,
+it remains flagged rather than using a printer date. Short numeric years retain
+the existing warning. This associates OCR output with fields; it cannot recover
+handwritten digits that ML Kit did not recognize. Evidence versions 1–3 remain
+readable; new scans record parser version 4 without changing the database schema.
+
+New tests cover explicit pre-scan gating, repeated image edits without OCR,
+recovered-image preparation, amount-column geometry, alternative amounts,
+multiple/unreadable rows, printer-date rejection and native word rectangles.
+Light/dark Prepare Receipt goldens extend the existing review captures.
+
+
+## Preparation accessibility — 18 October 2026
+
+Scan receipt immediately displays the current work status while disabled. Status
+changes are live regions for assistive technology; reduced motion retains static
+status without an indeterminate progress animation. Tests exercise preparation
+and completed review at 200% text in narrow portrait and landscape. Android's
+native crop toolbar, frame and active controls use brand blue.
+
+Physical testing confirms preparation, rotate/crop completion and explicit scan.
+The supplied low-resolution handwritten invoice still requires manual total/date
+correction. Cleaner preprocessing and geometric parsing do not guarantee recovery
+of characters absent from the native recognizer output.

@@ -287,3 +287,74 @@ checks pass. Final in-place installation and timing of this optimized build, nat
 Rotate/Crop interaction, test-copy cleanup and final restart verification are
 pending a stable untouched phone screen; concurrent screen transitions prevented
 reliable control targeting. This is not a completed handwriting-accuracy test.
+
+
+## Pre-scan preview follow-up — 17 October 2026
+
+The owner requested image rotation/cropping before recognition, and confirmed the
+transaction date and amount locations on the paper form. `ac5a728` introduces an
+explicit Prepare Receipt step and Scan receipt action; `2078a8d` adds geometric
+Amount-column and Date/Received From associations. Subsequent date regression
+coverage also preserves an adjacent transaction time and rejects separately
+recognized printer-date labels. Private receipt values are not hardcoded.
+
+The Redmi was initially visible with an unsaved receipt review. It disconnected
+before the planned close/install action; ADB returned no devices, so that action
+did not execute. Repeated discovery during the owner's continuation also returned
+no devices. At that interruption the new preview/parser build had not been installed or
+physically verified. Later results below supersede this pending status.
+
+Automated checks pass: formatting, analysis and 246 tests, including 31 goldens.
+The preview has reviewed light/dark captures and tests proving acquisition, crop,
+rotation and recovery do not invoke OCR until Scan receipt. Parser tests use
+synthetic variable values and geometry, including unreadable/multiple rows and
+printer-date rejection; these do not establish handwriting recognition accuracy.
+
+Next connected-device check: upgrade in place, select the staged receipt copy,
+verify preview edits before Scan receipt, measure recognition time, inspect actual
+amount/date extraction and discard the test review. Then remove only the staged
+test copy and verify unchanged finances after a cold restart. These tasks were pending at that checkpoint; completion is recorded below.
+
+
+## Pre-scan and OCR completion — 18 October 2026
+
+The APK containing `40095ff` installed in place on the authorized Redmi 14C.
+Before/after installation, Home retained PHP 1,642.50 total across two accounts,
+PHP 47.50 October spending and three unread alerts. No storage reset, uninstall,
+financial command, schema change or key change was used.
+
+| Check | Observed result |
+| --- | --- |
+| Native photo selection | PASS: known staged test copy opened Prepare Receipt without OCR |
+| Rotate | PASS: visible 90-degree edit; still in preparation |
+| Native crop | PASS: editor opened, edge adjustment confirmed, returned to preparation |
+| Native styling | PASS: toolbar/frame/active controls blue; inactive native tabs retain plugin gray |
+| Explicit Scan receipt | PASS: review visible after 12.4 seconds including UI polling |
+| Merchant/payment | PASS: invoice heading excluded; Cash explicitly suggested for verification |
+| Handwritten total/date | NOT RECOGNIZED: correction warnings remain; no guessed values accepted |
+| Spurious invoice items | PASS: no invoice-serial item generated |
+| Financial save | NOT EXERCISED: no save action issued |
+| Test-copy cleanup | PASS: identified temporary MediaStore entry and file removed; originals preserved |
+| Cold restart | PASS: current persisted Home values retained |
+
+The cropped image was restored upright before scanning and retained the merchant,
+date and amount table. Timing is a single UI observation, not a controlled speed
+benchmark. No private receipt image/text or screenshot is committed. No fresh
+camera capture or saved-image reopen was performed in this session.
+
+The session was interrupted by an approval-service usage limit before closing the
+unsaved review. On continuation several hours later the phone was on its launcher;
+opening PesoFlow cold showed Home, with PHP 1,542.50 total (Cash PHP 900.00 and bank
+PHP 642.50), PHP 147.50 October spending and three unread alerts. The intervening
+change was not made by these tool actions and was not reverted. A further scoped
+force-stop/cold launch retained those current values. This verifies persistence
+of the resumed state, not that balances stayed unchanged during the interruption.
+
+Final automated checks: format/analyze PASS; 248 tests including 31 goldens PASS;
+APK (100.1 MB), AAB (81.1 MB), unsigned iOS device compile PASS. The missing local
+MLKitTextRecognitionCommon binary was restored at its locked version before the
+successful iOS retry. Physical iPhone remains unavailable. Receipt preparation
+also has tests at 200% text, narrow portrait, landscape and reduced motion.
+
+Next OCR acceptance requires clearer owner-consented samples and expected fields;
+these results do not demonstrate reliable handwritten amount/date recognition.
