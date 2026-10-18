@@ -358,3 +358,37 @@ also has tests at 200% text, narrow portrait, landscape and reduced motion.
 
 Next OCR acceptance requires clearer owner-consented samples and expected fields;
 these results do not demonstrate reliable handwritten amount/date recognition.
+
+
+## Clearer latest gallery image — 18 October 2026, evening
+
+The owner authorized selecting the latest receipt image. The native gallery's
+18 October 2:34 PM image was visually confirmed as a clearer view of the same
+paper invoice. The full, upright image was tested without manual field edits,
+cropping or rotation. The original photo was not altered or deleted.
+
+Before the correction, scan-to-review took 34.6 seconds (UI-polling upper bound).
+OCR omitted the handwritten amount/date and misread the Received From label,
+causing the parser to suggest a printer-issued date. Original extracted text in
+the review confirmed the label error and absent handwritten digits. Merchant
+extraction excluded the invoice heading but missed a character in the company
+suffix. Cash was correctly shown only as a suggestion; no item rows were found.
+
+Milestone `051db9e` fixes the form-label guard with a narrow spelling tolerance.
+The synthetic missing-date regression failed before the fix, then passed; the
+tests use invented merchant/date values rather than private receipt contents.
+Format/analyze and all 252 tests (31 goldens) pass. APK (100.1 MB), AAB (81.1 MB)
+and unsigned iOS builds pass; backend unchanged and not rerun.
+
+The fixed APK installed with `adb install -r`. Rescanning the same unedited image
+took 33.9 seconds. Review no longer selected the printer date and explicitly
+reported a missing/invalid transaction date with today's date only as a fallback.
+The handwritten total/date remain unrecognized, and the merchant suffix still
+needs manual correction. These timings are two observations, not a performance
+benchmark or an accuracy claim.
+
+Both unsaved test reviews were discarded without a financial save. Home retained
+PHP 1,542.50 total (Cash PHP 900.00, bank PHP 642.50), PHP 147.50 October spending
+and three unread alerts before the test, after the in-place update/cold launch
+and at the end. No gallery originals, saved receipt evidence or financial records
+were changed. No private photos, extracted text or screen captures are committed.

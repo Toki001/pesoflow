@@ -220,3 +220,30 @@ Next: assess a consented set of clearer printed and handwritten receipts with
 verified expected fields, measuring accuracy separately from parser tests. Fresh
 camera capture, saved-image reopen and broader low-storage/CSV acceptance remain
 separate checks. See the dated device report for exact scope.
+
+## Clearer gallery receipt follow-up — 18 October 2026
+
+The owner authorized testing the latest clearer receipt photo in the gallery.
+Its first scan exposed a parser defect: an OCR spelling error in Received From
+disabled the form-date guard and allowed a printer-issued date as a suggestion.
+Milestone `051db9e` tolerates that narrow label error while retaining strict
+numeric parsing and manual confirmation. A synthetic regression failed before
+the fix and passes afterward; no private image/text or known expected financial
+value is embedded in tests.
+
+Verification: format/analyze PASS; **252 tests including 31 goldens PASS**; APK,
+AAB and unsigned iOS build PASS. No dependency, UI, schema or key changes. The
+clearer photo still does not establish reliable handwritten OCR: its first scan
+took approximately 34.6 seconds and omitted the handwritten transaction amount
+and date from extracted text. Missing digits cannot be recovered by label parsing.
+
+The corrected APK installed in place and rescanned the same unedited photo in
+approximately 33.9 seconds. Physical review confirmed the printer date is no
+longer selected: the date is missing and today's fallback is explicitly flagged
+for correction. Total/items remain missing; the merchant suffix also needs
+correction. Cash remains an explicit suggestion. The test review was discarded,
+the original gallery image retained, and Home remained at PHP 1,542.50 total and
+PHP 147.50 October spending. Next OCR work should evaluate handwriting recognition
+and field-focused recognition against varied consented examples, with false-date
+and false-total checks retained; another generic contrast pass is not established
+as a solution by this result.

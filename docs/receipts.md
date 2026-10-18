@@ -211,3 +211,10 @@ Physical testing confirms preparation, rotate/crop completion and explicit scan.
 The supplied low-resolution handwritten invoice still requires manual total/date
 correction. Cleaner preprocessing and geometric parsing do not guarantee recovery
 of characters absent from the native recognizer output.
+
+The clearer-photo follow-up exposed a form-label OCR error: `Recaived` bypassed
+the `Received` safeguard and allowed a printer-issued date into the fallback.
+The layout parser now accepts that narrow label variation in both form detection
+and the date row's lower boundary. Synthetic regressions cover readable/missing
+transaction dates and separately tokenized footer dates. Numeric characters are
+never substituted or filled from the owner's expected values.
