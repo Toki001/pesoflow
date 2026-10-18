@@ -1,4 +1,7 @@
 import 'dart:typed_data';
+import 'dart:async';
+
+import 'package:pesoflow/features/receipts/domain/ocr_document.dart';
 
 import 'package:pesoflow/features/receipts/presentation/widgets/receipt_preview.dart';
 import 'package:drift/native.dart';
@@ -78,6 +81,50 @@ Future<void> waitForScan(ProviderContainer c) async {
 }
 
 void main() {
+  for (final viewport in [const Size(320, 844), const Size(844, 390)]) {
+    testWidgets(
+      'preparation supports 200% text and reduced motion at $viewport',
+      (tester) async {
+        size(tester, viewport);
+        tester.platformDispatcher.textScaleFactorTestValue = 2;
+        tester.platformDispatcher.accessibilityFeaturesTestValue =
+            const FakeAccessibilityFeatures(disableAnimations: true);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        addTearDown(
+          tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+        );
+        final ocr = _PendingOcr();
+        final c = await screen(tester, FakeReceiptImages(), ocr);
+        await tester.runAsync(
+          () => c
+              .read(receiptScanProvider.notifier)
+              .acquire(ReceiptImageSource.photos),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        await tester.ensureVisible(
+          find.byKey(const ValueKey('scan-prepared-receipt')),
+        );
+        await tester.runAsync(() async {
+          await tester.tap(find.byKey(const ValueKey('scan-prepared-receipt')));
+        });
+        await tester.pump();
+        expect(
+          find.widgetWithText(FilledButton, 'Reading text…'),
+          findsOneWidget,
+        );
+        expect(find.byType(LinearProgressIndicator), findsNothing);
+        expect(c.read(receiptScanProvider).busy, isTrue);
+        await tester.runAsync(() async {
+          ocr.done.complete(OcrDocument(receiptText, []));
+          await waitForScan(c);
+        });
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   for (final dark in [false, true]) {
     testWidgets(
       'pre-scan preview permits image edits and explicit scan; dark: $dark',
@@ -379,4 +426,10 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+}
+
+class _PendingOcr extends FakeReceiptOcr {
+  final done = Completer<OcrDocument>();
+  @override
+  Future<OcrDocument> recognize(String imagePath) => done.future;
 }

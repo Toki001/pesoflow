@@ -217,7 +217,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                       FilledButton(
                         key: const ValueKey('scan-prepared-receipt'),
                         onPressed: locked ? null : controller.retry,
-                        child: const Text('Scan receipt'),
+                        child: Text(state.progress ?? 'Scan receipt'),
                       ),
                       const SizedBox(height: 8),
                       TextButton(
@@ -242,12 +242,16 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (state.progress != null) ...[
-          const LinearProgressIndicator(),
+          if (!MediaQuery.disableAnimationsOf(context))
+            const LinearProgressIndicator(),
           const SizedBox(height: 12),
-          Text(
-            state.progress!,
-            style: TextStyle(
-              color: state.image == null ? Colors.white : context.colors.ink,
+          Semantics(
+            liveRegion: true,
+            child: Text(
+              state.progress!,
+              style: TextStyle(
+                color: state.image == null ? Colors.white : context.colors.ink,
+              ),
             ),
           ),
           const SizedBox(height: 16),

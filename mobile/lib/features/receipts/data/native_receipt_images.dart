@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../app/theme/app_colors.dart';
 import '../../../core/identity/new_id.dart';
 import '../domain/receipt_image.dart';
 import 'prepare_receipt_image.dart';
@@ -147,6 +148,9 @@ class NativeReceiptImages implements ReceiptImages {
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Adjust receipt',
+          toolbarWidgetColor: AppColors.primary,
+          activeControlsWidgetColor: AppColors.primary,
+          cropFrameColor: AppColors.primary,
           lockAspectRatio: false,
         ),
         IOSUiSettings(title: 'Adjust receipt'),
