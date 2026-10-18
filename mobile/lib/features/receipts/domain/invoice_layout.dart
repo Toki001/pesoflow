@@ -25,12 +25,13 @@ class InvoiceLayout {
     r'^AM[O0](?:I?U|L)NT\s*:?$',
     caseSensitive: false,
   ).hasMatch(text.trim());
+  // Printed forms can confuse the first e with a. Keep this label-only
+  // tolerance narrow; never substitute characters in handwritten date digits.
+  static bool _receivedLabel(String text) =>
+      RegExp(r'^REC[EA]IVED\b', caseSensitive: false).hasMatch(text.trim());
   bool get hasFormDate =>
       cells.any((cell) => dateLabel(cell.text)) &&
-      cells.any(
-        (cell) =>
-            RegExp(r'^RECEIVED\b', caseSensitive: false).hasMatch(cell.text),
-      );
+      cells.any((cell) => _receivedLabel(cell.text));
   static bool _description(String text) => RegExp(
     r'^(PARTICULARS|DESCRIPTION|ITEMS?)$',
     caseSensitive: false,
@@ -49,10 +50,7 @@ class InvoiceLayout {
           cells
               .where(
                 (cell) =>
-                    RegExp(
-                      r'^RECEIVED\b',
-                      caseSensitive: false,
-                    ).hasMatch(cell.text) &&
+                    _receivedLabel(cell.text) &&
                     cell.box!.top > box.top &&
                     cell.box!.top - box.top <= box.height * 4 &&
                     (cell.box!.left - box.left).abs() < box.height * 4,

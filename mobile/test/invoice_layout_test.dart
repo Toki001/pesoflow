@@ -158,4 +158,26 @@ void main() {
     );
     expect(receipt.date, isNull);
   });
+  for (final received in ['Received From:', 'Recaived Fron:']) {
+    for (final readable in [true, false]) {
+      test(
+        'form date with $received and readable=$readable excludes footer',
+        () {
+          final lines = [
+            cell('EXAMPLE SERVICES', 10, 10, 180),
+            cell('Date', 180, 70, 35),
+            if (readable) cell('12-19-24', 240, 64, 95, 18),
+            cell(received, 180, 90, 100),
+            cell('Example Customer', 300, 92, 140),
+            cell('Dele', 180, 310, 35),
+            cell('ssued: 03-06-22', 240, 310, 150),
+          ];
+          final receipt = ReceiptParser.parse(
+            OcrDocument(lines.map((l) => l.text).join('\n'), [OcrBlock(lines)]),
+          );
+          expect(receipt.date, readable ? DateTime(2024, 12, 19) : isNull);
+        },
+      );
+    }
+  }
 }
