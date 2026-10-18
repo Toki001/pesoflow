@@ -1,0 +1,6 @@
+# Desktop experiment only; never part of the Flutter app.
+torch==2.8.0
+transformers==4.57.1
+Pillow==12.0.0
+sentencepiece==0.2.1
+protobuf==6.33.0
