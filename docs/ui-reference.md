@@ -131,8 +131,8 @@ for tested coverage and remaining contrast/motion/assistive-navigation work.
 
 ### Readable foreground variants — 19 October 2026
 
-Light-theme action text uses #1D4ED8; semantic foregrounds use success #15803D,
-warning #92400E and error #B91C1C. Primary fills and light-surface icons retain
+Light-theme action text uses #1D4ED8; semantic foregrounds use success #166534,
+warning #92400E and error #991B1B. Primary fills and light-surface icons retain
 #2563EB. Dark badge icons use #60A5FA where needed; icons on pale blue controls
 retain #2563EB. Dark semantic text roles remain unchanged. Shared budget bars keep
 the original semantic fill palette. These are contrast corrections within the
@@ -182,6 +182,17 @@ Stitch screen composition and functional controls remain.
 
 Category selectors measure wrapped labels so every tile shares the same height,
 including 200% text. The large amount placeholder retains its field typography.
+
+The follow-up glass correction reduces light card tint opacity to 18–48% and dark
+tints to 18–24%, with a directional reflection gradient over a more pronounced
+blue ambient backdrop. Sections reveal the background without outline borders;
+dark muted text is #AFBDD0 and light secondary text is #43536B. The dock also uses
+a lighter tint and sits 8px higher above its existing safe-area gap. Navigation
+pointer taps have no gray splash/highlight; blue keyboard focus and selected
+capsules remain. Transactions' search-clear X has no circular background or border,
+and the search field uses the shared translucent fill.
+Home's inner Spending/Income and net-flow wells use translucent fills rather than
+opaque white, without adding nested backdrop filters.
 
 Phone review refined the dock labels to fit on one line at the device's text size.
 System status/navigation icon brightness follows the active theme, including cold

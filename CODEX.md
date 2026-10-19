@@ -69,7 +69,7 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #56657A, border #E5E7EB,
+canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #43536B, border #E5E7EB,
 success #16A34A, warning #D97706, error #DC2626. Use blue-only gradients for prominent summary surfaces, restrained depth, and
 frosted floating navigation and clipped translucent cards over blue ambient
 backgrounds. Group non-overlapping card filters per route. Keep dense financial
@@ -86,13 +86,17 @@ Settings is reached directly through the settings icon.
 
 Icons use blue consistently, including notification, navigation and receipt
 controls; use #60A5FA on dark badge surfaces where #2563EB lacks contrast.
-Readable light-theme semantic foregrounds are success #15803D, warning #92400E
-and error #B91C1C; original semantic colors remain progress/chart fills.
+Readable light-theme semantic foregrounds are success #166534, warning #92400E
+and error #991B1B; dark muted text uses #AFBDD0. Original semantic colors remain progress/chart fills.
 Light-theme action text uses #1D4ED8 for contrast on pale blue controls;
 primary fills and light-surface icons retain #2563EB. Financial text and progress bars retain semantic colors.
 
 Section cards have no outline borders in either theme. Use surfaces and subtle
 shadows for separation; retain borders on inputs and explicit selection controls.
+Default glass cards must reveal the ambient backdrop rather than read as opaque
+white panels. Use directional tint/reflection gradients without perimeter outlines.
+The dock has an additional 8px lift above its safe-area spacing. Navigation pointer
+taps have no splash/highlight overlay; keyboard focus remains visible in blue.
 Subscriptions & Bills is directly accessible from Budgets and Settings.
 
 Share app bars, cards, amounts, rows, account/category selectors, inputs, buttons,

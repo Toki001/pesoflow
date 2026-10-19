@@ -77,90 +77,99 @@ class AppBottomNavigation extends StatelessWidget {
     return SafeArea(
       top: false,
       minimum: const EdgeInsets.fromLTRB(12, 6, 12, 10),
-      child: FrostedPanel(
-        child: SizedBox(
-          height: height,
-          child: Row(
-            children: List.generate(destinations.length, (index) {
-              final active = selectedIndex == index;
-              return Expanded(
-                child: Semantics(
-                  selected: active,
-                  button: true,
-                  label: destinations[index],
-                  child: Tooltip(
-                    message: destinations[index],
-                    child: InkWell(
-                      key: ValueKey('nav-${destinations[index]}'),
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () => onSelected(index),
-                      child: ExcludeSemantics(
-                        child: SizedBox.expand(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (index == 2)
-                                Container(
-                                  width: 44,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    gradient: const LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Color(0xFFDBEAFE),
-                                        Color(0xFFBFDBFE),
-                                      ],
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: FrostedPanel(
+          child: SizedBox(
+            height: height,
+            child: Row(
+              children: List.generate(destinations.length, (index) {
+                final active = selectedIndex == index;
+                return Expanded(
+                  child: Semantics(
+                    selected: active,
+                    button: true,
+                    label: destinations[index],
+                    child: Tooltip(
+                      message: destinations[index],
+                      child: InkWell(
+                        key: ValueKey('nav-${destinations[index]}'),
+                        splashFactory: NoSplash.splashFactory,
+                        overlayColor: WidgetStateProperty.resolveWith(
+                          (states) => states.contains(WidgetState.focused)
+                              ? c.primary.withValues(alpha: .10)
+                              : Colors.transparent,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () => onSelected(index),
+                        child: ExcludeSemantics(
+                          child: SizedBox.expand(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (index == 2)
+                                  Container(
+                                    width: 44,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Color(0xFFDBEAFE),
+                                          Color(0xFFBFDBFE),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
                                     ),
-                                    borderRadius: BorderRadius.circular(16),
+                                    child: const Icon(
+                                      Icons.add,
+                                      color: AppColors.primary,
+                                      size: 26,
+                                    ),
+                                  )
+                                else
+                                  Container(
+                                    width: 44,
+                                    height: 32,
+                                    decoration: BoxDecoration(
+                                      color: active
+                                          ? c.primary.withValues(alpha: .10)
+                                          : null,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      active
+                                          ? selectedIcons[index]
+                                          : icons[index],
+                                      size: 22,
+                                      color: c.iconOn(c.surface),
+                                    ),
                                   ),
-                                  child: const Icon(
-                                    Icons.add,
-                                    color: AppColors.primary,
-                                    size: 26,
-                                  ),
-                                )
-                              else
-                                Container(
-                                  width: 44,
-                                  height: 32,
-                                  decoration: BoxDecoration(
-                                    color: active
-                                        ? c.primary.withValues(alpha: .10)
-                                        : null,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    active
-                                        ? selectedIcons[index]
-                                        : icons[index],
-                                    size: 22,
-                                    color: c.iconOn(c.surface),
+                                const SizedBox(height: 4),
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    destinations[index],
+                                    maxLines: 1,
+                                    softWrap: false,
+                                    textAlign: TextAlign.center,
+                                    style: AppTypography.labelSmall.copyWith(
+                                      color: active ? c.primary : c.mutedInk,
+                                      letterSpacing: 0,
+                                    ),
                                   ),
                                 ),
-                              const SizedBox(height: 4),
-                              FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Text(
-                                  destinations[index],
-                                  maxLines: 1,
-                                  softWrap: false,
-                                  textAlign: TextAlign.center,
-                                  style: AppTypography.labelSmall.copyWith(
-                                    color: active ? c.primary : c.mutedInk,
-                                    letterSpacing: 0,
-                                  ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ),
       ),

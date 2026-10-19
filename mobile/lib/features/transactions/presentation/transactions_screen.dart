@@ -294,6 +294,10 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                             ),
                             suffixIcon: IconButton(
                               tooltip: 'Clear search',
+                              style: IconButton.styleFrom(
+                                backgroundColor: Colors.transparent,
+                                side: BorderSide.none,
+                              ),
                               onPressed: () {
                                 search.clear();
                                 setQuery(query.copyWith(search: ''));
@@ -305,7 +309,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                               ),
                             ),
                             filled: true,
-                            fillColor: c.surface,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
                               borderSide: BorderSide(color: c.border),

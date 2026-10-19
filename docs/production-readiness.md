@@ -514,3 +514,29 @@ merchant/notes fields and blue pill Save action. The untouched form was closed;
 visible Home values still matched after a cold restart. Temporary captures and
 the private baseline were deleted. No financial writes, reset or reseeding were
 issued. Physical dark-theme and iPhone verification were not repeated.
+
+## Visible glass and navigation polish — 19 October 2026
+
+Corrected the overly opaque card treatment: light tint opacity is now 18–48%,
+dark tint 18–24%, with a directional reflection and a stronger blue light-mode
+backdrop. Default section cards reveal the ambient background. Home's metric and
+net-flow wells are also translucent, without nested blur or section outlines.
+Light secondary/semantic text and dark muted text were adjusted to retain the
+existing contrast checks. High contrast retains opaque cards and disables blur.
+Transactions' clear-search X has no circular fill/border; navigation pointer taps
+have no gray splash/highlight, while blue focus/selection remain. The dock sits
+8 logical pixels higher above its prior safe-area spacing.
+
+Formatting PASS (177 files), analysis PASS, **297 Flutter tests including 31 golden
+comparisons PASS**. Updated and inspected Home light/dark and Transactions light
+captures. Release APK (100.3 MB), AAB (81.2 MB) and unsigned iOS device compile PASS.
+No packages, financial logic, schema, keys or backend code changed. Existing
+development-signing and physical-iPhone/simulator limits remain.
+
+The final APK installed in place on the Redmi. Native captures confirmed the
+translucent Home sections/inner wells, plain search-clear X and raised dock. A held
+Home pointer showed no gray overlay. Privately compared visible Home monetary
+labels before updating, after installing and after the final cold restart: matched.
+No financial commands, resets or preference changes were issued. Temporary private
+captures and the baseline were removed. Physical dark-theme verification was not
+repeated; dark materials pass Flutter captures and contrast tests.

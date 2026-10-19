@@ -85,7 +85,7 @@ class FlowSummary extends StatelessWidget {
       key: ValueKey('flow-${label.toLowerCase()}'),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: c.canvas,
+        color: c.canvas.withValues(alpha: .30),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -151,7 +151,7 @@ class FlowSummary extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: c.mutedSurface,
+              color: c.mutedSurface.withValues(alpha: .35),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Wrap(

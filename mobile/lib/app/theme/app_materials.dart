@@ -7,24 +7,32 @@ abstract final class AppMaterials {
     end: Alignment.bottomRight,
     colors: dark
         ? const [Color(0xFF071423), Color(0xFF102845), Color(0xFF080F1C)]
-        : const [Color(0xFFE6EEFF), Color(0xFFF3F7FF), Color(0xFFE9F2FF)],
+        : const [Color(0xFFC9DBF4), Color(0xFFEAF1FA), Color(0xFFC7DAF4)],
     stops: const [0, .55, 1],
   );
 
-  static LinearGradient card(bool dark, {required bool solid}) =>
-      LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: dark
-            ? [
-                const Color(0xFF1A2D48).withValues(alpha: solid ? 1 : .82),
-                const Color(0xFF111D32).withValues(alpha: solid ? 1 : .72),
-              ]
-            : [
-                Colors.white.withValues(alpha: solid ? 1 : .88),
-                const Color(0xFFF8FBFF).withValues(alpha: solid ? 1 : .70),
-              ],
-      );
+  static LinearGradient card(bool dark, {required bool solid}) {
+    if (solid) {
+      final color = dark ? const Color(0xFF111D32) : Colors.white;
+      return LinearGradient(colors: [color, color]);
+    }
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      stops: const [0, .32, 1],
+      colors: dark
+          ? [
+              const Color(0xFF7B9ABD).withValues(alpha: .18),
+              const Color(0xFF315478).withValues(alpha: .24),
+              const Color(0xFF172943).withValues(alpha: .18),
+            ]
+          : [
+              Colors.white.withValues(alpha: .48),
+              Colors.white.withValues(alpha: .28),
+              const Color(0xFFE8F1FF).withValues(alpha: .18),
+            ],
+    );
+  }
 
   static LinearGradient button({required bool pale, required bool pressed}) =>
       LinearGradient(

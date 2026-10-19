@@ -521,3 +521,20 @@ issued. This verifies visible Home values, not every stored record. Dark-theme
 materials were reviewed in Flutter captures; a physical theme switch and iPhone
 runtime check were not performed. Formatting/analysis, 297 Flutter tests including
 31 goldens, APK/AAB and unsigned iOS compilation passed for this UI milestone.
+
+## 19 October 2026 — visible glass and dock correction
+
+Installed the final APK in place on the Redmi (`adb install -r`: Success). Native
+captures show the section backdrop through the lower-opacity glass and translucent
+Home Spending/Income/net-flow wells. Transactions' clear-search X is plain, without
+the previous circular fill. Dock control bounds moved upward by 16 physical pixels
+on this 2× device (8 logical pixels), preserving safe-area spacing. A held pointer
+on the already-selected Home tab showed no gray overlay; release retained Home.
+
+Visible Home monetary labels matched a private pre-update baseline after the update
+and after the final build's cold restart. No financial commands, preference edits,
+reset, uninstall or gallery edits were issued. Private captures/baseline were
+deleted. This check covers visible Home values, not every stored record. Dark mode
+was reviewed through Flutter captures rather than switching the phone's preference.
+All 297 Flutter tests including 31 goldens, format/analyze and APK/AAB/unsigned iOS
+builds passed. Existing signing and physical-iPhone limits remain.

@@ -9,9 +9,9 @@ abstract final class AppColors {
   static const accent = Color(0xFF2563EB);
   static const accentSoft = Color(0xFFEFF6FF);
   static const positive = Color(0xFF16A34A);
-  static const positiveText = Color(0xFF15803D);
+  static const positiveText = Color(0xFF166534);
   static const warningText = Color(0xFF92400E);
-  static const dangerText = Color(0xFFB91C1C);
+  static const dangerText = Color(0xFF991B1B);
   static const darkIcon = Color(0xFF60A5FA);
   static const positiveSoft = Color(0xFFDCFCE7);
   static const warning = Color(0xFFD97706);
@@ -19,8 +19,8 @@ abstract final class AppColors {
   static const danger = Color(0xFFDC2626);
   static const dangerSoft = Color(0xFFFEE2E2);
   static const ink = Color(0xFF111827);
-  static const inkSecondary = Color(0xFF56657A);
-  static const inkMuted = Color(0xFF56657A);
+  static const inkSecondary = Color(0xFF43536B);
+  static const inkMuted = Color(0xFF43536B);
   static const surface = Color(0xFFFFFFFF);
   static const surfaceSubtle = Color(0xFFF5F7FC);
   static const surfaceMuted = Color(0xFFF3F4F6);
@@ -31,7 +31,7 @@ abstract final class AppColors {
   static const darkSurfaceMuted = Color(0xFF1A2A44);
   static const darkInk = Color(0xFFF7F8FA);
   static const darkInkSecondary = Color(0xFFCBD5E1);
-  static const darkInkMuted = Color(0xFF94A3B8);
+  static const darkInkMuted = Color(0xFFAFBDD0);
   static const darkBorder = Color(0xFF334155);
 
   // Compatibility aliases for shared widgets; v7 uses one interaction blue.
