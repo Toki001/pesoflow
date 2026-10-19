@@ -366,3 +366,32 @@ do not establish broad handwriting accuracy. No alternative recognizer is promot
 review remains mandatory. Fixture hashes/crop generation, 24 local predictions and
 8 Python scoring regressions pass. This test-data/docs-only milestone retains the
 preceding 262-test/build/device results; production builds were not repeated.
+
+## UI/UX audit and OCR scope decision — 19 October 2026
+
+At the owner's request, further handwriting model research is deferred. Unreliable
+handwritten amount/date recognition is a documented product limitation. Retain
+manual correction and explicit review; no handwriting-accuracy promise is made.
+
+Applied the apple-design skill to a native UI/UX review while preserving Stitch
+v7. Fixed two reproduced accessibility issues: Appearance options now scroll rather
+than overflow at 200% text in landscape, and Subscriptions' sort control now has a
+48px minimum target. Added 12 screen-entry label/touch-target checks plus a sheet
+interaction regression. Updated and inspected only the two subscription goldens.
+
+Formatting PASS (171 files), analysis PASS, **275 Flutter tests including 31 goldens
+PASS**. No package, storage, financial-engine or OCR changes. The
+[review report](verification/ui-ux-review-20261019.md) records remaining contrast,
+TalkBack and global reduced-motion checks. These checks do not establish complete
+accessibility compliance. Next priority is semantic text/dark-icon contrast,
+followed by assistive navigation; do not resume OCR experiments by default.
+
+Release APK (100.1 MB), AAB (81.1 MB) and unsigned iOS device build PASS for these
+UI fixes. Android remains development-signed; physical iOS runtime verification
+is unavailable. Backend was unchanged and was not rerun.
+
+The Redmi received the APK in place. Visible Home amounts matched the private
+pre-update baseline after update and cold restart; the baseline was then deleted.
+No financial writes or preference changes were issued. Physical TalkBack and
+large-text landscape interaction checks remain pending; widget tests verify the
+specific UI fixes. See [device evidence](verification/android-device-test.md).

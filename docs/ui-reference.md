@@ -118,3 +118,11 @@ accessible live announcements and reduced-motion handling. Native Android crop
 uses the brand-blue toolbar/frame/active controls. Narrow portrait and landscape
 preparation/review are checked at 200% text without changing the approved palette
 or introducing decorative motion.
+
+### Accessibility follow-up — 19 October 2026
+
+The Apple Design review preserves the approved visual system. Appearance's native
+choice sheet scrolls when space is limited, and Subscriptions' sort menu has a
+48px minimum touch target. Its subsequent content is 4px lower; the hierarchy and
+control order are unchanged. See the [UI/UX review](verification/ui-ux-review-20261019.md)
+for tested coverage and remaining contrast/motion/assistive-navigation work.

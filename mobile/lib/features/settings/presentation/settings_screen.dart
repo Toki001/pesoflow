@@ -41,8 +41,8 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       showDragHandle: true,
       builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             for (final value in Appearance.values)
               ListTile(

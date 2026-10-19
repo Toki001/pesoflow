@@ -473,3 +473,15 @@ latency measurement. Source evidence, OCR selection and field-confirmation rules
 are unchanged. Automated checks: 262 tests/31 goldens, analysis/formatting and
 APK/AAB/unsigned iOS build PASS. Synthetic desktop processing timings are recorded
 in [production readiness](../production-readiness.md).
+
+## 19 October 2026 — UI accessibility follow-up
+
+Installed the verified accessibility APK with `adb install -r` on the Redmi 14C
+(`NBDEXCJNL7JR9DIJ`). Before updating, confirmed Home was visible and privately
+captured its monetary labels. Those labels matched after installation/launch and
+again after a package-scoped force-stop/cold launch. Deleted the private baseline
+and temporary UI hierarchy captures. No financial writes, reset, uninstall,
+preference changes or gallery edits occurred. This checks visible Home values,
+not every stored record. The 200%-text landscape Appearance interaction and
+48px subscription sort target were verified in Flutter widget tests, not by a
+physical TalkBack or rotated-phone acceptance pass.

@@ -90,7 +90,9 @@ class SubscriptionsScreen extends ConsumerWidget {
                           child: Text('Sort by ${s.name}'),
                         ),
                     ],
-                    child: Padding(
+                    child: Container(
+                      constraints: const BoxConstraints(minHeight: 48),
+                      alignment: Alignment.centerRight,
                       padding: const EdgeInsets.all(12),
                       child: Text('Sort by ${sort.name} ⌄'),
                     ),
