@@ -433,3 +433,26 @@ the previous checkpoint; it was not redundantly rerun for documentation-only wor
 Acceptance of automatic handwritten fields remains OPEN. Next investigation must
 separate pass-selection behavior from recognizer accuracy and evaluate alternate
 handwriting recognition locally before changing the production pipeline.
+
+## Isolated native per-pass diagnostic — 19 October 2026
+
+After the owner confirmed the Redmi was unlocked and ready, installation of the
+separate `dev.pesoflow.ocrprobe` diagnostic app succeeded. Its inspected APK had
+no Internet or gallery/storage permission. It contained temporary private assets
+derived from the authorized original, with no PesoFlow database dependencies.
+
+All 15 native ML Kit runs completed: full image plus amount/date region and line
+crops, each original/contrast/shadow-corrected. Every output was exported from
+app-private storage and assessed independently. None recovered the target amount
+or transaction date. This resolves the previous uncertainty about pass selection
+for these inputs; it is not an accuracy estimate across different receipts.
+
+Only the newly installed diagnostic package was uninstalled afterward. PesoFlow
+was reopened and Home retained PHP 1,542.50 total, Cash PHP 900.00, bank PHP 642.50,
+PHP 147.50 October spending and three unread alerts. No financial save, app reset,
+production update or gallery modification was issued in this checkpoint.
+
+Two alternative handwriting models were evaluated offline on the Mac, not on the
+Redmi. One produced the correct amount token on one variant, but date recognition
+and blank-input checks failed. See the [sanitized evaluation](receipt-ocr-evaluation-20261019.md)
+for methodology and limits. No alternative model is integrated into PesoFlow.

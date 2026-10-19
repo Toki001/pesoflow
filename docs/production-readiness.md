@@ -270,3 +270,28 @@ Home retained PHP 1,542.50 total and PHP 147.50 October spending. No application
 code, dependencies or financial records changed in this checkpoint. The prior
 252-test/build results remain the latest code verification; these experiments
 are physical recognition checks, not additional passing unit tests.
+
+## Per-pass and offline handwriting evaluation — 19 October 2026
+
+Diagnostic tooling milestone `6df3c94` separates native recognition from parser
+and pass selection. A temporary, offline Android test app collected all 15 native
+ML Kit outputs for the full authorized image and four field crops, each with
+three preparation variants. None contained the correct target amount/date; the
+production parser also found neither. For these inputs, selection is not hiding
+a successful pass. The test app was removed and PesoFlow's Home baseline retained.
+
+Two pinned TrOCR handwriting models were evaluated locally on the Mac, without
+uploading receipt data. TrOCR-base recovered the correct amount token in one of
+six amount variants, with extra punctuation, but neither model recovered the
+date in six date variants. Both produced output from a blank control. This partial
+amount success is insufficient to ship a replacement recognizer. No production
+code, dependency, financial data, schema or key changed.
+
+Verification: formatting PASS (167 files), analysis PASS, all **252 tests including
+31 goldens PASS**, Python tooling compilation PASS, standalone Android diagnostic
+build/permission checks PASS. Production APK/AAB/iOS and backend builds were not
+rerun for this test-tool-only checkpoint. See the [evaluation report](verification/receipt-ocr-evaluation-20261019.md)
+for model revisions, exact versus token-match results, timing limits and the next
+gate: evaluate numeric handwriting on varied consented fields with false-positive
+controls before selecting an on-device implementation. Handwritten field acceptance
+remains open; explicit correction remains required.
