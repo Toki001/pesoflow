@@ -76,6 +76,9 @@ backgrounds. Group non-overlapping card filters per route. Keep dense financial
 content readable;
 avoid decorative purple/teal accents and random icon colors. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
+The approved background-only follow-up uses neutral charcoal with localized,
+muted blue corner glows in Dark appearance. Preserve Light appearance and existing
+card/control styling; the concept mockup does not authorize other changes.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
 padding, 24px cards, 18px inset fields, pill buttons and 28px sheets. Main app bar is 56px.

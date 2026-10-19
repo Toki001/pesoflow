@@ -194,6 +194,12 @@ and the search field uses the shared translucent fill.
 Home's inner Spending/Income and net-flow wells use translucent fills rather than
 opaque white, without adding nested backdrop filters.
 
+The approved “Charcoal + Blue Glow” background replaces Dark appearance's navy
+wash with neutral charcoal and localized muted blue light at upper-right and
+lower-left. Native gradients render it; the generated mockup is not an app asset.
+Only the backdrop changes. Existing cards/controls/spacing and Light appearance
+remain intact, including the raised dock and plain search-clear icon.
+
 Phone review refined the dock labels to fit on one line at the device's text size.
 System status/navigation icon brightness follows the active theme, including cold
 launches, so light surfaces retain dark system icons. Dark header wells preserve

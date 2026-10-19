@@ -540,3 +540,23 @@ labels before updating, after installing and after the final cold restart: match
 No financial commands, resets or preference changes were issued. Temporary private
 captures and the baseline were removed. Physical dark-theme verification was not
 repeated; dark materials pass Flutter captures and contrast tests.
+
+## Approved charcoal background only — 19 October 2026
+
+Applied the selected “Charcoal + Blue Glow” concept to Dark appearance's shared
+backdrop: neutral charcoal with localized muted blue light at opposite corners.
+Existing cards, gradients, controls, typography, spacing and routes are unchanged.
+Light golden images remain byte-for-byte unchanged. The concept's other styling
+is not implemented. Native gradients render the background; no asset/package added.
+
+Format PASS (177 files), analysis PASS, **297 tests including 31 goldens PASS**.
+The existing contrast regression now composites the actual glow layers. Inspected
+Home/Transactions dark captures. APK (100.3 MB), AAB (81.2 MB), unsigned iOS device
+compile PASS. Backend unchanged, not rerun; signing/iPhone runtime limits remain.
+
+The Redmi was updated in place. Selected the existing Dark appearance to display
+the approved background; no theme default or automatic preference migration was
+introduced. Native Home review confirmed the backdrop. Visible monetary labels
+matched the private pre-update baseline after installation and cold restart.
+No financial records were changed; the appearance preference is the only saved
+setting changed during review. Temporary private capture and baseline were removed.

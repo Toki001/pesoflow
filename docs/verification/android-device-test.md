@@ -538,3 +538,16 @@ deleted. This check covers visible Home values, not every stored record. Dark mo
 was reviewed through Flutter captures rather than switching the phone's preference.
 All 297 Flutter tests including 31 goldens, format/analyze and APK/AAB/unsigned iOS
 builds passed. Existing signing and physical-iPhone limits remain.
+
+## 19 October 2026 — charcoal background only
+
+Installed the background-only APK in place (`adb install -r`: Success). Selected
+Dark using the existing Settings → Appearance control to show the approved neutral
+charcoal backdrop with muted blue corner glows. Reviewed Home on the Redmi.
+The visible monetary labels matched the private pre-update baseline after the
+update, after choosing Dark, and after a cold restart. No financial records were
+changed. Only the appearance preference was saved; no theme-default migration,
+reset, uninstall or gallery edit was issued. Private capture/baseline were removed.
+Light-mode golden images are unchanged. All 297 tests including 31 goldens,
+format/analyze and APK/AAB/unsigned iOS build checks passed. Physical iOS remains
+unavailable; existing development-signing limitations remain.

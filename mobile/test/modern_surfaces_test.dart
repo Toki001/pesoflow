@@ -24,15 +24,14 @@ void main() {
     () {
       for (final dark in [false, true]) {
         final c = FinancePalette(dark);
-        final backdrops = AppMaterials.backdrop(dark).colors;
-        for (final backdrop in [
-          ...backdrops,
-          for (final base in backdrops)
-            Color.alphaBlend(
-              AppColors.primary.withValues(alpha: dark ? .12 : .07),
-              base,
-            ),
-        ]) {
+        var backdrops = AppMaterials.backdrop(dark).colors;
+        for (final glow in AppMaterials.backdropGlows(dark)) {
+          backdrops = [
+            for (final base in backdrops)
+              for (final color in glow.colors) Color.alphaBlend(color, base),
+          ];
+        }
+        for (final backdrop in backdrops) {
           for (final tint in AppMaterials.card(dark, solid: false).colors) {
             final surface = Color.alphaBlend(tint, backdrop);
             for (final ink in [

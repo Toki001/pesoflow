@@ -12,27 +12,22 @@ class AppBackdrop extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final solid = MediaQuery.highContrastOf(context);
+    Widget content = child;
+    if (!solid) {
+      for (final glow in AppMaterials.backdropGlows(c.isDark).reversed) {
+        content = DecoratedBox(
+          decoration: BoxDecoration(gradient: glow),
+          child: content,
+        );
+      }
+    }
     return BackdropGroup(
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: c.canvas,
           gradient: solid ? null : AppMaterials.backdrop(c.isDark),
         ),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: solid
-                ? null
-                : RadialGradient(
-                    center: Alignment.topRight,
-                    radius: 1.4,
-                    colors: [
-                      AppColors.primary.withValues(alpha: c.isDark ? .12 : .07),
-                      Colors.transparent,
-                    ],
-                  ),
-          ),
-          child: child,
-        ),
+        child: content,
       ),
     );
   }
