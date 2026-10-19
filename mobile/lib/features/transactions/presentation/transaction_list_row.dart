@@ -35,7 +35,7 @@ class TransactionListRow extends StatelessWidget {
       _ => Icons.receipt_long_outlined,
     };
     final foreground = categoryColor(t.category, c);
-    final background = foreground.withValues(alpha: .10);
+    final background = categoryBackground(t.category, c);
     final (
       badge,
       badgeColor,

@@ -622,3 +622,17 @@ visible Home values, not every stored record. Dark was inspected in Flutter
 captures; physical Dark/iPhone checks were not repeated. Format/analyze, 303 tests
 including 31 goldens, APK/AAB and unsigned iOS compilation passed. Signing and
 physical-iPhone limitations remain unchanged.
+
+## 20 October 2026 — solid chrome/pastel update, device unavailable
+
+Prepared the new solid dock/header/filter/date-control and pastel category build.
+The Redmi was absent from ADB, and the owner confirmed it is unavailable. No
+installation, physical visual review or restart comparison is claimed for this
+update. Those remain pending; the previous installed build's evidence above is
+separate. No device financial writes, preferences or external files were touched.
+
+Formatting/analysis, 303 Flutter tests including 31 goldens, APK/AAB and unsigned
+iOS compilation passed. Deterministic Transactions/Analytics Light and Home Dark
+captures were reviewed. Next device step: capture the current Home baseline,
+install in place, inspect the requested controls and compare after a cold restart.
+Never clear/uninstall/reseed to complete that check.

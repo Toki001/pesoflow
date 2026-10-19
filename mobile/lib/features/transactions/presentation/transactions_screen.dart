@@ -466,14 +466,8 @@ class _FilterPill extends StatelessWidget {
     selected: selected,
     button: true,
     child: Material(
-      color: selected
-          ? AppColors.primary
-          : context.colors.surface.withValues(alpha: .4),
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: selected ? AppColors.primary : context.colors.border,
-        ),
-      ),
+      color: selected ? AppColors.primary : context.colors.surface,
+      shape: const StadiumBorder(),
       child: InkWell(
         customBorder: const StadiumBorder(),
         onTap: onTap,

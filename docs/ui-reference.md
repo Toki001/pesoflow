@@ -273,3 +273,17 @@ waves. They remain static and deterministic across rebuilds/restarts. High contr
 retains its flat background. The Home hero's clipped radial reflection was removed
 because its bounds appeared as an inner rectangle on the Redmi; only the original
 continuous blue gradient and financial content remain.
+
+### Solid navigation/chrome and softer categories — 20 October 2026
+
+The owner extended solid surfaces to the dock, circular header buttons, inactive
+Transactions filter pills (including account/category filters) and Analytics date
+control. They are white in Light and navy in Dark. Transactions pills have no
+outline; selected filters keep their blue fill/white text. Active dock tiles keep
+the same blue/white treatment. Layout, touch targets and behavior are unchanged.
+
+The dock no longer filters the backdrop; its shared component is now named
+NavigationPanel. Category orange/violet/teal/indigo/blue/green/neutral accents are
+lighter and less saturated, with opaque pastel badge fills. Labels and amounts
+retain text-role colors. Non-text category icons/charts are checked at 3:1 contrast;
+text roles retain 4.5:1. Financial income/refund and risk colors remain unchanged.

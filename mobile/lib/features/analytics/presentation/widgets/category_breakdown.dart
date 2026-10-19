@@ -206,7 +206,10 @@ class _CategoryRow extends StatelessWidget {
               foreground: item.category == AnalyticsCategory.other
                   ? c.mutedInk
                   : foreground,
-              background: foreground.withValues(alpha: .10),
+              background: Color.alphaBlend(
+                foreground.withValues(alpha: c.isDark ? .13 : .08),
+                c.surface,
+              ),
               size: 36,
               iconSize: 18,
             ),

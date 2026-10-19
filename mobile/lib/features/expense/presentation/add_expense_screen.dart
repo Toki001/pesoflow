@@ -662,10 +662,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                                           CategoryIcon(
                                             categoryIcon(item),
                                             foreground: categoryColor(item, c),
-                                            background: categoryColor(
+                                            background: categoryBackground(
                                               item,
                                               c,
-                                            ).withValues(alpha: .08),
+                                            ),
                                           ),
                                           const SizedBox(height: 10),
                                           SizedBox(

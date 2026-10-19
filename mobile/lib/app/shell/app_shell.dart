@@ -7,7 +7,7 @@ import '../../core/widgets/app_backdrop.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
-import '../../core/widgets/frosted_panel.dart';
+import '../../core/widgets/navigation_panel.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.shell, super.key});
@@ -79,7 +79,7 @@ class AppBottomNavigation extends StatelessWidget {
       minimum: const EdgeInsets.fromLTRB(12, 6, 12, 10),
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: FrostedPanel(
+        child: NavigationPanel(
           child: SizedBox(
             height: height,
             child: Row(

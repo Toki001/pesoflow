@@ -680,3 +680,30 @@ changes, reset/reseed/uninstall or gallery edits were issued. Private capture an
 baseline were removed. Dark was reviewed through Flutter captures; the physical
 Dark switch was not repeated for this refinement. The data check covers visible
 Home values, not every stored record.
+
+## Solid navigation and controls, pastel categories — 20 October 2026
+
+The dock, shared header icon circles, inactive Transactions filter pills and
+Analytics date control now use the opaque theme surface: white in Light, navy in
+Dark. Transactions pills have no outline; selected filters keep their blue fill
+and white labels. Selected navigation tiles retain the same blue/white styling.
+The obsolete glass dock component/filter was replaced by NavigationPanel; layout,
+spacing, touch targets, routes and interactions are unchanged.
+
+Category accents are lighter, less saturated orange/violet/teal/indigo/green/blue
+and neutral hues. The same mappings remain shared across entry tiles, ledger,
+budgets and Analytics. Badge fills are opaque pastel blends. Category names and
+amounts retain text-role colors; income/refund and budget-risk colors are unchanged.
+Contrast checks distinguish text roles (4.5:1) from non-text category icons/chart
+accents (3:1 on section and badge surfaces). No golden tolerance was changed.
+
+Formatting PASS (181 files), analysis PASS, **303 tests including 31 golden
+comparisons PASS**. Reviewed final Transactions/Analytics Light and Home Dark
+renders. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS compilation PASS. No new
+packages, financial calculations, persistence/schema/key or backend changes.
+Backend not rerun; development signing and physical-iPhone limitations remain.
+
+The Redmi was not visible to ADB; the owner confirmed the device is unavailable.
+This build has not been installed or physically checked. In-place update and
+visible-Home restart comparison are pending until the phone is available. No
+financial/device writes or preference changes were issued in this refinement.

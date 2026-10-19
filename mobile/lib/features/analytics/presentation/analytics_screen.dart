@@ -104,7 +104,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       key: const ValueKey('analytics-date'),
       onPressed: pickDate,
       style: TextButton.styleFrom(
-        backgroundColor: c.primary.withValues(alpha: .08),
+        backgroundColor: c.surface,
         foregroundColor: c.ink,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         minimumSize: const Size(48, 48),

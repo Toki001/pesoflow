@@ -72,18 +72,20 @@ Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
 Light canvas pale blue with ink #111827 and secondary text #596779; Dark canvas
 #0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #BBC6D5.
 Use blue-only gradients for prominent summary surfaces, restrained depth, and
-transparent floating navigation and solid section cards over blue ambient
+solid floating navigation and solid section cards over blue ambient
 backgrounds. Keep dense financial
 content readable. Category colors are stable identities: food orange, shopping
 violet, bills teal, subscriptions indigo, transport blue and other neutral.
-Income/refunds use green; risk and over-limit states use amber/red. Avoid random
+Category icons/chart accents use softer pastel hues with pale opaque badge fills;
+category names and amounts retain readable text colors. Income/refunds use green;
+risk and over-limit states use amber/red. Avoid random
 decorative accents. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
 Both appearances share static abstract blue ribbons with unequal slopes, bends
 and thicknesses, following the owner's 20 October refinement. Light retains a
 pale sapphire/white base; Dark retains deep navy. Section cards are opaque white
-in Light and opaque navy in Dark, without backdrop blur. The dock retains its
-16px glass blur. Do not animate background paths or blur.
+in Light and opaque navy in Dark, without backdrop blur. The dock also uses the
+solid theme surface without blur. Keep background paths static.
 High contrast keeps opaque readable theme surfaces.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
@@ -96,6 +98,9 @@ Settings is reached directly through the settings icon.
 Ordinary header, receipt, account and navigation icons use neutral gray, resolved
 against their actual surface. Category badges may use their stable category color.
 Selected navigation tiles use #2563EB with white icons; inactive tiles remain gray.
+Header icon circles, unselected Transactions filter pills and the Analytics date
+control use the same solid theme surface. Transactions filters have no border;
+their selected state retains the blue fill and white text.
 Readable foregrounds on charcoal use blue #93C5FD, success #86EFAC, warning
 #FBBF24 and error #FCA5A5. Light uses blue #1E40AF, success #166534, warning
 #92400E and error #991B1B. Primary fills and pale-surface icons retain #2563EB.

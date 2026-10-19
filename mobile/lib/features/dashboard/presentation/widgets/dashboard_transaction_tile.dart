@@ -59,10 +59,7 @@ class DashboardTransactionTile extends StatelessWidget {
               transaction.kind == TransactionKind.refund,
           icon: icon,
           iconColor: categoryColor(transaction.category, c),
-          iconBackground: categoryColor(
-            transaction.category,
-            c,
-          ).withValues(alpha: .10),
+          iconBackground: categoryBackground(transaction.category, c),
         ),
       ),
     );

@@ -163,9 +163,7 @@ abstract final class AppTheme {
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
           foregroundColor: c.icon,
-          backgroundColor: c.isDark
-              ? c.canvas.withValues(alpha: .65)
-              : c.primary.withValues(alpha: .06),
+          backgroundColor: c.surface,
           shape: const CircleBorder(),
         ),
       ),

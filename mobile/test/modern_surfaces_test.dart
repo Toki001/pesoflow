@@ -4,7 +4,7 @@ import 'package:pesoflow/core/widgets/finance_card.dart';
 import 'package:pesoflow/app/theme/app_theme.dart';
 import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:pesoflow/app/theme/app_materials.dart';
-import 'package:pesoflow/core/widgets/frosted_panel.dart';
+import 'package:pesoflow/core/widgets/navigation_panel.dart';
 import 'package:pesoflow/features/dashboard/presentation/widgets/balance_summary.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
 import 'package:pesoflow/features/transactions/presentation/category_color.dart';
@@ -20,68 +20,71 @@ double contrast(Color a, Color b) {
 }
 
 void main() {
-  test(
-    'solid card foregrounds retain contrast over all background variants',
-    () {
-      for (final dark in [false, true]) {
-        final c = FinancePalette(dark);
-        var backdrops = AppMaterials.backdrop(dark).colors;
-        for (final glow in AppMaterials.backdropGlows(dark)) {
-          backdrops = [
-            for (final base in backdrops)
-              for (final color in glow.colors) Color.alphaBlend(color, base),
-          ];
-        }
+  test('solid card foregrounds retain contrast over all background variants', () {
+    for (final dark in [false, true]) {
+      final c = FinancePalette(dark);
+      var backdrops = AppMaterials.backdrop(dark).colors;
+      for (final glow in AppMaterials.backdropGlows(dark)) {
         backdrops = [
           for (final base in backdrops)
-            for (final wave in [
-              Colors.transparent,
-              ...AppMaterials.waveColors(dark),
-            ])
-              Color.alphaBlend(wave, base),
+            for (final color in glow.colors) Color.alphaBlend(color, base),
         ];
-        for (final backdrop in backdrops) {
-          for (final tint in [c.surface]) {
-            final surface = Color.alphaBlend(tint, backdrop);
-            for (final ink in [
-              c.ink,
-              c.secondaryInk,
-              c.mutedInk,
-              c.primary,
-              c.positive,
-              c.warning,
-              c.danger,
-              for (final category in TransactionCategory.values)
-                categoryColor(category, c),
-            ]) {
-              expect(
-                contrast(ink, surface),
-                greaterThanOrEqualTo(4.5),
-                reason: 'dark=$dark, foreground=$ink, surface=$surface',
-              );
-            }
+      }
+      backdrops = [
+        for (final base in backdrops)
+          for (final wave in [
+            Colors.transparent,
+            ...AppMaterials.waveColors(dark),
+          ])
+            Color.alphaBlend(wave, base),
+      ];
+      for (final backdrop in backdrops) {
+        for (final tint in [c.surface]) {
+          final surface = Color.alphaBlend(tint, backdrop);
+          for (final ink in [
+            c.ink,
+            c.secondaryInk,
+            c.mutedInk,
+            c.primary,
+            c.positive,
+            c.warning,
+            c.danger,
+          ]) {
+            expect(
+              contrast(ink, surface),
+              greaterThanOrEqualTo(4.5),
+              reason: 'dark=$dark, foreground=$ink, surface=$surface',
+            );
           }
         }
       }
-      for (final pressed in [false, true]) {
-        for (final color in AppMaterials.button(
-          pale: false,
-          pressed: pressed,
-        ).colors) {
-          expect(contrast(Colors.white, color), greaterThanOrEqualTo(4.5));
-        }
-        for (final color in AppMaterials.button(
-          pale: true,
-          pressed: pressed,
-        ).colors) {
-          expect(
-            contrast(AppColors.primaryStrong, color),
-            greaterThanOrEqualTo(4.5),
-          );
+      // Category accents identify non-text icons and chart segments. Names and
+      // amounts retain the text roles checked above at 4.5:1.
+      for (final category in TransactionCategory.values) {
+        final accent = categoryColor(category, c);
+        for (final background in [c.surface, categoryBackground(category, c)]) {
+          expect(contrast(accent, background), greaterThanOrEqualTo(3));
         }
       }
-    },
-  );
+    }
+    for (final pressed in [false, true]) {
+      for (final color in AppMaterials.button(
+        pale: false,
+        pressed: pressed,
+      ).colors) {
+        expect(contrast(Colors.white, color), greaterThanOrEqualTo(4.5));
+      }
+      for (final color in AppMaterials.button(
+        pale: true,
+        pressed: pressed,
+      ).colors) {
+        expect(
+          contrast(AppColors.primaryStrong, color),
+          greaterThanOrEqualTo(4.5),
+        );
+      }
+    }
+  });
   test('neutral header icons remain readable in both themes', () {
     for (final theme in [AppTheme.light, AppTheme.dark]) {
       final background = theme.iconButtonTheme.style!.backgroundColor!.resolve(
@@ -127,31 +130,34 @@ void main() {
       }
     },
   );
-  testWidgets('floating panel becomes opaque without blur in high contrast', (
-    tester,
-  ) async {
-    tester.platformDispatcher.accessibilityFeaturesTestValue =
-        const FakeAccessibilityFeatures(highContrast: true);
-    addTearDown(tester.platformDispatcher.clearAccessibilityFeaturesTestValue);
-    await app.pumpApp(tester);
-    final filter = tester.widget<BackdropFilter>(
-      find.descendant(
-        of: find.byType(FrostedPanel),
-        matching: find.byType(BackdropFilter),
-      ),
-    );
-    expect(filter.enabled, isFalse);
-    final surfaces = tester.widgetList<DecoratedBox>(
-      find.descendant(
-        of: find.byType(FrostedPanel),
-        matching: find.byType(DecoratedBox),
-      ),
-    );
-    final fill = surfaces
-        .map((w) => w.decoration)
-        .whereType<BoxDecoration>()
-        .where((d) => d.gradient != null)
-        .first;
-    expect(fill.gradient!.colors.every((c) => c.a == 1), isTrue);
-  });
+  testWidgets(
+    'floating panel retains a solid surface without blur in high contrast',
+    (tester) async {
+      tester.platformDispatcher.accessibilityFeaturesTestValue =
+          const FakeAccessibilityFeatures(highContrast: true);
+      addTearDown(
+        tester.platformDispatcher.clearAccessibilityFeaturesTestValue,
+      );
+      await app.pumpApp(tester);
+      final panel = find.byType(NavigationPanel);
+      expect(
+        find.descendant(of: panel, matching: find.byType(BackdropFilter)),
+        findsNothing,
+      );
+      final decoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find
+                        .descendant(
+                          of: panel,
+                          matching: find.byType(DecoratedBox),
+                        )
+                        .first,
+                  )
+                  .decoration
+              as BoxDecoration;
+      expect(decoration.color, Colors.white);
+      expect(decoration.gradient, isNull);
+    },
+  );
 }

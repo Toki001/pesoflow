@@ -59,10 +59,7 @@ class BudgetCategoryCard extends StatelessWidget {
                   CategoryIcon(
                     icon,
                     foreground: categoryColor(a.category, c),
-                    background: categoryColor(
-                      a.category,
-                      c,
-                    ).withValues(alpha: .10),
+                    background: categoryBackground(a.category, c),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
