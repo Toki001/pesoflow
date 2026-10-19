@@ -367,12 +367,8 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
                     : (evidence.confidence[field] ?? 0) >= 65
                     ? 'Medium'
                     : 'Check'}',
-                foreground: (evidence.confidence[field] ?? 0) >= 65
-                    ? c.secondaryInk
-                    : c.warning,
-                background: (evidence.confidence[field] ?? 0) >= 65
-                    ? c.mutedSurface
-                    : c.soft(c.warning, AppColors.warningSoft),
+                foreground: c.secondaryInk,
+                background: c.mutedSurface,
               ),
           ],
         ),
@@ -384,7 +380,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         if (evidence.warnings.isNotEmpty) ...[
           const SizedBox(height: 12),
           FinanceCard(
-            color: c.soft(c.warning, AppColors.warningSoft),
+            color: c.mutedSurface,
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

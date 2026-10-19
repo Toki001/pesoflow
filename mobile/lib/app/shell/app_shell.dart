@@ -57,6 +57,13 @@ class AppBottomNavigation extends StatelessWidget {
     Icons.analytics_outlined,
     Icons.account_balance_wallet_outlined,
   ];
+  static const selectedIcons = [
+    Icons.home,
+    Icons.receipt_long,
+    Icons.add,
+    Icons.analytics,
+    Icons.account_balance_wallet,
+  ];
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
@@ -111,9 +118,7 @@ class AppBottomNavigation extends StatelessWidget {
                                 )
                               else
                                 Icon(
-                                  active && index == 0
-                                      ? Icons.home
-                                      : icons[index],
+                                  active ? selectedIcons[index] : icons[index],
                                   size: 22,
                                   color: AppColors.primary,
                                 ),

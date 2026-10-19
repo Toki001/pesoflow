@@ -139,3 +139,13 @@ approved hierarchy, not new color categories or a layout redesign.
 System reduced-motion disables spatial page/bottom-sheet transitions and theme
 animation. Normal-mode platform transitions remain. Main/task titles are exposed
 as screen-reader headings without changing visual typography.
+
+### Visual consistency — 19 October 2026
+
+Home's Spending/Income pair and Accounts' balance/credit pair share equal widths
+and heights in their two-column layout, including wrapped captions. Larger text
+retains the existing stacked layout. All four main destinations use a filled blue
+icon when selected and an outlined blue icon otherwise; Add retains its creation
+button treatment. Receipt review notices, uncertain item rows, pending labels and
+increased-spending comparison badges use neutral surfaces instead of yellow
+highlights. Their messages and confirmation requirements remain intact.

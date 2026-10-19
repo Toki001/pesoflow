@@ -179,11 +179,7 @@ class ReceiptItemsCard extends StatelessWidget {
                   key: ValueKey('receipt-item-${item.id}'),
                   onTap: onItem == null ? null : () => onItem!(item),
                   child: Container(
-                    color: item.needsReview
-                        ? c
-                              .soft(c.warning, AppColors.warningSoft)
-                              .withValues(alpha: c.isDark ? .12 : .45)
-                        : null,
+                    color: item.needsReview ? c.mutedSurface : null,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
                       vertical: 16,
@@ -195,15 +191,11 @@ class ReceiptItemsCard extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 10,
-                              backgroundColor: item.needsReview
-                                  ? c.soft(c.warning, AppColors.warningSoft)
-                                  : c.mutedSurface,
+                              backgroundColor: c.mutedSurface,
                               child: Text(
                                 '${index + 1}',
                                 style: AppTypography.labelSmall.copyWith(
-                                  color: item.needsReview
-                                      ? c.warning
-                                      : c.mutedInk,
+                                  color: c.mutedInk,
                                   fontSize: 10,
                                 ),
                               ),
@@ -241,11 +233,8 @@ class ReceiptItemsCard extends StatelessWidget {
                                 if (item.needsReview) ...[
                                   StatusBadge(
                                     'Check',
-                                    foreground: c.warning,
-                                    background: c.soft(
-                                      c.warning,
-                                      AppColors.warningSoft,
-                                    ),
+                                    foreground: c.secondaryInk,
+                                    background: c.mutedSurface,
                                     pill: false,
                                   ),
                                   const SizedBox(width: 4),
@@ -264,9 +253,7 @@ class ReceiptItemsCard extends StatelessWidget {
                                   ? 'Manual item'
                                   : 'Parser: ${item.confidence}%',
                               style: AppTypography.labelSmall.copyWith(
-                                color: item.needsReview
-                                    ? c.warning
-                                    : c.mutedInk,
+                                color: c.mutedInk,
                                 fontSize: 10,
                               ),
                             ),

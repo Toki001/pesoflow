@@ -37,6 +37,7 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
     );
     final c = context.colors;
     Widget summary(String label, int amount, String caption) => FinanceCard(
+      key: ValueKey('account-summary-$label'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -97,10 +98,17 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
                 ),
               ];
               return MediaQuery.textScalerOf(context).scale(14) > 19
-                  ? Column(spacing: 12, children: cards)
-                  : Row(
+                  ? Column(
                       spacing: 12,
-                      children: cards.map((v) => Expanded(child: v)).toList(),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: cards,
+                    )
+                  : IntrinsicHeight(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        spacing: 12,
+                        children: cards.map((v) => Expanded(child: v)).toList(),
+                      ),
                     );
             },
           ),

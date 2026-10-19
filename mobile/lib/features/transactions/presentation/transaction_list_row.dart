@@ -40,7 +40,7 @@ class TransactionListRow extends StatelessWidget {
       badgeColor,
       badgeBackground,
     ) = t.status == TransactionStatus.pending
-        ? ('PENDING', c.warning, c.soft(c.warning, AppColors.warningSoft))
+        ? ('PENDING', c.secondaryInk, c.mutedSurface)
         : switch (t.kind) {
             TransactionKind.transfer => (
               'Transfer',

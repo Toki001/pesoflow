@@ -63,6 +63,7 @@ class FlowSummary extends StatelessWidget {
       String caption,
       Color color,
     ) => Container(
+      key: ValueKey('flow-${label.toLowerCase()}'),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: c.canvas,
@@ -120,9 +121,12 @@ class FlowSummary extends StatelessWidget {
               children: children,
             )
           else
-            Row(
-              spacing: 12,
-              children: children.map((w) => Expanded(child: w)).toList(),
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 12,
+                children: children.map((w) => Expanded(child: w)).toList(),
+              ),
             ),
           const SizedBox(height: 16),
           Container(

@@ -33,11 +33,10 @@ class ExpenseHero extends StatelessWidget {
         : '${percent.abs().toStringAsFixed(1)}% (${MoneyFormatter.php(comparison.change.abs(), decimals: false)}) vs $prior';
     final badge = StatusBadge(
       label,
-      foreground: comparison.change <= 0 ? c.positive : c.warning,
-      background: c.soft(
-        comparison.change <= 0 ? c.positive : c.warning,
-        comparison.change <= 0 ? AppColors.positiveSoft : AppColors.warningSoft,
-      ),
+      foreground: comparison.change <= 0 ? c.positive : c.secondaryInk,
+      background: comparison.change <= 0
+          ? c.soft(c.positive, AppColors.positiveSoft)
+          : c.mutedSurface,
       icon: comparison.change <= 0 ? Icons.arrow_downward : Icons.arrow_upward,
       iconSize: 14,
     );

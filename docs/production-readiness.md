@@ -429,3 +429,24 @@ Redmi update installed in place and post-update visible Home values survived a
 cold restart. A pre-update baseline could not be captured, so no before/after
 comparison is claimed for this update. The owner-assisted TalkBack speech check
 is pending feedback; automated semantics/motion results above are verified.
+
+## Visual consistency follow-up — 19 October 2026
+
+Home Spending/Income and Accounts balance/credit pairs now share their height in
+the two-column layout, including differing caption wraps. Larger-text layouts
+retain stacked cards. Transactions, Analytics and Budgets now use filled selected
+navigation icons consistently with Home. Pending labels, Analytics' increased-
+spending badge and receipt-review notices/items use neutral surfaces rather than
+yellow highlights; status messages, warnings and confirmation behavior remain.
+
+Nine new visual-layout regressions cover empty/populated metrics at 320px and
+390px plus selected/unselected navigation icons. Formatting PASS (173 files),
+analysis PASS, **291 Flutter tests including 31 goldens PASS**. Relevant captures
+were updated and inspected. APK (100.1 MB), AAB (81.1 MB) and unsigned iOS device
+build PASS. No dependencies, financial calculations, schema or key changes.
+Backend unchanged, not rerun; existing signing and iPhone runtime limits remain.
+
+The Redmi received an in-place update. A physical capture confirmed aligned Home
+Spending/Income cards with a wrapped caption. Visible Home amounts matched the
+private pre-update baseline after installation and cold restart. Temporary device
+captures and the private baseline were deleted. No financial writes were issued.
