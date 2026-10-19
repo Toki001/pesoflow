@@ -39,13 +39,16 @@ class PesoFlowApp extends ConsumerWidget {
         },
     routerConfig: ref.watch(routerProvider),
     builder: (context, child) {
-      final dark = Theme.of(context).brightness == Brightness.dark;
+      final dark = context.colors.canvas.computeLuminance() < .5;
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
+          systemStatusBarContrastEnforced: false,
           statusBarIconBrightness: dark ? Brightness.light : Brightness.dark,
           statusBarBrightness: dark ? Brightness.dark : Brightness.light,
-          systemNavigationBarColor: context.colors.canvas,
+          systemNavigationBarColor: Colors.transparent,
+          systemNavigationBarDividerColor: Colors.transparent,
+          systemNavigationBarContrastEnforced: false,
           systemNavigationBarIconBrightness: dark
               ? Brightness.light
               : Brightness.dark,

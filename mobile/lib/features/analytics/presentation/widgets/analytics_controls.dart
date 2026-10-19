@@ -21,7 +21,7 @@ class AnalyticsSegments<T> extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: c.mutedSurface,
+        color: c.surface.withValues(alpha: .35),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: c.border),
       ),
@@ -47,13 +47,15 @@ class AnalyticsSegments<T> extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: selected == entry.key ? c.surface : null,
+                      color: selected == entry.key ? AppColors.primary : null,
                       borderRadius: BorderRadius.circular(AppRadius.pill),
                     ),
                     child: Text(
                       entry.value,
                       style: AppTypography.labelSmall.copyWith(
-                        color: selected == entry.key ? c.primary : c.mutedInk,
+                        color: selected == entry.key
+                            ? Colors.white
+                            : c.mutedInk,
                       ),
                     ),
                   ),

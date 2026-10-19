@@ -42,6 +42,44 @@ abstract final class AppTheme {
 
   static ThemeData _build(Brightness brightness, {bool reduceMotion = false}) {
     final c = FinancePalette(brightness == Brightness.dark);
+    var scheme =
+        ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          brightness: brightness,
+        ).copyWith(
+          primary: c.primary,
+          secondary: c.secondary,
+          secondaryContainer: c.primary.withValues(alpha: .10),
+          onSecondaryContainer: c.primary,
+          surfaceTint: Colors.transparent,
+          surface: c.surface,
+          onSurface: c.ink,
+          error: c.danger,
+          outline: c.border,
+        );
+    if (c.isDark) {
+      scheme = scheme.copyWith(
+        onPrimary: c.canvas,
+        primaryContainer: const Color(0xFF173B65),
+        onPrimaryContainer: AppColors.primarySoft,
+        onSecondary: c.canvas,
+        surfaceDim: c.canvas,
+        surfaceBright: const Color(0xFF2E4357),
+        surfaceContainerLowest: c.canvas,
+        surfaceContainerLow: c.surface,
+        surfaceContainer: c.mutedSurface,
+        surfaceContainerHigh: const Color(0xFF2E4357),
+        surfaceContainerHighest: const Color(0xFF385069),
+        onSurfaceVariant: c.secondaryInk,
+        onError: c.canvas,
+        errorContainer: const Color(0xFF51232D),
+        onErrorContainer: c.danger,
+        outlineVariant: c.border,
+        inverseSurface: const Color(0xFFE2E8F0),
+        onInverseSurface: AppColors.ink,
+        inversePrimary: AppColors.primaryStrong,
+      );
+    }
     return ThemeData(
       useMaterial3: true,
       pageTransitionsTheme: reduceMotion
@@ -55,21 +93,7 @@ abstract final class AppTheme {
       brightness: brightness,
       fontFamily: 'Inter',
       scaffoldBackgroundColor: c.canvas,
-      colorScheme:
-          ColorScheme.fromSeed(
-            seedColor: AppColors.primary,
-            brightness: brightness,
-          ).copyWith(
-            primary: c.primary,
-            secondary: c.secondary,
-            secondaryContainer: c.primary.withValues(alpha: .10),
-            onSecondaryContainer: c.primary,
-            surfaceTint: Colors.transparent,
-            surface: c.surface,
-            onSurface: c.ink,
-            error: c.danger,
-            outline: c.border,
-          ),
+      colorScheme: scheme,
       textTheme: TextTheme(
         displayLarge: AppTypography.display,
         headlineLarge: AppTypography.headlineLarge,
@@ -86,7 +110,7 @@ abstract final class AppTheme {
         filled: true,
         fillColor: c.isDark
             ? const Color(0xFF071423).withValues(alpha: .72)
-            : Colors.white.withValues(alpha: .65),
+            : Colors.white.withValues(alpha: .20),
         hintStyle: TextStyle(color: c.mutedInk),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
@@ -130,7 +154,9 @@ abstract final class AppTheme {
       iconTheme: const IconThemeData(color: AppColors.primary, size: 20),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
-          backgroundColor: c.isDark ? c.surface : const Color(0xFFEAF0FC),
+          backgroundColor: c.isDark
+              ? c.canvas.withValues(alpha: .65)
+              : c.primary.withValues(alpha: .06),
           shape: const CircleBorder(),
         ),
       ),

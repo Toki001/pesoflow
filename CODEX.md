@@ -69,16 +69,18 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #43536B, border #E5E7EB,
-success #16A34A, warning #D97706, error #DC2626. Use blue-only gradients for prominent summary surfaces, restrained depth, and
-frosted floating navigation and clipped translucent cards over blue ambient
+Light canvas white with ink #111827 and secondary text #43536B; Dark canvas
+#0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #AFBDD0.
+Use blue-only gradients for prominent summary surfaces, restrained depth, and
+transparent floating navigation and clipped translucent cards over blue ambient
 backgrounds. Group non-overlapping card filters per route. Keep dense financial
 content readable;
 avoid decorative purple/teal accents and random icon colors. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
-The approved background-only follow-up uses neutral charcoal with localized,
-muted blue corner glows in Dark appearance. Preserve Light appearance and existing
-card/control styling; the concept mockup does not authorize other changes.
+Both appearances share stronger blue corner glows. Light retains a white base;
+Dark retains charcoal. Panels must be transparent rather than milky white:
+restrained 6–12% tint and 4px card
+blur, with 8px dock blur. High contrast keeps opaque readable theme surfaces.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
 padding, 24px cards, 18px inset fields, pill buttons and 28px sheets. Main app bar is 56px.
@@ -89,10 +91,14 @@ Settings is reached directly through the settings icon.
 
 Icons use blue consistently, including notification, navigation and receipt
 controls; use #60A5FA on dark badge surfaces where #2563EB lacks contrast.
-Readable light-theme semantic foregrounds are success #166534, warning #92400E
-and error #991B1B; dark muted text uses #AFBDD0. Original semantic colors remain progress/chart fills.
-Light-theme action text uses #1D4ED8 for contrast on pale blue controls;
-primary fills and light-surface icons retain #2563EB. Financial text and progress bars retain semantic colors.
+Readable foregrounds on charcoal use blue #93C5FD, success #86EFAC, warning
+#FBBF24 and error #FCA5A5. Light uses blue #1E40AF, success #166534, warning
+#92400E and error #991B1B. Primary fills and pale-surface icons retain #2563EB.
+Financial text and progress bars retain semantic colors. Selected period/filter
+controls use blue fills and white labels, never black/white selection styling.
+System bars derive icon brightness from the actual canvas luminance. Android's
+navigation bar is transparent without an automatic contrast scrim, allowing the
+app backdrop to show behind the system buttons.
 
 Section cards have no outline borders in either theme. Use surfaces and subtle
 shadows for separation; retain borders on inputs and explicit selection controls.

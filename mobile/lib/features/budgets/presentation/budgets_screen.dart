@@ -261,15 +261,23 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                                     selected: filter == value,
                                     button: true,
                                     child: OutlinedButton(
+                                      key: ValueKey(
+                                        'budget-filter-${value.name}',
+                                      ),
                                       onPressed: () =>
                                           setState(() => filter = value),
                                       style: OutlinedButton.styleFrom(
                                         backgroundColor: filter == value
-                                            ? c.ink
-                                            : c.surface,
+                                            ? AppColors.primary
+                                            : c.primary.withValues(alpha: .06),
                                         foregroundColor: filter == value
-                                            ? c.surface
-                                            : c.secondaryInk,
+                                            ? Colors.white
+                                            : c.primary,
+                                        side: BorderSide(
+                                          color: filter == value
+                                              ? AppColors.primary
+                                              : c.primary.withValues(alpha: .2),
+                                        ),
                                         shape: const StadiumBorder(),
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 14,

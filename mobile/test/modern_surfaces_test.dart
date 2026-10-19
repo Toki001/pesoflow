@@ -43,7 +43,11 @@ void main() {
               c.warning,
               c.danger,
             ]) {
-              expect(contrast(ink, surface), greaterThanOrEqualTo(4.5));
+              expect(
+                contrast(ink, surface),
+                greaterThanOrEqualTo(4.5),
+                reason: 'dark=$dark, foreground=$ink, surface=$surface',
+              );
             }
           }
         }
@@ -72,7 +76,11 @@ void main() {
       final background = theme.iconButtonTheme.style!.backgroundColor!.resolve(
         {},
       )!;
-      expect(contrast(AppColors.primary, background), greaterThanOrEqualTo(3));
+      final canvas = FinancePalette(theme.brightness == Brightness.dark).canvas;
+      expect(
+        contrast(AppColors.primary, Color.alphaBlend(background, canvas)),
+        greaterThanOrEqualTo(3),
+      );
     }
   });
   testWidgets(

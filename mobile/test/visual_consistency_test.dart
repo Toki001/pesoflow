@@ -1,11 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/app/shell/app_shell.dart';
+import 'package:pesoflow/features/analytics/application/analytics_provider.dart';
+import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
 
 import 'fixtures/stitch_v7_fixture.dart';
 import 'production_app_test.dart' as app;
 
 void main() {
+  for (final theme in [ThemeMode.light, ThemeMode.dark]) {
+    testWidgets('analytics date remains usable at large text in $theme', (
+      tester,
+    ) async {
+      app.viewport(tester, const Size(320, 844));
+      tester.platformDispatcher.textScaleFactorTestValue = 2;
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      final container = await app.pumpApp(
+        tester,
+        route: '/analytics',
+        theme: theme,
+      );
+      final periods = tester.getRect(
+        find.byKey(const ValueKey('analytics-periods')),
+      );
+      final date = tester.getRect(find.byKey(const ValueKey('analytics-date')));
+      expect(date.top - periods.bottom, greaterThanOrEqualTo(12));
+      await tester.tap(find.byKey(const ValueKey('analytics-date')));
+      await tester.pumpAndSettle();
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+      await tester.tap(find.text('23'));
+      await tester.tap(find.text('OK'));
+      await tester.pumpAndSettle();
+      expect(container.read(analyticsSelectionProvider).date.day, 23);
+      await tester.tap(find.text('Week'));
+      await tester.pumpAndSettle();
+      expect(
+        container.read(analyticsSelectionProvider).period,
+        AnalyticsPeriod.week,
+      );
+      expect(tester.takeException(), isNull);
+    });
+    testWidgets('budget filter selection remains functional in $theme', (
+      tester,
+    ) async {
+      app.viewport(tester, const Size(390, 844));
+      await app.pumpApp(
+        tester,
+        route: '/budgets',
+        theme: theme,
+        workspace: stitchV7Fixture(),
+      );
+      final risk = find.byKey(const ValueKey('budget-filter-atRisk'));
+      await tester.ensureVisible(risk);
+      await tester.tap(risk);
+      await tester.pumpAndSettle();
+      expect(find.text('No budgets in this filter'), findsOneWidget);
+      final track = find.byKey(const ValueKey('budget-filter-onTrack'));
+      await tester.ensureVisible(track);
+      await tester.tap(track);
+      await tester.pumpAndSettle();
+      expect(find.text('No budgets in this filter'), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
   for (final scale in [1.0, 2.0]) {
     testWidgets(
       'category tiles share a size with wrapped labels at scale $scale',

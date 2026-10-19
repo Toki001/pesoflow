@@ -90,6 +90,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       AnalyticsPeriod.year => '${selection.date.year}',
     };
     final periodControl = AnalyticsSegments<AnalyticsPeriod>(
+      key: const ValueKey('analytics-periods'),
       options: const {
         AnalyticsPeriod.day: 'Day',
         AnalyticsPeriod.week: 'Week',
@@ -100,18 +101,21 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
       onSelected: ref.read(analyticsSelectionProvider.notifier).selectPeriod,
     );
     final dateControl = TextButton(
+      key: const ValueKey('analytics-date'),
       onPressed: pickDate,
       style: TextButton.styleFrom(
-        backgroundColor: c.mutedSurface,
+        backgroundColor: c.primary.withValues(alpha: .08),
         foregroundColor: c.ink,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         minimumSize: const Size(48, 48),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Icon(Icons.calendar_today_outlined, size: 16, color: c.primary),
+          const SizedBox(width: 8),
           Flexible(child: Text(dateLabel, style: AppTypography.labelMedium)),
-          const SizedBox(width: 4),
+          const SizedBox(width: 8),
           Icon(Icons.expand_more, size: 16, color: AppColors.primary),
         ],
       ),
@@ -126,10 +130,16 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
             child: periodControl,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
             child: Row(
               children: [
-                Expanded(child: dateControl),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: dateControl,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 IconButton(
                   tooltip: 'Analytics summary',
                   onPressed: state.value == null

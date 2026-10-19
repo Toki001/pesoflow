@@ -200,6 +200,27 @@ lower-left. Native gradients render it; the generated mockup is not an app asset
 Only the backdrop changes. Existing cards/controls/spacing and Light appearance
 remain intact, including the raised dock and plain search-clear icon.
 
+### Transparent glass and blue glows — 19 October 2026
+
+The owner clarified that Light must retain its white base; Dark retains charcoal.
+Both use stronger sapphire corner glows with the same geometry. Default cards use
+6–12% colored tint with 4px blur; the dock uses 8px blur and no white frosting.
+Light keeps dark text; Dark keeps light text. Solid overlays and native date-picker
+surfaces follow their appearance, with readable financial/action foregrounds.
+High contrast retains opaque cards and no blur.
+
+Analytics separates its period row from a compact, left-aligned calendar/date
+selector by 12px, with summary action at the right. Large date labels can wrap
+without touching the period controls. Period selections and Budget All/At Risk/
+On Track filters use blue fills with white labels; inactive choices use transparent
+blue tints. Android system bars use transparent backgrounds without a forced
+contrast scrim, and icon brightness follows the actual canvas luminance.
+
+The Add screen now has a full-width Expense/Income/Transfer selector below its
+Record Transaction header. Equally sized options pair a blue icon with a label;
+the selected option uses a blue fill. It remains scrollable with large text and
+available before creating the first account. Edit flows keep their fixed type.
+
 Phone review refined the dock labels to fit on one line at the device's text size.
 System status/navigation icon brightness follows the active theme, including cold
 launches, so light surfaces retain dark system icons. Dark header wells preserve

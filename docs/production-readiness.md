@@ -560,3 +560,37 @@ introduced. Native Home review confirmed the backdrop. Visible monetary labels
 matched the private pre-update baseline after installation and cold restart.
 No financial records were changed; the appearance preference is the only saved
 setting changed during review. Temporary private capture and baseline were removed.
+
+## Transparent glass, blue lighting and control refinements — 19 October 2026
+
+Light retains a white base and dark text, with the same corner-light geometry as
+Dark's charcoal base. Both use stronger sapphire glows. Default cards use 6–12%
+colored tint and 4px blur; the dock uses 8px blur, avoiding milky white frosting.
+High contrast retains opaque readable theme surfaces. Analytics now separates
+period buttons from a compact left-aligned calendar/date selector by 12px and
+keeps the summary action at the right. Period/Budget filter selections use blue
+fills and white labels. Transactions retains the same blue selection convention.
+
+The Add form has a full-width icon/label Expense/Income/Transfer selector below
+the Record Transaction header, including the no-account state. Edit flows retain
+their fixed type. Existing expense/income/transfer commands and financial semantics
+are unchanged. Android's forced navigation-bar contrast scrim is disabled; the
+bar reveals the app background and icon brightness follows canvas luminance.
+
+Verification: formatting PASS (178 files), analysis PASS, **301 Flutter tests
+including 31 goldens PASS**. Four new widget regressions exercise calendar/date
+selection at 200% text and Budget filters in both appearances. Existing contrast,
+compact/landscape/keyboard and financial tests pass. Home light/dark, Add light,
+Analytics light and Budgets dark captures were inspected. APK (100.3 MB), AAB
+(81.2 MB) and unsigned iOS device compile PASS. No new dependencies, backend,
+storage/schema/key or financial-engine changes. Signing/iPhone limits remain.
+
+The final APK installed in place on the Redmi. Native Light review confirmed a
+white base, blue glows, dark text, transparent panels, the new Add selector and a
+matching system-navigation area with dark buttons. Earlier native checks in this
+iteration confirmed the Analytics spacing, blue Budget filters and removal of
+the white system-bar strip on charcoal. The untouched Add form was closed; visible
+Home monetary labels matched the private pre-update baseline after installation
+and the final cold restart. Only appearance settings were changed during visual
+checks; no financial records/reset/reseed/gallery edits were issued. Temporary
+private captures and the baseline were removed. Physical iOS remains unavailable.

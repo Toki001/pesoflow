@@ -53,25 +53,24 @@ abstract final class AppColors {
 class FinancePalette {
   const FinancePalette(this.isDark);
   final bool isDark;
-  Color get canvas => isDark ? AppColors.darkSurface : AppColors.surfaceSubtle;
+  Color get canvas => isDark ? const Color(0xFF0A1016) : Colors.white;
   Color get surface => isDark ? AppColors.darkSurfaceSubtle : AppColors.surface;
   Color get mutedSurface =>
       isDark ? AppColors.darkSurfaceMuted : AppColors.surfaceMuted;
-  Color get ink => isDark ? AppColors.darkInk : AppColors.stitchInk;
+  Color get ink => isDark ? AppColors.darkInk : AppColors.ink;
   Color get secondaryInk =>
       isDark ? AppColors.darkInkSecondary : AppColors.inkSecondary;
   Color get mutedInk => isDark ? AppColors.darkInkMuted : AppColors.inkMuted;
   Color get border => isDark ? AppColors.darkBorder : AppColors.border;
   Color get strongBorder =>
       isDark ? AppColors.darkBorder : AppColors.borderStrong;
-  Color get primary => isDark ? AppColors.darkPrimary : AppColors.primaryStrong;
+  Color get primary => isDark ? AppColors.darkPrimary : const Color(0xFF1E40AF);
   Color get positive =>
       isDark ? AppColors.darkPositive : AppColors.positiveText;
   Color get warning => isDark ? AppColors.darkWarning : AppColors.warningText;
   Color get danger => isDark ? AppColors.darkDanger : AppColors.dangerText;
-  Color get secondary =>
-      isDark ? AppColors.darkSecondary : AppColors.stitchSecondary;
-  Color get accent => isDark ? AppColors.darkAccent : AppColors.stitchAccent;
+  Color get secondary => primary;
+  Color get accent => primary;
   Color get insight => isDark
       ? AppColors.accent.withValues(alpha: .12)
       : AppColors.stitchInsight;
@@ -95,7 +94,7 @@ class FinancePalette {
   }
 
   Color soft(Color foreground, Color light) =>
-      isDark ? foreground.withValues(alpha: .12) : light;
+      isDark ? foreground.withValues(alpha: .10) : light;
 }
 
 extension FinanceThemeContext on BuildContext {

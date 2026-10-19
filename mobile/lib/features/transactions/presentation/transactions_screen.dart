@@ -490,10 +490,12 @@ class _FilterPill extends StatelessWidget {
     selected: selected,
     button: true,
     child: Material(
-      color: selected ? context.colors.primary : context.colors.surface,
+      color: selected
+          ? AppColors.primary
+          : context.colors.surface.withValues(alpha: .4),
       shape: StadiumBorder(
         side: BorderSide(
-          color: selected ? context.colors.primary : context.colors.border,
+          color: selected ? AppColors.primary : context.colors.border,
         ),
       ),
       child: InkWell(
@@ -504,11 +506,7 @@ class _FilterPill extends StatelessWidget {
           child: Text(
             label,
             style: AppTypography.labelMedium.copyWith(
-              color: selected
-                  ? (context.colors.isDark
-                        ? AppColors.darkSurface
-                        : Colors.white)
-                  : context.colors.secondaryInk,
+              color: selected ? Colors.white : context.colors.secondaryInk,
             ),
           ),
         ),

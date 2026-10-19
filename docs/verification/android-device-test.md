@@ -551,3 +551,21 @@ reset, uninstall or gallery edit was issued. Private capture/baseline were remov
 Light-mode golden images are unchanged. All 297 tests including 31 goldens,
 format/analyze and APK/AAB/unsigned iOS build checks passed. Physical iOS remains
 unavailable; existing development-signing limitations remain.
+
+## 19 October 2026 — transparent glass, corrected Light and Add controls
+
+Installed the final APK in place (`adb install -r`: Success). Native Light review
+confirmed the clarified white base with blue glows and dark text, transparent
+panels, matching system-navigation background with dark square/circle/triangle
+buttons, and the full-width Expense/Income/Transfer selector below the Add header.
+Closed the untouched form without saving. Earlier checks in this iteration
+confirmed separated Analytics period/date controls, blue Budget filter selection
+and the system-bar contrast-scrim fix over charcoal. Final native review focused
+on Light; Dark was also reviewed in deterministic Flutter captures.
+
+Visible Home monetary labels matched the private pre-update baseline after the
+final installation and cold restart. Appearance settings alone changed during
+review; no financial records, reset/reseed/uninstall or gallery edits were issued.
+Temporary private captures and the baseline were deleted. Format/analyze,
+301 tests including 31 goldens, APK/AAB and unsigned iOS builds passed. Physical
+iOS and existing signing limitations remain unchanged.

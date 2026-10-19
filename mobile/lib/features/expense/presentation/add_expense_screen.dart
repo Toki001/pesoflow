@@ -1,3 +1,5 @@
+import 'widgets/transaction_type_selector.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -413,54 +415,24 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
       );
     }
 
+    final typeSelector = TransactionTypeSelector(
+      selected: kind,
+      enabled: !saving,
+      onSelected: (type) => setState(() {
+        kind = type;
+        category = type == TransactionKind.income
+            ? TransactionCategory.income
+            : type == TransactionKind.transfer
+            ? TransactionCategory.transfer
+            : TransactionCategory.food;
+      }),
+    );
+
     return TaskScreen(
       title: widget.transaction == null
           ? 'Record Transaction'
           : 'Edit $typeLabel',
       centerTitle: true,
-      titleWidget: widget.transaction == null
-          ? Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: c.mutedSurface,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  for (final type in [
-                    TransactionKind.expense,
-                    TransactionKind.income,
-                    TransactionKind.transfer,
-                  ])
-                    Expanded(
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: type == kind
-                              ? c.surface
-                              : Colors.transparent,
-                          foregroundColor: type == kind
-                              ? c.primary
-                              : c.secondaryInk,
-                        ),
-                        onPressed: widget.transaction != null || saving
-                            ? null
-                            : () => setState(() {
-                                kind = type;
-                                category = type == TransactionKind.income
-                                    ? TransactionCategory.income
-                                    : type == TransactionKind.transfer
-                                    ? TransactionCategory.transfer
-                                    : TransactionCategory.food;
-                              }),
-                        child: Text(
-                          type.name[0].toUpperCase() + type.name.substring(1),
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            )
-          : null,
       actions: [
         IconButton(
           tooltip: 'Scan receipt',
@@ -501,6 +473,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    if (widget.transaction == null) ...[
+                      typeSelector,
+                      const SizedBox(height: 24),
+                    ],
                     Text(
                       'Add an account first',
                       style: AppTypography.headlineMedium,
@@ -530,6 +506,10 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
               child: ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  if (widget.transaction == null) ...[
+                    typeSelector,
+                    const SizedBox(height: 16),
+                  ],
                   FinanceCard(
                     padding: const EdgeInsets.all(20),
                     child: Column(
