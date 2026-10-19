@@ -5,9 +5,9 @@ import 'app_colors.dart';
 abstract final class AppShadows {
   static final subtle = [
     BoxShadow(
-      color: AppColors.ink.withValues(alpha: .04),
-      offset: const Offset(0, 1),
-      blurRadius: 2,
+      color: AppColors.ink.withValues(alpha: .045),
+      offset: const Offset(0, 4),
+      blurRadius: 18,
     ),
   ];
   static final card = [

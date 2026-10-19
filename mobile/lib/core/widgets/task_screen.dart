@@ -41,7 +41,7 @@ class TaskScreen extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  color: context.colors.surface,
+                  color: context.colors.canvas,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,

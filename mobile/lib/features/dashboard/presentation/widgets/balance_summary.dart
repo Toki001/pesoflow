@@ -13,35 +13,54 @@ class BalanceHero extends StatelessWidget {
   final Dashboard data;
   @override
   Widget build(BuildContext context) => FinanceCard(
-    padding: const EdgeInsets.all(20),
+    hero: true,
+    padding: const EdgeInsets.all(24),
+    gradient: const LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: [Color(0xFF12368E), Color(0xFF1E5BDD), Color(0xFF1D4ED8)],
+    ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'TOTAL TRACKED BALANCE',
-          style: AppTypography.labelMedium.copyWith(
-            color: context.colors.mutedInk,
-          ),
+          style: AppTypography.labelMedium.copyWith(color: Colors.white),
         ),
         const SizedBox(height: 16),
-        Text(MoneyFormatter.php(data.balance), style: AppTypography.numericXL),
+        Text(
+          MoneyFormatter.php(data.balance),
+          style: AppTypography.numericXL.copyWith(color: Colors.white),
+        ),
         const SizedBox(height: 20),
         Wrap(
-          spacing: 16,
+          spacing: 8,
           runSpacing: 8,
           children: [
-            Text(
-              '${MoneyFormatter.php(data.monthChange, signed: true)} net flow this month',
-              style: AppTypography.labelSmall.copyWith(
-                color: data.monthChange < 0
-                    ? context.colors.danger
-                    : context.colors.positive,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF12368E).withValues(alpha: .5),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${MoneyFormatter.php(data.monthChange, signed: true)} net flow this month',
+                style: AppTypography.labelSmall.copyWith(
+                  color: data.monthChange < 0
+                      ? const Color(0xFFFFE4E6)
+                      : const Color(0xFFDCFCE7),
+                ),
               ),
             ),
-            Text(
-              '${data.accountCount} tracked accounts',
-              style: AppTypography.labelSmall.copyWith(
-                color: context.colors.mutedInk,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF12368E).withValues(alpha: .5),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '${data.accountCount} tracked accounts',
+                style: AppTypography.labelSmall.copyWith(color: Colors.white),
               ),
             ),
           ],

@@ -450,3 +450,36 @@ The Redmi received an in-place update. A physical capture confirmed aligned Home
 Spending/Income cards with a wrapped caption. Visible Home amounts matched the
 private pre-update baseline after installation and cold restart. Temporary device
 captures and the private baseline were deleted. No financial writes were issued.
+
+## Modern surface refresh — 19 October 2026
+
+The owner supplied new inspiration images and authorized a modern visual treatment
+beyond the original flat Stitch surfaces. Home now has a deep-blue gradient balance
+card with readable inset labels. Shared cards use rounded, softly shaded surfaces
+and restrained shadows; headers and controls use coordinated rounded wells. The
+floating bottom navigation uses one clipped native backdrop filter with a tinted
+surface and selected-tab capsules. Dense financial lists retain readable surfaces.
+Light and dark palettes, 24px cards, 14px controls and 28px sheets are documented in
+CODEX.md and ui-reference.md. Inspiration images are not bundled app assets.
+
+The recent equal-size metric pairs, consistently filled selected icons and neutral
+status/review panels remain. Functional routes, financial calculations, storage,
+keys, OCR and dependencies are unchanged. Native widgets implement all materials.
+
+Verification: formatting PASS (175 files), analysis PASS, **294 Flutter tests
+including 31 goldens PASS**. Three new regressions verify gradient-label contrast, blue header-icon
+contrast and the glass panel's opaque/no-blur high-contrast fallback. Existing compact,
+large-text, landscape, keyboard and financial regressions pass. Refreshed captures
+were generated and representative Home light/dark, Add Expense, Analytics,
+Budgets, Transactions and Settings captures visually inspected. APK (100.2 MB),
+AAB (81.2 MB) and unsigned iOS device build PASS. Backend unchanged, not rerun.
+Existing development signing and physical-iPhone/simulator limits remain.
+
+Physical Redmi review caught and corrected an orphaned navigation-label wrap and
+light-mode status-bar icon contrast. The final APK installed in place. All prior
+visible monetary values were found across the scrolled Home view; surface grouping
+and viewport positions changed with the taller summary. A private baseline of the
+new Home layout matched after the final update and a cold restart. Native captures
+confirmed the gradient, equal metric pair, floating dock, single-line labels and
+dark system icons on the light canvas. No financial commands were issued. Temporary
+captures and private baseline files were removed after verification.

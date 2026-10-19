@@ -1,6 +1,8 @@
-# Approved UI reference — Stitch v7
+# Approved UI reference — Stitch flows and modern surfaces
 
-The 13 PNG/HTML pairs directly under `design/stitch/` are authoritative. All 28
+The 13 PNG/HTML pairs directly under `design/stitch/` define the flows and layout
+hierarchy. The 19 October modern-surface refresh below supersedes their flat
+visual treatment, as authorized with the supplied inspiration images. All 28
 files match the latest user-provided v7 export. Both `pesoflow_minimal_tracker/DESIGN.md`
 and `calm_financial_intelligence/DESIGN.md` were read. The user's explicit palette
 and truthful product behavior override conflicting generated tokens and sample
@@ -149,3 +151,29 @@ icon when selected and an outlined blue icon otherwise; Add retains its creation
 button treatment. Receipt review notices, uncertain item rows, pending labels and
 increased-spending comparison badges use neutral surfaces instead of yellow
 highlights. Their messages and confirmation requirements remain intact.
+
+### Modern surface direction — 19 October 2026
+
+The five supplied plant-care, finance and smart-home inspiration images guide
+materials and depth. They are visual references, not bundled app assets. Existing
+Stitch screen composition and functional controls remain.
+
+- A deep-blue-to-sapphire gradient anchors Home's tracked balance. White amounts
+  and readable pale signed-flow labels sit above darker translucent inset chips.
+- A cool `#F5F7FC` canvas supports white-to-ice card surfaces; dark mode uses
+  navy surfaces with subtle tonal gradients. Cards use 24px corners, controls
+  14px and sheets 28px, with soft shadows and no section outlines.
+- A floating, clipped glass navigation panel uses native 18px backdrop blur,
+  a high-opacity tint, a selected-tab capsule and the consistent filled icons.
+  Its content is 72px high plus outer spacing and safe area; large text grows it.
+  High-contrast mode uses opaque surfaces without blur.
+- Header icon buttons use coordinated rounded wells. Input shapes and shared
+  surfaces carry the direction into forms, lists, Analytics, Budgets and Settings.
+- Keep financial content readable: no photographic backgrounds, rainbow accents,
+  extra widgets, demo data or new financial claims. Neutral review/status panels
+  and the equal-height summary pairs remain. No per-card backdrop filters.
+
+Phone review refined the dock labels to fit on one line at the device's text size.
+System status/navigation icon brightness follows the active theme, including cold
+launches, so light surfaces retain dark system icons. Dark header wells preserve
+contrast for the blue icons.

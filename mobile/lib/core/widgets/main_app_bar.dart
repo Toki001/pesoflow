@@ -11,7 +11,7 @@ class MainAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     constraints: const BoxConstraints(minHeight: 56),
-    color: context.colors.surface,
+    color: context.colors.canvas,
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     child: Row(
       children: [

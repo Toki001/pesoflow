@@ -13,6 +13,7 @@ class FinanceCard extends StatelessWidget {
     this.radius = AppRadius.homeCard,
     this.color,
     this.borderColor,
+    this.gradient,
     super.key,
   });
   final Widget child;
@@ -21,16 +22,34 @@ class FinanceCard extends StatelessWidget {
   final double radius;
   final Color? color;
   final Color? borderColor;
+  final Gradient? gradient;
   @override
   Widget build(BuildContext context) => Container(
     padding: padding,
     decoration: BoxDecoration(
       color: color ?? context.colors.surface,
+      gradient:
+          gradient ??
+          (color != null
+              ? null
+              : LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: context.colors.isDark
+                      ? const [Color(0xFF15243C), Color(0xFF111D32)]
+                      : const [Colors.white, Color(0xFFF8FAFF)],
+                )),
       borderRadius: BorderRadius.circular(radius),
       // Section cards are borderless; explicit borders identify selections only.
       border: borderColor == null ? null : Border.all(color: borderColor!),
       boxShadow: context.colors.isDark
-          ? null
+          ? [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: .12),
+                offset: const Offset(0, 4),
+                blurRadius: 16,
+              ),
+            ]
           : (hero ? AppShadows.card : AppShadows.subtle),
     ),
     child: Material(type: MaterialType.transparency, child: child),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
+import '../../core/widgets/frosted_panel.dart';
 
 class AppShell extends StatelessWidget {
   const AppShell({required this.shell, super.key});
@@ -68,22 +69,18 @@ class AppBottomNavigation extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     final height = math.max(
-      64.0,
-      64 + (MediaQuery.textScalerOf(context).scale(11) - 11) * 6,
+      72.0,
+      72 + (MediaQuery.textScalerOf(context).scale(11) - 11) * 6,
     );
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: c.surface,
-        border: Border(top: BorderSide(color: c.border)),
-      ),
-      child: SafeArea(
-        top: false,
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.fromLTRB(12, 6, 12, 10),
+      child: FrostedPanel(
         child: SizedBox(
           height: height,
           child: Row(
             children: List.generate(destinations.length, (index) {
               final active = selectedIndex == index;
-              final color = active ? c.primary : c.mutedInk;
               return Expanded(
                 child: Semantics(
                   selected: active,
@@ -93,6 +90,7 @@ class AppBottomNavigation extends StatelessWidget {
                     message: destinations[index],
                     child: InkWell(
                       key: ValueKey('nav-${destinations[index]}'),
+                      borderRadius: BorderRadius.circular(20),
                       onTap: () => onSelected(index),
                       child: ExcludeSemantics(
                         child: SizedBox.expand(
@@ -100,35 +98,56 @@ class AppBottomNavigation extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               if (index == 2)
-                                Transform.translate(
-                                  offset: const Offset(0, -6),
-                                  child: Container(
-                                    width: 44,
-                                    height: 44,
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.primarySoft,
-                                      shape: BoxShape.circle,
+                                Container(
+                                  width: 44,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color(0xFFDBEAFE),
+                                        Color(0xFFBFDBFE),
+                                      ],
                                     ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: AppColors.primary,
-                                      size: 26,
-                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: const Icon(
+                                    Icons.add,
+                                    color: AppColors.primary,
+                                    size: 26,
                                   ),
                                 )
                               else
-                                Icon(
-                                  active ? selectedIcons[index] : icons[index],
-                                  size: 22,
-                                  color: AppColors.primary,
+                                Container(
+                                  width: 44,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: active
+                                        ? c.primary.withValues(alpha: .10)
+                                        : null,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    active
+                                        ? selectedIcons[index]
+                                        : icons[index],
+                                    size: 22,
+                                    color: c.iconOn(c.surface),
+                                  ),
                                 ),
-                              const SizedBox(height: 2),
-                              Text(
-                                destinations[index],
-                                textAlign: TextAlign.center,
-                                style: AppTypography.labelSmall.copyWith(
-                                  color: color,
-                                  letterSpacing: 0,
+                              const SizedBox(height: 4),
+                              FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  destinations[index],
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.labelSmall.copyWith(
+                                    color: active ? c.primary : c.mutedInk,
+                                    letterSpacing: 0,
+                                  ),
                                 ),
                               ),
                             ],

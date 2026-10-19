@@ -19,16 +19,16 @@ abstract final class AppColors {
   static const danger = Color(0xFFDC2626);
   static const dangerSoft = Color(0xFFFEE2E2);
   static const ink = Color(0xFF111827);
-  static const inkSecondary = Color(0xFF6B7280);
-  static const inkMuted = Color(0xFF6B7280);
+  static const inkSecondary = Color(0xFF647084);
+  static const inkMuted = Color(0xFF647084);
   static const surface = Color(0xFFFFFFFF);
-  static const surfaceSubtle = Color(0xFFF7F8FA);
+  static const surfaceSubtle = Color(0xFFF5F7FC);
   static const surfaceMuted = Color(0xFFF3F4F6);
   static const border = Color(0xFFE5E7EB);
   static const borderStrong = Color(0xFFCBD5E1);
-  static const darkSurface = Color(0xFF0B1220);
-  static const darkSurfaceSubtle = Color(0xFF111827);
-  static const darkSurfaceMuted = Color(0xFF1E293B);
+  static const darkSurface = Color(0xFF0A1020);
+  static const darkSurfaceSubtle = Color(0xFF111D32);
+  static const darkSurfaceMuted = Color(0xFF1A2A44);
   static const darkInk = Color(0xFFF7F8FA);
   static const darkInkSecondary = Color(0xFFCBD5E1);
   static const darkInkMuted = Color(0xFF94A3B8);
@@ -41,12 +41,12 @@ abstract final class AppColors {
   static const stitchAccent = Color(0xFF2563EB);
   static const stitchAccentBorder = Color(0xFFDBEAFE);
   static const stitchInsight = Color(0xFFEFF6FF);
-  static const darkPrimary = Color(0xFFB4C5FF);
+  static const darkPrimary = Color(0xFF93C5FD);
   static const darkPositive = Color(0xFF86EFAC);
   static const darkWarning = Color(0xFFFBBF24);
   static const darkDanger = Color(0xFFFCA5A5);
-  static const darkSecondary = Color(0xFFB4C5FF);
-  static const darkAccent = Color(0xFFB4C5FF);
+  static const darkSecondary = Color(0xFF93C5FD);
+  static const darkAccent = Color(0xFF93C5FD);
 }
 
 /// Semantic roles keep components independent of the active brightness.

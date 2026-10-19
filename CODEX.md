@@ -11,7 +11,10 @@ accounts. Internal transfers record movement between the user's accounts; they d
 not move real money.
 
 The 13 version 7 Stitch PNG/HTML pairs directly under `design/stitch/` are the
-approved visual source of truth. They supersede previous exports. Read the PNG,
+approved flow and layout reference. The owner-authorized 19 October visual
+refresh adds blue gradients, layered surfaces and floating glass navigation,
+guided by the supplied inspiration images; this supersedes the earlier flat
+surface styling. Read the PNG,
 HTML and both DESIGN.md files before updating a screen. The explicit palette
 below overrides conflicting generated tokens. Priority: product truth and data
 safety, screenshot visual hierarchy, design tokens, HTML structure. Implement
@@ -66,15 +69,16 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-canvas #F7F8FA, card #FFFFFF, ink #111827, secondary text #6B7280, border #E5E7EB,
-success #16A34A, warning #D97706, error #DC2626. Avoid decorative purple/teal
-accents, gradients, random icon colors and heavy elevation. Dark mode preserves
+canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #647084, border #E5E7EB,
+success #16A34A, warning #D97706, error #DC2626. Use blue-only gradients for prominent summary surfaces, restrained depth, and
+frosted floating navigation. Keep dense financial content on readable surfaces;
+avoid decorative purple/teal accents and random icon colors. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
-padding, 16–18px cards, 10–12px controls and 20–24px sheets. Main app bar is 56px.
+padding, 24px cards, 14px controls and 28px sheets. Main app bar is 56px.
 Bottom navigation is one reusable component: Home, Transactions, Add, Analytics,
-Budgets, 64px plus safe area. Add is the single global creation action; no duplicate
+Budgets, 72px within a floating panel plus safe area. Add is the single global creation action; no duplicate
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 

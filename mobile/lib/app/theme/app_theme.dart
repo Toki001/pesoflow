@@ -62,15 +62,15 @@ abstract final class AppTheme {
           vertical: 14,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.control),
           borderSide: BorderSide(color: c.border),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.control),
           borderSide: BorderSide(color: c.border),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.control),
           borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
       ),
@@ -88,6 +88,14 @@ abstract final class AppTheme {
         collapsedIconColor: AppColors.primary,
       ),
       iconTheme: const IconThemeData(color: AppColors.primary, size: 20),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          backgroundColor: c.isDark ? c.surface : const Color(0xFFEAF0FC),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           minimumSize: const Size(48, 48),
@@ -106,7 +114,7 @@ abstract final class AppTheme {
           minimumSize: const Size(48, 48),
           textStyle: AppTypography.labelMedium,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(AppRadius.control),
           ),
         ),
       ),
