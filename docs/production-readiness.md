@@ -295,3 +295,26 @@ for model revisions, exact versus token-match results, timing limits and the nex
 gate: evaluate numeric handwriting on varied consented fields with false-positive
 controls before selecting an on-device implementation. Handwritten field acceptance
 remains open; explicit correction remains required.
+
+## Lightweight OCR candidates and field scoring — 19 October 2026
+
+Milestone `5b4cec6` adds test-only offline PP-OCR runners, 28 generated printed/
+blank/invalid-field controls and strict field scoring. Two pinned official models
+each processed 12 private crop variants plus these 28 controls. Neither recovered
+the real handwritten fields. The English model produced one valid-looking wrong
+amount with raw character score approximately 0.946; this is not calibrated
+financial confidence. Neither model is integrated into PesoFlow.
+
+The owner confirmed only the existing Skyline receipt is available. Broader
+handwriting accuracy remains unverified; repeated crops and synthetic controls
+are not independent receipt samples. The new scorer distinguishes exact text,
+correct values, wrong values, unparsable output and negative-control false positives.
+It is test infrastructure, not a production parser or automatic financial writer.
+
+Verification: 8 Python scoring regressions PASS; Python formatting/compilation
+PASS; Dart formatting PASS (167 files); Flutter analysis PASS; **252 Flutter tests
+including 31 goldens PASS**. Production builds and backend checks were not repeated
+for Python test tooling. No app UI, runtime dependencies, finances, schema or keys
+changed. See the [candidate evaluation](verification/receipt-ocr-lightweight-evaluation-20261019.md)
+for measured failures and limitations. Keep manual field confirmation; broader
+consented examples are needed before promoting a replacement handwriting engine.
