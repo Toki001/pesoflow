@@ -502,3 +502,22 @@ and navigation. Instructions were delivered after the restart check. Actual spok
 announcements are awaiting owner feedback; automated semantics checks are separate.
 System reduced-motion route/sheet behavior passes widget tests in both modes;
 physical reduced-motion gestures/native plugin dialogs are not yet verified.
+
+## 19 October 2026 — glass materials and form controls
+
+Updated the existing Redmi in place with `adb install -r` (Success). A private
+pre-update baseline of visible Home monetary labels matched after the update.
+Native visual review confirmed ambient blue backgrounds, translucent cards,
+aligned Spending/Income metrics, the floating dock and readable system icons.
+After a brief USB interruption and debugging reconnection, opened Add Expense
+without entering or saving data. Confirmed large amount typography, equally sized
+category tiles with wrapped labels, inset merchant/notes fields and a rounded blue
+gradient Save action. Closed the untouched form and cold-restarted only PesoFlow;
+visible Home monetary labels still matched the pre-update baseline.
+
+Deleted temporary private screenshots and the baseline after comparison. No
+financial commands, preference changes, reset, uninstall or gallery edits were
+issued. This verifies visible Home values, not every stored record. Dark-theme
+materials were reviewed in Flutter captures; a physical theme switch and iPhone
+runtime check were not performed. Formatting/analysis, 297 Flutter tests including
+31 goldens, APK/AAB and unsigned iOS compilation passed for this UI milestone.

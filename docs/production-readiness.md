@@ -508,5 +508,9 @@ not rerun. Development signing and physical-iPhone/simulator limits remain.
 The Redmi received an in-place update. Visible Home monetary labels matched the
 private pre-update baseline. A native capture confirmed the new background/card
 materials, readable system icons, aligned metric pair and floating dock. USB
-disconnected before the Add-form and cold-restart checks; those checks remain
-pending at this checkpoint. No financial writes, reset or reseeding were issued.
+briefly disconnected, then the owner restored debugging. Add Expense review
+confirmed the large amount placeholder, equal wrapped-label category tiles, inset
+merchant/notes fields and blue pill Save action. The untouched form was closed;
+visible Home values still matched after a cold restart. Temporary captures and
+the private baseline were deleted. No financial writes, reset or reseeding were
+issued. Physical dark-theme and iPhone verification were not repeated.
