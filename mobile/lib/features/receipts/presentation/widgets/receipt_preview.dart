@@ -31,7 +31,7 @@ Future<void> showReceiptImage(BuildContext context, Uint8List bytes) =>
                 child: IconButton(
                   tooltip: 'Close image',
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: AppColors.primary),
+                  icon: const Icon(Icons.close),
                 ),
               ),
               Expanded(

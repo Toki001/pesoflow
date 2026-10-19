@@ -30,16 +30,16 @@ class FrostedPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         child: BackdropFilter(
           enabled: !solid,
-          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
           child: DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  c.surface.withValues(alpha: solid ? 1 : .28),
+                  c.surface.withValues(alpha: solid ? 1 : .54),
                   (c.isDark ? const Color(0xFF172B49) : const Color(0xFFB9D4F4))
-                      .withValues(alpha: solid ? 1 : .12),
+                      .withValues(alpha: solid ? 1 : .32),
                 ],
               ),
             ),

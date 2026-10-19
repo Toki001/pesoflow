@@ -8,6 +8,7 @@ import '../../../../core/widgets/category_icon.dart';
 import '../../../../core/widgets/finance_card.dart';
 import '../../../transactions/domain/transaction.dart';
 import '../../domain/budget_plan.dart';
+import '../../../transactions/presentation/category_color.dart';
 
 class BudgetCategoryCard extends StatelessWidget {
   const BudgetCategoryCard({
@@ -57,8 +58,11 @@ class BudgetCategoryCard extends StatelessWidget {
                 children: [
                   CategoryIcon(
                     icon,
-                    foreground: c.primary,
-                    background: c.primary.withValues(alpha: .08),
+                    foreground: categoryColor(a.category, c),
+                    background: categoryColor(
+                      a.category,
+                      c,
+                    ).withValues(alpha: .10),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

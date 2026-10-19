@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/app/shell/app_shell.dart';
+import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/core/widgets/compact_segments.dart';
 import 'package:pesoflow/features/analytics/application/analytics_provider.dart';
 import 'package:pesoflow/features/analytics/domain/analytics_report.dart';
 
@@ -8,6 +10,32 @@ import 'fixtures/stitch_v7_fixture.dart';
 import 'production_app_test.dart' as app;
 
 void main() {
+  testWidgets('compact segments keep 48px targets around a slim selection', (
+    tester,
+  ) async {
+    int? selected;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CompactSegments<int>(
+            options: const {0: 'Daily', 1: 'Weekly'},
+            selected: 0,
+            onSelected: (value) => selected = value,
+          ),
+        ),
+      ),
+    );
+    final tap = find
+        .ancestor(of: find.text('Weekly'), matching: find.byType(InkWell))
+        .first;
+    expect(tester.getSize(tap).height, greaterThanOrEqualTo(48));
+    final pill = find
+        .ancestor(of: find.text('Daily'), matching: find.byType(DecoratedBox))
+        .first;
+    expect(tester.getSize(pill).height, lessThan(40));
+    await tester.tap(tap);
+    expect(selected, 1);
+  });
   for (final theme in [ThemeMode.light, ThemeMode.dark]) {
     testWidgets('analytics date remains usable at large text in $theme', (
       tester,
@@ -156,6 +184,10 @@ void main() {
               ),
               matching: find.byType(Icon),
             ),
+          );
+          expect(
+            icon.color,
+            selected == index ? Colors.white : const FinancePalette(false).icon,
           );
           expect(
             icon.icon,

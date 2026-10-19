@@ -69,7 +69,7 @@ class _FinanceStorageBoundaryState extends ConsumerState<FinanceStorageBoundary>
                           .read(financeControllerProvider.notifier)
                           .dismissError(),
                       tooltip: 'Dismiss save message',
-                      icon: const Icon(Icons.close, color: AppColors.primary),
+                      icon: const Icon(Icons.close),
                     ),
                   ],
                 ),

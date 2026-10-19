@@ -120,7 +120,7 @@ class _BudgetPair extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         if (!overall) ...[
-          Icon(Icons.circle, size: 8, color: AppColors.primary),
+          Icon(Icons.circle, size: 8),
           const SizedBox(width: 6),
         ],
         Flexible(

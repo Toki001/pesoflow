@@ -1,4 +1,3 @@
-import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,7 +28,7 @@ class SubscriptionsScreen extends ConsumerWidget {
           onPressed: state.hasValue
               ? () => showSubscriptionEditor(context)
               : null,
-          icon: const Icon(Icons.add, size: 18, color: AppColors.primary),
+          icon: const Icon(Icons.add, size: 18),
           label: const Text('Add'),
         ),
       ],
@@ -130,16 +129,10 @@ class SubscriptionsScreen extends ConsumerWidget {
                 child: ListTile(
                   key: const ValueKey('subscription-history'),
                   contentPadding: EdgeInsets.zero,
-                  leading: const Icon(
-                    Icons.receipt_long_outlined,
-                    color: AppColors.primary,
-                  ),
+                  leading: const Icon(Icons.receipt_long_outlined),
                   title: const Text('Subscription History'),
                   subtitle: const Text('View recorded recurring charges'),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: AppColors.primary,
-                  ),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () => showSubscriptionHistory(context),
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_motion.dart';
 import 'app_materials.dart';
 import 'app_radius.dart';
 import 'app_typography.dart';
@@ -89,7 +90,14 @@ abstract final class AppTheme {
                   platform: const _StaticPageTransitionsBuilder(),
               },
             )
-          : const PageTransitionsTheme(),
+          : PageTransitionsTheme(
+              builders: {
+                for (final platform in TargetPlatform.values)
+                  platform: platform == TargetPlatform.iOS
+                      ? const FinanceCupertinoPageTransitionsBuilder()
+                      : const FinancePageTransitionsBuilder(),
+              },
+            ),
       brightness: brightness,
       fontFamily: 'Inter',
       scaffoldBackgroundColor: c.canvas,
@@ -147,13 +155,14 @@ abstract final class AppTheme {
       ),
       chipTheme: const ChipThemeData(shape: StadiumBorder()),
       dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
-      expansionTileTheme: const ExpansionTileThemeData(
-        iconColor: AppColors.primary,
-        collapsedIconColor: AppColors.primary,
+      expansionTileTheme: ExpansionTileThemeData(
+        iconColor: c.icon,
+        collapsedIconColor: c.icon,
       ),
-      iconTheme: const IconThemeData(color: AppColors.primary, size: 20),
+      iconTheme: IconThemeData(color: c.icon, size: 20),
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
+          foregroundColor: c.icon,
           backgroundColor: c.isDark
               ? c.canvas.withValues(alpha: .65)
               : c.primary.withValues(alpha: .06),

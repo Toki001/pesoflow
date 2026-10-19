@@ -133,9 +133,7 @@ class AppBottomNavigation extends StatelessWidget {
                                     width: 44,
                                     height: 32,
                                     decoration: BoxDecoration(
-                                      color: active
-                                          ? c.primary.withValues(alpha: .10)
-                                          : null,
+                                      color: active ? AppColors.primary : null,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Icon(
@@ -143,7 +141,7 @@ class AppBottomNavigation extends StatelessWidget {
                                           ? selectedIcons[index]
                                           : icons[index],
                                       size: 22,
-                                      color: c.iconOn(c.surface),
+                                      color: active ? Colors.white : c.icon,
                                     ),
                                   ),
                                 const SizedBox(height: 4),

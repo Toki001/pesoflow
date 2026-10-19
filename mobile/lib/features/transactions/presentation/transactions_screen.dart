@@ -171,10 +171,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                   IconButton(
                                     tooltip: 'Previous month',
                                     onPressed: () => changeMonth(-1),
-                                    icon: const Icon(
-                                      Icons.chevron_left,
-                                      color: AppColors.primary,
-                                    ),
+                                    icon: const Icon(Icons.chevron_left),
                                   ),
                                   Expanded(
                                     child: TextButton(
@@ -198,7 +195,6 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                           const Icon(
                                             Icons.expand_more,
                                             size: 16,
-                                            color: AppColors.primary,
                                           ),
                                         ],
                                       ),
@@ -207,10 +203,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                   IconButton(
                                     tooltip: 'Next month',
                                     onPressed: () => changeMonth(1),
-                                    icon: const Icon(
-                                      Icons.chevron_right,
-                                      color: AppColors.primary,
-                                    ),
+                                    icon: const Icon(Icons.chevron_right),
                                   ),
                                 ],
                               ),
@@ -288,10 +281,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           style: AppTypography.bodyMedium,
                           decoration: InputDecoration(
                             hintText: 'Search merchant, note, or amount...',
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: AppColors.primary,
-                            ),
+                            prefixIcon: const Icon(Icons.search),
                             suffixIcon: IconButton(
                               tooltip: 'Clear search',
                               style: IconButton.styleFrom(
@@ -302,11 +292,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                 search.clear();
                                 setQuery(query.copyWith(search: ''));
                               },
-                              icon: const Icon(
-                                Icons.close,
-                                size: 18,
-                                color: AppColors.primary,
-                              ),
+                              icon: const Icon(Icons.close, size: 18),
                             ),
                             filled: true,
                             border: OutlineInputBorder(
@@ -369,11 +355,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                             padding: const EdgeInsets.symmetric(vertical: 32),
                             child: Column(
                               children: [
-                                Icon(
-                                  Icons.search_off,
-                                  color: AppColors.primary,
-                                  size: 32,
-                                ),
+                                Icon(Icons.search_off, size: 32),
                                 const SizedBox(height: 12),
                                 Text(
                                   'No transactions found',
@@ -440,19 +422,13 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                         FinanceCard(
                           child: ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              Icons.description_outlined,
-                              color: AppColors.primary,
-                            ),
+                            leading: Icon(Icons.description_outlined),
                             title: const Text('Transaction report'),
                             subtitle: const Text(
                               'Export all saved records as CSV',
                             ),
                             onTap: () => exportTransactions(context, ref),
-                            trailing: const Icon(
-                              Icons.file_download_outlined,
-                              color: AppColors.primary,
-                            ),
+                            trailing: const Icon(Icons.file_download_outlined),
                           ),
                         ),
                       ],

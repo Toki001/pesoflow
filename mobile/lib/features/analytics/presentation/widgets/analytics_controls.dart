@@ -1,71 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../app/theme/app_colors.dart';
-import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_typography.dart';
+import '../../../../core/widgets/compact_segments.dart';
 
-/// The approved Analytics segmented controls, with native 48px targets.
-class AnalyticsSegments<T> extends StatelessWidget {
+class AnalyticsSegments<T> extends CompactSegments<T> {
   const AnalyticsSegments({
-    required this.options,
-    required this.selected,
-    required this.onSelected,
+    required super.options,
+    required super.selected,
+    required super.onSelected,
     super.key,
   });
-  final Map<T, String> options;
-  final T selected;
-  final ValueChanged<T> onSelected;
-  @override
-  Widget build(BuildContext context) {
-    final c = context.colors;
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        color: c.surface.withValues(alpha: .35),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: c.border),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          for (final entry in options.entries)
-            Flexible(
-              child: Semantics(
-                selected: selected == entry.key,
-                button: true,
-                child: InkWell(
-                  onTap: () => onSelected(entry.key),
-                  borderRadius: BorderRadius.circular(AppRadius.pill),
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 48,
-                      minWidth: 44,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6,
-                      vertical: 8,
-                    ),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: selected == entry.key ? AppColors.primary : null,
-                      borderRadius: BorderRadius.circular(AppRadius.pill),
-                    ),
-                    child: Text(
-                      entry.value,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: selected == entry.key
-                            ? Colors.white
-                            : c.mutedInk,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
 }
 
 class AnalyticsHeading extends StatelessWidget {

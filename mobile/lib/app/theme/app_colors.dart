@@ -19,8 +19,8 @@ abstract final class AppColors {
   static const danger = Color(0xFFDC2626);
   static const dangerSoft = Color(0xFFFEE2E2);
   static const ink = Color(0xFF111827);
-  static const inkSecondary = Color(0xFF43536B);
-  static const inkMuted = Color(0xFF43536B);
+  static const inkSecondary = Color(0xFF596779);
+  static const inkMuted = Color(0xFF596779);
   static const surface = Color(0xFFFFFFFF);
   static const surfaceSubtle = Color(0xFFF5F7FC);
   static const surfaceMuted = Color(0xFFF3F4F6);
@@ -31,7 +31,7 @@ abstract final class AppColors {
   static const darkSurfaceMuted = Color(0xFF1A2A44);
   static const darkInk = Color(0xFFF7F8FA);
   static const darkInkSecondary = Color(0xFFCBD5E1);
-  static const darkInkMuted = Color(0xFFAFBDD0);
+  static const darkInkMuted = Color(0xFFBBC6D5);
   static const darkBorder = Color(0xFF334155);
 
   // Compatibility aliases for shared widgets; v7 uses one interaction blue.
@@ -77,12 +77,12 @@ class FinancePalette {
   Color get accentBorder => isDark
       ? AppColors.accent.withValues(alpha: .4)
       : AppColors.stitchAccentBorder;
-  // Icons stay blue. Resolve against the actual badge surface so pale buttons
-  // retain brand blue even when the surrounding app is dark.
+  Color get icon => isDark ? const Color(0xFFB8C4D3) : const Color(0xFF64748B);
+  // Neutral chrome follows the actual surface, including pale badges in Dark.
   Color iconOn(Color background) =>
       Color.alphaBlend(background, surface).computeLuminance() < .15
-      ? AppColors.darkIcon
-      : AppColors.primary;
+      ? const Color(0xFFB8C4D3)
+      : const Color(0xFF64748B);
 
   Color progress(Color foreground) {
     if (isDark) return foreground;

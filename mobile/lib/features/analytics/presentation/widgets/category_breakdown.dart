@@ -9,9 +9,18 @@ import '../../../../core/widgets/category_icon.dart';
 import '../../../../core/widgets/finance_card.dart';
 import '../../domain/analytics_report.dart';
 import 'analytics_controls.dart';
+import '../../../transactions/presentation/category_color.dart' as ledger;
+import '../../../transactions/domain/transaction.dart';
 
 Color categoryColor(AnalyticsCategory category, FinancePalette c) =>
-    Color.lerp(c.primary, c.border, category.index / 7)!;
+    ledger.categoryColor(switch (category) {
+      AnalyticsCategory.food => TransactionCategory.food,
+      AnalyticsCategory.shopping => TransactionCategory.shopping,
+      AnalyticsCategory.transport => TransactionCategory.transport,
+      AnalyticsCategory.bills => TransactionCategory.bills,
+      AnalyticsCategory.subscriptions => TransactionCategory.subscriptions,
+      AnalyticsCategory.other => TransactionCategory.other,
+    }, c);
 
 class CategoryBreakdown extends StatelessWidget {
   const CategoryBreakdown(
@@ -152,7 +161,6 @@ class _CategoryRow extends StatelessWidget {
               Icon(
                 trend < 0 ? Icons.trending_down : Icons.trending_up,
                 size: 12,
-                color: AppColors.primary,
               ),
               Text(
                 '${trend.abs()}%',
@@ -198,7 +206,7 @@ class _CategoryRow extends StatelessWidget {
               foreground: item.category == AnalyticsCategory.other
                   ? c.mutedInk
                   : foreground,
-              background: c.primary.withValues(alpha: .08),
+              background: foreground.withValues(alpha: .10),
               size: 36,
               iconSize: 18,
             ),

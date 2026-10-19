@@ -7,6 +7,7 @@ import 'package:pesoflow/app/theme/app_materials.dart';
 import 'package:pesoflow/core/widgets/frosted_panel.dart';
 import 'package:pesoflow/features/dashboard/presentation/widgets/balance_summary.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
+import 'package:pesoflow/features/transactions/presentation/category_color.dart';
 
 import 'fixtures/finance_workspace_fixture.dart';
 import 'fixtures/stitch_v7_fixture.dart';
@@ -31,6 +32,14 @@ void main() {
               for (final color in glow.colors) Color.alphaBlend(color, base),
           ];
         }
+        backdrops = [
+          for (final base in backdrops)
+            for (final wave in [
+              Colors.transparent,
+              ...AppMaterials.waveColors(dark),
+            ])
+              Color.alphaBlend(wave, base),
+        ];
         for (final backdrop in backdrops) {
           for (final tint in AppMaterials.card(dark, solid: false).colors) {
             final surface = Color.alphaBlend(tint, backdrop);
@@ -42,6 +51,8 @@ void main() {
               c.positive,
               c.warning,
               c.danger,
+              for (final category in TransactionCategory.values)
+                categoryColor(category, c),
             ]) {
               expect(
                 contrast(ink, surface),
@@ -71,14 +82,17 @@ void main() {
       }
     },
   );
-  test('header icon wells preserve readable brand blue in both themes', () {
+  test('neutral header icons remain readable in both themes', () {
     for (final theme in [AppTheme.light, AppTheme.dark]) {
       final background = theme.iconButtonTheme.style!.backgroundColor!.resolve(
         {},
       )!;
       final canvas = FinancePalette(theme.brightness == Brightness.dark).canvas;
       expect(
-        contrast(AppColors.primary, Color.alphaBlend(background, canvas)),
+        contrast(
+          FinancePalette(theme.brightness == Brightness.dark).icon,
+          Color.alphaBlend(background, canvas),
+        ),
         greaterThanOrEqualTo(3),
       );
     }

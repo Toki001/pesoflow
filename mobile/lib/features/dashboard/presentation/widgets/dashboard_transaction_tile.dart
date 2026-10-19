@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../../../transactions/presentation/category_color.dart';
+
 import 'package:go_router/go_router.dart';
 
 import 'package:pesoflow/app/theme/app_colors.dart';
@@ -55,8 +58,11 @@ class DashboardTransactionTile extends StatelessWidget {
               transaction.kind == TransactionKind.income ||
               transaction.kind == TransactionKind.refund,
           icon: icon,
-          iconColor: c.primary,
-          iconBackground: c.primary.withValues(alpha: .08),
+          iconColor: categoryColor(transaction.category, c),
+          iconBackground: categoryColor(
+            transaction.category,
+            c,
+          ).withValues(alpha: .10),
         ),
       ),
     );

@@ -235,3 +235,27 @@ palette: white/ice blue in Light, deep navy in Dark. Their color remains visible
 through the existing transparent cards. Shapes are background decoration only;
 screen composition, controls, typography and financial data remain unchanged.
 High contrast retains its flat background.
+
+### Wave glass and semantic color refinement — 20 October 2026
+
+The owner's wave/liquid-glass references supersede the earlier orb background and
+blue-only chrome. Native static cubic ribbon paths with translucent highlights
+sit over the ambient blue/cyan canvas; Light stays white/ice blue and Dark navy.
+Section panels now use 38–62% Light / 26–38% Dark tints and 12px clipped grouped
+blur; the floating dock uses 16px blur. This is a layered glass treatment, not a
+physical refraction simulation. No screenshot assets or animated blur are used.
+
+Analytics and Budget segments share a slimmer raised surface pill within a muted
+track, blue selected text and 48px interaction targets. Gray chrome recedes behind
+financial content. Selected dock tiles are solid blue with white icons. Gray text
+is softer while retaining the composited-background contrast checks.
+
+Food/orange, shopping/violet, bills/teal, subscriptions/indigo and transport/blue
+identify categories consistently in entry, transactions, budgets and Analytics;
+other stays neutral. Green income/refunds and amber/red budget risk retain their
+financial meaning. Amounts, labels and legends accompany colors. The Home blue
+card now has a compact wallet/title row, directional cash-flow label, a subtle
+light reflection and an account-count/month footer, all from actual projections.
+
+Task transitions keep native geometry/back behavior with 250ms entrance and 200ms
+exit. Tabs and filters remain instant. See the [motion review](verification/ui-ux-review-20261020.md).

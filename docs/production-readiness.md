@@ -617,3 +617,29 @@ theme switching and the final cold restart. Selected Light again before completi
 the check. No financial commands, resets, uninstall, reseeding or gallery edits
 were issued. Private device captures and the baseline were deleted. This check
 covers visible Home values, not every stored record.
+
+## Wave glass, compact controls and motion refinement — 20 October 2026
+
+The owner's new references authorize static blue/cyan wave contours, stronger
+translucent section panels (38–62% Light / 26–38% Dark tint, 12px blur) and a 16px
+blurred dock. Light remains white/ice blue; Dark remains navy. No animated blur or
+background assets are used. Ordinary chrome is gray; selected dock tiles are blue
+with white icons. Shared Analytics/Budget filters have slimmer surface pills with
+blue selected text and full touch targets. Secondary gray text is softened while
+retaining contrast. The Home balance card has a compact title/action row,
+directional net flow, reflection and actual account-count/month footer.
+
+Stable category colors now connect entry tiles, transaction rows, budget badges
+and Analytics legends; green income/refunds and amber/red budget risk remain
+semantic. Categories remain labeled; no financial calculation changes. Native task
+navigation now enters in 250ms and exits in 200ms, retaining Android predictive-back
+and Cupertino builders. Existing sheets, instant tab/filter changes and static
+reduced-motion behavior are retained. See the [review](verification/ui-ux-review-20261020.md).
+
+Formatting PASS (181 files), analysis PASS, **303 Flutter tests including 31 golden
+comparisons PASS**. Added slim-pill/touch-target and mid-transition reversal
+regressions; updated neutral-icon/nav expectations and expanded contrast coverage
+to wave colors and all category foregrounds. Refreshed Home, Analytics, Add and
+Budgets renders were inspected. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS
+compilation PASS. No dependency, financial engine, persistence/schema/key or backend
+changes. Backend not rerun; development signing and physical-iPhone limits remain.

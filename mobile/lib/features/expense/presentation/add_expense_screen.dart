@@ -1,3 +1,4 @@
+import '../../transactions/presentation/category_color.dart';
 import 'widgets/transaction_type_selector.dart';
 
 import 'package:flutter/material.dart';
@@ -241,9 +242,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
             ))
               ListTile(
                 title: Text(categoryLabel(c)),
-                trailing: c == category
-                    ? const Icon(Icons.check, color: AppColors.primary)
-                    : null,
+                trailing: c == category ? const Icon(Icons.check) : null,
                 onTap: () => Navigator.pop(context, c),
               ),
           ],
@@ -437,10 +436,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         IconButton(
           tooltip: 'Scan receipt',
           onPressed: saving ? null : () => context.push('/receipt'),
-          icon: const Icon(
-            Icons.receipt_long_outlined,
-            color: AppColors.primary,
-          ),
+          icon: const Icon(Icons.receipt_long_outlined),
         ),
       ],
       footer: Container(
@@ -665,10 +661,11 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                                         children: [
                                           CategoryIcon(
                                             categoryIcon(item),
-                                            foreground: c.primary,
-                                            background: c.primary.withValues(
-                                              alpha: .08,
-                                            ),
+                                            foreground: categoryColor(item, c),
+                                            background: categoryColor(
+                                              item,
+                                              c,
+                                            ).withValues(alpha: .08),
                                           ),
                                           const SizedBox(height: 10),
                                           SizedBox(
@@ -729,10 +726,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             maxLength: 100,
                             decoration: const InputDecoration(
                               hintText: 'Name',
-                              prefixIcon: Icon(
-                                Icons.storefront_outlined,
-                                color: AppColors.primary,
-                              ),
+                              prefixIcon: Icon(Icons.storefront_outlined),
                               counterText: '',
                             ),
                             validator: (v) => (v ?? '').trim().isEmpty
@@ -747,20 +741,14 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           children: [
                             OutlinedButton.icon(
                               onPressed: pickDate,
-                              icon: const Icon(
-                                Icons.calendar_today_outlined,
-                                color: AppColors.primary,
-                              ),
+                              icon: const Icon(Icons.calendar_today_outlined),
                               label: Text(
                                 DateFormat('MMM d, yyyy').format(date),
                               ),
                             ),
                             OutlinedButton.icon(
                               onPressed: pickTime,
-                              icon: const Icon(
-                                Icons.schedule_outlined,
-                                color: AppColors.primary,
-                              ),
+                              icon: const Icon(Icons.schedule_outlined),
                               label: Text(DateFormat('h:mm a').format(date)),
                             ),
                           ],
@@ -783,18 +771,12 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                           const SizedBox(height: 16),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: Icon(
-                              Icons.add_photo_alternate_outlined,
-                              color: AppColors.primary,
-                            ),
+                            leading: Icon(Icons.add_photo_alternate_outlined),
                             title: const Text('Scan a receipt'),
                             subtitle: const Text(
                               'Review a photo and save its expense',
                             ),
-                            trailing: const Icon(
-                              Icons.chevron_right,
-                              color: AppColors.primary,
-                            ),
+                            trailing: const Icon(Icons.chevron_right),
                             onTap: () => context.push('/receipt'),
                           ),
                         ],

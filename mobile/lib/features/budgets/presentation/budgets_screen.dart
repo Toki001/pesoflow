@@ -1,3 +1,5 @@
+import '../../../core/widgets/compact_segments.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -61,9 +63,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
             ])
               ListTile(
                 title: Text(label),
-                trailing: sort == value
-                    ? const Icon(Icons.check, color: AppColors.primary)
-                    : null,
+                trailing: sort == value ? const Icon(Icons.check) : null,
                 onTap: () => Navigator.pop(context, value),
               ),
           ],
@@ -208,11 +208,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                           TextButton.icon(
                             onPressed: () =>
                                 showBudgetEditor(context, plan, creating: true),
-                            icon: const Icon(
-                              Icons.add,
-                              size: 18,
-                              color: AppColors.primary,
-                            ),
+                            icon: const Icon(Icons.add, size: 18),
                             label: const Text('New'),
                           ),
                         ],
@@ -230,65 +226,21 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                           alignment: Alignment.centerRight,
                           child: TextButton.icon(
                             onPressed: chooseSort,
-                            icon: const Icon(
-                              Icons.sort,
-                              size: 18,
-                              color: AppColors.primary,
-                            ),
+                            icon: const Icon(Icons.sort, size: 18),
                             label: const Text('Sort budgets'),
                           ),
                         ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              for (final (value, label, count) in [
-                                (
-                                  BudgetFilter.all,
-                                  'All',
-                                  plan.allowances.length,
-                                ),
-                                (BudgetFilter.atRisk, 'At Risk', risk),
-                                (
-                                  BudgetFilter.onTrack,
-                                  'On Track',
-                                  plan.allowances.length - risk,
-                                ),
-                              ])
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  child: Semantics(
-                                    selected: filter == value,
-                                    button: true,
-                                    child: OutlinedButton(
-                                      key: ValueKey(
-                                        'budget-filter-${value.name}',
-                                      ),
-                                      onPressed: () =>
-                                          setState(() => filter = value),
-                                      style: OutlinedButton.styleFrom(
-                                        backgroundColor: filter == value
-                                            ? AppColors.primary
-                                            : c.primary.withValues(alpha: .06),
-                                        foregroundColor: filter == value
-                                            ? Colors.white
-                                            : c.primary,
-                                        side: BorderSide(
-                                          color: filter == value
-                                              ? AppColors.primary
-                                              : c.primary.withValues(alpha: .2),
-                                        ),
-                                        shape: const StadiumBorder(),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                        ),
-                                      ),
-                                      child: Text('$label  $count'),
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
+                        CompactSegments<BudgetFilter>(
+                          options: {
+                            BudgetFilter.all: 'All  ${plan.allowances.length}',
+                            BudgetFilter.atRisk: 'At Risk  $risk',
+                            BudgetFilter.onTrack:
+                                'On Track  ${plan.allowances.length - risk}',
+                          },
+                          selected: filter,
+                          itemKey: (value) =>
+                              ValueKey('budget-filter-${value.name}'),
+                          onSelected: (value) => setState(() => filter = value),
                         ),
                         const SizedBox(height: 12),
                         if (visible.isEmpty)
@@ -327,16 +279,10 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                         padding: EdgeInsets.zero,
                         child: ListTile(
                           key: const ValueKey('open-subscriptions'),
-                          leading: const Icon(
-                            Icons.event_repeat_outlined,
-                            color: AppColors.primary,
-                          ),
+                          leading: const Icon(Icons.event_repeat_outlined),
                           title: const Text('Subscriptions & Bills'),
                           subtitle: const Text('Manage recurring commitments'),
-                          trailing: const Icon(
-                            Icons.chevron_right,
-                            color: AppColors.primary,
-                          ),
+                          trailing: const Icon(Icons.chevron_right),
                           onTap: () => context.push('/budgets/subscriptions'),
                         ),
                       ),

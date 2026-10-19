@@ -8,6 +8,7 @@ import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/category_icon.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../domain/transaction.dart';
+import 'category_color.dart';
 
 /// Compact row used by the approved Transactions feed, distinct from Home.
 class TransactionListRow extends StatelessWidget {
@@ -33,8 +34,8 @@ class TransactionListRow extends StatelessWidget {
       TransactionCategory.subscriptions => Icons.smart_display_outlined,
       _ => Icons.receipt_long_outlined,
     };
-    final foreground = c.primary;
-    final background = c.primary.withValues(alpha: .08);
+    final foreground = categoryColor(t.category, c);
+    final background = foreground.withValues(alpha: .10);
     final (
       badge,
       badgeColor,
@@ -118,7 +119,7 @@ class TransactionListRow extends StatelessWidget {
                       ],
                       if (t.recurring) ...[
                         const SizedBox(width: 6),
-                        Icon(Icons.sync, size: 14, color: AppColors.primary),
+                        Icon(Icons.sync, size: 14),
                       ],
                     ],
                   ),

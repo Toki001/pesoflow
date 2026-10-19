@@ -59,11 +59,7 @@ class ReceiptMerchantCard extends StatelessWidget {
               IconButton(
                 tooltip: 'Edit merchant name',
                 onPressed: onMerchant,
-                icon: Icon(
-                  Icons.edit_outlined,
-                  size: 16,
-                  color: AppColors.primary,
-                ),
+                icon: Icon(Icons.edit_outlined, size: 16),
               ),
             ],
           ),
@@ -82,11 +78,7 @@ class ReceiptMerchantCard extends StatelessWidget {
                     final date = Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 16,
-                          color: AppColors.primary,
-                        ),
+                        Icon(Icons.calendar_today_outlined, size: 16),
                         const SizedBox(width: 6),
                         Flexible(
                           child: Text(
@@ -100,11 +92,7 @@ class ReceiptMerchantCard extends StatelessWidget {
                     final parsed = Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
-                          Icons.verified_outlined,
-                          size: 14,
-                          color: AppColors.primary,
-                        ),
+                        Icon(Icons.verified_outlined, size: 14),
                         const SizedBox(width: 4),
                         Text(
                           draft.evidence?.confirmed == true
@@ -350,11 +338,7 @@ class ReceiptTotalsCard extends StatelessWidget {
           if (onEdit != null)
             TextButton.icon(
               onPressed: onEdit,
-              icon: const Icon(
-                Icons.edit_outlined,
-                size: 16,
-                color: AppColors.primary,
-              ),
+              icon: const Icon(Icons.edit_outlined, size: 16),
               label: const Text('Edit totals & currency'),
             ),
           Text(
@@ -427,7 +411,7 @@ class ReceiptAssignments extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Icon(Icons.expand_more, size: 18, color: AppColors.primary),
+                  Icon(Icons.expand_more, size: 18),
                 ],
               ),
             ],

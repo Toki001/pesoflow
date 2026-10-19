@@ -80,7 +80,6 @@ class TransactionDetailScreen extends ConsumerWidget {
                               ? Icons.schedule
                               : Icons.check,
                           size: 13,
-                          color: AppColors.primary,
                         ),
                       ),
                     ),
@@ -251,16 +250,10 @@ class TransactionDetailScreen extends ConsumerWidget {
                 color: c.surface,
                 child: ListTile(
                   contentPadding: EdgeInsets.zero,
-                  leading: Icon(
-                    Icons.receipt_long_outlined,
-                    color: AppColors.primary,
-                  ),
+                  leading: Icon(Icons.receipt_long_outlined),
                   title: const Text('Reviewed receipt'),
                   subtitle: const Text('View image and extracted details'),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: AppColors.primary,
-                  ),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: () => context.push('/receipts/$id'),
                 ),
               ),
@@ -291,7 +284,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                   builder: (_) => AddExpenseScreen(transaction: t),
                 ),
               ),
-              icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+              icon: const Icon(Icons.edit_outlined),
               label: const Text('Edit Details'),
             ),
           if (t.kind == TransactionKind.expense) ...[

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 import '../../features/notifications/presentation/widgets/notification_button.dart';
 
@@ -25,7 +24,7 @@ class MainAppBar extends StatelessWidget {
         IconButton(
           tooltip: 'Settings',
           onPressed: () => context.push('/settings'),
-          icon: const Icon(Icons.settings_outlined, color: AppColors.primary),
+          icon: const Icon(Icons.settings_outlined),
         ),
       ],
     ),

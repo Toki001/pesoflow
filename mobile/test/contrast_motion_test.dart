@@ -54,35 +54,34 @@ void main() {
       }
     });
   }
-  testWidgets(
-    'dark badges use readable blue while pale badges retain brand blue',
-    (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.dark,
-          home: Scaffold(
-            body: Row(
-              children: [
-                CategoryIcon(
-                  Icons.home,
-                  foreground: AppColors.primary,
-                  background: AppColors.darkSurfaceMuted,
-                ),
-                CategoryIcon(
-                  Icons.home,
-                  foreground: AppColors.primary,
-                  background: AppColors.primarySoft,
-                ),
-              ],
-            ),
+  testWidgets('neutral badge icons resolve against dark and pale surfaces', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.dark,
+        home: Scaffold(
+          body: Row(
+            children: [
+              CategoryIcon(
+                Icons.home,
+                foreground: AppColors.primary,
+                background: AppColors.darkSurfaceMuted,
+              ),
+              CategoryIcon(
+                Icons.home,
+                foreground: AppColors.primary,
+                background: AppColors.primarySoft,
+              ),
+            ],
           ),
         ),
-      );
-      final icons = tester.widgetList<Icon>(find.byIcon(Icons.home)).toList();
-      expect(icons[0].color, AppColors.darkIcon);
-      expect(icons[1].color, AppColors.primary);
-    },
-  );
+      ),
+    );
+    final icons = tester.widgetList<Icon>(find.byIcon(Icons.home)).toList();
+    expect(icons[0].color, const Color(0xFFB8C4D3));
+    expect(icons[1].color, const Color(0xFF64748B));
+  });
   testWidgets(
     'navigation announces one label, selected state and actionable tap',
     (tester) async {
@@ -146,6 +145,20 @@ void main() {
       handle.dispose();
     }
   });
+  testWidgets('task navigation can reverse before its entrance finishes', (
+    tester,
+  ) async {
+    final container = await app.pumpApp(tester);
+    final router = container.read(routerProvider);
+    unawaited(router.push('/settings'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 80));
+    router.pop();
+    await tester.pumpAndSettle();
+    expect(find.byType(AppBottomNavigation), findsOneWidget);
+    expect(find.text('PesoFlow'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
   for (final reduce in [false, true]) {
     testWidgets('system reduced motion=$reduce controls route and sheet', (
       tester,
@@ -162,6 +175,13 @@ void main() {
           .pageTransitionsTheme
           .builders[TargetPlatform.android]!;
       expect(builder.transitionDuration == Duration.zero, reduce);
+      if (!reduce) {
+        expect(builder.transitionDuration, const Duration(milliseconds: 250));
+        expect(
+          builder.reverseTransitionDuration,
+          const Duration(milliseconds: 200),
+        );
+      }
       unawaited(container.read(routerProvider).push('/settings'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Appearance'));

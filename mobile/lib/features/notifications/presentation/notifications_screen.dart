@@ -55,8 +55,8 @@ class NotificationsScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             DropdownButtonFormField<NoticeFilter>(
-              iconEnabledColor: AppColors.primary,
-              iconDisabledColor: AppColors.primary,
+              iconEnabledColor: c.icon,
+              iconDisabledColor: c.icon,
               key: ValueKey('notice-type-$filter'),
               initialValue: filter,
               isExpanded: true,

@@ -116,7 +116,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
           const SizedBox(width: 8),
           Flexible(child: Text(dateLabel, style: AppTypography.labelMedium)),
           const SizedBox(width: 8),
-          Icon(Icons.expand_more, size: 16, color: AppColors.primary),
+          Icon(Icons.expand_more, size: 16),
         ],
       ),
     );
@@ -145,10 +145,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                   onPressed: state.value == null
                       ? null
                       : () => preview(state.value!),
-                  icon: const Icon(
-                    Icons.summarize_outlined,
-                    color: AppColors.primary,
-                  ),
+                  icon: const Icon(Icons.summarize_outlined),
                 ),
               ],
             ),
@@ -205,11 +202,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.analytics_outlined,
-                              size: 32,
-                              color: AppColors.primary,
-                            ),
+                            Icon(Icons.analytics_outlined, size: 32),
                             const SizedBox(height: 12),
                             Text(
                               'No spending in this period',

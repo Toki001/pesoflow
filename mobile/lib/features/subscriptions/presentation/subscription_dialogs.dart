@@ -233,11 +233,7 @@ class _SubscriptionEditorState extends ConsumerState<_SubscriptionEditor> {
                   );
                   if (date != null && mounted) setState(() => renewal = date);
                 },
-                icon: const Icon(
-                  Icons.calendar_today_outlined,
-                  size: 18,
-                  color: AppColors.primary,
-                ),
+                icon: const Icon(Icons.calendar_today_outlined, size: 18),
                 label: Text(
                   'Next renewal: ${DateFormat('MMM d, yyyy').format(renewal)}',
                 ),

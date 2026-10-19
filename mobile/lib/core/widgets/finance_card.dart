@@ -49,7 +49,7 @@ class FinanceCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         child: BackdropFilter.grouped(
           enabled: glass,
-          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: color,

@@ -1,4 +1,3 @@
-import 'package:pesoflow/app/theme/app_colors.dart';
 import 'package:pesoflow/core/time/clock.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,7 +88,7 @@ class AccountDetailScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           OutlinedButton.icon(
             onPressed: () => showManualAccountEditor(context, account: a),
-            icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+            icon: const Icon(Icons.edit_outlined),
             label: const Text('Edit Account'),
           ),
           TextButton(

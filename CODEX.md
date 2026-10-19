@@ -69,18 +69,21 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-Light canvas white with ink #111827 and secondary text #43536B; Dark canvas
-#0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #AFBDD0.
+Light canvas white with ink #111827 and secondary text #596779; Dark canvas
+#0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #BBC6D5.
 Use blue-only gradients for prominent summary surfaces, restrained depth, and
 transparent floating navigation and clipped translucent cards over blue ambient
 backgrounds. Group non-overlapping card filters per route. Keep dense financial
-content readable;
-avoid decorative purple/teal accents and random icon colors. Dark mode preserves
+content readable. Category colors are stable identities: food orange, shopping
+violet, bills teal, subscriptions indigo, transport blue and other neutral.
+Income/refunds use green; risk and over-limit states use amber/red. Avoid random
+decorative accents. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
-Both appearances share soft blue orb forms inspired by the approved reference,
-partially cropped at the top and side edges. Light retains a white base;
+Both appearances share static blue/cyan wave ribbons inspired by the approved
+20 October reference. Light retains a white base;
 Dark retains a deep charcoal/navy base. Panels must be transparent rather than
-milky white: restrained 6–12% tint and 4px card blur, with 8px dock blur.
+milky white: directional 38–62% Light / 26–38% Dark tint and 12px card blur,
+with 16px dock blur. Do not animate background paths or blur.
 High contrast keeps opaque readable theme surfaces.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
@@ -90,13 +93,15 @@ Budgets, 72px within a floating panel plus safe area. Add is the single global c
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 
-Icons use blue consistently, including notification, navigation and receipt
-controls; use #60A5FA on dark badge surfaces where #2563EB lacks contrast.
+Ordinary header, receipt, account and navigation icons use neutral gray, resolved
+against their actual surface. Category badges may use their stable category color.
+Selected navigation tiles use #2563EB with white icons; inactive tiles remain gray.
 Readable foregrounds on charcoal use blue #93C5FD, success #86EFAC, warning
 #FBBF24 and error #FCA5A5. Light uses blue #1E40AF, success #166534, warning
 #92400E and error #991B1B. Primary fills and pale-surface icons retain #2563EB.
-Financial text and progress bars retain semantic colors. Selected period/filter
-controls use blue fills and white labels, never black/white selection styling.
+Financial text and progress bars retain semantic colors. Period/Budget filters
+use compact raised surface pills with blue selected text inside a muted track.
+Keep their 48px touch targets while making the visible pill slimmer.
 System bars derive icon brightness from the actual canvas luminance. Android's
 navigation bar is transparent without an automatic contrast scrim, allowing the
 app backdrop to show behind the system buttons.
@@ -108,6 +113,9 @@ white panels. Use directional tint/reflection gradients without perimeter outlin
 The dock has an additional 8px lift above its safe-area spacing. Navigation pointer
 taps have no splash/highlight overlay; keyboard focus remains visible in blue.
 Subscriptions & Bills is directly accessible from Budgets and Settings.
+Task routes retain native Android predictive-back/iOS transition behavior with
+250ms entrance and 200ms exit. Tabs/filters remain instant; reduced motion keeps
+its existing static routes/sheets. Do not add decorative entrance sequences.
 
 Share app bars, cards, amounts, rows, account/category selectors, inputs, buttons,
 filters, sheets, dialogs and loading/empty/error states. Avoid giant build methods

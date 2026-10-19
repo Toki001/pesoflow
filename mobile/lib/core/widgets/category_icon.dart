@@ -32,7 +32,11 @@ class CategoryIcon extends StatelessWidget {
     child: Icon(
       icon,
       size: iconSize ?? (size == 40 ? 20 : 18),
-      color: context.colors.iconOn(background),
+      color:
+          foreground == context.colors.primary ||
+              foreground == AppColors.primary
+          ? context.colors.iconOn(background)
+          : foreground,
     ),
   );
 }

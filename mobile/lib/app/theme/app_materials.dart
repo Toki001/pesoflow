@@ -13,64 +13,27 @@ abstract final class AppMaterials {
 
   static List<RadialGradient> backdropGlows(bool dark) => [
     RadialGradient(
-      center: const Alignment(.5, -1.1),
-      radius: .68,
-      stops: const [0, .44, .78, 1],
+      center: const Alignment(.8, -.8),
+      radius: 1.2,
       colors: [
-        (dark ? const Color(0xFF60A5FA) : const Color(0xFFE7F1FF)).withValues(
-          alpha: dark ? .02 : .15,
-        ),
-        (dark ? const Color(0xFF172F54) : const Color(0xFFDBEAFE)).withValues(
-          alpha: dark ? .55 : .50,
-        ),
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: dark ? .55 : .62,
-        ),
-        // Preserve the edge hue while fading to avoid a gray interpolation rim.
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: 0,
-        ),
+        const Color(0xFF38BDF8).withValues(alpha: dark ? .16 : .10),
+        const Color(0xFF38BDF8).withValues(alpha: 0),
       ],
     ),
     RadialGradient(
-      center: const Alignment(-1.22, .08),
-      radius: .64,
-      stops: const [0, .50, .80, 1],
+      center: const Alignment(-.9, .8),
+      radius: 1.1,
       colors: [
-        (dark ? const Color(0xFF60A5FA) : const Color(0xFFDBEAFE)).withValues(
-          alpha: dark ? .03 : .35,
-        ),
-        (dark ? const Color(0xFF172F54) : const Color(0xFFC7DDFB)).withValues(
-          alpha: dark ? .55 : .50,
-        ),
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: dark ? .52 : .55,
-        ),
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: 0,
-        ),
-      ],
-    ),
-    RadialGradient(
-      center: const Alignment(1.18, .72),
-      radius: .84,
-      stops: const [0, .50, .80, 1],
-      colors: [
-        (dark ? const Color(0xFF60A5FA) : const Color(0xFFE7F1FF)).withValues(
-          alpha: dark ? .02 : .20,
-        ),
-        (dark ? const Color(0xFF172F54) : const Color(0xFFBFDBFE)).withValues(
-          alpha: .55,
-        ),
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: dark ? .55 : .58,
-        ),
-        (dark ? const Color(0xFF1E3C70) : const Color(0xFFBFD7FA)).withValues(
-          alpha: 0,
-        ),
+        const Color(0xFF2563EB).withValues(alpha: dark ? .18 : .08),
+        const Color(0xFF2563EB).withValues(alpha: 0),
       ],
     ),
   ];
+
+  /// Each ribbon uses these same stops, including its translucent highlight.
+  static List<Color> waveColors(bool dark) => dark
+      ? const [Color(0x242D699E), Color(0x121A4169), Color(0x244B92C5)]
+      : const [Color(0x406FC8EC), Color(0x127BC5EB), Color(0x99FFFFFF)];
 
   static LinearGradient card(bool dark, {required bool solid}) {
     if (solid) {
@@ -83,14 +46,14 @@ abstract final class AppMaterials {
       stops: const [0, .32, 1],
       colors: dark
           ? [
-              const Color(0xFF5B7C9B).withValues(alpha: .12),
-              const Color(0xFF203D59).withValues(alpha: .08),
-              const Color(0xFF172943).withValues(alpha: .10),
+              const Color(0xFF385471).withValues(alpha: .38),
+              const Color(0xFF203D59).withValues(alpha: .26),
+              const Color(0xFF172943).withValues(alpha: .32),
             ]
           : [
-              const Color(0xFFBAD4F5).withValues(alpha: .12),
-              const Color(0xFFD2E5FF).withValues(alpha: .06),
-              const Color(0xFFB7D3F5).withValues(alpha: .10),
+              Colors.white.withValues(alpha: .62),
+              const Color(0xFFF2F8FF).withValues(alpha: .38),
+              const Color(0xFFE2F0FD).withValues(alpha: .48),
             ],
     );
   }

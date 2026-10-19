@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 
 import 'app_backdrop.dart';
 
-import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 
 /// Task-focused screens suppress bottom navigation, as approved in Stitch.
@@ -60,7 +59,7 @@ class TaskScreen extends StatelessWidget {
                             context.go(fallbackRoute);
                           }
                         },
-                        icon: Icon(backIcon, color: AppColors.primary),
+                        icon: Icon(backIcon),
                       ),
                       Expanded(
                         child: Semantics(
