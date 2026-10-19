@@ -643,3 +643,13 @@ to wave colors and all category foregrounds. Refreshed Home, Analytics, Add and
 Budgets renders were inspected. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS
 compilation PASS. No dependency, financial engine, persistence/schema/key or backend
 changes. Backend not rerun; development signing and physical-iPhone limits remain.
+
+The Redmi received an in-place update. Native captures confirmed Light Home,
+Analytics and Budgets styling, active blue/white navigation tiles and neutral
+chrome. Home was also reviewed in Dark, then Light was restored. All previously
+visible monetary values were retained after installation despite the compact Home
+layout exposing more content. The exact new-layout baseline matched after theme
+switching and the final cold restart. No financial commands/reset/reseed/uninstall
+or gallery edits were issued. Private captures/comparison data were removed. This
+is a visible-Home persistence check, not a complete record audit or frame-rate
+certification. See the [device report](verification/android-device-test.md).

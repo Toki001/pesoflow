@@ -585,3 +585,25 @@ and the baseline were deleted. This verifies visible Home values, not every
 stored record. Format/analyze, 301 Flutter tests including 31 golden comparisons,
 APK/AAB and unsigned iOS compilation passed. Physical iOS and development-signing
 limitations remain unchanged.
+
+## 20 October 2026 — wave glass and compact controls
+
+Installed the verified release APK in place (`adb install -r`: Success). Native
+Light Home review confirmed the compact blue balance card, wave contours, stronger
+glass, neutral header/account icons and white icon on the blue selected dock tile.
+Analytics and Budgets captures confirmed the slimmer raised filter pills, readable
+gray labels and consistent active navigation tiles. The existing Bills category
+uses its teal identity. Settings opened and closed through the native task route.
+Reviewed Home in Dark; restored the original Light preference afterward.
+
+The more compact Home changes which rows fit in the viewport. All previously
+visible monetary values were retained after the update; an exact private baseline
+of the new layout then matched after theme switches and the final cold restart.
+No financial writes, resets, reseeding, uninstall or gallery edits were issued.
+This verifies visible Home values rather than every stored record. Removed the
+private captures and both layout comparison data/helper after verification.
+
+303 Flutter tests including 31 goldens, format/analyze, APK/AAB and unsigned iOS
+compilation passed. Motion interruption and reduced-motion results are automated;
+no measured frame-rate or physical-iPhone claim is made. Development signing and
+the existing iPhone runtime limitations remain.
