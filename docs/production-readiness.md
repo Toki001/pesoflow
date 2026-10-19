@@ -318,3 +318,33 @@ for Python test tooling. No app UI, runtime dependencies, finances, schema or ke
 changed. See the [candidate evaluation](verification/receipt-ocr-lightweight-evaluation-20261019.md)
 for measured failures and limitations. Keep manual field confirmation; broader
 consented examples are needed before promoting a replacement handwriting engine.
+
+## Pixel-preserving preprocessing performance — 19 October 2026
+
+The shadow pass now interpolates its small paper-lighting estimate directly into
+the correction, avoiding a full-resolution background allocation. Single-channel
+normalization uses a byte lookup table. Quantization/interpolation order is retained;
+non-byte/color/oriented-paper cases retain the original library path. OCR pass
+selection, resolution, thresholds, source evidence and financial commands are
+unchanged. This improves processing efficiency, not handwriting recognition.
+
+Ten new regression tests compare every output pixel with the prior library
+operations, including all 32,896 byte-luminance ranges, varied resize geometry,
+constant/black illumination and fallback formats. Complete old/new contrast and
+shadow derivatives also produced identical PNG bytes on a synthetic 3000×2250
+image in a temporary AOT comparison. Desktop observations: contrast 1,806 → 1,560
+ms; shadow 3,167 → 1,783 ms. These are single synthetic processing observations,
+not Android scan timings. A committed synthetic benchmark checks pixel equality
+before reporting the targeted operations' timings.
+
+Verification: formatting PASS (170 files), analysis PASS, **262 Flutter tests
+including 31 goldens PASS**; APK (100.1 MB), AAB (81.1 MB) and unsigned iOS device
+build PASS. No dependency/schema/key/UI changes. Backend was unchanged and not
+rerun; existing signing and physical-iPhone limitations remain.
+
+The Redmi was updated in place with `adb install -r`. Home's visible monetary
+values matched a privately captured pre-update baseline both after installation
+and after a cold process restart. No financial save/reset/reseed or gallery edit
+was issued. The private baseline was deleted after comparison. This verifies the
+visible Home baseline, not every record; camera/OCR end-to-end timing was not
+repeated. See [device verification](verification/android-device-test.md).

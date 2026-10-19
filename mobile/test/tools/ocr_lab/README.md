@@ -165,3 +165,20 @@ Official references: [multilingual model](https://huggingface.co/PaddlePaddle/PP
 [English model](https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec),
 [native preprocessing](https://github.com/PaddlePaddle/PaddleOCR/blob/v3.3.2/tools/infer/predict_rec.py),
 and [CTC decoding](https://github.com/PaddlePaddle/PaddleOCR/blob/v3.3.2/ppocr/postprocess/rec_postprocess.py).
+
+## Pixel-preserving preprocessing benchmark
+
+From `mobile/`:
+
+```
+dart compile exe --packages=.dart_tool/package_config.json test/tools/ocr_lab/benchmark_luminance.dart -o /tmp/pf-luminance-benchmark
+/tmp/pf-luminance-benchmark
+```
+
+The benchmark compares the former image-library resize/illumination/normalization
+steps with the optimized luminance operations on deterministic 3000×2250 synthetic
+pixels. All output pixels must match before timing is reported. It performs five
+runs; use the final four to exclude the first run and run without competing builds
+or benchmarks. Times cover those operations only, not image decoding, ML Kit,
+storage or navigation. Desktop AOT timing does not establish Android scan latency.
+No private image, expected receipt field or financial writer is involved.

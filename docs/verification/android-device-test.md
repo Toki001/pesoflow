@@ -456,3 +456,20 @@ Two alternative handwriting models were evaluated offline on the Mac, not on the
 Redmi. One produced the correct amount token on one variant, but date recognition
 and blank-input checks failed. See the [sanitized evaluation](receipt-ocr-evaluation-20261019.md)
 for methodology and limits. No alternative model is integrated into PesoFlow.
+
+## Preprocessing optimization update — 19 October 2026
+
+The owner confirmed readiness for an update/restart check. When the phone was
+on its launcher, bringing PesoFlow forward returned to Home. Its visible monetary
+labels were captured privately without logging values. The optimized release APK
+installed using `adb install -r`, and all captured Home amounts matched after
+launch. A subsequent scoped force-stop and cold launch retained the same values.
+The temporary baseline and generated device UI-dump file were removed afterward.
+
+No financial form was saved, no records or gallery images were changed, and the
+app was not uninstalled, cleared or reseeded. This is a visible Home preservation
+check; it does not verify every persisted record or establish a new physical OCR
+latency measurement. Source evidence, OCR selection and field-confirmation rules
+are unchanged. Automated checks: 262 tests/31 goldens, analysis/formatting and
+APK/AAB/unsigned iOS build PASS. Synthetic desktop processing timings are recorded
+in [production readiness](../production-readiness.md).

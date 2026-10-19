@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as image;
 
 import '../domain/receipt_image.dart';
+import 'receipt_luminance.dart';
 
 const maxReceiptInputBytes = 25 * 1024 * 1024;
 Future<Uint8List> prepareReceiptImage(Uint8List bytes) => Isolate.run(() {
@@ -113,22 +114,9 @@ Future<Uint8List> enhanceReceiptForOcr(
       pixel.setRgb(brightest, brightest, brightest);
     }
     image.gaussianBlur(paper, radius: 3);
-    final background = image.copyResize(
-      paper,
-      width: decoded.width,
-      height: decoded.height,
-      interpolation: image.Interpolation.linear,
-    );
-    for (final pixel in decoded) {
-      final illumination = background
-          .getPixel(pixel.x, pixel.y)
-          .r
-          .clamp(1, 255);
-      final value = (pixel.r * 245 / illumination).round().clamp(0, 255);
-      pixel.setRgb(value, value, value);
-    }
+    correctReceiptIllumination(decoded, paper);
   }
-  image.normalize(decoded, min: 0, max: 255);
+  normalizeReceiptLuminance(decoded);
   // Temporary lossless input does not need archival PNG compression.
   return image.encodePng(decoded, level: 1, filter: image.PngFilter.none);
 });
