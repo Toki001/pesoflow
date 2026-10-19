@@ -1,0 +1,63 @@
+[
+  {
+    "id": "abbott",
+    "file": "abbott.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Abbott_and_Holder_receipt_-_21_August_1969.jpg",
+    "author": "Eric Holder",
+    "license": "Public domain (Commons PD-ineligible)",
+    "fields": [
+      {
+        "id": "abbott_amount",
+        "crop": [
+          0.42,
+          0.535,
+          0.19,
+          0.065
+        ],
+        "expected": "£36.5.0"
+      },
+      {
+        "id": "abbott_date",
+        "crop": [
+          0.65,
+          0.91,
+          0.32,
+          0.06
+        ],
+        "expected": "21.8.1969"
+      }
+    ],
+    "sha256": "dbdaf6032da9b3975d90c6be98dbd007896e67bfbd0e39000a722771bdbc6861"
+  },
+  {
+    "id": "kuitansi",
+    "file": "kuitansi.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Bukti_Kuitansi_Uang_makan_2-7_April_2018_Ahmad.jpg",
+    "author": "Goyat1",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "fields": [
+      {
+        "id": "kuitansi_amount",
+        "crop": [
+          0.24,
+          0.77,
+          0.2,
+          0.09
+        ],
+        "expected": "360.000,-"
+      },
+      {
+        "id": "kuitansi_date",
+        "crop": [
+          0.74,
+          0.615,
+          0.16,
+          0.095
+        ],
+        "expected": "09-04-2018"
+      }
+    ],
+    "sha256": "e1a737bfd6d94033994481c36274e6ac3cadf4650a7e10070dfbca3a0a9e0f92"
+  }
+]

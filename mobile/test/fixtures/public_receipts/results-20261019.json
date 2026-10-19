@@ -1,0 +1,162 @@
+{
+  "trocr_base": [
+    {
+      "case": "abbott_amount_original",
+      "prediction": "-L 36.15.",
+      "matches": false,
+      "inference_ms": 2346
+    },
+    {
+      "case": "abbott_amount_contrast",
+      "prediction": ". ( 36.30",
+      "matches": false,
+      "inference_ms": 474
+    },
+    {
+      "case": "abbott_amount_shadow",
+      "prediction": "( 136.25",
+      "matches": false,
+      "inference_ms": 411
+    },
+    {
+      "case": "abbott_date_original",
+      "prediction": "21. 8.1969 .",
+      "matches": false,
+      "inference_ms": 536
+    },
+    {
+      "case": "abbott_date_contrast",
+      "prediction": "21. 8.1969 .",
+      "matches": false,
+      "inference_ms": 533
+    },
+    {
+      "case": "abbott_date_shadow",
+      "prediction": "21. 8.1969 .",
+      "matches": false,
+      "inference_ms": 534
+    },
+    {
+      "case": "kuitansi_amount_original",
+      "prediction": "3,3to.000,",
+      "matches": false,
+      "inference_ms": 599
+    },
+    {
+      "case": "kuitansi_amount_contrast",
+      "prediction": "3/3to.000 ,",
+      "matches": false,
+      "inference_ms": 611
+    },
+    {
+      "case": "kuitansi_amount_shadow",
+      "prediction": "3/3to.000 ,",
+      "matches": false,
+      "inference_ms": 595
+    },
+    {
+      "case": "kuitansi_date_original",
+      "prediction": "of that",
+      "matches": false,
+      "inference_ms": 285
+    },
+    {
+      "case": "kuitansi_date_contrast",
+      "prediction": "of the proposals",
+      "matches": false,
+      "inference_ms": 347
+    },
+    {
+      "case": "kuitansi_date_shadow",
+      "prediction": "of the peak of a pair of a pair of",
+      "matches": false,
+      "inference_ms": 783
+    }
+  ],
+  "ppocr_english": [
+    {
+      "case": "abbott_amount_original",
+      "prediction": "36.5",
+      "score": 0.7742974162101746,
+      "inference_ms": 79,
+      "matches": false
+    },
+    {
+      "case": "abbott_amount_contrast",
+      "prediction": "36.50",
+      "score": 0.7476171255111694,
+      "inference_ms": 58,
+      "matches": false
+    },
+    {
+      "case": "abbott_amount_shadow",
+      "prediction": "36.50",
+      "score": 0.8568993806838989,
+      "inference_ms": 59,
+      "matches": false
+    },
+    {
+      "case": "abbott_date_original",
+      "prediction": "2.8.1965",
+      "score": 0.8402256369590759,
+      "inference_ms": 60,
+      "matches": false
+    },
+    {
+      "case": "abbott_date_contrast",
+      "prediction": "2.8.1965",
+      "score": 0.902277946472168,
+      "inference_ms": 62,
+      "matches": false
+    },
+    {
+      "case": "abbott_date_shadow",
+      "prediction": "2.8.1665",
+      "score": 0.7542401552200317,
+      "inference_ms": 62,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_amount_original",
+      "prediction": "",
+      "score": null,
+      "inference_ms": 61,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_amount_contrast",
+      "prediction": "",
+      "score": null,
+      "inference_ms": 63,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_amount_shadow",
+      "prediction": "",
+      "score": null,
+      "inference_ms": 61,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_date_original",
+      "prediction": "%07718",
+      "score": 0.7082781791687012,
+      "inference_ms": 63,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_date_contrast",
+      "prediction": "O07718",
+      "score": 0.6522045731544495,
+      "inference_ms": 63,
+      "matches": false
+    },
+    {
+      "case": "kuitansi_date_shadow",
+      "prediction": "O07718",
+      "score": 0.6327031254768372,
+      "inference_ms": 63,
+      "matches": false
+    }
+  ]
+}

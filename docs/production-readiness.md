@@ -348,3 +348,21 @@ and after a cold process restart. No financial save/reset/reseed or gallery edit
 was issued. The private baseline was deleted after comparison. This verifies the
 visible Home baseline, not every record; camera/OCR end-to-end timing was not
 repeated. See [device verification](verification/android-device-test.md).
+
+## Public handwritten receipt test set — 19 October 2026
+
+Two openly reusable handwritten receipt photos now live in test-only fixtures,
+with original bytes, hashes, attribution/licenses and manually annotated field
+crops. No user receipt was uploaded or committed. Existing offline TrOCR-base and
+English PP-OCR runners each processed 12 variants from four fields. Strict
+whitespace-normalized transcription matched 0/12 each, although TrOCR recovered
+one date's digits with extra punctuation in all three variants. PP-OCR produced a
+wrong date with raw score 0.902. Historical British and Indonesian monetary formats
+are transcription probes, not supported PHP parsing examples or runtime fixtures.
+
+See the [public evaluation report](verification/receipt-ocr-public-evaluation-20261019.md)
+for complete outputs, attribution and reproduction instructions. Two new receipts
+do not establish broad handwriting accuracy. No alternative recognizer is promoted;
+review remains mandatory. Fixture hashes/crop generation, 24 local predictions and
+8 Python scoring regressions pass. This test-data/docs-only milestone retains the
+preceding 262-test/build/device results; production builds were not repeated.
