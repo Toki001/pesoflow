@@ -703,7 +703,14 @@ renders. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS compilation PASS. No new
 packages, financial calculations, persistence/schema/key or backend changes.
 Backend not rerun; development signing and physical-iPhone limitations remain.
 
-The Redmi was not visible to ADB; the owner confirmed the device is unavailable.
-This build has not been installed or physically checked. In-place update and
-visible-Home restart comparison are pending until the phone is available. No
-financial/device writes or preference changes were issued in this refinement.
+The Redmi was initially unavailable. After the owner reconnected it on 20 October,
+the verified APK from `49d308c` installed in place (`adb install -r`: Success).
+Native Light review confirmed the solid white dock/header circles, borderless
+white inactive Transactions pills with blue selection, softer category icons and
+the white Analytics date control. Visible Home monetary labels matched a fresh
+private pre-update baseline after installation, route navigation and cold restart.
+The app was left on Home. No financial commands, preference changes,
+reset/reseed/uninstall or gallery edits were issued. Private captures and baseline
+were deleted. This checks visible Home values, not every stored record. Dark/iPhone
+runtime checks were not repeated; automated results above are from the existing
+verified build and were not rerun for this installation-only follow-up.

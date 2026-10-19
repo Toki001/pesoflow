@@ -636,3 +636,24 @@ iOS compilation passed. Deterministic Transactions/Analytics Light and Home Dark
 captures were reviewed. Next device step: capture the current Home baseline,
 install in place, inspect the requested controls and compare after a cold restart.
 Never clear/uninstall/reseed to complete that check.
+
+## 20 October 2026 — solid chrome/pastel installation completed
+
+The owner reconnected the Redmi. Brought the existing app forward and returned
+its Home scroll view to the top before privately capturing a fresh monetary-label
+baseline. Installed the verified APK from `49d308c` in place (`adb install -r`:
+Success). Visible Home labels matched immediately after installation.
+
+Native Light Home review confirmed the solid white dock and header icon circles.
+Transactions showed white borderless inactive filter pills, unchanged blue selected
+filter/navigation states and softer category icons. Analytics showed its white
+date control and matching solid dock. Returned to Home, compared again, then
+cold-restarted only PesoFlow: visible monetary labels still matched. Left Home
+visible. No financial commands, preferences, reset/reseed/uninstall or gallery
+changes were issued. Deleted the private screenshots, hierarchy captures, helper
+and baseline. This verifies visible Home values rather than every stored record.
+
+No runtime source changed; automated tests/builds were not repeated for this
+installation-only follow-up. The prior 303-test/build checkpoint remains the
+artifact's validation. Physical Dark/iPhone checks were not repeated. Existing
+development-signing and iPhone runtime limits remain.
