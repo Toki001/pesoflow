@@ -1,0 +1,7 @@
+# Separate temporary environment; no Flutter/runtime dependency changes.
+torch==2.8.0
+torchvision==0.23.0
+transformers==5.5.0
+Pillow==12.0.0
+paddlepaddle==3.2.2
+opencv-python-headless==4.11.0.86

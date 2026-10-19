@@ -92,3 +92,76 @@ Primary references:
 Review licensing, mobile runtime/size, false positives, confidence calibration,
 image-region association and a broader consented corpus before proposing a
 production model change. Findings are recorded in `docs/verification/` at repo root.
+
+## Field-level scoring and lightweight OCR candidates
+
+Use a separate temporary Python 3.12 environment with `requirements-ppocr.txt`.
+These dependencies are desktop experiment tools, not Flutter dependencies.
+Download official model files at a recorded immutable revision separately from
+inference. Do not execute model-repository Python files. The two runners load
+only local configuration/weights and write private results outside this repo:
+
+```
+python evaluate_ppocr.py /tmp/official-safetensors-model /tmp/cases.json /tmp/results.json
+python evaluate_paddle_native.py /tmp/official-paddle-model /tmp/cases.json /tmp/native-results.json
+python score_fields.py /tmp/cases.json /tmp/results.json > /tmp/summary.json
+```
+
+`evaluate_ppocr.py` uses the official Transformers processor/model classes;
+`evaluate_paddle_native.py` uses Paddle's CPU inference API with the model's
+BGR image layout, proportional height-48 resize, normalized padding and CTC
+dictionary. It checks supported configuration and output/dictionary size.
+Neither runner uses expected values during recognition. Prediction files are
+private, newly created with owner-only access. Empty-output nonfinite scores
+become JSON null. Raw character scores are **not** calibrated field confidence.
+
+Each local case includes:
+
+```
+{
+  "id": "sample_a_amount",
+  "path": "/tmp/private-line.png",
+  "group": "private_amount",
+  "field": "amount",
+  "expected": 42500,
+  "transcription": "425",
+  "date_order": "mdy"
+}
+```
+
+This example is invented. Amount expectations are integer minor units; date
+expectations are ISO calendar strings. Set `expected: null` for negative controls.
+Date order is an explicit corpus annotation, not inferred from the expected
+answer. Two-digit years use the documented 2000–2099 corpus convention. The
+scorer accepts only entire unambiguous amounts/dates; it does not strip surrounding
+labels, turn O into 0, pick one of several numbers, or drop suspicious punctuation.
+
+Outcomes distinguish `correct`, `wrong_value`, `abstained`, `false_positive` and
+`rejected_negative`. Here, abstention/rejection means **the test scorer** could
+not accept the output, not that the OCR model or app declined to suggest anything.
+`nonempty` records gibberish on blank inputs separately. Exact transcription and
+field equivalence are separate metrics. Groups prevent synthetic control results
+from obscuring private-receipt failures. Duplicate, missing and extra prediction
+IDs fail evaluation rather than silently changing denominators. No raw text or
+expected value is printed by the scorer; keep IDs/groups anonymous.
+
+Generate reproducible sanity controls outside the repo with a local font:
+
+```
+python create_field_controls.py /path/to/Arial.ttf /tmp/field-controls
+python -m unittest discover -s mobile/test/tools/ocr_lab -p 'test_*.py' -v
+```
+
+The unittest command runs from the repository root; other examples run from this
+directory. The generator creates 28 cases: 12 printed amounts, 8 printed dates,
+two blanks, one empty grid, three nonfield labels and two invalid dates. Printed
+positives use 40/80px text on identical 880×130 canvases, so the smaller text tests
+extra surrounding whitespace. They are **not handwritten receipts**. Nonfield
+and invalid-date rejection exercises the scorer as well as recognition, and must
+not be reported as model-only safety. Do not manufacture handwritten digits or
+claim a synthetic control suite establishes handwriting accuracy.
+
+Official references: [multilingual model](https://huggingface.co/PaddlePaddle/PP-OCRv5_mobile_rec_safetensors),
+[English model](https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec),
+[native preprocessing](https://github.com/PaddlePaddle/PaddleOCR/blob/v3.3.2/tools/infer/predict_rec.py),
+and [CTC decoding](https://github.com/PaddlePaddle/PaddleOCR/blob/v3.3.2/ppocr/postprocess/rec_postprocess.py).
