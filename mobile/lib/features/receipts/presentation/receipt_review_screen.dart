@@ -369,7 +369,6 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         if (evidence.warnings.isNotEmpty) ...[
           const SizedBox(height: 12),
           FinanceCard(
-            color: c.mutedSurface,
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,95 +20,72 @@ class BalanceHero extends StatelessWidget {
       end: Alignment.bottomRight,
       colors: [Color(0xFF12368E), Color(0xFF1E5BDD), Color(0xFF1D4ED8)],
     ),
-    child: Stack(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Positioned(
-          right: -36,
-          top: -48,
-          child: IgnorePointer(
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    Colors.white.withValues(alpha: .13),
-                    Colors.white.withValues(alpha: 0),
-                  ],
+        Row(
+          children: [
+            const Icon(
+              Icons.account_balance_wallet_outlined,
+              size: 18,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'TOTAL TRACKED BALANCE',
+                style: AppTypography.labelSmall.copyWith(
+                  color: Colors.white,
+                  letterSpacing: .8,
                 ),
               ),
             ),
-          ),
+            const Icon(Icons.arrow_outward, size: 18, color: Colors.white),
+          ],
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        const SizedBox(height: 16),
+        Text(
+          MoneyFormatter.php(data.balance),
+          style: AppTypography.numericXL.copyWith(color: Colors.white),
+        ),
+        const SizedBox(height: 8),
+        Row(
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.account_balance_wallet_outlined,
-                  size: 18,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    'TOTAL TRACKED BALANCE',
-                    style: AppTypography.labelSmall.copyWith(
-                      color: Colors.white,
-                      letterSpacing: .8,
-                    ),
-                  ),
-                ),
-                const Icon(Icons.arrow_outward, size: 18, color: Colors.white),
-              ],
+            Icon(
+              data.monthChange < 0 ? Icons.south_east : Icons.north_east,
+              size: 14,
+              color: data.monthChange < 0
+                  ? const Color(0xFFFFE4E6)
+                  : const Color(0xFFDCFCE7),
             ),
-            const SizedBox(height: 16),
-            Text(
-              MoneyFormatter.php(data.balance),
-              style: AppTypography.numericXL.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(
-                  data.monthChange < 0 ? Icons.south_east : Icons.north_east,
-                  size: 14,
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                '${MoneyFormatter.php(data.monthChange, signed: true)} net flow this month',
+                style: AppTypography.labelSmall.copyWith(
                   color: data.monthChange < 0
                       ? const Color(0xFFFFE4E6)
                       : const Color(0xFFDCFCE7),
                 ),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    '${MoneyFormatter.php(data.monthChange, signed: true)} net flow this month',
-                    style: AppTypography.labelSmall.copyWith(
-                      color: data.monthChange < 0
-                          ? const Color(0xFFFFE4E6)
-                          : const Color(0xFFDCFCE7),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-            const SizedBox(height: 18),
-            Divider(color: Colors.white.withValues(alpha: .18), height: 1),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 16,
-              runSpacing: 8,
-              alignment: WrapAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${data.accountCount} tracked accounts',
-                  style: AppTypography.labelSmall.copyWith(color: Colors.white),
-                ),
-                Text(
-                  DateFormat('MMMM yyyy').format(data.asOf),
-                  style: AppTypography.labelSmall.copyWith(color: Colors.white),
-                ),
-              ],
+          ],
+        ),
+        const SizedBox(height: 18),
+        Divider(color: Colors.white.withValues(alpha: .18), height: 1),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 16,
+          runSpacing: 8,
+          alignment: WrapAlignment.spaceBetween,
+          children: [
+            Text(
+              '${data.accountCount} tracked accounts',
+              style: AppTypography.labelSmall.copyWith(color: Colors.white),
+            ),
+            Text(
+              DateFormat('MMMM yyyy').format(data.asOf),
+              style: AppTypography.labelSmall.copyWith(color: Colors.white),
             ),
           ],
         ),

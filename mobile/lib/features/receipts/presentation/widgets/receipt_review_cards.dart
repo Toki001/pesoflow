@@ -23,7 +23,6 @@ class ReceiptMerchantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.colors;
     return FinanceCard(
-      color: c.canvas,
       padding: const EdgeInsets.all(14),
       child: Column(
         children: [
@@ -301,7 +300,6 @@ class ReceiptTotalsCard extends StatelessWidget {
       ],
     );
     return FinanceCard(
-      color: c.canvas,
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

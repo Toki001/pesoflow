@@ -172,7 +172,6 @@ class TransactionDetailScreen extends ConsumerWidget {
           if (allowance != null) ...[
             const SizedBox(height: 12),
             FinanceCard(
-              color: c.canvas,
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -228,7 +227,6 @@ class TransactionDetailScreen extends ConsumerWidget {
                 Text('Notes', style: AppTypography.merchant),
                 const SizedBox(height: 8),
                 FinanceCard(
-                  color: c.canvas,
                   padding: const EdgeInsets.all(12),
                   child: SizedBox(
                     width: double.infinity,

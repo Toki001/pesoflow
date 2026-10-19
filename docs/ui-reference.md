@@ -259,3 +259,17 @@ light reflection and an account-count/month footer, all from actual projections.
 
 Task transitions keep native geometry/back behavior with 250ms entrance and 200ms
 exit. Tabs and filters remain instant. See the [motion review](verification/ui-ux-review-20261020.md).
+
+### Solid sections and abstract blue background — 20 October 2026
+
+The owner refined the wave-glass direction: section boxes now use opaque white
+in Light and opaque navy in Dark. This supersedes the earlier translucent card
+materials; their backdrop filters are removed. The floating dock keeps its glass
+material. Existing semantic insets, icon colors, controls and layout are retained.
+
+The canvas shifts from cyan toward sapphire blue. Ribbon contours have fixed,
+unequal start/end heights, curvature and thickness instead of evenly repeated
+waves. They remain static and deterministic across rebuilds/restarts. High contrast
+retains its flat background. The Home hero's clipped radial reflection was removed
+because its bounds appeared as an inner rectangle on the Redmi; only the original
+continuous blue gradient and financial content remain.

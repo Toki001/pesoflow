@@ -283,7 +283,6 @@ class _Intelligence extends StatelessWidget {
     final copy =
         'Your net expenses are ${MoneyFormatter.php(report.totalExpense)} this period. ${report.comparison.change <= 0 ? 'Spending is lower or unchanged from the previous period.' : 'Spending is higher than the previous period.'}';
     return FinanceCard(
-      color: c.insight,
       padding: const EdgeInsets.all(16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -653,3 +653,30 @@ switching and the final cold restart. No financial commands/reset/reseed/uninsta
 or gallery edits were issued. Private captures/comparison data were removed. This
 is a visible-Home persistence check, not a complete record audit or frame-rate
 certification. See the [device report](verification/android-device-test.md).
+
+## Solid sections and abstract blue background — 20 October 2026
+
+The owner's follow-up replaces translucent section cards with opaque white in
+Light and opaque navy in Dark. Section backdrop filters and their unused grouping
+were removed; the floating dock remains glass. Shared section color overrides
+were normalized while semantic inset labels/badges retain their colors. The canvas
+now favors sapphire blue over cyan, with unequal fixed ribbon slopes, curvature
+and thickness. Shapes stay deterministic rather than changing during rebuilds.
+The clipped reflection inside Home's blue hero was removed to eliminate its
+visible rectangular boundary. Hero layout/content and controls remain unchanged.
+
+Formatting PASS (181 files), analysis PASS, **303 tests including 31 golden
+comparisons PASS**. Updated Home Light and Budgets Dark renders were inspected;
+existing foreground contrast, responsive layouts, motion and financial regressions
+pass. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS compilation PASS. No new
+packages, financial/storage/schema/key or backend changes. Backend not rerun;
+existing development-signing and physical-iPhone limitations remain.
+
+The final APK installed in place on the Redmi. Native Light Home review confirmed
+white sections, the abstract blue backdrop and a continuous hero gradient without
+the inset rectangle. Visible Home monetary labels matched the private pre-update
+baseline after installation and cold restart. No financial writes, appearance
+changes, reset/reseed/uninstall or gallery edits were issued. Private capture and
+baseline were removed. Dark was reviewed through Flutter captures; the physical
+Dark switch was not repeated for this refinement. The data check covers visible
+Home values, not every stored record.

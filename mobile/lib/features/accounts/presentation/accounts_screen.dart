@@ -194,7 +194,6 @@ class _AccountsScreenState extends ConsumerState<AccountsScreen> {
             ],
           const SizedBox(height: 16),
           FinanceCard(
-            color: c.mutedSurface,
             child: const Text(
               'Manual expense tracking. PesoFlow does not access banking credentials or transfer funds.',
             ),

@@ -69,21 +69,21 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-Light canvas white with ink #111827 and secondary text #596779; Dark canvas
+Light canvas pale blue with ink #111827 and secondary text #596779; Dark canvas
 #0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #BBC6D5.
 Use blue-only gradients for prominent summary surfaces, restrained depth, and
-transparent floating navigation and clipped translucent cards over blue ambient
-backgrounds. Group non-overlapping card filters per route. Keep dense financial
+transparent floating navigation and solid section cards over blue ambient
+backgrounds. Keep dense financial
 content readable. Category colors are stable identities: food orange, shopping
 violet, bills teal, subscriptions indigo, transport blue and other neutral.
 Income/refunds use green; risk and over-limit states use amber/red. Avoid random
 decorative accents. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
-Both appearances share static blue/cyan wave ribbons inspired by the approved
-20 October reference. Light retains a white base;
-Dark retains a deep charcoal/navy base. Panels must be transparent rather than
-milky white: directional 38–62% Light / 26–38% Dark tint and 12px card blur,
-with 16px dock blur. Do not animate background paths or blur.
+Both appearances share static abstract blue ribbons with unequal slopes, bends
+and thicknesses, following the owner's 20 October refinement. Light retains a
+pale sapphire/white base; Dark retains deep navy. Section cards are opaque white
+in Light and opaque navy in Dark, without backdrop blur. The dock retains its
+16px glass blur. Do not animate background paths or blur.
 High contrast keeps opaque readable theme surfaces.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
@@ -108,8 +108,8 @@ app backdrop to show behind the system buttons.
 
 Section cards have no outline borders in either theme. Use surfaces and subtle
 shadows for separation; retain borders on inputs and explicit selection controls.
-Default glass cards must reveal the ambient backdrop rather than read as opaque
-white panels. Use directional tint/reflection gradients without perimeter outlines.
+Default section cards use the solid theme surface. The Home balance card retains
+its blue gradient without an inset reflection layer or visible inner rectangle.
 The dock has an additional 8px lift above its safe-area spacing. Navigation pointer
 taps have no splash/highlight overlay; keyboard focus remains visible in blue.
 Subscriptions & Bills is directly accessible from Budgets and Settings.

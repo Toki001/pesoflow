@@ -21,7 +21,7 @@ double contrast(Color a, Color b) {
 
 void main() {
   test(
-    'glass foregrounds retain contrast across background gradient extremes',
+    'solid card foregrounds retain contrast over all background variants',
     () {
       for (final dark in [false, true]) {
         final c = FinancePalette(dark);
@@ -41,7 +41,7 @@ void main() {
               Color.alphaBlend(wave, base),
         ];
         for (final backdrop in backdrops) {
-          for (final tint in AppMaterials.card(dark, solid: false).colors) {
+          for (final tint in [c.surface]) {
             final surface = Color.alphaBlend(tint, backdrop);
             for (final ink in [
               c.ink,

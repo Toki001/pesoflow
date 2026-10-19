@@ -607,3 +607,18 @@ private captures and both layout comparison data/helper after verification.
 compilation passed. Motion interruption and reduced-motion results are automated;
 no measured frame-rate or physical-iPhone claim is made. Development signing and
 the existing iPhone runtime limitations remain.
+
+## 20 October 2026 — solid sections and abstract background refinement
+
+Installed the verified final APK using `adb install -r` (Success). Native Light
+Home review confirmed solid white sections, blue abstract sweeps and removal of
+the rectangular reflection inside the balance hero. Dock styling, controls and
+content remain. Visible Home monetary labels matched a private pre-update
+baseline after installation and the final cold restart.
+
+No financial commands, preference changes, reset/reseed/uninstall or gallery edits
+were issued. Deleted the temporary device screenshot and baseline. This verifies
+visible Home values, not every stored record. Dark was inspected in Flutter
+captures; physical Dark/iPhone checks were not repeated. Format/analyze, 303 tests
+including 31 goldens, APK/AAB and unsigned iOS compilation passed. Signing and
+physical-iPhone limitations remain unchanged.
