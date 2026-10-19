@@ -569,3 +569,19 @@ review; no financial records, reset/reseed/uninstall or gallery edits were issue
 Temporary private captures and the baseline were deleted. Format/analyze,
 301 tests including 31 goldens, APK/AAB and unsigned iOS builds passed. Physical
 iOS and existing signing limitations remain unchanged.
+
+## 20 October 2026 — rounded ambient backgrounds
+
+Installed the final APK in place (`adb install -r`: Success). Native Home captures
+were reviewed in both appearances: white/ice blue with dark text in Light, deep
+navy with light text in Dark. Soft, partially cropped blue forms show behind the
+existing glass panels. Card/control geometry is unchanged, and the system-button
+area continues the app backdrop. Selected Light again after the visual review.
+
+Visible Home monetary labels matched the private pre-update baseline after the
+update, theme switching and the final cold restart. No financial commands,
+reset/reseed/uninstall or gallery edits were issued. Private device screenshots
+and the baseline were deleted. This verifies visible Home values, not every
+stored record. Format/analyze, 301 Flutter tests including 31 golden comparisons,
+APK/AAB and unsigned iOS compilation passed. Physical iOS and development-signing
+limitations remain unchanged.

@@ -1,4 +1,4 @@
-# Production readiness — 19 October 2026
+# Production readiness — 20 October 2026
 
 PesoFlow is a local-first expense tracker without login, registration, profiles,
 mandatory authentication or Backup/Restore. The 13 approved Stitch v7 screens are
@@ -594,3 +594,26 @@ Home monetary labels matched the private pre-update baseline after installation
 and the final cold restart. Only appearance settings were changed during visual
 checks; no financial records/reset/reseed/gallery edits were issued. Temporary
 private captures and the baseline were removed. Physical iOS remains unavailable.
+
+## Rounded ambient backgrounds — 20 October 2026
+
+The owner's latest reference guides a background-only change: large, softly shaded
+blue forms partially cropped at the top, left and lower-right edges. Light keeps
+a white/ice-blue base with dark text; Dark keeps a deep navy base with light text.
+Static native radial gradients render the forms behind the existing transparent
+panels. Matching edge hues fade to zero opacity without gray interpolation rims.
+Cards, buttons, typography, layout, routes and financial behavior are unchanged.
+High contrast retains its existing flat backdrop. No assets or packages added.
+
+Verification: formatting PASS (178 files), analysis PASS, **301 Flutter tests
+including 31 goldens PASS**. The existing composited-material contrast regression
+passes both appearances. Updated Home light/dark captures were inspected. APK
+(100.3 MB), AAB (81.2 MB) and unsigned iOS device compilation PASS. Backend
+unchanged, not rerun; development signing and physical-iPhone limits remain.
+
+Installed in place on the Redmi and reviewed both Light and Dark Home backgrounds.
+Visible monetary labels matched the private pre-update baseline after installation,
+theme switching and the final cold restart. Selected Light again before completing
+the check. No financial commands, resets, uninstall, reseeding or gallery edits
+were issued. Private device captures and the baseline were deleted. This check
+covers visible Home values, not every stored record.

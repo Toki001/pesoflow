@@ -225,3 +225,13 @@ Phone review refined the dock labels to fit on one line at the device's text siz
 System status/navigation icon brightness follows the active theme, including cold
 launches, so light surfaces retain dark system icons. Dark header wells preserve
 contrast for the blue icons.
+
+### Rounded ambient background — 20 October 2026
+
+The new reference's large, softly shaded circular forms replace the simple corner
+glows. A partial orb enters at the top, with larger forms cropped along the left
+and lower-right edges. Native static radial gradients use the existing blue
+palette: white/ice blue in Light, deep navy in Dark. Their color remains visible
+through the existing transparent cards. Shapes are background decoration only;
+screen composition, controls, typography and financial data remain unchanged.
+High contrast retains its flat background.

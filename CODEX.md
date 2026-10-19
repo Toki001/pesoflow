@@ -77,10 +77,11 @@ backgrounds. Group non-overlapping card filters per route. Keep dense financial
 content readable;
 avoid decorative purple/teal accents and random icon colors. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
-Both appearances share stronger blue corner glows. Light retains a white base;
-Dark retains charcoal. Panels must be transparent rather than milky white:
-restrained 6–12% tint and 4px card
-blur, with 8px dock blur. High contrast keeps opaque readable theme surfaces.
+Both appearances share soft blue orb forms inspired by the approved reference,
+partially cropped at the top and side edges. Light retains a white base;
+Dark retains a deep charcoal/navy base. Panels must be transparent rather than
+milky white: restrained 6–12% tint and 4px card blur, with 8px dock blur.
+High contrast keeps opaque readable theme surfaces.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
 padding, 24px cards, 18px inset fields, pill buttons and 28px sheets. Main app bar is 56px.
