@@ -14,6 +14,9 @@ class SpendingTrajectory extends StatelessWidget {
   final AnalyticsReport report;
   Future<void> showPoints(BuildContext context) => showModalBottomSheet<void>(
     context: context,
+    sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+        ? AnimationStyle.noAnimation
+        : null,
     showDragHandle: true,
     isScrollControlled: true,
     builder: (context) => SafeArea(

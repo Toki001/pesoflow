@@ -44,6 +44,9 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
   Future<void> chooseSort() async {
     final selected = await showModalBottomSheet<BudgetSort>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => SafeArea(
         child: Column(

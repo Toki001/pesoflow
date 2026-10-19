@@ -44,6 +44,9 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
 
   void preview(AnalyticsReport report) => showModalBottomSheet<void>(
     context: context,
+    sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+        ? AnimationStyle.noAnimation
+        : null,
     showDragHandle: true,
     isScrollControlled: true,
     builder: (context) => SafeArea(

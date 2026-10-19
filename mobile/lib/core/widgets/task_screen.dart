@@ -62,15 +62,18 @@ class TaskScreen extends StatelessWidget {
                         icon: Icon(backIcon, color: AppColors.primary),
                       ),
                       Expanded(
-                        child:
-                            titleWidget ??
-                            Text(
-                              title,
-                              textAlign: centerTitle
-                                  ? TextAlign.center
-                                  : TextAlign.start,
-                              style: AppTypography.headlineSmall,
-                            ),
+                        child: Semantics(
+                          header: true,
+                          child:
+                              titleWidget ??
+                              Text(
+                                title,
+                                textAlign: centerTitle
+                                    ? TextAlign.center
+                                    : TextAlign.start,
+                                style: AppTypography.headlineSmall,
+                              ),
+                        ),
                       ),
                       ...actions,
                     ],

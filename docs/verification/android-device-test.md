@@ -485,3 +485,20 @@ preference changes or gallery edits occurred. This checks visible Home values,
 not every stored record. The 200%-text landscape Appearance interaction and
 48px subscription sort target were verified in Flutter widget tests, not by a
 physical TalkBack or rotated-phone acceptance pass.
+
+## 19 October 2026 — contrast and reduced-motion update
+
+Confirmed TalkBack installed but not enabled before this check. Installed release
+APK in place (`adb install -r`: Success) after the owner confirmed ready. The
+pre-update Home checker did not see PesoFlow Home; no valid pre-update baseline
+was captured. This update therefore does not establish a before/after financial
+comparison. After launching the updated app, privately captured visible Home
+monetary labels, cold-restarted only PesoFlow, and confirmed those labels matched.
+Deleted the post-update baseline and temporary hierarchy captures. No financial
+commands, preference edits, gallery edits, reset or uninstall were issued.
+
+The owner agreed to enable TalkBack and check Home → Settings → Appearance speech
+and navigation. Instructions were delivered after the restart check. Actual spoken
+announcements are awaiting owner feedback; automated semantics checks are separate.
+System reduced-motion route/sheet behavior passes widget tests in both modes;
+physical reduced-motion gestures/native plugin dialogs are not yet verified.

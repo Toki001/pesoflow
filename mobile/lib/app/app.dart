@@ -16,8 +16,18 @@ class PesoFlowApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => MaterialApp.router(
     title: 'PesoFlow',
     debugShowCheckedModeBanner: false,
-    theme: AppTheme.light,
-    darkTheme: AppTheme.dark,
+    theme: AppTheme.forAccessibility(
+      Brightness.light,
+      reduceMotion: MediaQuery.maybeDisableAnimationsOf(context) ?? false,
+    ),
+    darkTheme: AppTheme.forAccessibility(
+      Brightness.dark,
+      reduceMotion: MediaQuery.maybeDisableAnimationsOf(context) ?? false,
+    ),
+    themeAnimationDuration:
+        (MediaQuery.maybeDisableAnimationsOf(context) ?? false)
+        ? Duration.zero
+        : kThemeAnimationDuration,
     themeMode:
         themeMode ??
         switch (ref.watch(settingsProvider)) {

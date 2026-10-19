@@ -483,7 +483,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
           icon: const Icon(Icons.task_alt, size: 20, color: AppColors.primary),
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.primarySoft,
-            foregroundColor: AppColors.primary,
+            foregroundColor: AppColors.primaryStrong,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
           label: Text(

@@ -179,6 +179,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
   Future<void> switchAccount({bool receiving = false}) async {
     final selected = await showModalBottomSheet<String>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => SafeArea(
         child: Column(
@@ -214,6 +217,9 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
   Future<void> moreCategories() async {
     final selected = await showModalBottomSheet<TransactionCategory>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => SafeArea(
         child: ListView(
@@ -473,7 +479,7 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
           child: FilledButton.icon(
             style: FilledButton.styleFrom(
               backgroundColor: AppColors.primarySoft,
-              foregroundColor: AppColors.primary,
+              foregroundColor: AppColors.primaryStrong,
             ),
             onPressed: saving || accounts.isEmpty ? null : save,
             icon: const Icon(Icons.check, color: AppColors.primary),

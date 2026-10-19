@@ -395,3 +395,37 @@ pre-update baseline after update and cold restart; the baseline was then deleted
 No financial writes or preference changes were issued. Physical TalkBack and
 large-text landscape interaction checks remain pending; widget tests verify the
 specific UI fixes. See [device evidence](verification/android-device-test.md).
+
+## Contrast, semantics and reduced motion — 19 October 2026
+
+Readable light-theme foregrounds now use darker green/amber/red and action blue;
+brand blue fills remain. Shared category/status icons choose a brighter blue on
+dark badge surfaces and retain brand blue on pale backgrounds. Shared budget
+progress bars map the foreground roles back to the original fill colors. The
+approved layout, typography, icon meanings and financial semantics are unchanged.
+CODEX.md records the foreground variants explicitly.
+
+New regressions require at least 4.5:1 for the tested semantic/action foregrounds
+on canvas/card/muted/badge surfaces in both themes and 3:1 for the tested badge
+icons. These are defined token combinations, not a blanket accessibility claim.
+Main/task titles expose heading semantics. Bottom navigation tests verify single
+labels, selected state, button role and activation through a semantic tap action.
+
+With system disableAnimations enabled, page navigation and theme changes are
+static; all 17 app bottom-sheet calls request no animation. Native transitions
+remain when the setting is off. Tests navigate to Settings, open/dismiss Appearance,
+and return Home with the feature both on and off. Existing receipt processing
+already suppresses its animated progress indicator under the same setting. Native
+camera/crop/picker UI and full screen-reader speech remain separate device checks.
+
+Verification: formatting PASS (172 files), analysis PASS, **282 Flutter tests
+including 31 goldens PASS**; APK (100.1 MB), AAB (81.1 MB), unsigned iOS device
+build PASS. Updated contrast captures were generated without weakening comparisons;
+representative Home light, Accounts dark, Analytics light and Receipt Review dark
+captures were visually inspected. No runtime packages/storage/OCR changes. Backend
+unchanged, not rerun. Signing/iPhone runtime limitations remain.
+
+Redmi update installed in place and post-update visible Home values survived a
+cold restart. A pre-update baseline could not be captured, so no before/after
+comparison is claimed for this update. The owner-assisted TalkBack speech check
+is pending feedback; automated semantics/motion results above are verified.

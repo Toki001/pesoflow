@@ -78,8 +78,12 @@ Budgets, 64px plus safe area. Add is the single global creation action; no dupli
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 
-Icons use the brand blue consistently, including notification, navigation and
-receipt controls. Financial text and progress bars retain semantic colors.
+Icons use blue consistently, including notification, navigation and receipt
+controls; use #60A5FA on dark badge surfaces where #2563EB lacks contrast.
+Readable light-theme semantic foregrounds are success #15803D, warning #92400E
+and error #B91C1C; original semantic colors remain progress/chart fills.
+Light-theme action text uses #1D4ED8 for contrast on pale blue controls;
+primary fills and light-surface icons retain #2563EB. Financial text and progress bars retain semantic colors.
 
 Section cards have no outline borders in either theme. Use surfaces and subtle
 shadows for separation; retain borders on inputs and explicit selection controls.

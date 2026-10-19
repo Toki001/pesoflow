@@ -17,6 +17,9 @@ Future<void> showBudgetEditor(
   bool creating = false,
 }) => showModalBottomSheet<void>(
   context: context,
+  sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+      ? AnimationStyle.noAnimation
+      : null,
   isScrollControlled: true,
   showDragHandle: true,
   builder: (_) =>

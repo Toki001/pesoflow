@@ -31,7 +31,7 @@ class BudgetProgressBar extends StatelessWidget {
               widthFactor: value.clamp(0, 1),
               child: DecoratedBox(
                 decoration: BoxDecoration(
-                  color: color,
+                  color: context.colors.progress(color),
                   borderRadius: BorderRadius.circular(AppRadius.pill),
                 ),
                 child: SizedBox(height: height),

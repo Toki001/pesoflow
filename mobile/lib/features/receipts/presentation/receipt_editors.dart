@@ -43,6 +43,9 @@ Future<bool> confirmReceiptAction(
 Future<void> showReceiptItemEditor(BuildContext context, {ReceiptItem? item}) =>
     showModalBottomSheet<void>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => _ItemEditor(item: item),
@@ -258,6 +261,9 @@ class _MerchantEditorState extends State<_MerchantEditor> {
 Future<TransactionCategory?> chooseReceiptCategory(BuildContext context) =>
     showModalBottomSheet<TransactionCategory>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => Consumer(
         builder: (context, ref, _) => SafeArea(
@@ -288,6 +294,9 @@ Future<TransactionCategory?> chooseReceiptCategory(BuildContext context) =>
 Future<LedgerAccount?> chooseReceiptAccount(BuildContext context) =>
     showModalBottomSheet<LedgerAccount>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => Consumer(
         builder: (context, ref, _) {
@@ -339,6 +348,9 @@ Future<void> editReceiptTotals(
   ReceiptEvidence evidence,
 ) => showModalBottomSheet<void>(
   context: context,
+  sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+      ? AnimationStyle.noAnimation
+      : null,
   isScrollControlled: true,
   showDragHandle: true,
   builder: (_) => _TotalsEditor(evidence),

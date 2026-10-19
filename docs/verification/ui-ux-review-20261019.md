@@ -55,3 +55,20 @@ readability, not a new pixel-by-pixel comparison against every Stitch export.
 Existing compact 200%-text, landscape, keyboard, empty-state and financial
 correctness regressions remain. Physical iPhone testing is unavailable. Device
 refresh results and build verification are recorded in production-readiness.md.
+
+## Contrast and motion follow-up
+
+The contrast priority is addressed for the defined foreground/surface combinations
+in `contrast_motion_test.dart`: semantic and action text meets 4.5:1 and shared
+badge icons meet 3:1 in light/dark. The regression includes pale badges in dark
+mode to prevent replacing a readable blue with a low-contrast light-blue icon.
+CODEX.md and ui-reference.md document the variants. No global compliance claim is
+made for untested opacity combinations, focus rings or native plugin UI.
+
+Navigation semantics tests activate a tab using a semantics tap, verify its role,
+label and selected state, and verify main/task heading flags. Reduced-motion tests
+cover route and bottom-sheet configuration plus navigation/dismissal in both modes.
+All app bottom sheets honor the system setting; standard native dialogs retain
+the Flutter SDK's short opacity transitions. Screen-reader speech and gesture
+order still require the owner-assisted TalkBack check. Tests do not substitute for
+hearing the spoken announcements. Handwriting research remains deferred.

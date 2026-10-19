@@ -15,7 +15,12 @@ class MainAppBar extends StatelessWidget {
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     child: Row(
       children: [
-        Expanded(child: Text(title, style: AppTypography.headlineSmall)),
+        Expanded(
+          child: Semantics(
+            header: true,
+            child: Text(title, style: AppTypography.headlineSmall),
+          ),
+        ),
         const NotificationButton(showUnreadDot: true),
         IconButton(
           tooltip: 'Settings',

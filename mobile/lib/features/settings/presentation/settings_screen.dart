@@ -39,6 +39,9 @@ class SettingsScreen extends ConsumerWidget {
   Future<void> appearance(BuildContext context, WidgetRef ref) async {
     final option = await showModalBottomSheet<Appearance>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => SafeArea(
         child: ListView(
@@ -71,6 +74,9 @@ class SettingsScreen extends ConsumerWidget {
         .where((a) => !a.archived && a.source == BalanceSource.manual);
     final id = await showModalBottomSheet<String>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       isScrollControlled: true,
       builder: (context) => SafeArea(
@@ -231,6 +237,9 @@ class SettingsScreen extends ConsumerWidget {
                   '${TransactionCategory.values.where((v) => (isExpenseCategory(v) || isIncomeCategory(v)) && !p.hiddenCategories.contains(v)).length} visible categories',
                   onTap: () => showModalBottomSheet<void>(
                     context: context,
+                    sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+                        ? AnimationStyle.noAnimation
+                        : null,
                     isScrollControlled: true,
                     showDragHandle: true,
                     builder: (_) => const _CategoryPreferences(),

@@ -93,7 +93,7 @@ class ReceiptScanner extends StatelessWidget {
                   FilledButton.icon(
                     style: FilledButton.styleFrom(
                       backgroundColor: AppColors.primarySoft,
-                      foregroundColor: AppColors.primary,
+                      foregroundColor: AppColors.primaryStrong,
                     ),
                     onPressed: onCamera,
                     icon: const Icon(

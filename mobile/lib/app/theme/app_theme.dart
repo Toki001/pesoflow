@@ -7,10 +7,23 @@ import 'app_typography.dart';
 abstract final class AppTheme {
   static ThemeData get light => _build(Brightness.light);
   static ThemeData get dark => _build(Brightness.dark);
-  static ThemeData _build(Brightness brightness) {
+  static ThemeData forAccessibility(
+    Brightness brightness, {
+    required bool reduceMotion,
+  }) => _build(brightness, reduceMotion: reduceMotion);
+
+  static ThemeData _build(Brightness brightness, {bool reduceMotion = false}) {
     final c = FinancePalette(brightness == Brightness.dark);
     return ThemeData(
       useMaterial3: true,
+      pageTransitionsTheme: reduceMotion
+          ? PageTransitionsTheme(
+              builders: {
+                for (final platform in TargetPlatform.values)
+                  platform: const _StaticPageTransitionsBuilder(),
+              },
+            )
+          : const PageTransitionsTheme(),
       brightness: brightness,
       fontFamily: 'Inter',
       scaffoldBackgroundColor: c.canvas,
@@ -110,4 +123,21 @@ abstract final class AppTheme {
       ),
     );
   }
+}
+
+/// Retain navigation and semantics without spatial motion when requested.
+class _StaticPageTransitionsBuilder extends PageTransitionsBuilder {
+  const _StaticPageTransitionsBuilder();
+  @override
+  Duration get transitionDuration => Duration.zero;
+  @override
+  Duration get reverseTransitionDuration => Duration.zero;
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) => child;
 }

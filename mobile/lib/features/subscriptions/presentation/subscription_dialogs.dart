@@ -19,6 +19,9 @@ Future<void> showSubscriptionEditor(
   SubscriptionPlan? plan,
 }) => showModalBottomSheet<void>(
   context: context,
+  sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+      ? AnimationStyle.noAnimation
+      : null,
   isScrollControlled: true,
   showDragHandle: true,
   builder: (_) => _SubscriptionEditor(plan: plan),
@@ -261,6 +264,9 @@ Future<void> showSubscriptionDetails(
   SubscriptionPlan plan,
 ) => showModalBottomSheet<void>(
   context: context,
+  sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+      ? AnimationStyle.noAnimation
+      : null,
   isScrollControlled: true,
   showDragHandle: true,
   builder: (_) => _SubscriptionDetails(plan: plan),
@@ -377,6 +383,9 @@ class _SubscriptionDetails extends ConsumerWidget {
 Future<void> showSubscriptionHistory(BuildContext context) =>
     showModalBottomSheet<void>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       isScrollControlled: true,
       showDragHandle: true,
       builder: (_) => const _SubscriptionHistory(),

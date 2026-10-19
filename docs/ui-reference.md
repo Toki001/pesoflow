@@ -126,3 +126,16 @@ choice sheet scrolls when space is limited, and Subscriptions' sort menu has a
 48px minimum touch target. Its subsequent content is 4px lower; the hierarchy and
 control order are unchanged. See the [UI/UX review](verification/ui-ux-review-20261019.md)
 for tested coverage and remaining contrast/motion/assistive-navigation work.
+
+### Readable foreground variants — 19 October 2026
+
+Light-theme action text uses #1D4ED8; semantic foregrounds use success #15803D,
+warning #92400E and error #B91C1C. Primary fills and light-surface icons retain
+#2563EB. Dark badge icons use #60A5FA where needed; icons on pale blue controls
+retain #2563EB. Dark semantic text roles remain unchanged. Shared budget bars keep
+the original semantic fill palette. These are contrast corrections within the
+approved hierarchy, not new color categories or a layout redesign.
+
+System reduced-motion disables spatial page/bottom-sheet transitions and theme
+animation. Normal-mode platform transitions remain. Main/task titles are exposed
+as screen-reader headings without changing visual typography.

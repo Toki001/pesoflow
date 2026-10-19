@@ -42,7 +42,11 @@ class NoticeCard extends StatelessWidget {
               CircleAvatar(
                 radius: 16,
                 backgroundColor: c.soft(color, soft),
-                child: Icon(icon, color: AppColors.primary, size: 18),
+                child: Icon(
+                  icon,
+                  color: c.iconOn(c.soft(color, soft)),
+                  size: 18,
+                ),
               ),
               const SizedBox(width: AppSpacing.sm),
               Expanded(

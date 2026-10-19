@@ -78,6 +78,9 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
         : records.map((t) => categoryLabel(t.category)).toSet().toList();
     final selected = await showModalBottomSheet<String>(
       context: context,
+      sheetAnimationStyle: MediaQuery.disableAnimationsOf(context)
+          ? AnimationStyle.noAnimation
+          : null,
       showDragHandle: true,
       builder: (context) => SafeArea(
         child: SingleChildScrollView(

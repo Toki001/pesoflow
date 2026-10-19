@@ -9,6 +9,10 @@ abstract final class AppColors {
   static const accent = Color(0xFF2563EB);
   static const accentSoft = Color(0xFFEFF6FF);
   static const positive = Color(0xFF16A34A);
+  static const positiveText = Color(0xFF15803D);
+  static const warningText = Color(0xFF92400E);
+  static const dangerText = Color(0xFFB91C1C);
+  static const darkIcon = Color(0xFF60A5FA);
   static const positiveSoft = Color(0xFFDCFCE7);
   static const warning = Color(0xFFD97706);
   static const warningSoft = Color(0xFFFEF3C7);
@@ -60,10 +64,11 @@ class FinancePalette {
   Color get border => isDark ? AppColors.darkBorder : AppColors.border;
   Color get strongBorder =>
       isDark ? AppColors.darkBorder : AppColors.borderStrong;
-  Color get primary => isDark ? AppColors.darkPrimary : AppColors.stitchPrimary;
-  Color get positive => isDark ? AppColors.darkPositive : AppColors.positive;
-  Color get warning => isDark ? AppColors.darkWarning : AppColors.warning;
-  Color get danger => isDark ? AppColors.darkDanger : AppColors.danger;
+  Color get primary => isDark ? AppColors.darkPrimary : AppColors.primaryStrong;
+  Color get positive =>
+      isDark ? AppColors.darkPositive : AppColors.positiveText;
+  Color get warning => isDark ? AppColors.darkWarning : AppColors.warningText;
+  Color get danger => isDark ? AppColors.darkDanger : AppColors.dangerText;
   Color get secondary =>
       isDark ? AppColors.darkSecondary : AppColors.stitchSecondary;
   Color get accent => isDark ? AppColors.darkAccent : AppColors.stitchAccent;
@@ -73,6 +78,22 @@ class FinancePalette {
   Color get accentBorder => isDark
       ? AppColors.accent.withValues(alpha: .4)
       : AppColors.stitchAccentBorder;
+  // Icons stay blue. Resolve against the actual badge surface so pale buttons
+  // retain brand blue even when the surrounding app is dark.
+  Color iconOn(Color background) =>
+      Color.alphaBlend(background, surface).computeLuminance() < .15
+      ? AppColors.darkIcon
+      : AppColors.primary;
+
+  Color progress(Color foreground) {
+    if (isDark) return foreground;
+    if (foreground == primary) return AppColors.primary;
+    if (foreground == positive) return AppColors.positive;
+    if (foreground == warning) return AppColors.warning;
+    if (foreground == danger) return AppColors.danger;
+    return foreground;
+  }
+
   Color soft(Color foreground, Color light) =>
       isDark ? foreground.withValues(alpha: .12) : light;
 }
