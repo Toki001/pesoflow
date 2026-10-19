@@ -19,8 +19,8 @@ abstract final class AppColors {
   static const danger = Color(0xFFDC2626);
   static const dangerSoft = Color(0xFFFEE2E2);
   static const ink = Color(0xFF111827);
-  static const inkSecondary = Color(0xFF647084);
-  static const inkMuted = Color(0xFF647084);
+  static const inkSecondary = Color(0xFF56657A);
+  static const inkMuted = Color(0xFF56657A);
   static const surface = Color(0xFFFFFFFF);
   static const surfaceSubtle = Color(0xFFF5F7FC);
   static const surfaceMuted = Color(0xFFF3F4F6);

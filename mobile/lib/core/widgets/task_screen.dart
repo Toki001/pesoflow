@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'app_backdrop.dart';
+
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 
@@ -30,18 +32,17 @@ class TaskScreen extends StatelessWidget {
   final String backTooltip;
   final String fallbackRoute;
   @override
-  Widget build(BuildContext context) => ColoredBox(
-    color: context.colors.canvas,
+  Widget build(BuildContext context) => AppBackdrop(
     child: Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 512),
         child: Scaffold(
-          backgroundColor: context.colors.canvas,
+          backgroundColor: Colors.transparent,
           body: SafeArea(
             child: Column(
               children: [
                 Container(
-                  color: context.colors.canvas,
+                  color: Colors.transparent,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,

@@ -6,6 +6,29 @@ import 'fixtures/stitch_v7_fixture.dart';
 import 'production_app_test.dart' as app;
 
 void main() {
+  for (final scale in [1.0, 2.0]) {
+    testWidgets(
+      'category tiles share a size with wrapped labels at scale $scale',
+      (tester) async {
+        app.viewport(tester, const Size(390, 844));
+        tester.platformDispatcher.textScaleFactorTestValue = scale;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await app.pumpApp(tester, route: '/add', workspace: stitchV7Fixture());
+        final tiles = find.byWidgetPredicate(
+          (w) =>
+              w.key is ValueKey<String> &&
+              (w.key! as ValueKey<String>).value.startsWith('category-choice-'),
+        );
+        expect(tiles, findsNWidgets(6));
+        final size = tester.getSize(tiles.first);
+        for (var i = 0; i < 6; i++) {
+          expect(tester.getSize(tiles.at(i)), size);
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   for (final width in [320.0, 390.0]) {
     for (final populated in [false, true]) {
       testWidgets('Home metrics match at $width, populated=$populated', (

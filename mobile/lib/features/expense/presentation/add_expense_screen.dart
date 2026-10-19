@@ -472,17 +472,21 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
         ),
       ],
       footer: Container(
-        color: c.surface,
+        color: Colors.transparent,
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
         child: SizedBox(
           width: double.infinity,
           child: FilledButton.icon(
             style: FilledButton.styleFrom(
-              backgroundColor: AppColors.primarySoft,
-              foregroundColor: AppColors.primaryStrong,
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
             ),
             onPressed: saving || accounts.isEmpty ? null : save,
-            icon: const Icon(Icons.check, color: AppColors.primary),
+            icon: const CircleAvatar(
+              radius: 14,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.check, size: 18, color: AppColors.primary),
+            ),
             label: Text(
               saving ? 'Saving…' : 'Save $typeLabel',
               style: AppTypography.headlineSmall,
@@ -630,19 +634,38 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                             MediaQuery.textScalerOf(context).scale(14) > 19
                             ? 2
                             : 3;
+                        final visible = choices
+                            .where(
+                              (v) =>
+                                  !w.preferences.hiddenCategories.contains(v) ||
+                                  v == category,
+                            )
+                            .toList();
+                        final tileWidth =
+                            (bounds.maxWidth - (columns - 1) * 10) / columns;
+                        var labelHeight = 0.0;
+                        for (final item in visible) {
+                          final painter = TextPainter(
+                            text: TextSpan(
+                              text: categoryLabel(item),
+                              style: AppTypography.bodySmall,
+                            ),
+                            textDirection: Directionality.of(context),
+                            textScaler: MediaQuery.textScalerOf(context),
+                          )..layout(maxWidth: tileWidth - 16);
+                          if (painter.height > labelHeight) {
+                            labelHeight = painter.height;
+                          }
+                          painter.dispose();
+                        }
                         return Wrap(
                           spacing: 10,
                           runSpacing: 10,
                           children: [
-                            for (final item in choices.where(
-                              (v) =>
-                                  !w.preferences.hiddenCategories.contains(v) ||
-                                  v == category,
-                            ))
+                            for (final item in visible)
                               SizedBox(
-                                width:
-                                    (bounds.maxWidth - (columns - 1) * 10) /
-                                    columns,
+                                key: ValueKey('category-choice-${item.name}'),
+                                width: tileWidth,
                                 child: Semantics(
                                   selected: category == item,
                                   button: true,
@@ -668,15 +691,20 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                                             ),
                                           ),
                                           const SizedBox(height: 10),
-                                          Text(
-                                            categoryLabel(item),
-                                            textAlign: TextAlign.center,
-                                            style: AppTypography.bodySmall
-                                                .copyWith(
-                                                  color: category == item
-                                                      ? c.primary
-                                                      : c.ink,
-                                                ),
+                                          SizedBox(
+                                            height: labelHeight,
+                                            child: Center(
+                                              child: Text(
+                                                categoryLabel(item),
+                                                textAlign: TextAlign.center,
+                                                style: AppTypography.bodySmall
+                                                    .copyWith(
+                                                      color: category == item
+                                                          ? c.primary
+                                                          : c.ink,
+                                                    ),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),

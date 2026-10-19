@@ -3,6 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/widgets/app_backdrop.dart';
+
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../../core/widgets/frosted_panel.dart';
@@ -11,12 +13,12 @@ class AppShell extends StatelessWidget {
   const AppShell({required this.shell, super.key});
   final StatefulNavigationShell shell;
   @override
-  Widget build(BuildContext context) => ColoredBox(
-    color: context.colors.canvas,
+  Widget build(BuildContext context) => AppBackdrop(
     child: Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 512),
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: shell,
           bottomNavigationBar: AppBottomNavigation(
             selectedIndex: shell.currentIndex >= 2

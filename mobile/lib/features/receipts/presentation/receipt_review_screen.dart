@@ -476,10 +476,14 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         FilledButton.icon(
           key: const ValueKey('save-receipt'),
           onPressed: state.busy ? null : save,
-          icon: const Icon(Icons.task_alt, size: 20, color: AppColors.primary),
+          icon: const CircleAvatar(
+            radius: 14,
+            backgroundColor: Colors.white,
+            child: Icon(Icons.task_alt, size: 18, color: AppColors.primary),
+          ),
           style: FilledButton.styleFrom(
-            backgroundColor: AppColors.primarySoft,
-            foregroundColor: AppColors.primaryStrong,
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           ),
           label: Text(

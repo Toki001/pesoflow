@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_colors.dart';
+import '../../app/theme/app_materials.dart';
 import '../../app/theme/app_radius.dart';
 import '../../app/theme/app_shadows.dart';
 import '../../app/theme/app_spacing.dart';
@@ -23,35 +26,51 @@ class FinanceCard extends StatelessWidget {
   final Color? color;
   final Color? borderColor;
   final Gradient? gradient;
+
   @override
-  Widget build(BuildContext context) => Container(
-    padding: padding,
-    decoration: BoxDecoration(
-      color: color ?? context.colors.surface,
-      gradient:
-          gradient ??
-          (color != null
-              ? null
-              : LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: context.colors.isDark
-                      ? const [Color(0xFF15243C), Color(0xFF111D32)]
-                      : const [Colors.white, Color(0xFFF8FAFF)],
-                )),
-      borderRadius: BorderRadius.circular(radius),
-      // Section cards are borderless; explicit borders identify selections only.
-      border: borderColor == null ? null : Border.all(color: borderColor!),
-      boxShadow: context.colors.isDark
-          ? [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: .12),
-                offset: const Offset(0, 4),
-                blurRadius: 16,
-              ),
-            ]
-          : (hero ? AppShadows.card : AppShadows.subtle),
-    ),
-    child: Material(type: MaterialType.transparency, child: child),
-  );
+  Widget build(BuildContext context) {
+    final c = context.colors;
+    final solid = MediaQuery.highContrastOf(context);
+    final glass = color == null && gradient == null && !solid;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        boxShadow: c.isDark
+            ? [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: .10),
+                  offset: const Offset(0, 4),
+                  blurRadius: 20,
+                ),
+              ]
+            : (hero ? AppShadows.card : AppShadows.subtle),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: BackdropFilter.grouped(
+          enabled: glass,
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: color,
+              gradient:
+                  gradient ??
+                  (color != null
+                      ? null
+                      : AppMaterials.card(c.isDark, solid: solid)),
+              borderRadius: BorderRadius.circular(radius),
+              // Explicit borders identify selection, never section packaging.
+              border: borderColor == null
+                  ? null
+                  : Border.all(color: borderColor!),
+            ),
+            child: Padding(
+              padding: padding,
+              child: Material(type: MaterialType.transparency, child: child),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

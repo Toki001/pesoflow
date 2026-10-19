@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_materials.dart';
 import 'app_radius.dart';
 import 'app_typography.dart';
 
@@ -11,6 +12,33 @@ abstract final class AppTheme {
     Brightness brightness, {
     required bool reduceMotion,
   }) => _build(brightness, reduceMotion: reduceMotion);
+
+  static Widget _buttonLayer(
+    BuildContext context,
+    Set<WidgetState> states,
+    Widget? child,
+  ) {
+    if (states.contains(WidgetState.disabled)) return child ?? const SizedBox();
+    final button = context.widget;
+    final specified = button is ButtonStyleButton
+        ? button.style?.backgroundColor?.resolve(states)
+        : null;
+    if (specified != null &&
+        specified != AppColors.primary &&
+        specified != AppColors.primarySoft) {
+      return child ?? const SizedBox();
+    }
+    return DecoratedBox(
+      decoration: ShapeDecoration(
+        shape: const StadiumBorder(),
+        gradient: AppMaterials.button(
+          pale: specified == AppColors.primarySoft,
+          pressed: states.contains(WidgetState.pressed),
+        ),
+      ),
+      child: child,
+    );
+  }
 
   static ThemeData _build(Brightness brightness, {bool reduceMotion = false}) {
     final c = FinancePalette(brightness == Brightness.dark);
@@ -56,22 +84,33 @@ abstract final class AppTheme {
       ).apply(bodyColor: c.ink, displayColor: c.ink),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: c.canvas,
+        fillColor: c.isDark
+            ? const Color(0xFF071423).withValues(alpha: .72)
+            : Colors.white.withValues(alpha: .65),
+        hintStyle: TextStyle(color: c.mutedInk),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 14,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.control),
-          borderSide: BorderSide(color: c.border),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.control),
-          borderSide: BorderSide(color: c.border),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppRadius.control),
+          borderRadius: BorderRadius.circular(18),
           borderSide: BorderSide(color: c.primary, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: c.danger),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: c.danger, width: 1.5),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
@@ -82,6 +121,7 @@ abstract final class AppTheme {
           ),
         ),
       ),
+      chipTheme: const ChipThemeData(shape: StadiumBorder()),
       dividerTheme: DividerThemeData(color: c.border, thickness: 1, space: 1),
       expansionTileTheme: const ExpansionTileThemeData(
         iconColor: AppColors.primary,
@@ -91,9 +131,7 @@ abstract final class AppTheme {
       iconButtonTheme: IconButtonThemeData(
         style: IconButton.styleFrom(
           backgroundColor: c.isDark ? c.surface : const Color(0xFFEAF0FC),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
+          shape: const CircleBorder(),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -101,32 +139,27 @@ abstract final class AppTheme {
           minimumSize: const Size(48, 48),
           foregroundColor: c.primary,
           textStyle: AppTypography.labelMedium,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.control),
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          backgroundColor: c.surface,
+          backgroundColor: c.surface.withValues(alpha: .60),
           foregroundColor: c.secondaryInk,
           side: BorderSide(color: c.border),
           minimumSize: const Size(48, 48),
           textStyle: AppTypography.labelMedium,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.control),
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary,
           foregroundColor: AppColors.surface,
+          backgroundBuilder: _buttonLayer,
           minimumSize: const Size(48, 48),
           textStyle: AppTypography.labelMedium,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.control),
-          ),
+          shape: const StadiumBorder(),
         ),
       ),
     );

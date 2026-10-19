@@ -22,7 +22,7 @@ class AnalyticsSegments<T> extends StatelessWidget {
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         color: c.mutedSurface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: c.border),
       ),
       child: Row(
@@ -35,7 +35,7 @@ class AnalyticsSegments<T> extends StatelessWidget {
                 button: true,
                 child: InkWell(
                   onTap: () => onSelected(entry.key),
-                  borderRadius: BorderRadius.circular(AppRadius.micro),
+                  borderRadius: BorderRadius.circular(AppRadius.pill),
                   child: Container(
                     constraints: const BoxConstraints(
                       minHeight: 48,
@@ -48,7 +48,7 @@ class AnalyticsSegments<T> extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: selected == entry.key ? c.surface : null,
-                      borderRadius: BorderRadius.circular(AppRadius.micro),
+                      borderRadius: BorderRadius.circular(AppRadius.pill),
                     ),
                     child: Text(
                       entry.value,

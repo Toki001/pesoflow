@@ -69,14 +69,16 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #647084, border #E5E7EB,
+canvas #F5F7FC, card #FFFFFF, ink #111827, secondary text #56657A, border #E5E7EB,
 success #16A34A, warning #D97706, error #DC2626. Use blue-only gradients for prominent summary surfaces, restrained depth, and
-frosted floating navigation. Keep dense financial content on readable surfaces;
+frosted floating navigation and clipped translucent cards over blue ambient
+backgrounds. Group non-overlapping card filters per route. Keep dense financial
+content readable;
 avoid decorative purple/teal accents and random icon colors. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
-padding, 24px cards, 14px controls and 28px sheets. Main app bar is 56px.
+padding, 24px cards, 18px inset fields, pill buttons and 28px sheets. Main app bar is 56px.
 Bottom navigation is one reusable component: Home, Transactions, Add, Analytics,
 Budgets, 72px within a floating panel plus safe area. Add is the single global creation action; no duplicate
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.

@@ -160,18 +160,28 @@ Stitch screen composition and functional controls remain.
 
 - A deep-blue-to-sapphire gradient anchors Home's tracked balance. White amounts
   and readable pale signed-flow labels sit above darker translucent inset chips.
-- A cool `#F5F7FC` canvas supports white-to-ice card surfaces; dark mode uses
-  navy surfaces with subtle tonal gradients. Cards use 24px corners, controls
-  14px and sheets 28px, with soft shadows and no section outlines.
+- Cool blue ambient gradients support translucent white-to-ice cards; dark mode
+  uses a navy gradient with tinted glass surfaces. Cards use 24px corners,
+  inset fields 18px, pill buttons and sheets 28px, with soft shadows and no
+  section outlines.
 - A floating, clipped glass navigation panel uses native 18px backdrop blur,
-  a high-opacity tint, a selected-tab capsule and the consistent filled icons.
+  a tinted surface, a selected-tab capsule and the consistent filled icons.
   Its content is 72px high plus outer spacing and safe area; large text grows it.
   High-contrast mode uses opaque surfaces without blur.
-- Header icon buttons use coordinated rounded wells. Input shapes and shared
-  surfaces carry the direction into forms, lists, Analytics, Budgets and Settings.
+- Header icon buttons use circular wells. Inputs use inset translucent fills and
+  explicit focus/error outlines. Primary buttons have clipped blue pill gradients;
+  secondary controls use pale wells. Expense and receipt confirmation actions
+  retain blue icons within white circles. Forms, lists, Analytics, Budgets and
+  Settings share this treatment.
 - Keep financial content readable: no photographic backgrounds, rainbow accents,
   extra widgets, demo data or new financial claims. Neutral review/status panels
-  and the equal-height summary pairs remain. No per-card backdrop filters.
+  and the equal-height summary pairs remain. Default glass cards use clipped 10px
+  backdrop filters grouped per route for non-overlapping surfaces. Custom-color
+  and summary-gradient cards do not add blur. High contrast removes the ambient
+  gradient and card blur, with opaque card surfaces.
+
+Category selectors measure wrapped labels so every tile shares the same height,
+including 200% text. The large amount placeholder retains its field typography.
 
 Phone review refined the dock labels to fit on one line at the device's text size.
 System status/navigation icon brightness follows the active theme, including cold

@@ -37,9 +37,9 @@ class FrostedPanel extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  c.surface.withValues(alpha: solid ? 1 : .96),
+                  c.surface.withValues(alpha: solid ? 1 : .88),
                   (c.isDark ? const Color(0xFF172B49) : const Color(0xFFF0F6FF))
-                      .withValues(alpha: solid ? 1 : .90),
+                      .withValues(alpha: solid ? 1 : .78),
                 ],
               ),
             ),

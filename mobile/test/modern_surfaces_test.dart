@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pesoflow/core/widgets/finance_card.dart';
 import 'package:pesoflow/app/theme/app_theme.dart';
 import 'package:pesoflow/app/theme/app_colors.dart';
+import 'package:pesoflow/app/theme/app_materials.dart';
 import 'package:pesoflow/core/widgets/frosted_panel.dart';
 import 'package:pesoflow/features/dashboard/presentation/widgets/balance_summary.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
@@ -18,6 +19,55 @@ double contrast(Color a, Color b) {
 }
 
 void main() {
+  test(
+    'glass foregrounds retain contrast across background gradient extremes',
+    () {
+      for (final dark in [false, true]) {
+        final c = FinancePalette(dark);
+        final backdrops = AppMaterials.backdrop(dark).colors;
+        for (final backdrop in [
+          ...backdrops,
+          for (final base in backdrops)
+            Color.alphaBlend(
+              AppColors.primary.withValues(alpha: dark ? .12 : .07),
+              base,
+            ),
+        ]) {
+          for (final tint in AppMaterials.card(dark, solid: false).colors) {
+            final surface = Color.alphaBlend(tint, backdrop);
+            for (final ink in [
+              c.ink,
+              c.secondaryInk,
+              c.mutedInk,
+              c.primary,
+              c.positive,
+              c.warning,
+              c.danger,
+            ]) {
+              expect(contrast(ink, surface), greaterThanOrEqualTo(4.5));
+            }
+          }
+        }
+      }
+      for (final pressed in [false, true]) {
+        for (final color in AppMaterials.button(
+          pale: false,
+          pressed: pressed,
+        ).colors) {
+          expect(contrast(Colors.white, color), greaterThanOrEqualTo(4.5));
+        }
+        for (final color in AppMaterials.button(
+          pale: true,
+          pressed: pressed,
+        ).colors) {
+          expect(
+            contrast(AppColors.primaryStrong, color),
+            greaterThanOrEqualTo(4.5),
+          );
+        }
+      }
+    },
+  );
   test('header icon wells preserve readable brand blue in both themes', () {
     for (final theme in [AppTheme.light, AppTheme.dark]) {
       final background = theme.iconButtonTheme.style!.backgroundColor!.resolve(

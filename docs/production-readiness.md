@@ -483,3 +483,30 @@ new Home layout matched after the final update and a cold restart. Native captur
 confirmed the gradient, equal metric pair, floating dock, single-line labels and
 dark system icons on the light canvas. No financial commands were issued. Temporary
 captures and private baseline files were removed after verification.
+
+## Glass materials and form controls — 19 October 2026
+
+The owner's additional finance/plant references guide a second material pass:
+ambient blue gradients in light/dark, translucent tinted cards, a lighter glass
+dock, circular header controls, blue gradient pill actions and inset text fields.
+Native clipped card filters share a backdrop group for non-overlapping surfaces
+per route. Explicit-color/summary-gradient cards avoid extra blur; high contrast
+uses opaque cards and a flat backdrop. No inspiration images or packages are added.
+Secondary text is darker on light surfaces. Category tiles measure their longest
+wrapped label for equal heights, including large text. Amount placeholders retain
+their large typography. Layout hierarchy, blue icons, neutral review notices and
+all financial commands/storage remain unchanged.
+
+Verification: formatting PASS (177 files), analysis PASS, **297 Flutter tests
+including 31 goldens PASS**. Added contrast coverage composites card tints over
+linear/radial background extremes in both themes and checks button foregrounds;
+two category-size regressions cover normal/200% text. Updated golden comparisons
+were reviewed, including Add light/dark, Home dark and Analytics light. APK
+(100.3 MB), AAB (81.2 MB), unsigned iOS device build PASS. Backend unchanged,
+not rerun. Development signing and physical-iPhone/simulator limits remain.
+
+The Redmi received an in-place update. Visible Home monetary labels matched the
+private pre-update baseline. A native capture confirmed the new background/card
+materials, readable system icons, aligned metric pair and floating dock. USB
+disconnected before the Add-form and cold-restart checks; those checks remain
+pending at this checkpoint. No financial writes, reset or reseeding were issued.
