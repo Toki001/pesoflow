@@ -105,13 +105,9 @@ class FlowSummary extends StatelessWidget {
       int amount,
       String caption,
       Color color,
-    ) => Container(
+    ) => Padding(
       key: ValueKey('flow-${label.toLowerCase()}'),
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: c.canvas.withValues(alpha: .30),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -133,9 +129,9 @@ class FlowSummary extends StatelessWidget {
         data.inflow > 0
             ? '${(data.outflow * 100 / data.inflow).round()}% of monthly income'
             : 'No income recorded',
-        c.danger,
+        c.cashflowSpending,
       ),
-      metric('INCOME', data.inflow, 'Recorded this month', c.positive),
+      metric('INCOME', data.inflow, 'Recorded this month', c.cashflowIncome),
     ];
     return FinanceCard(
       padding: const EdgeInsets.all(20),

@@ -679,3 +679,24 @@ captures and baseline were deleted. This covers visible Home values rather than
 every record; physical iPhone behavior remains untested. Format/analyze, all
 306 Flutter tests including 31 goldens, APK/AAB and unsigned iOS compilation passed.
 Development signing and iPhone runtime limitations remain.
+
+## 20 October 2026 — Home A, theme parity and account badges
+
+Returned from the verified read-only Accounts page to Home and privately captured
+a fresh visible-value baseline. The final APK installed in place (`adb install -r`:
+Success). Roomier grouping changed the initially exposed labels; all earlier
+visible monetary values were found unchanged across scrolled Home. A private
+baseline for the new layout then matched exactly after appearance switching and
+a cold process restart.
+
+Native Light/Dark Home review confirmed the same card hierarchy and flat metric
+treatment, softer Spending/Income accents, Cash identifier and matched ambient
+gradient composition. The Light background remained unchanged. Institution-letter
+variants were verified in deterministic fixtures; no accounts were created for
+visual tests. Restored the original Light preference and left Home visible.
+
+No financial commands, reset/reseed/uninstall or gallery edits were issued.
+Removed private screenshots, UI hierarchy files and comparison data. This verifies
+visible Home values, not a full record audit. All 309 Flutter tests including
+31 goldens, formatting/analysis, APK/AAB and unsigned iOS compilation passed.
+Development signing and physical-iPhone runtime limitations remain.

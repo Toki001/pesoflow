@@ -752,3 +752,44 @@ readable system buttons. The original Dark preference was restored and Home left
 visible. No financial commands, reset/reseed/uninstall or gallery edits were
 issued. Private captures and comparison data were deleted. This verifies visible
 Home values, not every stored record; physical iOS runtime was not tested.
+
+## Home A, appearance parity and account badges — 20 October 2026
+
+Home now follows the owner's revised A presentation with roomier card grouping;
+the Light background is unchanged. Dark uses the same three ambient gradient
+positions/radii/stops with muted lavender, blue and mint over charcoal. Removed
+the obsolete wave painter and dark-only Cashflow metric wells. Shared cards,
+controls, navigation and layout hierarchy retain their native implementations.
+Cashflow Spending/Income labels use softer coral/green; amounts and budget-risk
+semantics are unchanged and text contrast remains covered.
+
+One AccountBadge restores the requested rounded colored letter identifiers for
+BDO, GCash, GoTyme, Maya and BPI, plus the Cash symbol. It is used by shared account
+rows in Home, Accounts and entry forms. Explicit institution metadata takes
+priority, with recognized name-prefix fallback only when it is absent. Unknown
+names use neutral initials. No official logo assets, provider connection, new
+runtime dependency or financial/storage/schema/key change is introduced.
+
+Formatting PASS (184 files), analysis PASS, **309 tests including 31 golden
+comparisons PASS**. Three new regressions cover gradient-composition parity and
+rendered account identification/contrast in both appearances, including metadata
+precedence and a lookalike name. Existing compact/large-text, paired-metric,
+financial and restart regressions pass. Updated Home Light/Dark and Accounts Dark
+captures were inspected. APK (100.3 MB), AAB (81.2 MB) and unsigned iOS device
+compile PASS. Backend was unchanged and not rerun; development signing and iPhone
+runtime limitations remain.
+
+The final APK installed in place on the Redmi. The roomier layout changed the
+first visible Home snapshot; all earlier visible monetary values were found
+unchanged across the scrolled Home view. A new-layout baseline was captured
+privately for exact comparison after restart. No financial records were edited
+for this check.
+
+Native Light and Dark Home review confirmed the matched card grouping, flat
+Cashflow metrics, softer label colors, Cash badge and three-color ambient
+backdrop without waves. Restored the original Light preference and left Home
+visible. The new-layout monetary-label baseline matched after theme switching
+and the final cold restart. No financial writes, reset/reseed/uninstall or gallery
+edits were issued. Private captures and comparison data were deleted. This checks
+visible Home values, not every stored record; named institution badge variants
+were reviewed in deterministic renders/tests rather than by creating phone data.

@@ -83,17 +83,21 @@ Entertainment purple and Education cyan. Category names and amounts retain
 readable text colors. Income/refunds use green;
 risk and over-limit states use amber/red. Avoid random
 decorative accents. Dark mode preserves
-hierarchy using the established dark surfaces and readable semantic variants.
-The owner's approved 20 October mix uses `design/approved/pastel-background-a.png`
-for the Light canvas and `design/approved/home-presentation-d.png` for Home
-presentation. Light has a cool gray-white base (#E9EDF2–#E5EAF0), diffuse lavender
+hierarchy using dark equivalents of the same surfaces and readable semantic variants.
+The owner's latest 20 October selection uses both the background and Home
+presentation from `design/approved/pastel-background-a.png`, superseding Home D.
+Light has a cool gray-white base (#E9EDF2–#E5EAF0), diffuse lavender
 on the left, pale blue above and mint toward the lower right. Render the ambient
 color with static native radial gradients, without hard waves, runtime bitmap
 backgrounds or moving effects. These decorative hues do not change financial
 meaning or category identity. Home retains solid white rounded sections, its blue
 balance card and white floating navigation. Preserve real content and controls;
-the concept's example amounts are not runtime data. Dark retains its established
-deep-navy backdrop and subtle ribbons. Section cards are opaque white in Light
+the concept's example amounts are not runtime data. Dark uses the same lavender/
+blue/mint gradient centers, radii and stops with muted colors over charcoal. Neither
+appearance has wave paths. Home's card spacing is 20px with 20px section padding;
+Recent Transactions retains 16px padding so normal-width amounts stay alongside
+merchant names. Cashflow metrics have the same flat treatment in both appearances.
+Section cards are opaque white in Light
 and opaque navy in Dark, without backdrop blur. High contrast keeps flat opaque
 readable theme surfaces. Free-standing captions use canvasSecondaryInk; text on
 cards retains its surface role. Filter/type tracks and search remain opaque.
@@ -105,8 +109,12 @@ Budgets, 72px within a floating panel plus safe area. Add is the single global c
 Home Add Expense/FAB or banking shortcuts. Focused forms/details can hide the bar.
 Settings is reached directly through the settings icon.
 
-Ordinary header, receipt, account and navigation icons use neutral gray, resolved
+Ordinary header, receipt and navigation icons use neutral gray, resolved
 against their actual surface. Category badges may use their stable category color.
+AccountBadge uses colored letter identifiers for BDO/GCash/GoTyme/Maya/BPI and a
+slate cash symbol, consistently across appearances. Prefer saved institution
+metadata; infer only recognized name prefixes when it is empty. Unknown names use
+neutral initials. These badges are identifiers, not official logos or provider links.
 Use the exhaustive transactionCategoryIcon mapping in category_style.dart across
 entry, Home, Transactions/details and Budgets. Entertainment uses a game controller
 and Healthcare a medical kit; known categories never fall back to receipt glyphs.
@@ -117,6 +125,8 @@ their selected state retains the blue fill and white text.
 Readable foregrounds on charcoal use blue #93C5FD, success #86EFAC, warning
 #FBBF24 and error #FCA5A5. Light uses blue #1E40AF, success #166534, warning
 #92400E and error #991B1B. Primary fills and pale-surface icons retain #2563EB.
+Cashflow Spending/Income labels use softer coral #C24158 and green #26795F in
+Light, pink #FDA4AF and mint #6EE7B7 in Dark; other financial foregrounds remain.
 Financial text and progress bars retain semantic colors. Period/Budget filters
 use compact raised surface pills with blue selected text inside a muted track.
 Keep their 48px touch targets while making the visible pill slimmer.
@@ -147,7 +157,7 @@ Do not fabricate insights. Empty installs have zero financial records. Settings
 shows the installed application version and only functional options. Do not add
 fake help/privacy links, notification schedules or receipt-scanning controls.
 Authentic institution logos require available licensed assets; otherwise use
-neutral initials/icons and accurate names, never invented official branding.
+accurate letter identifiers/icons, never invented official logo artwork.
 
 ## Verification and workflow
 

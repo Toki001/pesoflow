@@ -65,7 +65,7 @@ class HomeContent extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        spacing: 16,
+        spacing: 20,
         children: [
           InkWell(
             key: const ValueKey('open-accounts'),
@@ -74,6 +74,7 @@ class HomeContent extends ConsumerWidget {
           ),
           FlowSummary(data: data),
           FinanceCard(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -105,6 +106,7 @@ class HomeContent extends ConsumerWidget {
             ),
           ),
           FinanceCard(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

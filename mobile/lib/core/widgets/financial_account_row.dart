@@ -5,7 +5,7 @@ import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_typography.dart';
 import '../../features/accounts/domain/financial_account.dart';
 import '../formatting/money_formatter.dart';
-import 'category_icon.dart';
+import 'account_badge.dart';
 
 class FinancialAccountRow extends StatelessWidget {
   const FinancialAccountRow({
@@ -36,17 +36,7 @@ class FinancialAccountRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           children: [
-            CategoryIcon(
-              account.type == AccountType.cash
-                  ? Icons.payments_outlined
-                  : account.type == AccountType.credit
-                  ? Icons.credit_card
-                  : account.type == AccountType.wallet
-                  ? Icons.account_balance_wallet_outlined
-                  : Icons.account_balance_outlined,
-              foreground: c.primary,
-              background: c.primary.withValues(alpha: .08),
-            ),
+            AccountBadge(account: account),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

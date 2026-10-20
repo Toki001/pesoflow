@@ -319,3 +319,20 @@ Free-standing captions use deeper neutral gray for contrast across the pastels;
 card captions retain their existing gray. Dark keeps its established navy styling.
 Touch targets, layout hierarchy and financial behavior remain unchanged. Actual
 record counts and responsive typography may differ from generated concept boards.
+
+### Home A, matched appearances and account identifiers — 20 October 2026
+
+The owner now selects Home A from the existing approved A board; the Light
+background is unchanged. Home uses roomier 20px section spacing/padding, with the
+existing 16px transaction-list padding retained to avoid prematurely stacking
+amounts. Cashflow labels are softer coral/green with contrast-preserving light
+variants in Dark. Metrics have the same flat treatment in both appearances.
+
+Dark now shares Light's lavender-left, blue-above, mint-right gradient geometry,
+using muted colors over charcoal. The older wave painter is removed. Card order,
+radii, controls and navigation follow the same presentation across appearances.
+Home/Accounts and entry account rows use one AccountBadge: BDO, G, GT, M and BPI
+letter identifiers on contrasting colored rounded squares; Cash uses a slate
+cash symbol. Explicit saved institution metadata wins over account nicknames;
+unknown institutions/names retain neutral initials. These are simple identifiers,
+not downloaded or recreated official logos, and imply no provider connection.

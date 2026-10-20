@@ -70,6 +70,10 @@ class FinancePalette {
   Color get primary => isDark ? AppColors.darkPrimary : const Color(0xFF1E40AF);
   Color get positive =>
       isDark ? AppColors.darkPositive : AppColors.positiveText;
+  Color get cashflowSpending =>
+      isDark ? const Color(0xFFFDA4AF) : const Color(0xFFC24158);
+  Color get cashflowIncome =>
+      isDark ? const Color(0xFF6EE7B7) : const Color(0xFF26795F);
   Color get warning => isDark ? AppColors.darkWarning : AppColors.warningText;
   Color get danger => isDark ? AppColors.darkDanger : AppColors.dangerText;
   Color get secondary => primary;

@@ -30,14 +30,6 @@ void main() {
             for (final color in glow.colors) Color.alphaBlend(color, base),
         ];
       }
-      backdrops = [
-        for (final base in backdrops)
-          for (final wave in [
-            Colors.transparent,
-            ...AppMaterials.waveColors(dark),
-          ])
-            Color.alphaBlend(wave, base),
-      ];
       for (final backdrop in backdrops) {
         // Free-standing labels have no card behind them on the pastel canvas.
         if (!dark) {
@@ -59,6 +51,8 @@ void main() {
             c.positive,
             c.warning,
             c.danger,
+            c.cashflowSpending,
+            c.cashflowIncome,
           ]) {
             expect(
               contrast(ink, surface),
