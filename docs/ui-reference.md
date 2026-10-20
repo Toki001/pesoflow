@@ -287,3 +287,35 @@ NavigationPanel. Category orange/violet/teal/indigo/blue/green/neutral accents a
 lighter and less saturated, with opaque pastel badge fills. Labels and amounts
 retain text-role colors. Non-text category icons/charts are checked at 3:1 contrast;
 text roles retain 4.5:1. Financial income/refund and risk colors remain unchanged.
+
+### Richer blue and distinct category badges — 20 October 2026
+
+The owner's latest reference supersedes the subdued icon accents: category glyphs
+now use clearer orange/purple/teal/indigo/green/blue hues inside pale opaque circles
+(12% color blend in Light, 16% in Dark). Entertainment has its own purple identity,
+Healthcare rose and Education cyan. Labels and financial amounts retain their
+text/semantic roles; ordinary header/account icons remain neutral.
+
+One exhaustive native Material glyph mapping in `category_style.dart` replaces
+incomplete screen-local switches in entry, Home, Transactions/details and Budgets.
+Entertainment uses a game controller; Healthcare a medical kit. Analytics grouped
+category badges use the same underlying glyphs where categories correspond.
+No external icon package or downloaded asset is needed.
+
+### Approved A/D mix — 20 October 2026
+
+The owner selected [A's background](../design/approved/pastel-background-a.png)
+and [D's Home presentation](../design/approved/home-presentation-d.png). These
+concept boards use synthetic example records and document styling only. Runtime
+records, functional sections and controls remain live.
+
+Light now uses cool gray-white with diffuse lavender on the left, pale blue above
+and mint toward the lower right. Three static native radial gradients create the
+soft transitions; there are no hard waves, runtime bitmap backgrounds or filters.
+D's presentation translates to opaque white rounded cards and dock, white header
+icon circles, a blue balance card and neutral inactive icons with blue selection.
+The discarded wave design's additional white caption backings were removed.
+Free-standing captions use deeper neutral gray for contrast across the pastels;
+card captions retain their existing gray. Dark keeps its established navy styling.
+Touch targets, layout hierarchy and financial behavior remain unchanged. Actual
+record counts and responsive typography may differ from generated concept boards.

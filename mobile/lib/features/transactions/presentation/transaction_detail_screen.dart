@@ -1,3 +1,5 @@
+import 'category_style.dart';
+
 import 'package:pesoflow/core/widgets/category_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,15 +59,12 @@ class TransactionDetailScreen extends ConsumerWidget {
                 Stack(
                   children: [
                     CategoryIcon(
-                      t.category == TransactionCategory.food
-                          ? Icons.fastfood_outlined
-                          : t.kind == TransactionKind.transfer
-                          ? Icons.swap_horiz
-                          : Icons.receipt_long_outlined,
-                      foreground: c.primary,
+                      transactionCategoryIcon(t.category),
+                      round: true,
+                      foreground: categoryColor(t.category, c),
                       iconSize: 32,
                       size: 64,
-                      background: c.primary.withValues(alpha: .08),
+                      background: categoryBackground(t.category, c),
                     ),
                     Positioned(
                       bottom: 0,

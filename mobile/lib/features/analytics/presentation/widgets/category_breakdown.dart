@@ -9,7 +9,7 @@ import '../../../../core/widgets/category_icon.dart';
 import '../../../../core/widgets/finance_card.dart';
 import '../../domain/analytics_report.dart';
 import 'analytics_controls.dart';
-import '../../../transactions/presentation/category_color.dart' as ledger;
+import '../../../transactions/presentation/category_style.dart' as ledger;
 import '../../../transactions/domain/transaction.dart';
 
 Color categoryColor(AnalyticsCategory category, FinancePalette c) =>
@@ -123,11 +123,21 @@ class _CategoryRow extends StatelessWidget {
     final c = context.colors;
     final foreground = categoryColor(item.category, c);
     final icon = switch (item.category) {
-      AnalyticsCategory.food => Icons.restaurant,
-      AnalyticsCategory.shopping => Icons.shopping_bag_outlined,
-      AnalyticsCategory.transport => Icons.directions_car_outlined,
-      AnalyticsCategory.bills => Icons.receipt_long_outlined,
-      AnalyticsCategory.subscriptions => Icons.subscriptions_outlined,
+      AnalyticsCategory.food => ledger.transactionCategoryIcon(
+        TransactionCategory.food,
+      ),
+      AnalyticsCategory.shopping => ledger.transactionCategoryIcon(
+        TransactionCategory.shopping,
+      ),
+      AnalyticsCategory.transport => ledger.transactionCategoryIcon(
+        TransactionCategory.transport,
+      ),
+      AnalyticsCategory.bills => ledger.transactionCategoryIcon(
+        TransactionCategory.bills,
+      ),
+      AnalyticsCategory.subscriptions => ledger.transactionCategoryIcon(
+        TransactionCategory.subscriptions,
+      ),
       AnalyticsCategory.other => Icons.more_horiz,
     };
     final share = '${item.share(total).toStringAsFixed(1)}%';
@@ -203,11 +213,12 @@ class _CategoryRow extends StatelessWidget {
           children: [
             CategoryIcon(
               icon,
+              round: true,
               foreground: item.category == AnalyticsCategory.other
                   ? c.mutedInk
                   : foreground,
               background: Color.alphaBlend(
-                foreground.withValues(alpha: c.isDark ? .13 : .08),
+                foreground.withValues(alpha: c.isDark ? .16 : .12),
                 c.surface,
               ),
               size: 36,

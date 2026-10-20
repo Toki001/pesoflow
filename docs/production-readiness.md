@@ -714,3 +714,41 @@ reset/reseed/uninstall or gallery edits were issued. Private captures and baseli
 were deleted. This checks visible Home values, not every stored record. Dark/iPhone
 runtime checks were not repeated; automated results above are from the existing
 verified build and were not rerun for this installation-only follow-up.
+
+## Approved pastel canvas, Home presentation and category glyphs — 20 October 2026
+
+The owner selected background A and Home presentation D after reviewing mockups.
+The selected concept boards are retained under `design/approved/`; their example
+finances are illustrative. Light uses a cool gray-white base with soft lavender
+left, pale blue above and mint toward the lower right. Static native radial
+gradients replace the discarded dark-blue shapes, without runtime images, blur
+filters or decorative motion. D's opaque white rounded cards/dock/header circles,
+blue balance card and gray inactive icons are retained. White label backings
+needed by the rejected shapes were removed. Free-standing captions use deeper
+neutral gray, checked at 4.5:1 over gradient-layer bounds. Card text keeps its roles.
+Dark retains its established navy backdrop and ribbons; high contrast stays flat.
+
+A shared exhaustive native category-glyph mapping replaces incomplete switches
+across entry, Home, Transactions/details and Budgets. Healthcare uses a medical
+kit; Entertainment a game controller. Category accents have clearer distinct hues
+on pale circular badge fills, following the supplied reference. Financial amounts,
+semantic colors and ordinary neutral icons retain their roles. Three rendered
+regressions cover the repaired categories in Home, ledger and transaction detail.
+
+Formatting PASS (182 files), analysis PASS, **306 tests including 31 golden
+comparisons PASS**. Captures were refreshed without weakening tolerances;
+Home Light/Dark, Add Light and Budgets Light were visually reviewed. Existing
+compact/large-text/landscape/keyboard and financial persistence regressions pass.
+Release APK (100.3 MB), AAB (81.2 MB) and unsigned iOS device compile PASS.
+No new runtime dependencies, financial calculations, storage/schema/key or backend
+changes. Backend was not rerun; development signing and physical-iPhone limitations
+remain. Generated concept boards are design references, not bundled runtime assets.
+
+The final APK installed in place on the Redmi (`adb install -r`: Success).
+Visible Home monetary labels matched a fresh private baseline after installation,
+a temporary Light-mode review and the final cold restart. Native Light Home and
+Budgets confirmed the pastel background, white sections/dock/header circles and
+readable system buttons. The original Dark preference was restored and Home left
+visible. No financial commands, reset/reseed/uninstall or gallery edits were
+issued. Private captures and comparison data were deleted. This verifies visible
+Home values, not every stored record; physical iOS runtime was not tested.

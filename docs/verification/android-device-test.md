@@ -657,3 +657,25 @@ No runtime source changed; automated tests/builds were not repeated for this
 installation-only follow-up. The prior 303-test/build checkpoint remains the
 artifact's validation. Physical Dark/iPhone checks were not repeated. Existing
 development-signing and iPhone runtime limits remain.
+
+## 20 October 2026 — approved A/D pastel mix
+
+The Redmi initially disconnected, then reappeared in ADB. Returned from its known
+Settings screen to Home without dismissing a form. Captured a fresh private
+visible-monetary-label baseline, then installed the final APK in place using
+`adb install -r` (Success). The original Dark preference and visible Home values
+were retained after installation.
+
+Temporarily selected Light through the existing Appearance sheet. Native Home and
+Budgets review confirmed A's lavender/blue/mint backdrop with D's white rounded
+sections and dock, white header circles, blue balance card and neutral inactive
+icons. System icons/buttons remained readable on the light background. Visible
+Home values still matched. Restored the original Dark preference, returned Home,
+cold-restarted only PesoFlow and compared again: visible values matched.
+
+No financial commands, reset/reseed/uninstall or gallery changes were issued.
+The appearance preference was changed only temporarily and restored. Private
+captures and baseline were deleted. This covers visible Home values rather than
+every record; physical iPhone behavior remains untested. Format/analyze, all
+306 Flutter tests including 31 goldens, APK/AAB and unsigned iOS compilation passed.
+Development signing and iPhone runtime limitations remain.

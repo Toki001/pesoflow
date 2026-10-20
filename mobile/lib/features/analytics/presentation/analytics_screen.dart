@@ -254,7 +254,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen> {
                           Text(
                             'Based on your saved, posted transactions up to today.',
                             style: AppTypography.bodySmall.copyWith(
-                              color: c.mutedInk,
+                              color: c.canvasSecondaryInk,
                             ),
                           ),
                         ],

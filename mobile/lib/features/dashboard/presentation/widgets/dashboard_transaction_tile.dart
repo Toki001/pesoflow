@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../transactions/presentation/category_color.dart';
+import '../../../transactions/presentation/category_style.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -21,29 +21,6 @@ class DashboardTransactionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = context.colors;
-    final (icon, _, _) = switch (transaction.category) {
-      TransactionCategory.food => (
-        Icons.fastfood_outlined,
-        c.danger,
-        c.soft(c.danger, AppColors.dangerSoft),
-      ),
-      TransactionCategory.transport => (
-        Icons.directions_car_outlined,
-        c.primary,
-        c.soft(c.primary, AppColors.primarySoft),
-      ),
-      TransactionCategory.transfer => (
-        Icons.sync_alt,
-        c.secondaryInk,
-        c.mutedSurface,
-      ),
-      TransactionCategory.income => (
-        Icons.payments_outlined,
-        c.positive,
-        c.soft(c.positive, AppColors.positiveSoft),
-      ),
-      _ => (Icons.receipt_long_outlined, c.secondaryInk, c.mutedSurface),
-    };
     return Semantics(
       button: true,
       child: InkWell(
@@ -57,7 +34,7 @@ class DashboardTransactionTile extends StatelessWidget {
           incoming:
               transaction.kind == TransactionKind.income ||
               transaction.kind == TransactionKind.refund,
-          icon: icon,
+          icon: transactionCategoryIcon(transaction.category),
           iconColor: categoryColor(transaction.category, c),
           iconBackground: categoryBackground(transaction.category, c),
         ),

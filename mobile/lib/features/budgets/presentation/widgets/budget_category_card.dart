@@ -6,9 +6,8 @@ import '../../../../core/formatting/money_formatter.dart';
 import '../../../../core/widgets/budget_progress_bar.dart';
 import '../../../../core/widgets/category_icon.dart';
 import '../../../../core/widgets/finance_card.dart';
-import '../../../transactions/domain/transaction.dart';
 import '../../domain/budget_plan.dart';
-import '../../../transactions/presentation/category_color.dart';
+import '../../../transactions/presentation/category_style.dart';
 
 class BudgetCategoryCard extends StatelessWidget {
   const BudgetCategoryCard({
@@ -36,14 +35,6 @@ class BudgetCategoryCard extends StatelessWidget {
         : a.atRisk
         ? 'Near limit'
         : 'On track';
-    final icon = switch (a.category) {
-      TransactionCategory.food => Icons.restaurant,
-      TransactionCategory.transport => Icons.directions_car_outlined,
-      TransactionCategory.shopping => Icons.shopping_bag_outlined,
-      TransactionCategory.bills => Icons.bolt,
-      TransactionCategory.groceries => Icons.shopping_cart_outlined,
-      _ => Icons.category_outlined,
-    };
     return Semantics(
       button: true,
       label: 'Edit ${a.name} budget',
@@ -57,7 +48,8 @@ class BudgetCategoryCard extends StatelessWidget {
               Row(
                 children: [
                   CategoryIcon(
-                    icon,
+                    transactionCategoryIcon(a.category),
+                    round: true,
                     foreground: categoryColor(a.category, c),
                     background: categoryBackground(a.category, c),
                   ),

@@ -132,7 +132,7 @@ class SettingsScreen extends ConsumerWidget {
       child: Text(
         title,
         style: AppTypography.labelMedium.copyWith(
-          color: c.secondaryInk,
+          color: c.canvasSecondaryInk,
           letterSpacing: .8,
         ),
       ),
@@ -339,7 +339,9 @@ class SettingsScreen extends ConsumerWidget {
           Text(
             'Local financial tracking · No advertising tracking',
             textAlign: TextAlign.center,
-            style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+            style: AppTypography.bodySmall.copyWith(
+              color: c.canvasSecondaryInk,
+            ),
           ),
         ],
       ),

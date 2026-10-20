@@ -281,6 +281,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                           style: AppTypography.bodyMedium,
                           decoration: InputDecoration(
                             hintText: 'Search merchant, note, or amount...',
+                            fillColor: c.surface,
                             prefixIcon: const Icon(Icons.search),
                             suffixIcon: IconButton(
                               tooltip: 'Clear search',
@@ -391,14 +392,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                 Text(
                                   _dateLabel(entry.key),
                                   style: AppTypography.labelMedium.copyWith(
-                                    color: c.secondaryInk,
+                                    color: c.canvasSecondaryInk,
                                   ),
                                 ),
                                 if (entry.value.isNotEmpty)
                                   Text(
                                     '${entry.value.length} records',
                                     style: AppTypography.labelSmall.copyWith(
-                                      color: c.mutedInk,
+                                      color: c.canvasSecondaryInk,
                                     ),
                                   ),
                               ],

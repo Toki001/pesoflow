@@ -364,7 +364,7 @@ class _ReceiptReviewScreenState extends ConsumerState<ReceiptReviewScreen> {
         const SizedBox(height: 6),
         Text(
           'Parser confidence estimates; corrections still need your confirmation.',
-          style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+          style: AppTypography.bodySmall.copyWith(color: c.canvasSecondaryInk),
         ),
         if (evidence.warnings.isNotEmpty) ...[
           const SizedBox(height: 12),

@@ -22,7 +22,7 @@ class TransactionTypeSelector extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: c.primary.withValues(alpha: .06),
+        color: c.surface,
         borderRadius: BorderRadius.circular(22),
       ),
       child: IntrinsicHeight(

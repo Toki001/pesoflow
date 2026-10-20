@@ -69,6 +69,7 @@ class TransactionTile extends StatelessWidget {
             children: [
               CategoryIcon(
                 icon,
+                round: true,
                 foreground: iconColor,
                 background: iconBackground,
               ),

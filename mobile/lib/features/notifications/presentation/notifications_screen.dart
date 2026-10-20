@@ -60,7 +60,10 @@ class NotificationsScreen extends ConsumerWidget {
               key: ValueKey('notice-type-$filter'),
               initialValue: filter,
               isExpanded: true,
-              decoration: const InputDecoration(labelText: 'Alert type'),
+              decoration: InputDecoration(
+                labelText: 'Alert type',
+                fillColor: c.surface,
+              ),
               items: [
                 for (final (value, label) in [
                   (NoticeFilter.all, 'All alerts'),
@@ -89,7 +92,9 @@ class NotificationsScreen extends ConsumerWidget {
                 liveRegion: true,
                 child: Text(
                   '${state.value!.where(matches).length} of ${state.value!.length} alerts · $unread unread overall',
-                  style: AppTypography.labelMedium.copyWith(color: c.mutedInk),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: c.canvasSecondaryInk,
+                  ),
                 ),
               ),
             ],
@@ -158,7 +163,7 @@ class NotificationsScreen extends ConsumerWidget {
                             child: Text(
                               DateFormatter.header(visible[i].createdAt),
                               style: AppTypography.labelMedium.copyWith(
-                                color: c.mutedInk,
+                                color: c.canvasSecondaryInk,
                               ),
                             ),
                           ),
@@ -203,7 +208,9 @@ class NotificationsScreen extends ConsumerWidget {
             Text(
               'Alerts appear inside PesoFlow. Device push delivery is not enabled.',
               textAlign: TextAlign.center,
-              style: AppTypography.bodySmall.copyWith(color: c.mutedInk),
+              style: AppTypography.bodySmall.copyWith(
+                color: c.canvasSecondaryInk,
+              ),
             ),
           ],
         ),

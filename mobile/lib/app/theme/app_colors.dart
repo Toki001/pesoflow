@@ -61,6 +61,9 @@ class FinancePalette {
   Color get secondaryInk =>
       isDark ? AppColors.darkInkSecondary : AppColors.inkSecondary;
   Color get mutedInk => isDark ? AppColors.darkInkMuted : AppColors.inkMuted;
+  // Captions directly on colored canvas need slightly deeper neutral ink.
+  Color get canvasSecondaryInk =>
+      isDark ? AppColors.darkInkMuted : const Color(0xFF445064);
   Color get border => isDark ? AppColors.darkBorder : AppColors.border;
   Color get strongBorder =>
       isDark ? AppColors.darkBorder : AppColors.borderStrong;

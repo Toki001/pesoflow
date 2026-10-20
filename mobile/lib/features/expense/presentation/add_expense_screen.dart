@@ -1,4 +1,4 @@
-import '../../transactions/presentation/category_color.dart';
+import '../../transactions/presentation/category_style.dart';
 import 'widgets/transaction_type_selector.dart';
 
 import 'package:flutter/material.dart';
@@ -660,7 +660,8 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
                                       child: Column(
                                         children: [
                                           CategoryIcon(
-                                            categoryIcon(item),
+                                            transactionCategoryIcon(item),
+                                            round: true,
                                             foreground: categoryColor(item, c),
                                             background: categoryBackground(
                                               item,
@@ -795,14 +796,3 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
     );
   }
 }
-
-IconData categoryIcon(TransactionCategory category) => switch (category) {
-  TransactionCategory.food => Icons.restaurant,
-  TransactionCategory.transport => Icons.directions_car_outlined,
-  TransactionCategory.groceries => Icons.shopping_cart_outlined,
-  TransactionCategory.bills => Icons.bolt,
-  TransactionCategory.shopping => Icons.shopping_bag_outlined,
-  TransactionCategory.entertainment => Icons.sports_esports_outlined,
-  TransactionCategory.income => Icons.work_outline,
-  _ => Icons.category_outlined,
-};

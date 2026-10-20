@@ -7,7 +7,7 @@ import 'package:pesoflow/app/theme/app_materials.dart';
 import 'package:pesoflow/core/widgets/navigation_panel.dart';
 import 'package:pesoflow/features/dashboard/presentation/widgets/balance_summary.dart';
 import 'package:pesoflow/features/transactions/domain/transaction.dart';
-import 'package:pesoflow/features/transactions/presentation/category_color.dart';
+import 'package:pesoflow/features/transactions/presentation/category_style.dart';
 
 import 'fixtures/finance_workspace_fixture.dart';
 import 'fixtures/stitch_v7_fixture.dart';
@@ -39,6 +39,16 @@ void main() {
             Color.alphaBlend(wave, base),
       ];
       for (final backdrop in backdrops) {
+        // Free-standing labels have no card behind them on the pastel canvas.
+        if (!dark) {
+          for (final ink in [c.ink, c.canvasSecondaryInk, c.primary]) {
+            expect(
+              contrast(ink, backdrop),
+              greaterThanOrEqualTo(4.5),
+              reason: 'canvas foreground=$ink, background=$backdrop',
+            );
+          }
+        }
         for (final tint in [c.surface]) {
           final surface = Color.alphaBlend(tint, backdrop);
           for (final ink in [

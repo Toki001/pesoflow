@@ -199,7 +199,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                                 Text(
                                   '${plan.allowances.length} categorized allowances tracked',
                                   style: AppTypography.bodySmall.copyWith(
-                                    color: c.mutedInk,
+                                    color: c.canvasSecondaryInk,
                                   ),
                                 ),
                               ],
@@ -290,7 +290,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> {
                       Text(
                         'Monthly limits repeat automatically. Spending comes from your saved transactions.',
                         style: AppTypography.bodySmall.copyWith(
-                          color: c.mutedInk,
+                          color: c.canvasSecondaryInk,
                         ),
                         textAlign: TextAlign.center,
                       ),

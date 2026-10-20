@@ -8,7 +8,7 @@ import '../../../core/formatting/money_formatter.dart';
 import '../../../core/widgets/category_icon.dart';
 import '../../../core/widgets/status_badge.dart';
 import '../domain/transaction.dart';
-import 'category_color.dart';
+import 'category_style.dart';
 
 /// Compact row used by the approved Transactions feed, distinct from Home.
 class TransactionListRow extends StatelessWidget {
@@ -23,17 +23,6 @@ class TransactionListRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = transaction;
     final c = context.colors;
-    final icon = switch (t.category) {
-      TransactionCategory.food => Icons.fastfood_outlined,
-      TransactionCategory.transport => Icons.directions_car_outlined,
-      TransactionCategory.coffee => Icons.local_cafe_outlined,
-      TransactionCategory.transfer => Icons.swap_horiz,
-      TransactionCategory.income => Icons.arrow_downward,
-      TransactionCategory.groceries => Icons.shopping_cart_outlined,
-      TransactionCategory.refund => Icons.undo,
-      TransactionCategory.subscriptions => Icons.smart_display_outlined,
-      _ => Icons.receipt_long_outlined,
-    };
     final foreground = categoryColor(t.category, c);
     final background = categoryBackground(t.category, c);
     final (
@@ -136,7 +125,8 @@ class TransactionListRow extends StatelessWidget {
               return Row(
                 children: [
                   CategoryIcon(
-                    icon,
+                    transactionCategoryIcon(t.category),
+                    round: true,
                     foreground: foreground,
                     background: background,
                   ),

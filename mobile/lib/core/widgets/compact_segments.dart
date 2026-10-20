@@ -22,7 +22,7 @@ class CompactSegments<T> extends StatelessWidget {
     final c = context.colors;
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: c.mutedSurface.withValues(alpha: .48),
+        color: c.mutedSurface,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(

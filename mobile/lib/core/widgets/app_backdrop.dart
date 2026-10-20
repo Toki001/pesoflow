@@ -21,8 +21,8 @@ class AppBackdrop extends StatelessWidget {
         );
       }
     }
-    if (!solid) {
-      content = CustomPaint(painter: _WavePainter(c.isDark), child: content);
+    if (!solid && c.isDark) {
+      content = CustomPaint(painter: const _DarkWavePainter(), child: content);
     }
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -34,16 +34,15 @@ class AppBackdrop extends StatelessWidget {
   }
 }
 
-/// Static, bounded ribbons give glass a visible backdrop without moving the ledger.
-class _WavePainter extends CustomPainter {
-  const _WavePainter(this.dark);
-  final bool dark;
+/// Static organic shapes leave the financial content and controls stationary.
+class _DarkWavePainter extends CustomPainter {
+  const _DarkWavePainter();
 
   @override
   void paint(Canvas canvas, Size size) {
-    final colors = AppMaterials.waveColors(dark);
     final w = size.width;
     final h = size.height;
+    final colors = AppMaterials.waveColors(true);
     // Fixed unequal sweeps look organic without changing on rebuild or restart.
     for (final (start, end, bend, thickness) in const [
       (-.08, .10, .32, .20),
@@ -104,5 +103,5 @@ class _WavePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_WavePainter oldDelegate) => dark != oldDelegate.dark;
+  bool shouldRepaint(_DarkWavePainter oldDelegate) => false;
 }

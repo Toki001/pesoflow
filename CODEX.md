@@ -69,24 +69,34 @@ images only with an explicit transaction deletion.
 ## Shared design system
 
 Inter is bundled locally; monetary text uses tabular figures. Primary #2563EB,
-Light canvas pale blue with ink #111827 and secondary text #596779; Dark canvas
+Light canvas soft gray-white with lavender, pale-blue and mint gradients;
+ink #111827 and secondary text #596779. Dark canvas
 #0A1016 with ink #F7F8FA, secondary #CBD5E1 and muted #BBC6D5.
 Use blue-only gradients for prominent summary surfaces, restrained depth, and
-solid floating navigation and solid section cards over blue ambient
+solid floating navigation and solid section cards over soft ambient
 backgrounds. Keep dense financial
 content readable. Category colors are stable identities: food orange, shopping
 violet, bills teal, subscriptions indigo, transport blue and other neutral.
-Category icons/chart accents use softer pastel hues with pale opaque badge fills;
-category names and amounts retain readable text colors. Income/refunds use green;
+Category icons/chart accents use clear saturated hues with pale opaque circular
+badge fills, following the owner's latest reference. Healthcare uses rose,
+Entertainment purple and Education cyan. Category names and amounts retain
+readable text colors. Income/refunds use green;
 risk and over-limit states use amber/red. Avoid random
 decorative accents. Dark mode preserves
 hierarchy using the established dark surfaces and readable semantic variants.
-Both appearances share static abstract blue ribbons with unequal slopes, bends
-and thicknesses, following the owner's 20 October refinement. Light retains a
-pale sapphire/white base; Dark retains deep navy. Section cards are opaque white
-in Light and opaque navy in Dark, without backdrop blur. The dock also uses the
-solid theme surface without blur. Keep background paths static.
-High contrast keeps opaque readable theme surfaces.
+The owner's approved 20 October mix uses `design/approved/pastel-background-a.png`
+for the Light canvas and `design/approved/home-presentation-d.png` for Home
+presentation. Light has a cool gray-white base (#E9EDF2–#E5EAF0), diffuse lavender
+on the left, pale blue above and mint toward the lower right. Render the ambient
+color with static native radial gradients, without hard waves, runtime bitmap
+backgrounds or moving effects. These decorative hues do not change financial
+meaning or category identity. Home retains solid white rounded sections, its blue
+balance card and white floating navigation. Preserve real content and controls;
+the concept's example amounts are not runtime data. Dark retains its established
+deep-navy backdrop and subtle ribbons. Section cards are opaque white in Light
+and opaque navy in Dark, without backdrop blur. High contrast keeps flat opaque
+readable theme surfaces. Free-standing captions use canvasSecondaryInk; text on
+cards retains its surface role. Filter/type tracks and search remain opaque.
 
 Use shared typography, 4/8px spacing rhythm, 16px screen margins, 16–20px card
 padding, 24px cards, 18px inset fields, pill buttons and 28px sheets. Main app bar is 56px.
@@ -97,6 +107,9 @@ Settings is reached directly through the settings icon.
 
 Ordinary header, receipt, account and navigation icons use neutral gray, resolved
 against their actual surface. Category badges may use their stable category color.
+Use the exhaustive transactionCategoryIcon mapping in category_style.dart across
+entry, Home, Transactions/details and Budgets. Entertainment uses a game controller
+and Healthcare a medical kit; known categories never fall back to receipt glyphs.
 Selected navigation tiles use #2563EB with white icons; inactive tiles remain gray.
 Header icon circles, unselected Transactions filter pills and the Analytics date
 control use the same solid theme surface. Transactions filters have no border;
